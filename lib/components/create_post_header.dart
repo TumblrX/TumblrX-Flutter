@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CreatePostHeader extends StatelessWidget {
+  final bool isPostEnabled;
+
+  CreatePostHeader({this.isPostEnabled});
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -23,22 +28,25 @@ class CreatePostHeader extends StatelessWidget {
               'Post',
               style: TextStyle(
                 fontSize: 16.0,
-                color: Colors.black,
+                color: isPostEnabled ? Colors.black : Colors.grey,
               ),
             ),
           ),
           style: ButtonStyle(
-            backgroundColor:
-                MaterialStateProperty.all<Color>(Colors.lightBlueAccent),
+            backgroundColor: isPostEnabled
+                ? MaterialStateProperty.all<Color>(Colors.lightBlueAccent)
+                : MaterialStateProperty.all<Color>(Colors.black12),
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(25.0),
               ),
             ),
           ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          onPressed: isPostEnabled
+              ? () {
+                  Navigator.pop(context);
+                }
+              : null,
         ),
         SizedBox(
           width: 20.0,

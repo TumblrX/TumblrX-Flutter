@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
 class CreatePostAdditions extends StatelessWidget {
+  CreatePostAdditions({this.addGif, this.addImage});
+  final Function addGif;
+  final Function addImage;
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -35,7 +38,7 @@ class CreatePostAdditions extends StatelessWidget {
             size: 30.0,
           ),
           onTap: () {
-            Navigator.pop(context);
+            addGif();
           },
         ),
         SizedBox(
@@ -47,7 +50,7 @@ class CreatePostAdditions extends StatelessWidget {
             size: 30.0,
           ),
           onTap: () {
-            Navigator.pop(context);
+            addImage();
           },
         ),
         SizedBox(

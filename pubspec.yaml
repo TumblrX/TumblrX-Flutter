@@ -35,6 +35,8 @@ dependencies:
   import_sorter: ^4.6.0
   test: ^1.16.8
   flutter_launcher_icons: ^0.9.2
+  giphy_get: ^2.0.3
+  image_picker: ^0.8.4+1
 
 dev_dependencies:
   flutter_test:
