@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tumblrx/components/create_post_options.dart';
+import 'package:tumblrx/components/modal_bottom_sheet.dart';
+import 'package:tumblrx/services/post.dart';
 
 class CreatePostHeader extends StatelessWidget {
-  final bool isPostEnabled;
-
-  CreatePostHeader({this.isPostEnabled});
-
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -28,12 +27,14 @@ class CreatePostHeader extends StatelessWidget {
               'Post',
               style: TextStyle(
                 fontSize: 16.0,
-                color: isPostEnabled ? Colors.black : Colors.grey,
+                color: Provider.of<Post>(context).isPostEnabled
+                    ? Colors.black
+                    : Colors.grey,
               ),
             ),
           ),
           style: ButtonStyle(
-            backgroundColor: isPostEnabled
+            backgroundColor: Provider.of<Post>(context).isPostEnabled
                 ? MaterialStateProperty.all<Color>(Colors.lightBlueAccent)
                 : MaterialStateProperty.all<Color>(Colors.black12),
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -42,7 +43,7 @@ class CreatePostHeader extends StatelessWidget {
               ),
             ),
           ),
-          onPressed: isPostEnabled
+          onPressed: Provider.of<Post>(context).isPostEnabled
               ? () {
                   Navigator.pop(context);
                 }
@@ -57,7 +58,16 @@ class CreatePostHeader extends StatelessWidget {
             size: 30.0,
           ),
           onTap: () {
-            Navigator.pop(context);
+            showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              builder: (context) => SingleChildScrollView(
+                child: ModalBottomSheet(
+                  content: CreatePostOptions(),
+                  title: 'Post options',
+                ),
+              ),
+            );
           },
         ),
       ],

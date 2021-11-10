@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'add_tags.dart';
+import 'modal_bottom_sheet.dart';
+
 class CreatePostAdditions extends StatelessWidget {
   CreatePostAdditions({this.addGif, this.addImage});
   final Function addGif;
@@ -72,7 +75,19 @@ class CreatePostAdditions extends StatelessWidget {
             size: 30.0,
           ),
           onTap: () {
-            Navigator.pop(context);
+            showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              builder: (context) => SingleChildScrollView(
+                child: Padding(
+                  padding: MediaQuery.of(context).viewInsets,
+                  child: ModalBottomSheet(
+                    title: 'Add tags',
+                    content: AddTags(),
+                  ),
+                ),
+              ),
+            );
           },
         ),
       ],

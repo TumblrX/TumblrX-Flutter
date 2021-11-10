@@ -1,11 +1,13 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:giphy_get/giphy_get.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
+import 'package:tumblrx/services/post.dart';
 
+import 'add_tags.dart';
 import 'create_post_additions.dart';
 import 'create_post_header.dart';
 import 'create_post_user.dart';
+import 'modal_bottom_sheet.dart';
 
 class CreatePost extends StatefulWidget {
   CreatePost({this.topPadding});
@@ -15,7 +17,6 @@ class CreatePost extends StatefulWidget {
 }
 
 class _CreatePostState extends State<CreatePost> {
-  bool isPostEnabled;
   List<Widget> postContent = [
     TextField(
       decoration: InputDecoration(
@@ -27,8 +28,6 @@ class _CreatePostState extends State<CreatePost> {
   ];
   @override
   void initState() {
-    isPostEnabled = false;
-
     super.initState();
   }
 
@@ -54,9 +53,7 @@ class _CreatePostState extends State<CreatePost> {
             Flexible(
               child: Column(
                 children: [
-                  CreatePostHeader(
-                    isPostEnabled: isPostEnabled,
-                  ),
+                  CreatePostHeader(),
                   SizedBox(
                     height: 10.0,
                   ),
@@ -105,10 +102,18 @@ class _CreatePostState extends State<CreatePost> {
                         ),
                       ),
                       onPressed: () {
-                        setState(
-                          () {
-                            isPostEnabled = !isPostEnabled;
-                          },
+                        showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          builder: (context) => SingleChildScrollView(
+                            child: Padding(
+                              padding: MediaQuery.of(context).viewInsets,
+                              child: ModalBottomSheet(
+                                title: 'Add tags',
+                                content: AddTags(),
+                              ),
+                            ),
+                          ),
                         );
                       },
                     ),
