@@ -7,6 +7,8 @@ import 'package:tumblrx/services/messaging.dart';
 import 'package:tumblrx/services/notifications.dart';
 import 'package:tumblrx/services/settings.dart';
 import 'package:tumblrx/services/theme.dart';
+import 'package:tumblrx/screens/profile.dart';
+
 
 void main() {
   runApp(MyApp());
@@ -17,28 +19,29 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        Provider<Authentication>(
+        ChangeNotifierProvider<Authentication>(
           create: (context) => Authentication(),
         ),
-        Provider<Content>(
+        ChangeNotifierProvider<Content>(
           create: (context) => Content(),
         ),
-        Provider<Messaging>(
+        ChangeNotifierProvider<Messaging>(
           create: (context) => Messaging(),
         ),
-        Provider<Notifications>(
+        ChangeNotifierProvider<Notifications>(
           create: (context) => Notifications(),
         ),
-        Provider<Settings>(
+        ChangeNotifierProvider<Settings>(
           create: (context) => Settings(),
         ),
-        Provider<Themes>(
+        ChangeNotifierProvider<Themes>(
           create: (context) => Themes(),
         ),
       ],
       child: MaterialApp(
-        initialRoute: WelcomeScreen.id,
+        initialRoute: Profile.profile,
         routes: {
+          Profile.profile:(context) => Profile(),
           WelcomeScreen.id: (context) => WelcomeScreen(),
         },
       ),
