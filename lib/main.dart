@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tumblrx/screens/Profile_Screen.dart';
+import 'package:tumblrx/screens/notifications_screen.dart';
+import 'package:tumblrx/screens/search_screen.dart';
 import 'package:tumblrx/screens/welcome_screen.dart';
 import 'package:tumblrx/services/authentication.dart';
 import 'package:tumblrx/services/content.dart';
@@ -17,29 +20,36 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        Provider<Authentication>(
+        ChangeNotifierProvider<Authentication>(
           create: (context) => Authentication(),
         ),
-        Provider<Content>(
+        ChangeNotifierProvider<Content>(
           create: (context) => Content(),
         ),
-        Provider<Messaging>(
+        ChangeNotifierProvider<Messaging>(
           create: (context) => Messaging(),
         ),
-        Provider<Notifications>(
+        ChangeNotifierProvider<Notifications>(
           create: (context) => Notifications(),
         ),
-        Provider<Settings>(
+        ChangeNotifierProvider<Settings>(
           create: (context) => Settings(),
         ),
-        Provider<Themes>(
+        ChangeNotifierProvider<Themes>(
           create: (context) => Themes(),
         ),
       ],
       child: MaterialApp(
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSwatch(
+              primarySwatch: Colors.blueGrey, accentColor: Colors.blueAccent),
+        ),
         initialRoute: WelcomeScreen.id,
         routes: {
           WelcomeScreen.id: (context) => WelcomeScreen(),
+          ProfileScreen.id: (context) => ProfileScreen(),
+          SearchScreen.id: (context) => SearchScreen(),
+          NotificationsScreen.id: (context) => NotificationsScreen(),
         },
       ),
     );
