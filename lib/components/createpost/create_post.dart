@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:giphy_get/giphy_get.dart';
 import 'package:provider/provider.dart';
+import 'package:tumblrx/components/createpost/post_tags.dart';
+import 'package:tumblrx/components/createpost/tags_list_view.dart';
 import 'package:tumblrx/services/post.dart';
-
 import 'add_tags.dart';
 import 'create_post_additions.dart';
 import 'create_post_header.dart';
 import 'create_post_user.dart';
-import 'modal_bottom_sheet.dart';
+import '../modal_bottom_sheet.dart';
 
 class CreatePost extends StatefulWidget {
   CreatePost({this.topPadding});
@@ -26,10 +27,6 @@ class _CreatePostState extends State<CreatePost> {
       ),
     ),
   ];
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,64 +63,13 @@ class _CreatePostState extends State<CreatePost> {
                       children: postContent,
                     ),
                   ),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: TextButton(
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                          right: 5.0,
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(
-                              Icons.add,
-                              size: 30.0,
-                              color: Colors.black,
-                            ),
-                            Text(
-                              'Add tags to help people find your post',
-                              style: TextStyle(
-                                fontSize: 16.0,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all<Color>(Colors.black12),
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(25.0),
-                          ),
-                        ),
-                      ),
-                      onPressed: () {
-                        showModalBottomSheet(
-                          context: context,
-                          isScrollControlled: true,
-                          builder: (context) => SingleChildScrollView(
-                            child: Padding(
-                              padding: MediaQuery.of(context).viewInsets,
-                              child: ModalBottomSheet(
-                                title: 'Add tags',
-                                content: AddTags(),
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
+                  PostTags(),
                   SizedBox(
                     height: 10.0,
                   ),
                   CreatePostAdditions(
                     addGif: addGif,
-                    addImage: addImage,
+                    addImage: () {},
                   ),
                 ],
               ),
@@ -148,11 +94,6 @@ class _CreatePostState extends State<CreatePost> {
     } else
       return;
     addTextField();
-  }
-
-  void addImage() async {
-    // final ImagePicker _picker = ImagePicker();
-    // final List<XFile> images = await _picker.pickMultiImage();
   }
 
   void addTextField() {

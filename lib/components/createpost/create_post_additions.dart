@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
+import 'package:tumblrx/services/post.dart';
 import 'add_tags.dart';
-import 'modal_bottom_sheet.dart';
+import '../modal_bottom_sheet.dart';
 
 class CreatePostAdditions extends StatelessWidget {
   CreatePostAdditions({this.addGif, this.addImage});

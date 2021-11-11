@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tumblrx/components/create_post.dart';
+import 'package:tumblrx/components/createpost/create_post.dart';
 import 'package:tumblrx/services/post.dart';
 
 class WelcomeScreen extends StatelessWidget {

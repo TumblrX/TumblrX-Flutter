@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tumblrx/components/create_post_options.dart';
 import 'package:tumblrx/components/modal_bottom_sheet.dart';
 import 'package:tumblrx/services/post.dart';
+import 'package:tumblrx/utilities/constants.dart';
+
+import 'create_post_options.dart';
 
 class CreatePostHeader extends StatelessWidget {
   @override
@@ -23,14 +25,32 @@ class CreatePostHeader extends StatelessWidget {
         TextButton(
           child: Padding(
             padding: const EdgeInsets.all(2.0),
-            child: Text(
-              'Post',
-              style: TextStyle(
-                fontSize: 16.0,
-                color: Provider.of<Post>(context).isPostEnabled
-                    ? Colors.black
-                    : Colors.grey,
-              ),
+            child: Row(
+              children: [
+                Provider.of<Post>(context).postOption == PostOption.private
+                    ? Padding(
+                        padding: const EdgeInsets.only(right: 4.0),
+                        child: Icon(
+                          Icons.lock,
+                          size: 16.0,
+                          color: Provider.of<Post>(context).isPostEnabled
+                              ? Colors.black
+                              : Colors.grey,
+                        ),
+                      )
+                    : SizedBox.shrink(),
+                Text(
+                  Provider.of<Post>(context).postOption == PostOption.draft
+                      ? 'Save draft'
+                      : 'Post',
+                  style: TextStyle(
+                    fontSize: 16.0,
+                    color: Provider.of<Post>(context).isPostEnabled
+                        ? Colors.black
+                        : Colors.grey,
+                  ),
+                ),
+              ],
             ),
           ),
           style: ButtonStyle(
