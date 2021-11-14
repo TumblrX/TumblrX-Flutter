@@ -18,8 +18,9 @@ class CreatePostAdditions extends StatelessWidget {
             size: 30.0,
           ),
           onTap: () {
-            Navigator.pop(context);
+            Provider.of<Post>(context, listen: false).nextTextStyle();
           },
+          onLongPress: () {},
         ),
         SizedBox(
           width: 7.0,

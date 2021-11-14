@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tumblrx/models/text_field_data.dart';
 import 'package:tumblrx/utilities/constants.dart';
 
 class Post extends ChangeNotifier {
@@ -12,6 +13,9 @@ class Post extends ChangeNotifier {
   PostOption postOption;
   List<String> chosenHashtags;
   List<String> suggestedHashtags;
+  List<TextFieldData> textFieldData;
+  Map<int, Widget> otherPostContent;
+  TextStyleType chosenTextStyle;
 
   void initializePostOptions() {
     blogUsernames = ['ammarovic21', 'ammmar', 'ammaar'];
@@ -44,6 +48,9 @@ class Post extends ChangeNotifier {
       'music',
       'poetry'
     ];
+    chosenTextStyle = TextStyleType.Normal;
+    textFieldData = [TextFieldData(chosenTextStyle)];
+    _changeFocus(0);
     notifyListeners();
   }
 
@@ -85,6 +92,33 @@ class Post extends ChangeNotifier {
     for (String followedTag in followedHashtags) {
       if (followedTag.contains(RegExp(tag, caseSensitive: false)))
         suggestedHashtags.add(followedTag);
+    }
+    notifyListeners();
+  }
+
+  void addTextField(int currentIndex) {
+    textFieldData.insert(currentIndex + 1, TextFieldData(chosenTextStyle));
+    _changeFocus(currentIndex + 1);
+    notifyListeners();
+  }
+
+  void _changeFocus(int index) {
+    textFieldData[index].focusNode.requestFocus();
+  }
+
+  void removeTextField(int index) {
+    textFieldData.removeAt(index);
+    _changeFocus(index - 1);
+    notifyListeners();
+  }
+
+  void nextTextStyle() {
+    chosenTextStyle = TextStyleType.values[(chosenTextStyle.index + 1) % 6];
+    for (int i = 0; i < textFieldData.length; i++) {
+      if (textFieldData[i].focusNode.hasFocus) {
+        textFieldData[i].setTextStyleType(chosenTextStyle);
+        break;
+      }
     }
     notifyListeners();
   }

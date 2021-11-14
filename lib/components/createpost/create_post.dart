@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:giphy_get/giphy_get.dart';
 import 'package:provider/provider.dart';
+import 'package:tumblrx/components/createpost/post_content.dart';
 import 'package:tumblrx/components/createpost/post_tags.dart';
-import 'package:tumblrx/components/createpost/tags_list_view.dart';
 import 'package:tumblrx/services/post.dart';
-import 'add_tags.dart';
 import 'create_post_additions.dart';
 import 'create_post_header.dart';
 import 'create_post_user.dart';
-import '../modal_bottom_sheet.dart';
 
 class CreatePost extends StatefulWidget {
   CreatePost({this.topPadding});
@@ -18,16 +16,6 @@ class CreatePost extends StatefulWidget {
 }
 
 class _CreatePostState extends State<CreatePost> {
-  List<Widget> postContent = [
-    TextField(
-      decoration: InputDecoration(
-        hintText: "Add something, if you'd like",
-        border: InputBorder.none,
-        focusedBorder: InputBorder.none,
-      ),
-    ),
-  ];
-
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height -
@@ -59,8 +47,8 @@ class _CreatePostState extends State<CreatePost> {
                     height: 10.0,
                   ),
                   Flexible(
-                    child: ListView(
-                      children: postContent,
+                    child: PostContent(
+                      textFieldData: Provider.of<Post>(context).textFieldData,
                     ),
                   ),
                   PostTags(),
@@ -90,7 +78,7 @@ class _CreatePostState extends State<CreatePost> {
         gif.images.original.webp,
         headers: {'accept': 'image/*'},
       );
-      postContent.add(pickedGif);
+      //postContent.add(pickedGif);
     } else
       return;
     addTextField();
@@ -103,7 +91,7 @@ class _CreatePostState extends State<CreatePost> {
         focusedBorder: InputBorder.none,
       ),
     );
-    postContent.add(textField);
+    //postContent.add(textField);
     setState(() {});
   }
 }
