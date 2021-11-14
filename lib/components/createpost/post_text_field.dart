@@ -22,7 +22,6 @@ class PostTextField extends StatelessWidget {
             index != 0 &&
             focus.hasFocus &&
             textEditingController.value.text.length == 0) {
-          print('removing');
           Provider.of<Post>(context, listen: false).removeTextField(index);
         }
       },
@@ -41,7 +40,6 @@ class PostTextField extends StatelessWidget {
         child: TextField(
           textInputAction: TextInputAction.next,
           onSubmitted: (value) {
-            print('hi');
             String curValue = textEditingController.value.text;
             int len = curValue.length;
             if (len > 0 && curValue[len - 1] == '\n') {
