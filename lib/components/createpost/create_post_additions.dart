@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tumblrx/components/createpost/font_style_list.dart';
 import 'package:tumblrx/services/post.dart';
 import 'add_tags.dart';
 import '../modal_bottom_sheet.dart';
@@ -20,7 +21,13 @@ class CreatePostAdditions extends StatelessWidget {
           onTap: () {
             Provider.of<Post>(context, listen: false).nextTextStyle();
           },
-          onLongPress: () {},
+          onLongPress: () {
+            Provider.of<Post>(context, listen: false).saveFocusedIndex();
+            showDialog(
+              context: context,
+              builder: (_) => FontStyleList(),
+            );
+          },
         ),
         SizedBox(
           width: 7.0,

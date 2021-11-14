@@ -16,8 +16,10 @@ class Post extends ChangeNotifier {
   List<TextFieldData> textFieldData;
   Map<int, Widget> otherPostContent;
   TextStyleType chosenTextStyle;
+  int lastFocusedIndex;
 
   void initializePostOptions() {
+    lastFocusedIndex = 0;
     blogUsernames = ['ammarovic21', 'ammmar', 'ammaar'];
     blogUsernamesTitles = {
       'ammarovic21': 'title1',
@@ -112,14 +114,58 @@ class Post extends ChangeNotifier {
     notifyListeners();
   }
 
-  void nextTextStyle() {
+  void nextTextStyle([int index = -1]) {
     chosenTextStyle = TextStyleType.values[(chosenTextStyle.index + 1) % 6];
+    if (index != -1) {
+      textFieldData[index].setTextStyleType(chosenTextStyle);
+    } else {
+      for (int i = 0; i < textFieldData.length; i++) {
+        if (textFieldData[i].focusNode.hasFocus) {
+          textFieldData[i].setTextStyleType(chosenTextStyle);
+          break;
+        }
+      }
+    }
+    notifyListeners();
+  }
+
+  void saveFocusedIndex() {
     for (int i = 0; i < textFieldData.length; i++) {
       if (textFieldData[i].focusNode.hasFocus) {
-        textFieldData[i].setTextStyleType(chosenTextStyle);
+        lastFocusedIndex = i;
         break;
       }
     }
+  }
+
+  void setTextStyle(TextStyleType type) {
+    chosenTextStyle = type;
+    textFieldData[lastFocusedIndex].focusNode.requestFocus();
+    textFieldData[lastFocusedIndex].setTextStyleType(chosenTextStyle);
+    notifyListeners();
+  }
+
+  void setTextColor(int index, Color color) {
+    textFieldData[index].color = color;
+    textFieldData[index].updateTextStyle();
+    notifyListeners();
+  }
+
+  void setBold(int index) {
+    textFieldData[index].isBold = !textFieldData[index].isBold;
+    textFieldData[index].updateTextStyle();
+    notifyListeners();
+  }
+
+  void setItalic(int index) {
+    textFieldData[index].isItalic = !textFieldData[index].isItalic;
+    textFieldData[index].updateTextStyle();
+    notifyListeners();
+  }
+
+  void setLineThrough(int index) {
+    textFieldData[index].isLineThrough = !textFieldData[index].isLineThrough;
+    textFieldData[index].updateTextStyle();
     notifyListeners();
   }
 }
