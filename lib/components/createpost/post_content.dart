@@ -1,11 +1,13 @@
+import 'package:any_link_preview/any_link_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:tumblrx/components/createpost/post_text_field.dart';
 import 'package:tumblrx/models/text_field_data.dart';
+import 'package:tumblrx/utilities/constants.dart';
 
 class PostContent extends StatelessWidget {
-  final List<TextFieldData> textFieldData;
+  final List<dynamic> postContent;
 
-  PostContent({this.textFieldData});
+  PostContent({this.postContent});
 
   @override
   Widget build(BuildContext context) {
@@ -15,17 +17,37 @@ class PostContent extends StatelessWidget {
   }
 
   List<Widget> getPostContent() {
-    List<Widget> postContent = [];
-    for (int i = 0; i < textFieldData.length; i++) {
-      postContent.add(
-        PostTextField(
-          index: i,
-          focus: textFieldData[i].focusNode,
-          textStyle: textFieldData[i].textStyle,
-          textEditingController: textFieldData[i].textEditingController,
-        ),
-      );
+    List<Widget> postContentList = [];
+    for (int i = 0; i < postContent.length; i++) {
+      if (postContent[i]['type'] == PostContentType.text)
+        postContentList.add(
+          PostTextField(
+            index: i,
+            focus: postContent[i]['content']['data'].focusNode,
+            textStyle: postContent[i]['content']['data'].textStyle,
+            textEditingController:
+                postContent[i]['content']['data'].textEditingController,
+          ),
+        );
+      else if (postContent[i]['type'] == PostContentType.gif)
+        postContentList.add(Image.network(
+          postContent[i]['content']['link'],
+          headers: {'accept': 'image/*'},
+        ));
+      else if (postContent[i]['type'] == PostContentType.link)
+        postContentList.add(AnyLinkPreview(
+          link: postContent[i]['content']['link'],
+          displayDirection: UIDirection.UIDirectionHorizontal,
+          showMultimedia: false,
+          bodyMaxLines: 5,
+          bodyTextOverflow: TextOverflow.ellipsis,
+          titleStyle: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+            fontSize: 15,
+          ),
+        ));
     }
-    return postContent;
+    return postContentList;
   }
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:giphy_get/giphy_get.dart';
 import 'package:tumblrx/models/text_field_data.dart';
 import 'package:tumblrx/utilities/constants.dart';
+import 'package:http/http.dart' as http;
 
 class Post extends ChangeNotifier {
   List<String> followedHashtags;
@@ -13,8 +15,8 @@ class Post extends ChangeNotifier {
   PostOption postOption;
   List<String> chosenHashtags;
   List<String> suggestedHashtags;
-  List<TextFieldData> textFieldData;
-  Map<int, Widget> otherPostContent;
+  //List<TextFieldData> textFieldData;
+  List<dynamic> postContent;
   TextStyleType chosenTextStyle;
   int lastFocusedIndex;
 
@@ -51,7 +53,28 @@ class Post extends ChangeNotifier {
       'poetry'
     ];
     chosenTextStyle = TextStyleType.Normal;
-    textFieldData = [TextFieldData(chosenTextStyle)];
+    postContent = [
+      {
+        'type': PostContentType.text,
+        'content': {
+          'data': TextFieldData(chosenTextStyle),
+        }
+      },
+      // {
+      //   'type': PostContentType.gif,
+      //   'content': {
+      //     'link':
+      //         'https://media3.giphy.com/media/3o6nUX2Wl1vTChTeAU/giphy.webp?cid=94c17816c95f0qlee5sgomn27734ac0qytc85nfbaequolbj&rid=giphy.webp&ct=g'
+      //   }
+      // },
+      // {
+      //   'type': PostContentType.image,
+      //   'content': {
+      //     'link':
+      //         'https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Tumblr.svg/2048px-Tumblr.svg.png'
+      //   }
+      // }
+    ];
     _changeFocus(0);
     notifyListeners();
   }
@@ -99,29 +122,41 @@ class Post extends ChangeNotifier {
   }
 
   void addTextField(int currentIndex) {
-    textFieldData.insert(currentIndex + 1, TextFieldData(chosenTextStyle));
+    dynamic textField = {
+      'type': PostContentType.text,
+      'content': {
+        'data': TextFieldData(chosenTextStyle),
+      }
+    };
+    postContent.insert(currentIndex + 1, textField);
+    //textFieldData.insert(currentIndex + 1, TextFieldData(chosenTextStyle));
     _changeFocus(currentIndex + 1);
     notifyListeners();
   }
 
   void _changeFocus(int index) {
-    textFieldData[index].focusNode.requestFocus();
+    postContent[index]['content']['data'].focusNode.requestFocus();
+    //textFieldData[index].focusNode.requestFocus();
   }
 
   void removeTextField(int index) {
-    textFieldData.removeAt(index);
-    _changeFocus(index - 1);
-    notifyListeners();
+    if (index != 0 && postContent[index - 1]['type'] == PostContentType.text) {
+      postContent.removeAt(index);
+      _changeFocus(index - 1);
+      notifyListeners();
+    }
   }
 
   void nextTextStyle([int index = -1]) {
     chosenTextStyle = TextStyleType.values[(chosenTextStyle.index + 1) % 6];
     if (index != -1) {
-      textFieldData[index].setTextStyleType(chosenTextStyle);
+      postContent[index]['content']['data'].setTextStyleType(chosenTextStyle);
+      //textFieldData[index].setTextStyleType(chosenTextStyle);
     } else {
-      for (int i = 0; i < textFieldData.length; i++) {
-        if (textFieldData[i].focusNode.hasFocus) {
-          textFieldData[i].setTextStyleType(chosenTextStyle);
+      for (int i = 0; i < postContent.length; i++) {
+        if (postContent[i]['type'] == PostContentType.text &&
+            postContent[i]['content']['data'].focusNode.hasFocus) {
+          postContent[i]['content']['data'].setTextStyleType(chosenTextStyle);
           break;
         }
       }
@@ -130,8 +165,9 @@ class Post extends ChangeNotifier {
   }
 
   void saveFocusedIndex() {
-    for (int i = 0; i < textFieldData.length; i++) {
-      if (textFieldData[i].focusNode.hasFocus) {
+    for (int i = 0; i < postContent.length; i++) {
+      if (postContent[i]['type'] == PostContentType.text &&
+          postContent[i]['content']['data'].focusNode.hasFocus) {
         lastFocusedIndex = i;
         break;
       }
@@ -140,32 +176,100 @@ class Post extends ChangeNotifier {
 
   void setTextStyle(TextStyleType type) {
     chosenTextStyle = type;
-    textFieldData[lastFocusedIndex].focusNode.requestFocus();
-    textFieldData[lastFocusedIndex].setTextStyleType(chosenTextStyle);
+    postContent[lastFocusedIndex]['content']['data'].focusNode.requestFocus();
+    postContent[lastFocusedIndex]['content']['data']
+        .setTextStyleType(chosenTextStyle);
     notifyListeners();
   }
 
   void setTextColor(int index, Color color) {
-    textFieldData[index].color = color;
-    textFieldData[index].updateTextStyle();
+    postContent[index]['content']['data'].color = color;
+    postContent[index]['content']['data'].updateTextStyle();
     notifyListeners();
   }
 
   void setBold(int index) {
-    textFieldData[index].isBold = !textFieldData[index].isBold;
-    textFieldData[index].updateTextStyle();
+    postContent[index]['content']['data'].isBold =
+        !postContent[index]['content']['data'].isBold;
+    postContent[index]['content']['data'].updateTextStyle();
     notifyListeners();
   }
 
   void setItalic(int index) {
-    textFieldData[index].isItalic = !textFieldData[index].isItalic;
-    textFieldData[index].updateTextStyle();
+    postContent[index]['content']['data'].isItalic =
+        !postContent[index]['content']['data'].isItalic;
+    postContent[index]['content']['data'].updateTextStyle();
     notifyListeners();
   }
 
   void setLineThrough(int index) {
-    textFieldData[index].isLineThrough = !textFieldData[index].isLineThrough;
-    textFieldData[index].updateTextStyle();
+    postContent[index]['content']['data'].isLineThrough =
+        !postContent[index]['content']['data'].isLineThrough;
+    postContent[index]['content']['data'].updateTextStyle();
     notifyListeners();
+  }
+
+  void addGif(BuildContext context) async {
+    saveFocusedIndex();
+    GiphyGif gif = await GiphyGet.getGif(
+      context: context,
+      apiKey: 'N4xaE80Z4B2vOJ5Kd6VAKsmYqXx4Ijyq',
+    );
+    if (gif != null) {
+      dynamic pickedGif = {
+        'type': PostContentType.gif,
+        'content': {'link': gif.images.original.webp}
+      };
+      postContent.insert(lastFocusedIndex + 1, pickedGif);
+      addTextField(lastFocusedIndex + 1);
+      setIsEnabled();
+    } else
+      return;
+  }
+
+  void setIsEnabled() {
+    isPostEnabled = true;
+    notifyListeners();
+  }
+
+  void checkPostEnable() {
+    for (int i = 0; i < postContent.length; i++) {
+      if (postContent[i]['type'] != PostContentType.text) {
+        setIsEnabled();
+        return;
+      } else {
+        if (postContent[i]['content']['data']
+                .textEditingController
+                .value
+                .text
+                .length >
+            0) {
+          setIsEnabled();
+          return;
+        }
+      }
+    }
+    isPostEnabled = false;
+    notifyListeners();
+  }
+
+  Future<bool> isLinkValid(String link) async {
+    if (link.substring(0, 4) != "http") link = "http://" + link;
+    final response = await http.get(Uri.parse(link), headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "POST, GET, OPTIONS, PUT, DELETE, HEAD",
+    });
+    if (response.statusCode == 200) return true;
+    return false;
+  }
+
+  void addLinkPreview(String link) {
+    if (link.substring(0, 4) != "http") link = "http://" + link;
+    dynamic linkMap = {
+      'type': PostContentType.link,
+      'content': {'link': link}
+    };
+    postContent.insert(lastFocusedIndex + 1, linkMap);
+    addTextField(lastFocusedIndex + 1);
   }
 }

@@ -24,6 +24,10 @@ class PostTextField extends StatelessWidget {
             textEditingController.value.text.length == 0) {
           Provider.of<Post>(context, listen: false).removeTextField(index);
         }
+        if (event.isKeyPressed(LogicalKeyboardKey.enter) &&
+            event.isKeyPressed(LogicalKeyboardKey.shift)) {
+          print('next line');
+        }
       },
       child: GestureDetector(
         onDoubleTap: () {
@@ -41,17 +45,22 @@ class PostTextField extends StatelessWidget {
           textInputAction: TextInputAction.next,
           onSubmitted: (value) {
             String curValue = textEditingController.value.text;
-            int len = curValue.length;
-            if (len > 0 && curValue[len - 1] == '\n') {
-              textEditingController.text =
-                  textEditingController.value.text.substring(0, len - 1);
-            }
+            //int len = curValue.length;
+            // if (len > 0 && curValue[len - 1] == '\n') {
+            //   textEditingController.text =
+            //       textEditingController.value.text.substring(0, len - 1);
+            // }
             Provider.of<Post>(context, listen: false).addTextField(index);
           },
           controller: textEditingController,
           style: textStyle,
           focusNode: focus,
           onChanged: (value) {
+            if (value.length > 0)
+              Provider.of<Post>(context, listen: false).setIsEnabled();
+            else {
+              Provider.of<Post>(context, listen: false).checkPostEnable();
+            }
             if (value.length > 0 && value[value.length - 1] == '\n') {
               textEditingController.text = textEditingController.value.text
                   .substring(0, value.length - 1);

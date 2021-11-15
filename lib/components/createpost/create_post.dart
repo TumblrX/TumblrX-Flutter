@@ -48,17 +48,14 @@ class _CreatePostState extends State<CreatePost> {
                   ),
                   Flexible(
                     child: PostContent(
-                      textFieldData: Provider.of<Post>(context).textFieldData,
+                      postContent: Provider.of<Post>(context).postContent,
                     ),
                   ),
                   PostTags(),
                   SizedBox(
                     height: 10.0,
                   ),
-                  CreatePostAdditions(
-                    addGif: addGif,
-                    addImage: () {},
-                  ),
+                  CreatePostAdditions(),
                 ],
               ),
             ),
@@ -66,32 +63,5 @@ class _CreatePostState extends State<CreatePost> {
         ),
       ),
     );
-  }
-
-  void addGif() async {
-    GiphyGif gif = await GiphyGet.getGif(
-      context: context,
-      apiKey: 'N4xaE80Z4B2vOJ5Kd6VAKsmYqXx4Ijyq',
-    );
-    if (gif != null && mounted) {
-      Widget pickedGif = Image.network(
-        gif.images.original.webp,
-        headers: {'accept': 'image/*'},
-      );
-      //postContent.add(pickedGif);
-    } else
-      return;
-    addTextField();
-  }
-
-  void addTextField() {
-    Widget textField = TextField(
-      decoration: InputDecoration(
-        border: InputBorder.none,
-        focusedBorder: InputBorder.none,
-      ),
-    );
-    //postContent.add(textField);
-    setState(() {});
   }
 }

@@ -59,11 +59,9 @@ class AdditionalStyleOptions extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     InkWell(
-                      child: IgnorePointer(
-                        child: Icon(
-                          Icons.text_format,
-                          size: 30.0,
-                        ),
+                      child: Icon(
+                        Icons.text_format,
+                        size: 30.0,
                       ),
                       onTap: () {
                         Provider.of<Post>(context, listen: false)
@@ -72,11 +70,14 @@ class AdditionalStyleOptions extends StatelessWidget {
                     ),
                     Spacer(),
                     InkWell(
-                      child: IgnorePointer(
-                        child: Icon(
-                          Icons.format_bold,
-                          size: 30.0,
-                        ),
+                      child: Icon(
+                        Icons.format_bold,
+                        size: 30.0,
+                        color: Provider.of<Post>(context)
+                                .postContent[index]['content']['data']
+                                .isBold
+                            ? Colors.blue
+                            : Colors.black,
                       ),
                       onTap: () {
                         Provider.of<Post>(context, listen: false)
@@ -90,6 +91,11 @@ class AdditionalStyleOptions extends StatelessWidget {
                       child: Icon(
                         Icons.format_italic,
                         size: 30.0,
+                        color: Provider.of<Post>(context)
+                                .postContent[index]['content']['data']
+                                .isItalic
+                            ? Colors.blue
+                            : Colors.black,
                       ),
                       onTap: () {
                         Provider.of<Post>(context, listen: false)
@@ -103,6 +109,11 @@ class AdditionalStyleOptions extends StatelessWidget {
                       child: Icon(
                         Icons.strikethrough_s,
                         size: 30.0,
+                        color: Provider.of<Post>(context)
+                                .postContent[index]['content']['data']
+                                .isLineThrough
+                            ? Colors.blue
+                            : Colors.black,
                       ),
                       onTap: () {
                         Provider.of<Post>(context, listen: false)

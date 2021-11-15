@@ -4,11 +4,9 @@ import 'package:tumblrx/components/createpost/font_style_list.dart';
 import 'package:tumblrx/services/post.dart';
 import 'add_tags.dart';
 import '../modal_bottom_sheet.dart';
+import 'link_preview_input.dart';
 
 class CreatePostAdditions extends StatelessWidget {
-  CreatePostAdditions({this.addGif, this.addImage});
-  final Function addGif;
-  final Function addImage;
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -38,7 +36,14 @@ class CreatePostAdditions extends StatelessWidget {
             size: 30.0,
           ),
           onTap: () {
-            Navigator.pop(context);
+            Provider.of<Post>(context, listen: false).saveFocusedIndex();
+            showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              builder: (context) => SingleChildScrollView(
+                child: LinkPreviewInput(),
+              ),
+            );
           },
         ),
         SizedBox(
@@ -50,7 +55,7 @@ class CreatePostAdditions extends StatelessWidget {
             size: 30.0,
           ),
           onTap: () {
-            addGif();
+            Provider.of<Post>(context, listen: false).addGif(context);
           },
         ),
         SizedBox(
@@ -61,9 +66,7 @@ class CreatePostAdditions extends StatelessWidget {
             Icons.photo_outlined,
             size: 30.0,
           ),
-          onTap: () {
-            addImage();
-          },
+          onTap: () {},
         ),
         SizedBox(
           width: 7.0,

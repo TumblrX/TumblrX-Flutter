@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 enum PostOption { now, draft, private }
+enum PostContentType { text, link, gif, image, video, music }
 
 const TextStyle kNormalTextStyle = TextStyle();
 const TextStyle kBiggerTextStyle = TextStyle(fontSize: 20.0);

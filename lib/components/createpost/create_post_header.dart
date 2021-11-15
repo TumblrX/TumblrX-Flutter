@@ -55,7 +55,7 @@ class CreatePostHeader extends StatelessWidget {
           ),
           style: ButtonStyle(
             backgroundColor: Provider.of<Post>(context).isPostEnabled
-                ? MaterialStateProperty.all<Color>(Colors.lightBlueAccent)
+                ? MaterialStateProperty.all<Color>(Colors.blueAccent)
                 : MaterialStateProperty.all<Color>(Colors.black12),
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
