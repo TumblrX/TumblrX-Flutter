@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:giphy_get/giphy_get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:tumblrx/models/text_field_data.dart';
 import 'package:tumblrx/utilities/constants.dart';
 import 'package:http/http.dart' as http;
@@ -19,6 +22,7 @@ class Post extends ChangeNotifier {
   List<dynamic> postContent;
   TextStyleType chosenTextStyle;
   int lastFocusedIndex;
+  ImagePicker _picker;
 
   void initializePostOptions() {
     lastFocusedIndex = 0;
@@ -60,22 +64,9 @@ class Post extends ChangeNotifier {
           'data': TextFieldData(chosenTextStyle),
         }
       },
-      // {
-      //   'type': PostContentType.gif,
-      //   'content': {
-      //     'link':
-      //         'https://media3.giphy.com/media/3o6nUX2Wl1vTChTeAU/giphy.webp?cid=94c17816c95f0qlee5sgomn27734ac0qytc85nfbaequolbj&rid=giphy.webp&ct=g'
-      //   }
-      // },
-      // {
-      //   'type': PostContentType.image,
-      //   'content': {
-      //     'link':
-      //         'https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Tumblr.svg/2048px-Tumblr.svg.png'
-      //   }
-      // }
     ];
     _changeFocus(0);
+    _picker = ImagePicker();
     notifyListeners();
   }
 
@@ -271,5 +262,36 @@ class Post extends ChangeNotifier {
     };
     postContent.insert(lastFocusedIndex + 1, linkMap);
     addTextField(lastFocusedIndex + 1);
+    setIsEnabled();
+  }
+
+  void addImage({bool isCamera}) async {
+    final XFile image = await _picker.pickImage(
+        source: isCamera ? ImageSource.camera : ImageSource.gallery);
+    if (image != null) {
+      Map img = {'type': PostContentType.image, 'content': image};
+      postContent.insert(lastFocusedIndex + 1, img);
+      addTextField(lastFocusedIndex + 1);
+      setIsEnabled();
+    }
+  }
+
+  void addVideo({bool isCamera}) async {
+    final XFile video = await _picker.pickVideo(
+        source: isCamera ? ImageSource.camera : ImageSource.gallery);
+    if (video != null) {
+      Map vid = {'type': PostContentType.video, 'content': video};
+      postContent.insert(lastFocusedIndex + 1, vid);
+      addTextField(lastFocusedIndex + 1);
+      setIsEnabled();
+    }
+  }
+
+  Future<XFile> retrieveLostData() async {
+    final LostDataResponse response = await _picker.retrieveLostData();
+    if (response.isEmpty || response.file == null) {
+      return null;
+    }
+    return response.file;
   }
 }

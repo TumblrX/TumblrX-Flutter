@@ -1,7 +1,9 @@
 import 'package:any_link_preview/any_link_preview.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:tumblrx/components/createpost/post_text_field.dart';
-import 'package:tumblrx/models/text_field_data.dart';
+import 'package:tumblrx/components/createpost/video_player_preview.dart';
+import 'dart:io';
 import 'package:tumblrx/utilities/constants.dart';
 
 class PostContent extends StatelessWidget {
@@ -19,7 +21,7 @@ class PostContent extends StatelessWidget {
   List<Widget> getPostContent() {
     List<Widget> postContentList = [];
     for (int i = 0; i < postContent.length; i++) {
-      if (postContent[i]['type'] == PostContentType.text)
+      if (postContent[i]['type'] == PostContentType.text) {
         postContentList.add(
           PostTextField(
             index: i,
@@ -29,12 +31,12 @@ class PostContent extends StatelessWidget {
                 postContent[i]['content']['data'].textEditingController,
           ),
         );
-      else if (postContent[i]['type'] == PostContentType.gif)
+      } else if (postContent[i]['type'] == PostContentType.gif) {
         postContentList.add(Image.network(
           postContent[i]['content']['link'],
           headers: {'accept': 'image/*'},
         ));
-      else if (postContent[i]['type'] == PostContentType.link)
+      } else if (postContent[i]['type'] == PostContentType.link) {
         postContentList.add(AnyLinkPreview(
           link: postContent[i]['content']['link'],
           displayDirection: UIDirection.UIDirectionHorizontal,
@@ -47,6 +49,14 @@ class PostContent extends StatelessWidget {
             fontSize: 15,
           ),
         ));
+      } else if (postContent[i]['type'] == PostContentType.image) {
+        postContentList.add(kIsWeb
+            ? Image.network(postContent[i]['content'].path)
+            : Image.file(File(postContent[i]['content'].path)));
+      } else if (postContent[i]['type'] == PostContentType.video) {
+        postContentList
+            .add(VideoPlayerPreview(file: postContent[i]['content']));
+      }
     }
     return postContentList;
   }
