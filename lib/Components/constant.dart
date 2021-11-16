@@ -15,10 +15,10 @@ class Constant extends StatelessWidget {
         ListTile(
           title: Text('View your avatar'),
           onTap: () {
-            Navigator.push(context,MaterialPageRoute(builder: (context)=>ShowImage(Constant.avatarPath)));
-
-
-
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ShowImage(Constant.avatarPath)));
           },
         )
       ],
@@ -36,9 +36,12 @@ class Constant extends StatelessWidget {
         ),
         ListTile(
           title: Text('View your header imge'),
-          onTap: () { Navigator.push(context,MaterialPageRoute(builder: (context)=>ShowImage(Constant.headerImgPath)));
-
-},
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ShowImage(Constant.headerImgPath)));
+          },
         )
       ],
     );
@@ -77,6 +80,8 @@ class Constant extends StatelessWidget {
   static String userName = 'nervouswinner';
   static String headerImgPath = 'images/header.png';
   static String avatarPath = 'images/avatar.png';
+  static String profileDescription = '';
+
   //for tumbler blogs
   final tumblrsBlogs = ['account1', 'account2'];
 

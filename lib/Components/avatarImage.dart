@@ -12,7 +12,7 @@ class _AvatarImageState extends State<AvatarImage> {
   Widget build(BuildContext context) {
     return Positioned(top: 143,child:  GestureDetector(
                 child: CircleAvatar(
-                  radius: 40,
+                  radius: 38,
                   backgroundImage: AssetImage(Constant.avatarPath),
                 ),
                 onTap: () {

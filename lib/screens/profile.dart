@@ -3,7 +3,6 @@ import 'package:tumblrx/Components/avatar.dart';
 import 'package:tumblrx/Components/constant.dart';
 import 'package:tumblrx/Components/headerImage.dart';
 import 'package:tumblrx/Components/text.dart';
-import 'package:tumblrx/Components/toggleButtons.dart';
 import 'package:tumblrx/Components/avatarImage.dart';
 import 'package:tumblrx/Components/edit/editBottons.dart';
 import 'package:tumblrx/Components/tabBars.dart';

@@ -11,7 +11,7 @@ class _AvatarState extends State<Avatar> {
   @override
   Widget build(BuildContext context) {
     return Positioned(top: 140,child:  CircleAvatar(
-      radius: 43,
+      radius: 41,
        backgroundColor:Constant .bottomCoverColor,
     ));
   }

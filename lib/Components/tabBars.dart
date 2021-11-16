@@ -4,9 +4,9 @@ import 'package:tumblrx/Components/avatar.dart';
 import 'package:tumblrx/Components/constant.dart';
 import 'package:tumblrx/Components/headerImage.dart';
 import 'package:tumblrx/Components/text.dart';
-import 'package:tumblrx/Components/toggleButtons.dart';
 import 'package:tumblrx/Components/avatarImage.dart';
 import 'package:tumblrx/Components/edit/editBottons.dart';
+import 'package:tumblrx/Components/squareAvatar/square.dart';
 
 class TabBars extends StatefulWidget  {
   @override
@@ -42,8 +42,9 @@ class _TabBarsState extends State<TabBars>   with SingleTickerProviderStateMixin
 
             ],
               ),
-             Avatar(),
-              AvatarImage()
+              Square(),
+             //Avatar(),
+              //AvatarImage()
            ]),
            Container(color: Constant.bottomCoverColor,child: TabBar(
               
