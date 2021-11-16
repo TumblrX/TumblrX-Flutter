@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tumblrx/Components/constant.dart';
+import 'search/search.dart';
 
 class HeaderImage extends StatefulWidget {
   @override
@@ -11,49 +12,65 @@ class _HeaderImageState extends State<HeaderImage> {
   Widget build(BuildContext context) {
     return GestureDetector(
       child: Container(
-        alignment: Alignment(1, -0.6),
+       
+
+        
         //the Top Icons
-        child: Row(
-          //DropDown Item
-          children: <Widget>[
-            Container(
-                margin: EdgeInsets.only(left: 15.0),
-                width: 150,
-                child: DropdownButton<String>(
-                  underline: SizedBox(),
+
+        child:Container( margin: EdgeInsets.only(left: 15.0,top: 25.0),child: 
+        
+        
+        Stack(
+          
+          
+         // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //crossAxisAlignment: CrossAxisAlignment.start,
+          children: [Stack(children: <Widget>[
+            
+            DropdownButton(
+              
+
+              //isExpanded: true,
+              value: 'first',
+          
+              underline: SizedBox(),
                   //change color of DropDown icon
                   iconEnabledColor: Colors.white,
                   iconDisabledColor: Colors.white,
-                  value: Constant.valueOfDropList,
-                  isExpanded: true,
+                
+              
+              items: [
+                
+                DropdownMenuItem(
+                  
+                  child:SizedBox(child: Text(' create new')),
+                  
+                  value: 'first',
+                ),
 
-                  items: [
-                    DropdownMenuItem(
-                      child: Row(
-                        children: <Widget>[
-                          Container(
-                            width: 25,
-                            height: 25,
-                            color: Colors.black,
-                          ),
-                          Text('unknown')
-                        ],
-                      ),
-                      value: 'unknown',
-                    ),
-                    //Constant.createNewTumblr()
-                  ],
-                  onChanged: (value) {
-                    setState(() {
-                      Constant.valueOfDropList = value;
-                    });
-                  },
-                )),
-            IconButton(
+               
+
+           
+              
+
+               
+              ],
+              onChanged: (selected) {},
+            )
+          ], ),
+
+            Row(crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.end,
+
+
+              children: <Widget>[
+                  IconButton(
               icon: Icon(Icons.search),
               color: Colors.white,
               onPressed: () {
-                print('search is pressed');
+                Navigator.push(context,MaterialPageRoute(builder: (context)=>Search()));
+
+               
               },
             ),
             IconButton(
@@ -77,14 +94,26 @@ class _HeaderImageState extends State<HeaderImage> {
                 print('setting is pressed');
               },
             ),
+
+
+
+
+              ],
+
+
+
+
+            )
+
           ],
-        ),
+        )),
+
         //color: Colors.green,
         decoration: BoxDecoration(
             image: DecorationImage(
-                image: AssetImage("images/header.png"),
+                image: AssetImage(Constant.headerImgPath),
                 fit: BoxFit.fill)), //dummy image
-        height: 200,
+        height: MediaQuery.of(context).size.height / 3.6, //(200)
       ),
       onTap: () {
         showModalBottomSheet(

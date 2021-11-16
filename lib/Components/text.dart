@@ -6,8 +6,9 @@ class TextWriting extends StatelessWidget {
     return Container(
         alignment: Alignment.center,
         color:Constant. bottomCoverColor,
-        height: 95,
+        height: 100,
         child: Text(
+          
           'Untitled',
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 38),
         )

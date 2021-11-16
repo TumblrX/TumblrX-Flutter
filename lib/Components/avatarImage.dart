@@ -10,10 +10,10 @@ class AvatarImage extends StatefulWidget {
 class _AvatarImageState extends State<AvatarImage> {
   @override
   Widget build(BuildContext context) {
-    return  GestureDetector(
+    return Positioned(top: 143,child:  GestureDetector(
                 child: CircleAvatar(
                   radius: 40,
-                  backgroundImage: AssetImage("images/avatar.png"),
+                  backgroundImage: AssetImage(Constant.avatarPath),
                 ),
                 onTap: () {
                   //bottom sheet of avatar
@@ -23,6 +23,7 @@ class _AvatarImageState extends State<AvatarImage> {
                       context: context,
                       builder:Constant. buildBottomSheetAvatar);
                 },
-              );
+    
+              ));
   }
 }

@@ -30,13 +30,13 @@ class _ToggleState extends State<Toggle> {
                     setState(() {
                       //For Change Color of Post
 
-                      Constant.posts = Color(0xffffff00);
-                      Constant.likes = Color(0xffffffff);
-                      Constant.following = Color(0xffffffff);
+                      Constant.posts = Constant. accent;
+                      Constant.likes = Color(0xffc7c1c1);
+                      Constant.following = Color(0xffc7c1c1);
                       Constant.isSelect[0] = true;
                       Constant.isSelect[1] = false;
                       Constant.isSelect[2] = false;
-                      Constant.postsUnderline = Color(0xffffff00);
+                      Constant.postsUnderline = Constant. accent;
 
                       Constant.likesUnderline = Constant.bottomCoverColor;
                       Constant.followingUnderline = Constant.bottomCoverColor;
@@ -58,16 +58,16 @@ class _ToggleState extends State<Toggle> {
                   onPressed: () {
                     setState(() {
                       //For Change Color of Likes
-                      Constant.posts = Color(0xffffffff);
-                      Constant.likes = Color(0xffffff00);
-                      Constant.following = Color(0xffffffff);
+                      Constant.posts = Color(0xffc7c1c1);
+                      Constant.likes = Constant. accent;
+                      Constant.following = Color(0xffc7c1c1);
                       Constant.isSelect[0] = false;
                       Constant.isSelect[1] = true;
                       Constant.isSelect[2] = false;
 
                       Constant.postsUnderline = Constant.bottomCoverColor;
 
-                      Constant.likesUnderline = Color(0xffffff00);
+                      Constant.likesUnderline = Constant. accent;
                       Constant.followingUnderline = Constant.bottomCoverColor;
                     });
                   },
@@ -88,16 +88,16 @@ class _ToggleState extends State<Toggle> {
                   onPressed: () {
                     //For Change Color of following
                     setState(() {
-                      Constant.posts = Color(0xffffffff);
-                      Constant.likes = Color(0xffffffff);
-                      Constant.following = Color(0xffffff00);
+                      Constant.posts = Color(0xffc7c1c1);
+                      Constant.likes = Color(0xffc7c1c1);
+                      Constant.following = Constant. accent;
                       Constant.isSelect[0] = false;
                       Constant.isSelect[1] = false;
                       Constant.isSelect[2] = true;
                       Constant.postsUnderline = Constant.bottomCoverColor;
 
                       Constant.likesUnderline = Constant.bottomCoverColor;
-                      Constant.followingUnderline = Color(0xffffff00);
+                      Constant.followingUnderline =Constant. accent;
                     });
                   },
                   child: Text(
