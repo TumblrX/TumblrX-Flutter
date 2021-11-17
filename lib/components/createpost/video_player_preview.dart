@@ -7,7 +7,7 @@ import 'package:video_player/video_player.dart';
 import 'dart:io';
 
 class VideoPlayerPreview extends StatefulWidget {
-  XFile file;
+  final XFile file;
   VideoPlayerPreview({this.file});
   @override
   _VideoPlayerPreviewState createState() => _VideoPlayerPreviewState();

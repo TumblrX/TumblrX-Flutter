@@ -44,12 +44,6 @@ class PostTextField extends StatelessWidget {
         child: TextField(
           textInputAction: TextInputAction.next,
           onSubmitted: (value) {
-            String curValue = textEditingController.value.text;
-            //int len = curValue.length;
-            // if (len > 0 && curValue[len - 1] == '\n') {
-            //   textEditingController.text =
-            //       textEditingController.value.text.substring(0, len - 1);
-            // }
             Provider.of<Post>(context, listen: false).addTextField(index);
           },
           controller: textEditingController,
