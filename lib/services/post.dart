@@ -133,6 +133,11 @@ class Post extends ChangeNotifier {
     }
   }
 
+  void removePostItem(int index) {
+    postContent.removeAt(index);
+    notifyListeners();
+  }
+
   void nextTextStyle([int index = -1]) {
     chosenTextStyle = TextStyleType.values[(chosenTextStyle.index + 1) % 6];
     if (index != -1) {
