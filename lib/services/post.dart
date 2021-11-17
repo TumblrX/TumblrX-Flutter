@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:giphy_get/giphy_get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -18,7 +16,6 @@ class Post extends ChangeNotifier {
   PostOption postOption;
   List<String> chosenHashtags;
   List<String> suggestedHashtags;
-  //List<TextFieldData> textFieldData;
   List<dynamic> postContent;
   TextStyleType chosenTextStyle;
   int lastFocusedIndex;
@@ -120,14 +117,12 @@ class Post extends ChangeNotifier {
       }
     };
     postContent.insert(currentIndex + 1, textField);
-    //textFieldData.insert(currentIndex + 1, TextFieldData(chosenTextStyle));
     _changeFocus(currentIndex + 1);
     notifyListeners();
   }
 
   void _changeFocus(int index) {
     postContent[index]['content']['data'].focusNode.requestFocus();
-    //textFieldData[index].focusNode.requestFocus();
   }
 
   void removeTextField(int index) {
@@ -142,7 +137,6 @@ class Post extends ChangeNotifier {
     chosenTextStyle = TextStyleType.values[(chosenTextStyle.index + 1) % 6];
     if (index != -1) {
       postContent[index]['content']['data'].setTextStyleType(chosenTextStyle);
-      //textFieldData[index].setTextStyleType(chosenTextStyle);
     } else {
       for (int i = 0; i < postContent.length; i++) {
         if (postContent[i]['type'] == PostContentType.text &&
@@ -246,11 +240,15 @@ class Post extends ChangeNotifier {
 
   Future<bool> isLinkValid(String link) async {
     if (link.substring(0, 4) != "http") link = "http://" + link;
-    final response = await http.get(Uri.parse(link), headers: {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "POST, GET, OPTIONS, PUT, DELETE, HEAD",
-    });
-    if (response.statusCode == 200) return true;
+    try {
+      final response = await http.get(Uri.parse(link), headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "POST, GET, OPTIONS, PUT, DELETE, HEAD",
+      });
+      if (response.statusCode == 200) return true;
+    } catch (error) {
+      return false;
+    }
     return false;
   }
 

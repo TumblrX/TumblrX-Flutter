@@ -53,16 +53,18 @@ class CreatePostOptions extends StatelessWidget {
             },
           ),
         ),
-        ListTile(
-          title: Text('Share to Twitter'),
-          trailing: Switch(
-            value: Provider.of<Post>(context).shareToTwitter,
-            onChanged: (value) {
-              Provider.of<Post>(context, listen: false)
-                  .setShareToTwitter(value);
-            },
-          ),
-        ),
+        Provider.of<Post>(context).postOption == PostOption.now
+            ? ListTile(
+                title: Text('Share to Twitter'),
+                trailing: Switch(
+                  value: Provider.of<Post>(context).shareToTwitter,
+                  onChanged: (value) {
+                    Provider.of<Post>(context, listen: false)
+                        .setShareToTwitter(value);
+                  },
+                ),
+              )
+            : SizedBox.shrink(),
       ],
     );
   }
