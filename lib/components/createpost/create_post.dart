@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/components/createpost/post_content.dart';
 import 'package:tumblrx/components/createpost/post_tags.dart';
-import 'package:tumblrx/services/post.dart';
+import 'package:tumblrx/services/creating_post.dart';
 import 'create_post_additions.dart';
 import 'create_post_header.dart';
 import 'create_post_user.dart';
@@ -47,7 +47,8 @@ class _CreatePostState extends State<CreatePost> {
                   ),
                   Flexible(
                     child: PostContent(
-                      postContent: Provider.of<Post>(context).postContent,
+                      postContent:
+                          Provider.of<CreatingPost>(context).postContent,
                     ),
                   ),
                   PostTags(),

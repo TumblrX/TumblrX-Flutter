@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tumblrx/services/post.dart';
+import 'package:tumblrx/services/creating_post.dart';
 
 class ColorChoice extends StatelessWidget {
   final int textFieldIndex;
@@ -10,7 +10,7 @@ class ColorChoice extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Provider.of<Post>(context, listen: false)
+        Provider.of<CreatingPost>(context, listen: false)
             .setTextColor(textFieldIndex, color);
       },
       child: Stack(
@@ -20,7 +20,7 @@ class ColorChoice extends StatelessWidget {
             radius: 16.0,
             backgroundColor: color,
           ),
-          Provider.of<Post>(context)
+          Provider.of<CreatingPost>(context)
                       .postContent[textFieldIndex]['content']['data']
                       .color ==
                   color

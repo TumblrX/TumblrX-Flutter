@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tumblrx/services/post.dart';
+import 'package:tumblrx/services/creating_post.dart';
 
 import 'color_choice.dart';
 
@@ -64,7 +64,7 @@ class AdditionalStyleOptions extends StatelessWidget {
                         size: 30.0,
                       ),
                       onTap: () {
-                        Provider.of<Post>(context, listen: false)
+                        Provider.of<CreatingPost>(context, listen: false)
                             .nextTextStyle(index);
                       },
                     ),
@@ -73,14 +73,14 @@ class AdditionalStyleOptions extends StatelessWidget {
                       child: Icon(
                         Icons.format_bold,
                         size: 30.0,
-                        color: Provider.of<Post>(context)
+                        color: Provider.of<CreatingPost>(context)
                                 .postContent[index]['content']['data']
                                 .isBold
                             ? Colors.blue
                             : Colors.black,
                       ),
                       onTap: () {
-                        Provider.of<Post>(context, listen: false)
+                        Provider.of<CreatingPost>(context, listen: false)
                             .setBold(index);
                       },
                     ),
@@ -91,14 +91,14 @@ class AdditionalStyleOptions extends StatelessWidget {
                       child: Icon(
                         Icons.format_italic,
                         size: 30.0,
-                        color: Provider.of<Post>(context)
+                        color: Provider.of<CreatingPost>(context)
                                 .postContent[index]['content']['data']
                                 .isItalic
                             ? Colors.blue
                             : Colors.black,
                       ),
                       onTap: () {
-                        Provider.of<Post>(context, listen: false)
+                        Provider.of<CreatingPost>(context, listen: false)
                             .setItalic(index);
                       },
                     ),
@@ -109,14 +109,14 @@ class AdditionalStyleOptions extends StatelessWidget {
                       child: Icon(
                         Icons.strikethrough_s,
                         size: 30.0,
-                        color: Provider.of<Post>(context)
+                        color: Provider.of<CreatingPost>(context)
                                 .postContent[index]['content']['data']
                                 .isLineThrough
                             ? Colors.blue
                             : Colors.black,
                       ),
                       onTap: () {
-                        Provider.of<Post>(context, listen: false)
+                        Provider.of<CreatingPost>(context, listen: false)
                             .setLineThrough(index);
                       },
                     ),

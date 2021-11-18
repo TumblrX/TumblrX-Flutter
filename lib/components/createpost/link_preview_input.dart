@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tumblrx/services/post.dart';
+import 'package:tumblrx/services/creating_post.dart';
 
 class LinkPreviewInput extends StatelessWidget {
   @override
@@ -21,10 +21,11 @@ class LinkPreviewInput extends StatelessWidget {
           child: TextField(
             onSubmitted: (value) async {
               final bool isValid =
-                  await Provider.of<Post>(context, listen: false)
+                  await Provider.of<CreatingPost>(context, listen: false)
                       .isLinkValid(value);
               if (isValid) {
-                Provider.of<Post>(context, listen: false).addLinkPreview(value);
+                Provider.of<CreatingPost>(context, listen: false)
+                    .addLinkPreview(value);
                 Navigator.pop(context);
               }
             },

@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/components/createpost/font_style_list.dart';
-import 'package:tumblrx/services/post.dart';
+import 'package:tumblrx/services/creating_post.dart';
 import 'add_tags.dart';
 import '../modal_bottom_sheet.dart';
 import 'link_preview_input.dart';
@@ -18,10 +18,11 @@ class CreatePostAdditions extends StatelessWidget {
             size: 30.0,
           ),
           onTap: () {
-            Provider.of<Post>(context, listen: false).nextTextStyle();
+            Provider.of<CreatingPost>(context, listen: false).nextTextStyle();
           },
           onLongPress: () {
-            Provider.of<Post>(context, listen: false).saveFocusedIndex();
+            Provider.of<CreatingPost>(context, listen: false)
+                .saveFocusedIndex();
             showDialog(
               context: context,
               builder: (_) => FontStyleList(),
@@ -37,7 +38,8 @@ class CreatePostAdditions extends StatelessWidget {
             size: 30.0,
           ),
           onTap: () {
-            Provider.of<Post>(context, listen: false).saveFocusedIndex();
+            Provider.of<CreatingPost>(context, listen: false)
+                .saveFocusedIndex();
             showModalBottomSheet(
               context: context,
               isScrollControlled: true,
@@ -56,7 +58,7 @@ class CreatePostAdditions extends StatelessWidget {
             size: 30.0,
           ),
           onTap: () {
-            Provider.of<Post>(context, listen: false).addGif(context);
+            Provider.of<CreatingPost>(context, listen: false).addGif(context);
           },
         ),
         SizedBox(
@@ -68,7 +70,8 @@ class CreatePostAdditions extends StatelessWidget {
             size: 30.0,
           ),
           onTap: () {
-            Provider.of<Post>(context, listen: false).saveFocusedIndex();
+            Provider.of<CreatingPost>(context, listen: false)
+                .saveFocusedIndex();
             showDialog(
                 context: context,
                 builder: (_) => AlertDialog(
@@ -86,7 +89,7 @@ class CreatePostAdditions extends StatelessWidget {
                           ),
                           onTap: () {
                             Navigator.pop(context);
-                            Provider.of<Post>(context, listen: false)
+                            Provider.of<CreatingPost>(context, listen: false)
                                 .addImage(isCamera: false);
                           },
                         ),
@@ -99,7 +102,7 @@ class CreatePostAdditions extends StatelessWidget {
                           ),
                           onTap: () {
                             Navigator.pop(context);
-                            Provider.of<Post>(context, listen: false)
+                            Provider.of<CreatingPost>(context, listen: false)
                                 .addVideo(isCamera: false);
                           },
                         ),
@@ -117,7 +120,8 @@ class CreatePostAdditions extends StatelessWidget {
                   size: 30.0,
                 ),
                 onTap: () {
-                  Provider.of<Post>(context, listen: false).saveFocusedIndex();
+                  Provider.of<CreatingPost>(context, listen: false)
+                      .saveFocusedIndex();
                   showDialog(
                       context: context,
                       builder: (_) => AlertDialog(
@@ -134,7 +138,8 @@ class CreatePostAdditions extends StatelessWidget {
                                 ),
                                 onTap: () {
                                   Navigator.pop(context);
-                                  Provider.of<Post>(context, listen: false)
+                                  Provider.of<CreatingPost>(context,
+                                          listen: false)
                                       .addImage(isCamera: true);
                                 },
                               ),
@@ -145,7 +150,8 @@ class CreatePostAdditions extends StatelessWidget {
                                 ),
                                 onTap: () {
                                   Navigator.pop(context);
-                                  Provider.of<Post>(context, listen: false)
+                                  Provider.of<CreatingPost>(context,
+                                          listen: false)
                                       .addVideo(isCamera: true);
                                 },
                               ),

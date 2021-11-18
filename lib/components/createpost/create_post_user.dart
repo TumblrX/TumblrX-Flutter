@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tumblrx/services/post.dart';
+import 'package:tumblrx/services/creating_post.dart';
 
 import 'post_blog_choice.dart';
 
@@ -37,7 +37,7 @@ class CreatePostUser extends StatelessWidget {
               width: 10.0,
             ),
             Text(
-              Provider.of<Post>(context).blogUsername,
+              Provider.of<CreatingPost>(context).blogUsername,
               style: TextStyle(
                 fontSize: 18.0,
                 fontWeight: FontWeight.bold,
@@ -56,11 +56,12 @@ class CreatePostUser extends StatelessWidget {
 
   List<Widget> getBlogs(BuildContext context) {
     List<Widget> blogs = [];
-    for (String username in Provider.of<Post>(context).blogUsernames) {
+    for (String username in Provider.of<CreatingPost>(context).blogUsernames) {
       blogs.add(
         PostBlogChoice(
           username: username,
-          blogTitle: Provider.of<Post>(context).blogUsernamesTitles[username],
+          blogTitle:
+              Provider.of<CreatingPost>(context).blogUsernamesTitles[username],
         ),
       );
     }

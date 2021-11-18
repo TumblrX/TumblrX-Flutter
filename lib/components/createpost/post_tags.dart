@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/components/createpost/tags_list_view.dart';
-import 'package:tumblrx/services/post.dart';
+import 'package:tumblrx/services/creating_post.dart';
 
 import '../modal_bottom_sheet.dart';
 import 'add_tags.dart';
@@ -11,7 +11,7 @@ class PostTags extends StatelessWidget {
   Widget build(BuildContext context) {
     return Align(
       alignment: Alignment.centerLeft,
-      child: Provider.of<Post>(context).chosenHashtags.length == 0
+      child: Provider.of<CreatingPost>(context).chosenHashtags.length == 0
           ? TextButton(
               child: Padding(
                 padding: const EdgeInsets.only(
@@ -102,8 +102,8 @@ class PostTags extends StatelessWidget {
                           ),
                           Flexible(
                             child: TagsListView(
-                                tagsList:
-                                    Provider.of<Post>(context).chosenHashtags,
+                                tagsList: Provider.of<CreatingPost>(context)
+                                    .chosenHashtags,
                                 isPostView: true),
                           ),
                         ],

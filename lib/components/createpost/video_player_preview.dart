@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:tumblrx/services/post.dart';
+import 'package:tumblrx/services/creating_post.dart';
 import 'package:video_player/video_player.dart';
 import 'dart:io';
 
@@ -55,7 +55,8 @@ class _VideoPlayerPreviewState extends State<VideoPlayerPreview> {
     if (file == null &&
         !kIsWeb &&
         defaultTargetPlatform == TargetPlatform.android) {
-      file = await Provider.of<Post>(context, listen: false).retrieveLostData();
+      file = await Provider.of<CreatingPost>(context, listen: false)
+          .retrieveLostData();
     }
     if (file != null && mounted) {
       await _disposeVideoController();
