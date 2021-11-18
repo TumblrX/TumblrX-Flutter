@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/components/createpost/tags_list_view.dart';
-import 'package:tumblrx/services/post.dart';
+import 'package:tumblrx/services/creating_post.dart';
 
 import 'chosen_tags_list.dart';
 
@@ -17,7 +17,7 @@ class AddTags extends StatelessWidget {
             size: 30.0,
           ),
           title: ChosenTagsList(
-            chosenTags: Provider.of<Post>(context).chosenHashtags,
+            chosenTags: Provider.of<CreatingPost>(context).chosenHashtags,
           ),
         ),
         SizedBox(
@@ -27,7 +27,7 @@ class AddTags extends StatelessWidget {
           width: MediaQuery.of(context).size.width,
           height: 50.0,
           child: TagsListView(
-            tagsList: Provider.of<Post>(context).suggestedHashtags,
+            tagsList: Provider.of<CreatingPost>(context).suggestedHashtags,
           ),
         ),
       ],

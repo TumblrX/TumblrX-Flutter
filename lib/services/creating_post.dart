@@ -1,12 +1,11 @@
-
 import 'package:flutter/material.dart';
 import 'package:giphy_get/giphy_get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:tumblrx/models/text_field_data.dart';
+import 'package:tumblrx/models/creatingpost/text_field_data.dart';
 import 'package:tumblrx/utilities/constants.dart';
 import 'package:http/http.dart' as http;
 
-class Post extends ChangeNotifier {
+class CreatingPost extends ChangeNotifier {
   List<String> followedHashtags;
   List<String> blogUsernames;
   Map<String, String> blogUsernamesTitles;
@@ -299,4 +298,3 @@ class Post extends ChangeNotifier {
     return response.file;
   }
 }
-

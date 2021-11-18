@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tumblrx/services/post.dart';
+import 'package:tumblrx/services/creating_post.dart';
 
 import 'add_tags.dart';
 import '../modal_bottom_sheet.dart';
@@ -33,7 +33,7 @@ class HashtagBubble extends StatelessWidget {
                 ),
               );
             } else if (isSuggested)
-              Provider.of<Post>(context, listen: false).addTag(hashtag);
+              Provider.of<CreatingPost>(context, listen: false).addTag(hashtag);
           },
           child: Container(
             padding: EdgeInsets.symmetric(
@@ -64,7 +64,7 @@ class HashtagBubble extends StatelessWidget {
                   alignment: Alignment.topRight,
                   child: GestureDetector(
                     onTap: () {
-                      Provider.of<Post>(context, listen: false)
+                      Provider.of<CreatingPost>(context, listen: false)
                           .deleteTag(hashtag);
                     },
                     child: Container(

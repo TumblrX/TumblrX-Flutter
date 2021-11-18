@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tumblrx/services/post.dart';
+import 'package:tumblrx/services/creating_post.dart';
 import 'package:tumblrx/utilities/constants.dart';
 
 class FontStyleChoice extends StatelessWidget {
@@ -16,7 +16,7 @@ class FontStyleChoice extends StatelessWidget {
             type.toString().substring(14, type.toString().length),
             style: kTextStyleMap[type],
           ),
-          trailing: Provider.of<Post>(context).chosenTextStyle == type
+          trailing: Provider.of<CreatingPost>(context).chosenTextStyle == type
               ? Icon(
                   Icons.done,
                   color: Colors.blue,
@@ -25,7 +25,7 @@ class FontStyleChoice extends StatelessWidget {
         ),
       ),
       onTap: () {
-        Provider.of<Post>(context, listen: false).setTextStyle(type);
+        Provider.of<CreatingPost>(context, listen: false).setTextStyle(type);
         Navigator.pop(context);
       },
     );

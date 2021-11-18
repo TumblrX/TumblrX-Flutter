@@ -6,7 +6,7 @@ import 'package:tumblrx/components/createpost/video_player_preview.dart';
 import 'dart:io';
 import 'package:tumblrx/utilities/constants.dart';
 import 'package:provider/provider.dart';
-import 'package:tumblrx/services/post.dart';
+import 'package:tumblrx/services/creating_post.dart';
 
 class PostContent extends StatelessWidget {
   final List<dynamic> postContent;
@@ -66,7 +66,7 @@ class PostContent extends StatelessWidget {
                     alignment: Alignment.topRight,
                     child: GestureDetector(
                       onTap: () {
-                        Provider.of<Post>(context, listen: false)
+                        Provider.of<CreatingPost>(context, listen: false)
                             .removePostItem(i);
                       },
                       child: Container(

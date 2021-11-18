@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tumblrx/services/post.dart';
+import 'package:tumblrx/services/creating_post.dart';
 
 import 'hashtag_bubble.dart';
 
@@ -25,7 +25,8 @@ class ChosenTagsList extends StatelessWidget {
     }
     chosenHashtags.add(TextField(
       onChanged: (value) {
-        Provider.of<Post>(context, listen: false).searchSuggestedTags(value);
+        Provider.of<CreatingPost>(context, listen: false)
+            .searchSuggestedTags(value);
       },
       decoration: InputDecoration(
         hintText: 'Add tags...',

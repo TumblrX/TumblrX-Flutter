@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/components/modal_bottom_sheet.dart';
-import 'package:tumblrx/services/post.dart';
+import 'package:tumblrx/services/creating_post.dart';
 import 'package:tumblrx/utilities/constants.dart';
 
 import 'create_post_options.dart';
@@ -27,25 +27,28 @@ class CreatePostHeader extends StatelessWidget {
             padding: const EdgeInsets.all(2.0),
             child: Row(
               children: [
-                Provider.of<Post>(context).postOption == PostOption.private
+                Provider.of<CreatingPost>(context).postOption ==
+                        PostOption.private
                     ? Padding(
                         padding: const EdgeInsets.only(right: 4.0),
                         child: Icon(
                           Icons.lock,
                           size: 16.0,
-                          color: Provider.of<Post>(context).isPostEnabled
-                              ? Colors.black
-                              : Colors.grey,
+                          color:
+                              Provider.of<CreatingPost>(context).isPostEnabled
+                                  ? Colors.black
+                                  : Colors.grey,
                         ),
                       )
                     : SizedBox.shrink(),
                 Text(
-                  Provider.of<Post>(context).postOption == PostOption.draft
+                  Provider.of<CreatingPost>(context).postOption ==
+                          PostOption.draft
                       ? 'Save draft'
                       : 'Post',
                   style: TextStyle(
                     fontSize: 16.0,
-                    color: Provider.of<Post>(context).isPostEnabled
+                    color: Provider.of<CreatingPost>(context).isPostEnabled
                         ? Colors.black
                         : Colors.grey,
                   ),
@@ -54,7 +57,7 @@ class CreatePostHeader extends StatelessWidget {
             ),
           ),
           style: ButtonStyle(
-            backgroundColor: Provider.of<Post>(context).isPostEnabled
+            backgroundColor: Provider.of<CreatingPost>(context).isPostEnabled
                 ? MaterialStateProperty.all<Color>(Colors.blueAccent)
                 : MaterialStateProperty.all<Color>(Colors.black12),
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -63,7 +66,7 @@ class CreatePostHeader extends StatelessWidget {
               ),
             ),
           ),
-          onPressed: Provider.of<Post>(context).isPostEnabled
+          onPressed: Provider.of<CreatingPost>(context).isPostEnabled
               ? () {
                   Navigator.pop(context);
                 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:tumblrx/services/post.dart';
+import 'package:tumblrx/services/creating_post.dart';
 
 import 'additional_style_options.dart';
 
@@ -22,7 +22,8 @@ class PostTextField extends StatelessWidget {
             index != 0 &&
             focus.hasFocus &&
             textEditingController.value.text.length == 0) {
-          Provider.of<Post>(context, listen: false).removeTextField(index);
+          Provider.of<CreatingPost>(context, listen: false)
+              .removeTextField(index);
         }
         if (event.isKeyPressed(LogicalKeyboardKey.enter) &&
             event.isKeyPressed(LogicalKeyboardKey.shift)) {
@@ -44,21 +45,24 @@ class PostTextField extends StatelessWidget {
         child: TextField(
           textInputAction: TextInputAction.next,
           onSubmitted: (value) {
-            Provider.of<Post>(context, listen: false).addTextField(index);
+            Provider.of<CreatingPost>(context, listen: false)
+                .addTextField(index);
           },
           controller: textEditingController,
           style: textStyle,
           focusNode: focus,
           onChanged: (value) {
             if (value.length > 0)
-              Provider.of<Post>(context, listen: false).setIsEnabled();
+              Provider.of<CreatingPost>(context, listen: false).setIsEnabled();
             else {
-              Provider.of<Post>(context, listen: false).checkPostEnable();
+              Provider.of<CreatingPost>(context, listen: false)
+                  .checkPostEnable();
             }
             if (value.length > 0 && value[value.length - 1] == '\n') {
               textEditingController.text = textEditingController.value.text
                   .substring(0, value.length - 1);
-              Provider.of<Post>(context, listen: false).addTextField(index);
+              Provider.of<CreatingPost>(context, listen: false)
+                  .addTextField(index);
             }
           },
           keyboardType: TextInputType.multiline,

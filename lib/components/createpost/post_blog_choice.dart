@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tumblrx/services/post.dart';
+import 'package:tumblrx/services/creating_post.dart';
 
 class PostBlogChoice extends StatelessWidget {
   PostBlogChoice({this.username, this.blogTitle});
@@ -14,7 +14,7 @@ class PostBlogChoice extends StatelessWidget {
       padding: const EdgeInsets.all(5.0),
       child: InkWell(
         onTap: () {
-          Provider.of<Post>(context, listen: false)
+          Provider.of<CreatingPost>(context, listen: false)
               .setPostBlogUsername(username);
           Navigator.pop(context);
         },
@@ -47,7 +47,7 @@ class PostBlogChoice extends StatelessWidget {
               ],
             ),
             Spacer(),
-            Provider.of<Post>(context).blogUsername == username
+            Provider.of<CreatingPost>(context).blogUsername == username
                 ? Icon(
                     Icons.done,
                     color: Colors.blue,
