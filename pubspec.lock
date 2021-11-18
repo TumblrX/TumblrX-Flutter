@@ -14,8 +14,8 @@ packages:
       name: analyzer
       url: "https://pub.dartlang.org"
     source: hosted
+    version: "2.7.0"
 
-    version: "1.7.1"
   any_link_preview:
     dependency: "direct main"
     description:
@@ -31,6 +31,7 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.1.6"
+
   args:
     dependency: transitive
     description:

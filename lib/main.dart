@@ -12,6 +12,7 @@ import 'package:tumblrx/services/notifications.dart';
 import 'package:tumblrx/services/post.dart';
 import 'package:tumblrx/services/settings.dart';
 import 'package:tumblrx/services/theme.dart';
+import 'package:tumblrx/screens/profile.dart';
 import 'package:tumblrx/screens/welcome_screen_login.dart';
 import 'package:tumblrx/screens/welcome_screen_signup.dart';
 import 'package:tumblrx/screens/signup_pick_tags.dart';
@@ -51,6 +52,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
+
         onUnknownRoute: (RouteSettings settings) {
           return PageRouteBuilder(pageBuilder: (_, __, ___) => PageNotFound());
         },
@@ -60,7 +62,9 @@ class MyApp extends StatelessWidget {
         ),
         debugShowCheckedModeBanner: false,
         initialRoute: WelcomeScreen.id,
+
         routes: {
+          Profile.profile:(context) => Profile(),
           WelcomeScreen.id: (context) => WelcomeScreen(),
           MainScreen.id: (context) => MainScreen(),
           LoginScreen.id: (context) => LoginScreen(),
