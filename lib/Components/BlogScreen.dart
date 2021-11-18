@@ -7,13 +7,12 @@ import 'package:tumblrx/Components/text.dart';
 import 'package:tumblrx/Components/avatarImage.dart';
 import 'package:tumblrx/Components/edit/editBottons.dart';
 import 'package:tumblrx/Components/squareAvatar/square.dart';
-
-class TabBars extends StatefulWidget  {
+class BlogScreen extends StatefulWidget  {
   @override
-  _TabBarsState createState() => _TabBarsState();
+  _BlogScreenState createState() => _BlogScreenState();
 }
 
-class _TabBarsState extends State<TabBars>   with SingleTickerProviderStateMixin {
+class _BlogScreenState extends State<BlogScreen>   with SingleTickerProviderStateMixin {
   TabController _tabController;
   @override
   void initState() {
