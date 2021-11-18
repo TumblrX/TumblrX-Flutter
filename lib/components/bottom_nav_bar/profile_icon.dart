@@ -7,7 +7,6 @@ class ProfileIcon extends StatelessWidget {
   final Function _onTab;
   final BuildContext _context;
   final GlobalKey _key;
-  OverlayEntry _switchAccountsOverlayEntry;
 
   ProfileIcon(this._context, this._key, this._onTab);
 
@@ -25,7 +24,7 @@ class ProfileIcon extends StatelessWidget {
     );
   }
 
-  void _showPicker(key, User user) {
+  OverlayEntry _showPicker(key, User user) {
     // get the overlay stack of the screen
     final OverlayState overlayState = Overlay.of(_context);
     // get the context of the Profile Icon
@@ -35,7 +34,7 @@ class ProfileIcon extends StatelessWidget {
     // get offset of the Profile icon
     final Offset offset = renderBox.localToGlobal(Offset.zero);
 
-    _switchAccountsOverlayEntry = OverlayEntry(
+    OverlayEntry _switchAccountsOverlayEntry = OverlayEntry(
       builder: (context) {
         EdgeInsets padding = MediaQuery.of(context).padding;
         Size screenSize = MediaQuery.of(context).size;
@@ -59,14 +58,17 @@ class ProfileIcon extends StatelessWidget {
 
     // insert the custom popup menu
     overlayState.insert(_switchAccountsOverlayEntry);
+    return _switchAccountsOverlayEntry;
   }
 
   @override
   Widget build(BuildContext context) {
+    OverlayEntry _switchAccountsOverlayEntry;
+
     return Consumer<User>(builder: (ctx, user, child) {
       return GestureDetector(
         onLongPressStart: (_) {
-          _showPicker(_key, user);
+          _switchAccountsOverlayEntry = _showPicker(_key, user);
         },
         onLongPressEnd: (_) {
           user.updateActiveBlog();

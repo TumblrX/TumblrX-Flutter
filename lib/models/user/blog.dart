@@ -8,6 +8,17 @@ class Blog {
   int followers; //total count of followers for this blog
   String blogType; //indicates whether a blog is public or private
   String blogAvatar;
+  String description;
+  int likes;
+
+  // bool ask;
+  // bool ask_anon
+  /*
+    following => followed blogs
+    likes => liked posts
+
+  */
+  int posts;
 
   Blog(
       {this.name,
