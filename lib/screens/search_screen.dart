@@ -13,7 +13,6 @@ class SearchScreen extends StatelessWidget {
           style: TextStyle(fontSize: 30.0),
         ),
       ),
-      bottomNavigationBar: BottomNavBar(),
     );
   }
 }

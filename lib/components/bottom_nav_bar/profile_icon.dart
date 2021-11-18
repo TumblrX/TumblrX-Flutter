@@ -1,30 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tumblrx/components/bottom_nav_bar/account_icon.dart';
+import 'package:tumblrx/models/user/account.dart';
 
 class ProfileIcon extends StatelessWidget {
+  final Function _onTab;
   BuildContext _context;
   GlobalKey _key;
-  ProfileIcon(this._context, this._key);
   OverlayEntry _switchAccountsOverlayEntry;
 
-  List<String> accounts = [
-    'assets/icon/Tumblr_Logo_t_Icon_White.png',
-    'assets/icon/Tumblr_Logo_t_Icon_White.png'
-  ];
+  ProfileIcon(this._context, this._key, this._onTab);
 
-  Widget _buildAccountPicker() {
+  Widget _buildAccountPicker(User user) {
+    if (user != null) print(user.blogs[0].blogAvatar);
     return Material(
       color: Colors.transparent,
       child: Column(
-        children: [
-          AccountIcon(),
-          AccountIcon(),
-        ],
+        children: (user != null && user.blogs != null)
+            ? user.blogs
+                .map((blog) => AccountIcon(blog, user.activeBlogName))
+                .toList()
+            : [Container()],
       ),
     );
   }
 
-  void _showPicker(key) {
+  void _showPicker(key, User user) {
     // get the overlay stack of the screen
     final OverlayState overlayState = Overlay.of(_context);
     // get the context of the Profile Icon
@@ -48,7 +49,7 @@ class ProfileIcon extends StatelessWidget {
               Positioned(
                 bottom: size.height,
                 right: offset.dx,
-                child: _buildAccountPicker(),
+                child: _buildAccountPicker(user),
               ),
             ],
           ),
@@ -62,18 +63,18 @@ class ProfileIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onLongPressStart: (_) {
-        _showPicker(_key);
-      },
-      onLongPressEnd: (_) {
-        _switchAccountsOverlayEntry.remove();
-      },
-      onTap: () => {
-        Navigator.of(_context).pushNamedAndRemoveUntil(
-            'profile_screen', ModalRoute.withName('welcome_screen'))
-      }, // navigate to profile
-      child: Icon(Icons.person),
-    );
+    return Consumer<User>(builder: (ctx, user, child) {
+      return GestureDetector(
+        onLongPressStart: (_) {
+          _showPicker(_key, user);
+        },
+        onLongPressEnd: (_) {
+          user.updateActiveBlog();
+          _switchAccountsOverlayEntry.remove();
+        },
+        onTap: () => _onTab(3), // navigate to profile
+        child: Icon(Icons.person),
+      );
+    });
   }
 }

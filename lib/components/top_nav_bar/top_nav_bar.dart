@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tumblrx/components/tumblrx_icon.dart';
+import 'package:tumblrx/components/top_nav_bar/tumblrx_icon.dart';
 
 class TopNavBar extends StatelessWidget {
   @override

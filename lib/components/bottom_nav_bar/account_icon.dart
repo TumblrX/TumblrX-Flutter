@@ -1,17 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:tumblrx/models/user/account.dart';
+import 'package:tumblrx/models/user/blog.dart';
 
 class AccountIcon extends StatefulWidget {
+  Blog _blog;
+  String _defaultBlogName;
+
+  AccountIcon(this._blog, this._defaultBlogName);
   @override
-  _AccountIconState createState() => _AccountIconState();
+  _AccountIconState createState() =>
+      _AccountIconState(_blog, this._defaultBlogName);
 }
 
 class _AccountIconState extends State<AccountIcon> {
   bool _isHovered = false;
+  Blog _blog;
+  String _defaultBlogName;
+
+  _AccountIconState(this._blog, this._defaultBlogName);
 
   void setSelection(bool selectionState) {
-    print('entered with hover state');
-    // ToDO: set the provider data to the chosen account if _isHovered is true
-    // else set it to null
     setState(() {
       this._isHovered = selectionState;
     });
@@ -19,16 +28,26 @@ class _AccountIconState extends State<AccountIcon> {
 
   @override
   Widget build(BuildContext context) {
-    return MouseRegion(
-      onHover: (event) => setSelection(true),
-      onEnter: (event) => setSelection(true),
-      onExit: (event) => setSelection(false),
-      child: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: CircleAvatar(
-          radius: _isHovered ? 30.0 : 25.0,
-          backgroundImage:
-              AssetImage('assets/icon/Tumblr_Logo_t_Icon_White.png'),
+    return Consumer<User>(
+      builder: (ctx, user, child) => MouseRegion(
+        onHover: (event) {
+          setSelection(true);
+          user.setActiveBlog(_blog.name);
+        },
+        onEnter: (event) {
+          setSelection(true);
+          user.setActiveBlog(_blog.name);
+        },
+        onExit: (event) {
+          setSelection(false);
+          user.setActiveBlog(_defaultBlogName);
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: CircleAvatar(
+            radius: _isHovered ? 30.0 : 25.0,
+            backgroundImage: AssetImage(_blog.blogAvatar),
+          ),
         ),
       ),
     );

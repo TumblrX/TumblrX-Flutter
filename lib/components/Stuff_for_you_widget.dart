@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tumblrx/components/post/post_view.dart';
 
 class StuffForYouWidget extends StatelessWidget {
   @override
@@ -6,11 +7,7 @@ class StuffForYouWidget extends StatelessWidget {
     return ListView.separated(
       itemCount: 16,
       itemBuilder: (context, index) {
-        return ListTile(
-            title: Text(
-          'Stuff for You',
-          style: TextStyle(fontSize: 20),
-        ));
+        return PostView();
       },
       separatorBuilder: (context, index) => SizedBox(
         height: 12.0,

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tumblrx/components/bottom_nav_bar/bottom_nav_bar.dart';
 
 class ProfileScreen extends StatelessWidget {
   static final String id = 'profile_screen';
@@ -13,7 +12,6 @@ class ProfileScreen extends StatelessWidget {
           style: TextStyle(fontSize: 30.0),
         ),
       ),
-      bottomNavigationBar: BottomNavBar(),
     );
   }
 }
