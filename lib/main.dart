@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tumblrx/models/user/account.dart';
+import 'package:tumblrx/screens/main_screen.dart';
+import 'package:tumblrx/screens/page_not_found.dart';
+import 'package:tumblrx/screens/signup_agecheck.dart';
 import 'package:tumblrx/screens/welcome_screen.dart';
 import 'package:tumblrx/services/authentication.dart';
 import 'package:tumblrx/services/content.dart';
@@ -8,6 +12,9 @@ import 'package:tumblrx/services/notifications.dart';
 import 'package:tumblrx/services/post.dart';
 import 'package:tumblrx/services/settings.dart';
 import 'package:tumblrx/services/theme.dart';
+import 'package:tumblrx/screens/welcome_screen_login.dart';
+import 'package:tumblrx/screens/welcome_screen_signup.dart';
+import 'package:tumblrx/screens/signup_pick_tags.dart';
 
 void main() {
   runApp(MyApp());
@@ -23,6 +30,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<Post>(
           create: (context) => Post(),
+        ),
+        ChangeNotifierProvider<User>(
+          create: (context) => User(),
         ),
         ChangeNotifierProvider<Content>(
           create: (context) => Content(),
@@ -41,10 +51,22 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
+        onUnknownRoute: (RouteSettings settings) {
+          return PageRouteBuilder(pageBuilder: (_, __, ___) => PageNotFound());
+        },
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSwatch(
+              primarySwatch: Colors.blueGrey, accentColor: Colors.blueAccent),
+        ),
         debugShowCheckedModeBanner: false,
         initialRoute: WelcomeScreen.id,
         routes: {
           WelcomeScreen.id: (context) => WelcomeScreen(),
+          MainScreen.id: (context) => MainScreen(),
+          LoginScreen.id: (context) => LoginScreen(),
+          SignupScreen.id: (context) => SignupScreen(),
+          SignUpAgeCheck.id: (context) => SignUpAgeCheck(),
+          SignUpPickTags.id: (context) => SignUpPickTags(),
         },
       ),
     );

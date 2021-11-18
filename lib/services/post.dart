@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:giphy_get/giphy_get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -298,3 +299,4 @@ class Post extends ChangeNotifier {
     return response.file;
   }
 }
+
