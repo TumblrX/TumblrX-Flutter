@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class PostFooter extends StatelessWidget {
-  void _likePost() {}
-  void _commentOnPost() {}
-  void _reblogPost() {}
+  // void _likePost() {}
+  // void _commentOnPost() {}
+  // void _reblogPost() {}
   void _sharePost() {}
 
   Widget notesIcons() {

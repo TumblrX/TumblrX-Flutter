@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tumblrx/components/bottom_nav_bar/profile_icon.dart';
 
 class BottomNavBarWidget extends StatefulWidget {
-  PageController _controller;
+  final PageController _controller;
   BottomNavBarWidget(this._controller);
   @override
   _BottomNavBarWidgetState createState() =>

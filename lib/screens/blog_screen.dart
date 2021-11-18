@@ -6,6 +6,7 @@ import 'package:tumblrx/Components/blog_screen_header_text.dart';
 import 'package:tumblrx/Components/avatar_image.dart';
 
 class BlogScreen extends StatefulWidget {
+  static final String id = 'blog_screen';
   @override
   _BlogScreenState createState() => _BlogScreenState();
 }
@@ -18,6 +19,7 @@ class _BlogScreenState extends State<BlogScreen>
     _tabController = new TabController(length: 3, vsync: this);
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

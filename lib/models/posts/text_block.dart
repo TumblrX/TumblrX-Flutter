@@ -32,7 +32,7 @@ class InlineFormatting {
   String type;
   String url;
   String hex;
-  String blog_url;
+  String blogUrl;
 
   InlineFormatting({this.start, this.end, this.type});
 
@@ -43,7 +43,7 @@ class InlineFormatting {
     if (parsedJson.containsKey('url')) url = parsedJson['url'];
     if (parsedJson.containsKey('hex')) url = parsedJson['hex'];
 
-    if (parsedJson.containsKey('blog_url')) blog_url = parsedJson['blog_url'];
+    if (parsedJson.containsKey('blog_url')) blogUrl = parsedJson['blog_url'];
   }
 
   Map<String, dynamic> toJson() {
@@ -53,7 +53,7 @@ class InlineFormatting {
     data['type'] = type;
     if (hex != null) data['hex'] = hex;
     if (url != null) data['url'] = url;
-    if (blog_url != null) data['blog_url'] = blog_url;
+    if (blogUrl != null) data['blog_url'] = blogUrl;
 
     return data;
   }
@@ -80,8 +80,7 @@ class InlineFormatting {
         formattedText = "<color text=\"${this.hex}\">$originalText</color>";
         break;
       case 'mention': // "uuid": , "name": , "url":
-        formattedText =
-            "<mention href=${this.blog_url}>$originalText</mention>";
+        formattedText = "<mention href=${this.blogUrl}>$originalText</mention>";
         break;
       default:
         formattedText = originalText;

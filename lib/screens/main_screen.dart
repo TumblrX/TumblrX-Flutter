@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:tumblrx/components/bottom_nav_bar/bottom_nav_bar.dart';
-import 'package:tumblrx/screens/Profile_Screen.dart';
+import 'package:tumblrx/screens/blog_screen.dart';
 import 'package:tumblrx/screens/feed_screen.dart';
 import 'package:tumblrx/screens/notifications_screen.dart';
 import 'package:tumblrx/screens/search_screen.dart';
@@ -13,7 +13,6 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  int _selectedIndex = 0;
   PageController _controller;
 
   @override
@@ -55,7 +54,7 @@ class _MainScreenState extends State<MainScreen> {
               FeedScreen(),
               SearchScreen(),
               NotificationsScreen(),
-              ProfileScreen(),
+              BlogScreen(),
             ],
           ),
           bottomNavigationBar: BottomNavBarWidget(_controller),

@@ -5,8 +5,8 @@ import 'package:tumblrx/models/user/account.dart';
 
 class ProfileIcon extends StatelessWidget {
   final Function _onTab;
-  BuildContext _context;
-  GlobalKey _key;
+  final BuildContext _context;
+  final GlobalKey _key;
   OverlayEntry _switchAccountsOverlayEntry;
 
   ProfileIcon(this._context, this._key, this._onTab);

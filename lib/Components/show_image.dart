@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:tumblrx/Components/constant.dart';
 
 class ShowImage extends StatelessWidget {
-  String img;
-  ShowImage(String image) {
-    img = image;
-  }
+  final String img;
+  ShowImage(this.img);
   @override
   Widget build(BuildContext context) {
     return InteractiveViewer(
