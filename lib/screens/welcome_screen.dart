@@ -1,8 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tumblrx/components/welcome_screen_image.dart';
 import 'package:tumblrx/screens/welcome_screen_signup.dart';
 import 'package:tumblrx/utilities/constants.dart';
 import 'package:tumblrx/screens/welcome_screen_login.dart';
+
 
 class WelcomeScreen extends StatelessWidget {
   static final String id = 'welcome_screen';

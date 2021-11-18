@@ -9,6 +9,7 @@ import 'package:tumblrx/services/authentication.dart';
 import 'package:tumblrx/services/content.dart';
 import 'package:tumblrx/services/messaging.dart';
 import 'package:tumblrx/services/notifications.dart';
+import 'package:tumblrx/services/post.dart';
 import 'package:tumblrx/services/settings.dart';
 import 'package:tumblrx/services/theme.dart';
 import 'package:tumblrx/screens/welcome_screen_login.dart';
@@ -24,11 +25,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<User>(
-          create: (context) => User(),
-        ),
         ChangeNotifierProvider<Authentication>(
           create: (context) => Authentication(),
+        ),
+        ChangeNotifierProvider<Post>(
+          create: (context) => Post(),
+        ),
+        ChangeNotifierProvider<User>(
+          create: (context) => User(),
         ),
         ChangeNotifierProvider<Content>(
           create: (context) => Content(),

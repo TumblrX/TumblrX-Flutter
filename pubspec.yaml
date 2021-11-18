@@ -34,13 +34,18 @@ dependencies:
   flutter_lints: ^1.0.4
   import_sorter: ^4.6.0
   test: ^1.16.8
-  flutter_launcher_icons: ^0.9.2
-  mockito: ^5.0.16
+  giphy_get: ^2.0.3
+  any_link_preview: ^1.0.7
+  image_picker: ^0.8.4+1
+  video_player: ^2.2.3
+  dartdoc: ^1.0.2
+  
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_launcher_icons: ^0.9.2
+  mockito: ^5.0.16
 
 flutter_icons:
   android: "launcher_icon"
@@ -57,7 +62,16 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
-
+  fonts:
+    - family: PTSerif
+      fonts:
+        - asset: assets/fonts/PTSerif-Regular.ttf
+    - family: GreatVibes
+      fonts:
+        - asset: assets/fonts/GreatVibes-Regular.ttf
+    - family: SourceCodePro
+      fonts:
+        - asset: assets/fonts/SourceCodePro-Regular.ttf
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/icon/Tumblr_Logo_t_Icon_White.png
