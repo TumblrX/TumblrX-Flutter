@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 
+///Modal Bottom Sheet that have title and done button
 class ModalBottomSheet extends StatelessWidget {
+  ///content to be shown in the sheet
   final Widget content;
+
+  ///Title of the sheet
   final String title;
   ModalBottomSheet({this.content, this.title});
   @override

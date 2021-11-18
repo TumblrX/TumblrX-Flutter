@@ -1,22 +1,38 @@
 import 'package:flutter/material.dart';
 
+///Options of the post (Now, Draft, Private)
 enum PostOption { now, draft, private }
+
+///Types of post content elements
 enum PostContentType { text, link, gif, image, video, music }
 
+///Normal Text Style
 const TextStyle kNormalTextStyle = TextStyle();
+
+///Bigger Test Style Type
 const TextStyle kBiggerTextStyle = TextStyle(fontSize: 20.0);
+
+///Biggest Test Style Type
 const TextStyle kBiggestTextStyle = TextStyle(fontSize: 28.0);
+
+///Quote Test Style Type
 const TextStyle kQuoteTextStyle =
     TextStyle(fontSize: 32.0, fontFamily: 'PTSerif');
+
+///Chat Test Style Type
 const TextStyle kChatTextStyle = TextStyle(
   fontSize: 16.0,
   fontFamily: 'SourceCodePro',
 );
+
+///Lucille Test Style Type
 const TextStyle kLucilleTextStyle =
     TextStyle(fontSize: 36.0, fontFamily: 'GreatVibes');
 
+///Text Style Types
 enum TextStyleType { Normal, Bigger, Biggest, Quote, Chat, Lucille }
 
+///Mapping Style Types to its Style
 const Map<TextStyleType, TextStyle> kTextStyleMap = {
   TextStyleType.Normal: kNormalTextStyle,
   TextStyleType.Bigger: kBiggerTextStyle,
@@ -86,4 +102,3 @@ const KPickTagsInfoText = TextStyle(
     fontSize: 20.0,
     color: Colors.grey,
     fontWeight: FontWeight.bold);
-

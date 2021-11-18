@@ -4,6 +4,7 @@ import 'package:tumblrx/services/creating_post.dart';
 
 import 'post_blog_choice.dart';
 
+///Shows the user of Creating post and allows you to choose the blog that post will be added into.
 class CreatePostUser extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

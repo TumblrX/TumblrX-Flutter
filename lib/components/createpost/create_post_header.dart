@@ -6,6 +6,7 @@ import 'package:tumblrx/utilities/constants.dart';
 
 import 'create_post_options.dart';
 
+///The Top header of the creating post container shows posting options button and Post button
 class CreatePostHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

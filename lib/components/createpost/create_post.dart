@@ -7,14 +7,13 @@ import 'create_post_additions.dart';
 import 'create_post_header.dart';
 import 'create_post_user.dart';
 
-class CreatePost extends StatefulWidget {
+///Creating Post Container shows the Text Editor and all Post creating options
+class CreatePost extends StatelessWidget {
   CreatePost({this.topPadding});
-  final double topPadding;
-  @override
-  _CreatePostState createState() => _CreatePostState();
-}
 
-class _CreatePostState extends State<CreatePost> {
+  ///top padding sent to the widget to show it below status bar
+  final double topPadding;
+
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height -
@@ -27,7 +26,7 @@ class _CreatePostState extends State<CreatePost> {
       padding: MediaQuery.of(context).viewInsets,
       child: Padding(
         padding: EdgeInsets.only(
-          top: widget.topPadding + 10.0,
+          top: topPadding + 10.0,
           left: 10.0,
           right: 10.0,
           bottom: 10.0,

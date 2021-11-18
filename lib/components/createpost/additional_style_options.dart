@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/services/creating_post.dart';
-
 import 'color_choice.dart';
 
+///A Widget that appears by double-click on the text field to edit its style
 class AdditionalStyleOptions extends StatelessWidget {
+  ///The index of the text field in the post content list to have its style edited
   final int index;
   AdditionalStyleOptions({this.index});
   @override

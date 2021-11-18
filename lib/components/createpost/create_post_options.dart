@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:tumblrx/services/creating_post.dart';
 import 'package:tumblrx/utilities/constants.dart';
 
+///List of creating post options: (Post Now, Private, Draft, Sharing to Twitter)
 class CreatePostOptions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

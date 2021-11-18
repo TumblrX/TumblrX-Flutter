@@ -4,7 +4,9 @@ import 'package:tumblrx/services/creating_post.dart';
 
 import 'hashtag_bubble.dart';
 
+///The wrap view of the chosen tags during creating post
 class ChosenTagsList extends StatelessWidget {
+  ///List of the chosen tags during creating post
   final List<String> chosenTags;
 
   ChosenTagsList({this.chosenTags});
@@ -16,6 +18,7 @@ class ChosenTagsList extends StatelessWidget {
     );
   }
 
+  ///returns the list of chosen tags and shows add more tags text field
   List<Widget> getChosenHashtags(BuildContext context) {
     List<Widget> chosenHashtags = [];
     for (String hashtag in chosenTags) {

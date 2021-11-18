@@ -6,7 +6,9 @@ import 'package:tumblrx/services/creating_post.dart';
 import 'package:video_player/video_player.dart';
 import 'dart:io';
 
+///The preview of the added video to post create where it keeps repeating.
 class VideoPlayerPreview extends StatefulWidget {
+  ///The video data to be shown.
   final XFile file;
   VideoPlayerPreview({this.file});
   @override

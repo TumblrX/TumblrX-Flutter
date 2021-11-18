@@ -5,6 +5,8 @@ import 'package:tumblrx/services/creating_post.dart';
 
 import 'additional_style_options.dart';
 
+///Text Field Editor where the style can be updated.
+///Pressing Enter or newline will add Additional TextField while Backspace will delete it.
 class PostTextField extends StatelessWidget {
   final int index;
   final TextEditingController textEditingController;

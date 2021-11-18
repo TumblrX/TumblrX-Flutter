@@ -6,6 +6,7 @@ import 'package:tumblrx/services/creating_post.dart';
 import '../modal_bottom_sheet.dart';
 import 'add_tags.dart';
 
+///A Widget that shows chosen tags if available or option to add tags.
 class PostTags extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

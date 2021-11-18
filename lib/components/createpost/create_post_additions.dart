@@ -7,6 +7,7 @@ import 'add_tags.dart';
 import '../modal_bottom_sheet.dart';
 import 'link_preview_input.dart';
 
+///Widget of creating post additions buttons like styling, adding media, tags and so on.
 class CreatePostAdditions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

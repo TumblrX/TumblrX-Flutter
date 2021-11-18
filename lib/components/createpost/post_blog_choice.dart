@@ -2,9 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/services/creating_post.dart';
 
+///Shows the blog choice where the post will be added to.
 class PostBlogChoice extends StatelessWidget {
   PostBlogChoice({this.username, this.blogTitle});
+
+  ///Username of the blog to be chosen
   final String username;
+
+  ///Title of the blog to be chosen
   final String blogTitle;
 
   //final Image userPic;
