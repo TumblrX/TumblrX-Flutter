@@ -1,16 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tumblrx/Components/BlogScreen.dart';
-import 'package:tumblrx/Components/avatar.dart';
-import 'package:tumblrx/Components/constant.dart';
-import 'package:tumblrx/Components/headerImage.dart';
-import 'package:tumblrx/Components/text.dart';
-import 'package:tumblrx/Components/avatarImage.dart';
-import 'package:tumblrx/Components/edit/editBottons.dart';
-import 'package:tumblrx/Components/squareAvatar/square.dart';
-
+import 'package:tumblrx/Components/Blog_screen.dart';
 class Profile extends StatefulWidget {
   static final String profile = 'profile';
-
   @override
   State<Profile> createState() => _ProfileState();
 }

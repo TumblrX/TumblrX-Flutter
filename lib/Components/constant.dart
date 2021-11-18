@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tumblrx/Components/showImage.dart';
+import 'package:tumblrx/Components/show_image.dart';
 
 class Constant extends StatelessWidget {
   static Widget buildBottomSheetAvatar(BuildContext context) {
@@ -23,7 +23,7 @@ class Constant extends StatelessWidget {
         )
       ],
     );
-  } 
+  }
 
   static Widget buildBottomSheetHeaderImage(BuildContext context) {
     //bottomsheet for Header Image
@@ -81,7 +81,6 @@ class Constant extends StatelessWidget {
   static String headerImgPath = 'images/header.png';
   static String avatarPath = 'images/avatar.png';
   static String profileDescription = 'i want to finish this project';
-
   //for tumbler blogs
   final tumblrsBlogs = ['account1', 'account2'];
 

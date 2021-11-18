@@ -5,15 +5,12 @@ class EditButtons extends StatefulWidget {
   @override
   _EditButtonsState createState() => _EditButtonsState();
 }
-
 class _EditButtonsState extends State<EditButtons> {
   @override
   Widget build(BuildContext context) {
-    return  Row(
-      
+    return  Row(  
      mainAxisAlignment: MainAxisAlignment.center ,
    crossAxisAlignment: CrossAxisAlignment.center,
-      
       children: <Widget>[
        SizedBox(width: 120,
          child: ElevatedButton(onPressed: () {}, child: Text('Background',style:TextStyle(color: Color(0xffc7c1c1))),style:ButtonStyle(
@@ -21,10 +18,7 @@ class _EditButtonsState extends State<EditButtons> {
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
           side: BorderSide(color:Color(0xffc7c1c1)),
           borderRadius:BorderRadius.circular(20.0))),
-       
          ) ,
-         
-         
          )),
          SizedBox(width: 25,), //space between 2 button
          SizedBox(
@@ -34,14 +28,9 @@ class _EditButtonsState extends State<EditButtons> {
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
           side: BorderSide(color:Color(0xffc7c1c1)),
           borderRadius:BorderRadius.circular(20.0))),
-       
-         ) ,
-         
+         ) ,       
          ),)
-         
 
-
-         
          ],
     );
   }

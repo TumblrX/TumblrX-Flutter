@@ -10,8 +10,7 @@ class ShowImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return InteractiveViewer(
         child: Container(
-      child:
-          Image(image: AssetImage(img), fit: BoxFit.fitWidth),
+      child: Image(image: AssetImage(img), fit: BoxFit.fitWidth),
     ));
   }
 }

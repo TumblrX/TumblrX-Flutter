@@ -10,9 +10,11 @@ class Avatar extends StatefulWidget {
 class _AvatarState extends State<Avatar> {
   @override
   Widget build(BuildContext context) {
-    return Positioned(top: 140,child:  CircleAvatar(
-      radius: 41,
-       backgroundColor:Constant .bottomCoverColor,
-    ));
+    return Positioned(
+        top: 140,
+        child: CircleAvatar(
+          radius: 41,
+          backgroundColor: Constant.bottomCoverColor,
+        ));
   }
 }

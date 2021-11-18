@@ -5,13 +5,13 @@ class TextWriting extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-
         alignment: Alignment.center,
         color: Constant.bottomCoverColor,
-       padding: const EdgeInsets.all(25.0),
+        padding: const EdgeInsets.all(25.0),
         //height: 123,
-        child: Column(mainAxisAlignment: MainAxisAlignment.center,
-crossAxisAlignment: CrossAxisAlignment.center ,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Text(
               'Untitled',
@@ -22,7 +22,6 @@ crossAxisAlignment: CrossAxisAlignment.center ,
             )
           ],
         )
-
         //child: Text(
         //'Untitled',
         //style:
