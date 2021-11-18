@@ -4,7 +4,6 @@ import 'package:tumblrx/screens/welcome_screen_signup.dart';
 import 'package:tumblrx/utilities/constants.dart';
 import 'package:tumblrx/screens/welcome_screen_login.dart';
 
-
 class WelcomeScreen extends StatelessWidget {
   static final String id = 'welcome_screen';
   @override
@@ -30,7 +29,8 @@ class WelcomeScreen extends StatelessWidget {
                   style: KWelcomeScreenButton,
                 ),
                 onPressed: () {
-                  Navigator.pushNamed(context, SignupScreen.id);
+                  Navigator.of(context).pushNamed('main_screen');
+                  //Navigator.pushNamed(context, SignupScreen.id);
                 },
                 style: TextButton.styleFrom(
                   backgroundColor: Colors.white,
