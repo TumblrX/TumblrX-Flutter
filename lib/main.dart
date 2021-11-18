@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tumblrx/components/bottom_nav_bar/bottom_nav_bar.dart';
+import 'package:tumblrx/models/user/account.dart';
+import 'package:tumblrx/screens/Profile_Screen.dart';
+import 'package:tumblrx/screens/notifications_screen.dart';
+import 'package:tumblrx/screens/page_not_found.dart';
+import 'package:tumblrx/screens/search_screen.dart';
 import 'package:tumblrx/screens/signup_agecheck.dart';
 import 'package:tumblrx/screens/welcome_screen.dart';
 import 'package:tumblrx/services/authentication.dart';
@@ -21,6 +27,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider<User>(
+          create: (context) => User(),
+        ),
         ChangeNotifierProvider<Authentication>(
           create: (context) => Authentication(),
         ),
@@ -41,10 +50,19 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
+
+        onUnknownRoute: (RouteSettings settings) {
+          return PageRouteBuilder(pageBuilder: (_, __, ___) => PageNotFound());
+        },
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSwatch(
+              primarySwatch: Colors.blueGrey, accentColor: Colors.blueAccent),
+        ),
         debugShowCheckedModeBanner: false,
         initialRoute: WelcomeScreen.id,
         routes: {
           WelcomeScreen.id: (context) => WelcomeScreen(),
+          BottomNavBarScreen.id: (context) => BottomNavBarScreen(),
           LoginScreen.id: (context) => LoginScreen(),
           SignupScreen.id: (context) => SignupScreen(),
           SignUpAgeCheck.id: (context) => SignUpAgeCheck(),
