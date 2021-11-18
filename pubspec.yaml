@@ -73,6 +73,8 @@ flutter:
         - asset: assets/fonts/SourceCodePro-Regular.ttf
   # To add assets to your application, add an assets section, like this:
   assets:
+    - images/header.png
+    - images/avatar.png
     - assets/icon/Tumblr_Logo_t_Icon_White.png
     - assets/icon/default_avatar.png
     - assets/icon/chat.png
