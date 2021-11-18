@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:tumblrx/models/posts/audio_block.dart';
 import 'package:tumblrx/models/posts/image_block.dart';
 import 'package:tumblrx/models/posts/link_block.dart';
@@ -59,5 +58,5 @@ class Post {
     });
   }
 
-  Widget showPost() {}
+  //Widget showPost() {}
 }

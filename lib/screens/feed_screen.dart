@@ -4,7 +4,7 @@ import 'package:tumblrx/components/Stuff_for_you_widget.dart';
 import 'package:tumblrx/components/createpost/create_post.dart';
 import 'package:tumblrx/components/following_widget.dart';
 import 'package:tumblrx/components/top_nav_bar/top_nav_bar.dart';
-import 'package:tumblrx/services//creating_post.dart';
+import 'package:tumblrx/services/creating_post.dart';
 
 class FeedScreen extends StatelessWidget {
   static final String id = 'feed_screen';

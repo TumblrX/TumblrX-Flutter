@@ -4,8 +4,8 @@ import 'package:tumblrx/models/user/account.dart';
 import 'package:tumblrx/models/user/blog.dart';
 
 class AccountIcon extends StatefulWidget {
-  Blog _blog;
-  String _defaultBlogName;
+  final Blog _blog;
+  final String _defaultBlogName;
 
   AccountIcon(this._blog, this._defaultBlogName);
   @override

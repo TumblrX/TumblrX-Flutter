@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/models/user/account.dart';
+import 'package:tumblrx/screens/blog_screen.dart';
 import 'package:tumblrx/screens/main_screen.dart';
 import 'package:tumblrx/screens/page_not_found.dart';
 import 'package:tumblrx/screens/signup_agecheck.dart';
@@ -12,7 +13,6 @@ import 'package:tumblrx/services/notifications.dart';
 import 'package:tumblrx/services/creating_post.dart';
 import 'package:tumblrx/services/settings.dart';
 import 'package:tumblrx/services/theme.dart';
-import 'package:tumblrx/screens/profile.dart';
 import 'package:tumblrx/screens/welcome_screen_login.dart';
 import 'package:tumblrx/screens/welcome_screen_signup.dart';
 import 'package:tumblrx/screens/signup_pick_tags.dart';
@@ -52,7 +52,6 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-
         onUnknownRoute: (RouteSettings settings) {
           return PageRouteBuilder(pageBuilder: (_, __, ___) => PageNotFound());
         },
@@ -62,9 +61,8 @@ class MyApp extends StatelessWidget {
         ),
         debugShowCheckedModeBanner: false,
         initialRoute: WelcomeScreen.id,
-
         routes: {
-          Profile.profile:(context) => Profile(),
+          BlogScreen.id: (context) => BlogScreen(),
           WelcomeScreen.id: (context) => WelcomeScreen(),
           MainScreen.id: (context) => MainScreen(),
           LoginScreen.id: (context) => LoginScreen(),
