@@ -6,6 +6,7 @@ import 'package:tumblrx/screens/Profile_Screen.dart';
 import 'package:tumblrx/screens/notifications_screen.dart';
 import 'package:tumblrx/screens/page_not_found.dart';
 import 'package:tumblrx/screens/search_screen.dart';
+import 'package:tumblrx/screens/signup_agecheck.dart';
 import 'package:tumblrx/screens/welcome_screen.dart';
 import 'package:tumblrx/services/authentication.dart';
 import 'package:tumblrx/services/content.dart';
@@ -13,6 +14,9 @@ import 'package:tumblrx/services/messaging.dart';
 import 'package:tumblrx/services/notifications.dart';
 import 'package:tumblrx/services/settings.dart';
 import 'package:tumblrx/services/theme.dart';
+import 'package:tumblrx/screens/welcome_screen_login.dart';
+import 'package:tumblrx/screens/welcome_screen_signup.dart';
+import 'package:tumblrx/screens/signup_pick_tags.dart';
 
 void main() {
   runApp(MyApp());
@@ -30,7 +34,7 @@ class MyApp extends StatelessWidget {
           create: (context) => Authentication(),
         ),
         ChangeNotifierProvider<Content>(
-          create: (context) => null, //Content(),
+          create: (context) => Content(),
         ),
         ChangeNotifierProvider<Messaging>(
           create: (context) => Messaging(),
@@ -46,6 +50,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
+
         onUnknownRoute: (RouteSettings settings) {
           return PageRouteBuilder(pageBuilder: (_, __, ___) => PageNotFound());
         },
@@ -53,12 +58,15 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSwatch(
               primarySwatch: Colors.blueGrey, accentColor: Colors.blueAccent),
         ),
-        initialRoute: BottomNavBarScreen.id,
+        debugShowCheckedModeBanner: false,
+        initialRoute: WelcomeScreen.id,
         routes: {
+          WelcomeScreen.id: (context) => WelcomeScreen(),
           BottomNavBarScreen.id: (context) => BottomNavBarScreen(),
-          ProfileScreen.id: (context) => ProfileScreen(),
-          SearchScreen.id: (context) => SearchScreen(),
-          NotificationsScreen.id: (context) => NotificationsScreen(),
+          LoginScreen.id: (context) => LoginScreen(),
+          SignupScreen.id: (context) => SignupScreen(),
+          SignUpAgeCheck.id: (context) => SignUpAgeCheck(),
+          SignUpPickTags.id: (context) => SignUpPickTags(),
         },
       ),
     );

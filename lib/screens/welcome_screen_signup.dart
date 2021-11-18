@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:tumblrx/components/welcome_screen_image.dart';
-import 'package:tumblrx/screens/welcome_screen_signup.dart';
 import 'package:tumblrx/utilities/constants.dart';
-import 'package:tumblrx/screens/welcome_screen_login.dart';
+import 'package:tumblrx/screens/signup_agecheck.dart';
 
-
-class WelcomeScreen extends StatelessWidget {
-  static final String id = 'welcome_screen';
+class SignupScreen extends StatelessWidget {
+  static final String id = 'welcome_screen_signup';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,11 +24,11 @@ class WelcomeScreen extends StatelessWidget {
               ),
               TextButton(
                 child: Text(
-                  '               Sign up               ',
+                  '          Sign up with Email           ',
                   style: KWelcomeScreenButton,
                 ),
                 onPressed: () {
-                  Navigator.pushNamed(context, SignupScreen.id);
+                  Navigator.pushNamed(context, SignUpAgeCheck.id);
                 },
                 style: TextButton.styleFrom(
                   backgroundColor: Colors.white,
@@ -43,12 +41,10 @@ class WelcomeScreen extends StatelessWidget {
               ),
               TextButton(
                 child: Text(
-                  '              Log in                 ',
+                  '           Sign up with Google               ',
                   style: KWelcomeScreenButton,
                 ),
-                onPressed: () {
-                  Navigator.pushNamed(context, LoginScreen.id);
-                },
+                onPressed: () {},
                 style: TextButton.styleFrom(
                   backgroundColor: Colors.white,
                   shape: const BeveledRectangleBorder(
@@ -62,4 +58,3 @@ class WelcomeScreen extends StatelessWidget {
     );
   }
 }
-//WelcomeScreenImage()
