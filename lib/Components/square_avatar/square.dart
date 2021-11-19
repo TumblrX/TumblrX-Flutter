@@ -10,7 +10,7 @@ class Square extends StatelessWidget {
           child: Container(
             width: MediaQuery.of(context).size.height / 8.7,
             height: MediaQuery.of(context).size.height / 8.8,
-            child: ClipRRect(
+            child:   ClipRRect(
               borderRadius: BorderRadius.circular(3),
               child: Image.asset('images/avatar.png'),
             ),
