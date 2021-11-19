@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tumblrx/Components/show_image.dart';
+import 'package:tumblrx/components/show_image.dart';
 
 class Constant extends StatelessWidget {
   static Widget buildBottomSheetAvatar(BuildContext context) {

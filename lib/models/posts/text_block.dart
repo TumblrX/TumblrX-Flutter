@@ -1,13 +1,21 @@
+import 'package:flutter/widgets.dart';
+import 'package:styled_text/styled_text.dart';
+import 'package:tumblrx/utilities/text_format.dart';
+
 class TextBlock {
   String _subtype;
   String _text;
-  List<InlineFormatting> _formatting;
+  List<InlineFormatting> _formatting = [];
 
   TextBlock.fromJson(Map<String, dynamic> parsedJson) {
-    _text = parsedJson['text'];
-    _subtype = parsedJson['subtype'];
-    if (parsedJson['formatting'] != null) {
-      _formatting.add(new InlineFormatting.fromJson(parsedJson['formatting']));
+    this._text = parsedJson['text'];
+    if (parsedJson.containsKey('subtype'))
+      this._subtype = parsedJson['subtype'];
+    if (parsedJson.containsKey('formatting') &&
+        parsedJson['formatting'] != null) {
+      this
+          ._formatting
+          .add(new InlineFormatting.fromJson(parsedJson['formatting']));
     }
   }
   Map<String, dynamic> toJson() {
@@ -23,6 +31,14 @@ class TextBlock {
       _text = format.applyFormat(_text);
     }
     return _text;
+  }
+
+  Widget showBlock() {
+    _text = this.formatText();
+    return StyledText(
+      text: _text,
+      tags: formattingTags(),
+    );
   }
 }
 
@@ -60,31 +76,32 @@ class InlineFormatting {
 
   String applyFormat(String text) {
     int start = this.start;
-    int end = this.end;
-    String originalText = text.substring(start, end);
+    int end = this.end + 1;
+
+    String originalText = (end >= text.length
+        ? text.substring(start)
+        : text.substring(start, end));
     String formattedText;
     switch (type) {
       case 'bold':
-        formattedText = "<b>$originalText</b>";
-        break;
-      case 'italic':
-        formattedText = "<italic>$originalText</italic>";
+        formattedText = "<bold>$originalText</bold> ";
         break;
       case 'strikethrough':
-        formattedText = "<strikethrough>$originalText</strikethrough>";
+        formattedText = " <strikethrough>$originalText</strikethrough> ";
         break;
       case 'link':
-        formattedText = "<link href=${this.url}>$originalText</link>";
+        formattedText = " <link href=${this.url}>$originalText</link> ";
         break;
       case 'color':
-        formattedText = "<color text=\"${this.hex}\">$originalText</color>";
+        formattedText = " <color text=\"${this.hex}\">$originalText</color> ";
         break;
       case 'mention': // "uuid": , "name": , "url":
-        formattedText = "<mention href=${this.blogUrl}>$originalText</mention>";
+        formattedText =
+            " <mention href=${this.blogUrl}>$originalText</mention> ";
         break;
       default:
         formattedText = originalText;
     }
-    return text.replaceRange(start, end, formattedText);
+    return text.replaceAll(originalText, formattedText);
   }
 }

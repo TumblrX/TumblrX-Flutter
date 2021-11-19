@@ -1,20 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:tumblrx/components/post/post_footer.dart';
+import 'package:provider/provider.dart';
+import 'package:tumblrx/services/content.dart';
 
 class PostView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: [
-          Text(
-            'Post Content',
-            style: TextStyle(height: 10.0),
-          ),
-          Divider(),
-          PostFooter(584, true),
-        ],
-      ),
+    return Consumer<Content>(
+      builder: (context, content, child) => Container(
+          child: Column(
+        children: content.posts.map((post) => post.showPost()).toList(),
+      )),
     );
   }
 }

@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import 'package:tumblrx/components/post/post_footer.dart';
+import 'package:tumblrx/components/post/post_header.dart';
 import 'package:tumblrx/models/posts/audio_block.dart';
 import 'package:tumblrx/models/posts/image_block.dart';
 import 'package:tumblrx/models/posts/link_block.dart';
@@ -21,7 +24,7 @@ class Post {
   List layout = []; //The layout of the post content.
   List trail = []; //The reblog trail items, if any.
 
-  Post({this.blogName, this.liked});
+  Post({this.blogName, this.liked, this.content});
   Post.fromJson(Map<String, dynamic> parsedJson) {
     // identifiers
     blogName = parsedJson['blog_name'];
@@ -59,5 +62,17 @@ class Post {
     });
   }
 
-  //Widget showPost() {}
+  Column showPost() {
+    return Column(
+      children: [
+        PostHeader(),
+        Divider(),
+        Column(
+          children: content.map<Widget>((block) => block.showBlock()).toList(),
+        ),
+        Divider(),
+        PostFooter(584, true),
+      ],
+    );
+  }
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:tumblrx/Components/constant.dart';
+import 'package:tumblrx/components/constant.dart';
 
 class Avatar extends StatefulWidget {
   @override

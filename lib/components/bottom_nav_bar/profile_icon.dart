@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/components/bottom_nav_bar/account_icon.dart';
-import 'package:tumblrx/models/user/account.dart';
+import 'package:tumblrx/models/user/user.dart';
 
 class ProfileIcon extends StatelessWidget {
   final Function _onTab;

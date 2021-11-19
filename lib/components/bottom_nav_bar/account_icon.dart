@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tumblrx/models/user/account.dart';
+import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/models/user/blog.dart';
 
 class AccountIcon extends StatefulWidget {
