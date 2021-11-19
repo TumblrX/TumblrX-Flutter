@@ -9,16 +9,11 @@ class AccountIcon extends StatefulWidget {
 
   AccountIcon(this._blog, this._defaultBlogName);
   @override
-  _AccountIconState createState() =>
-      _AccountIconState(_blog, this._defaultBlogName);
+  _AccountIconState createState() => _AccountIconState();
 }
 
 class _AccountIconState extends State<AccountIcon> {
   bool _isHovered = false;
-  Blog _blog;
-  String _defaultBlogName;
-
-  _AccountIconState(this._blog, this._defaultBlogName);
 
   void setSelection(bool selectionState) {
     setState(() {
@@ -32,21 +27,21 @@ class _AccountIconState extends State<AccountIcon> {
       builder: (ctx, user, child) => MouseRegion(
         onHover: (event) {
           setSelection(true);
-          user.setActiveBlog(_blog.name);
+          user.setActiveBlog(widget._blog.name);
         },
         onEnter: (event) {
           setSelection(true);
-          user.setActiveBlog(_blog.name);
+          user.setActiveBlog(widget._blog.name);
         },
         onExit: (event) {
           setSelection(false);
-          user.setActiveBlog(_defaultBlogName);
+          user.setActiveBlog(widget._defaultBlogName);
         },
         child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: CircleAvatar(
             radius: _isHovered ? 30.0 : 25.0,
-            backgroundImage: AssetImage(_blog.blogAvatar),
+            backgroundImage: AssetImage(widget._blog.blogAvatar),
           ),
         ),
       ),

@@ -80,6 +80,7 @@ flutter:
     - assets/icon/default_avatar.png
     - assets/icon/chat.png
     - assets/icon/love.png
+    - assets/icon/unlike.png
     - assets/icon/message.png
     - assets/icon/repeat.png
     - assets/icon/reblog.png

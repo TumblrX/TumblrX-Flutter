@@ -21,6 +21,7 @@ class Post {
   List layout = []; //The layout of the post content.
   List trail = []; //The reblog trail items, if any.
 
+  Post({this.blogName, this.liked});
   Post.fromJson(Map<String, dynamic> parsedJson) {
     // identifiers
     blogName = parsedJson['blog_name'];

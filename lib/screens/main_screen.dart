@@ -14,22 +14,25 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   PageController _controller;
+  ValueNotifier<int> _selectedIndex;
 
   @override
   void initState() {
     super.initState();
     _controller = PageController();
+    _selectedIndex = ValueNotifier(0);
   }
 
   void _onPageChanged(int index) {
     setState(() {
-      // this._selectedIndex = index;
+      this._selectedIndex.value = index;
     });
   }
 
   @override
   void dispose() {
     _controller.dispose();
+    _selectedIndex.dispose();
     super.dispose();
   }
 
@@ -57,7 +60,7 @@ class _MainScreenState extends State<MainScreen> {
               BlogScreen(),
             ],
           ),
-          bottomNavigationBar: BottomNavBarWidget(_controller),
+          bottomNavigationBar: BottomNavBarWidget(_controller, _selectedIndex),
         ),
       ),
     );

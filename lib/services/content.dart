@@ -8,11 +8,6 @@ class Content extends ChangeNotifier {
     _posts = parsedJson['body'];
   }
 
-  // void addPost() {
-  //   _posts.add(value);
-  //   notifyListeners();
-  // }
-
   // return copy of the posts list
   List<Post> get posts => [..._posts];
 }

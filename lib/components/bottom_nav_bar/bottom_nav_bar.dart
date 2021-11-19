@@ -3,21 +3,28 @@ import 'package:tumblrx/components/bottom_nav_bar/profile_icon.dart';
 
 class BottomNavBarWidget extends StatefulWidget {
   final PageController _controller;
-  BottomNavBarWidget(this._controller);
+  final ValueNotifier<int> _selectedIndexNotifier;
+  BottomNavBarWidget(this._controller, this._selectedIndexNotifier);
   @override
-  _BottomNavBarWidgetState createState() =>
-      _BottomNavBarWidgetState(_controller);
+  _BottomNavBarWidgetState createState() => _BottomNavBarWidgetState();
 }
 
 class _BottomNavBarWidgetState extends State<BottomNavBarWidget> {
   int _selectedIndex = 0;
-  PageController _controller;
-  _BottomNavBarWidgetState(this._controller);
+  @override
+  void initState() {
+    super.initState();
+    widget._selectedIndexNotifier.addListener(() {
+      setState(() {
+        _selectedIndex = widget._selectedIndexNotifier.value;
+      });
+    });
+  }
 
   void _onTap(int index) {
     setState(() {
       _selectedIndex = index;
-      _controller.jumpToPage(index);
+      widget._controller.jumpToPage(index);
     });
   }
 

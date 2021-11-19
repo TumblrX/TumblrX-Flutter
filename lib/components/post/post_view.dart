@@ -12,7 +12,7 @@ class PostView extends StatelessWidget {
             style: TextStyle(height: 10.0),
           ),
           Divider(),
-          PostFooter(),
+          PostFooter(584, true),
         ],
       ),
     );
