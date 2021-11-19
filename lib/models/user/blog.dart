@@ -10,7 +10,6 @@ class Blog {
   String blogAvatar;
   String description;
   int likes;
-
   // bool ask;
   // bool ask_anon
   /*
