@@ -34,7 +34,9 @@ dependencies:
   flutter_lints: ^1.0.4
   import_sorter: ^4.6.0
   test: ^1.16.8
-  giphy_get: ^2.0.3
+  giphy_get:
+    git:
+      url: https://github.com/AmmarMohamed21/giphy_get
   any_link_preview: ^1.0.7
   image_picker: ^0.8.4+1
   video_player: ^2.2.3

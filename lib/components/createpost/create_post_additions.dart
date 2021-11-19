@@ -42,6 +42,8 @@ class CreatePostAdditions extends StatelessWidget {
             Provider.of<CreatingPost>(context, listen: false)
                 .saveFocusedIndex();
             showModalBottomSheet(
+              constraints:
+                  BoxConstraints(maxWidth: kIsWeb ? 500.0 : double.infinity),
               context: context,
               isScrollControlled: true,
               builder: (context) => SingleChildScrollView(
@@ -183,6 +185,8 @@ class CreatePostAdditions extends StatelessWidget {
           ),
           onTap: () {
             showModalBottomSheet(
+              constraints:
+                  BoxConstraints(maxWidth: kIsWeb ? 500.0 : double.infinity),
               context: context,
               isScrollControlled: true,
               builder: (context) => SingleChildScrollView(

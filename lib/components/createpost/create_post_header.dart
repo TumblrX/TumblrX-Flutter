@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/components/modal_bottom_sheet.dart';
@@ -83,6 +84,8 @@ class CreatePostHeader extends StatelessWidget {
           ),
           onTap: () {
             showModalBottomSheet(
+              constraints:
+                  BoxConstraints(maxWidth: kIsWeb ? 500.0 : double.infinity),
               context: context,
               isScrollControlled: true,
               builder: (context) => SingleChildScrollView(

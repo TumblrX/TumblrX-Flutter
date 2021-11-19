@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/components/Stuff_for_you_widget.dart';
@@ -33,15 +34,23 @@ class FeedScreen extends StatelessWidget {
           double topPadding = MediaQuery.of(context).padding.top;
           Provider.of<CreatingPost>(context, listen: false)
               .initializePostOptions();
-          showModalBottomSheet(
-            context: context,
-            isScrollControlled: true,
-            builder: (context) => SingleChildScrollView(
-              child: CreatePost(
-                topPadding: topPadding,
-              ),
-            ),
-          );
+          !kIsWeb
+              ? showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  builder: (context) => SingleChildScrollView(
+                    child: CreatePost(
+                      topPadding: topPadding,
+                    ),
+                  ),
+                )
+              : showDialog(
+                  context: context,
+                  builder: (_) => AlertDialog(
+                        content: CreatePost(
+                          topPadding: topPadding,
+                        ),
+                      ));
         },
       ),
     );

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/components/createpost/post_content.dart';
@@ -20,9 +21,20 @@ class CreatePost extends StatelessWidget {
         MediaQuery.of(context).padding.top -
         MediaQuery.of(context).padding.bottom;
     return Container(
-      constraints: BoxConstraints(
-        maxHeight: screenHeight,
-      ),
+      constraints: !kIsWeb
+          ? BoxConstraints(
+              maxHeight: screenHeight,
+            )
+          : BoxConstraints(
+              maxWidth: 500.0,
+              maxHeight: 600.0,
+              minWidth: MediaQuery.of(context).size.width < 500
+                  ? MediaQuery.of(context).size.width * 0.9
+                  : 500.0,
+              minHeight: MediaQuery.of(context).size.height < 600
+                  ? MediaQuery.of(context).size.height * 0.9
+                  : 600.0,
+            ),
       padding: MediaQuery.of(context).viewInsets,
       child: Padding(
         padding: EdgeInsets.only(
@@ -44,12 +56,19 @@ class CreatePost extends StatelessWidget {
                   SizedBox(
                     height: 10.0,
                   ),
-                  Flexible(
-                    child: PostContent(
-                      postContent:
-                          Provider.of<CreatingPost>(context).postContent,
-                    ),
-                  ),
+                  !kIsWeb
+                      ? Flexible(
+                          child: PostContent(
+                            postContent:
+                                Provider.of<CreatingPost>(context).postContent,
+                          ),
+                        )
+                      : Expanded(
+                          child: PostContent(
+                            postContent:
+                                Provider.of<CreatingPost>(context).postContent,
+                          ),
+                        ),
                   PostTags(),
                   SizedBox(
                     height: 10.0,

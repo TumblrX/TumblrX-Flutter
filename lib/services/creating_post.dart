@@ -178,6 +178,7 @@ class CreatingPost extends ChangeNotifier {
   ///deletes a post content item of the sent [index]
   void removePostItem(int index) {
     postContent.removeAt(index);
+    checkPostEnable();
     notifyListeners();
   }
 
@@ -254,6 +255,7 @@ class CreatingPost extends ChangeNotifier {
   void addGif(BuildContext context) async {
     saveFocusedIndex();
     GiphyGif gif = await GiphyGet.getGif(
+      modal: false,
       context: context,
       apiKey: 'N4xaE80Z4B2vOJ5Kd6VAKsmYqXx4Ijyq',
     );

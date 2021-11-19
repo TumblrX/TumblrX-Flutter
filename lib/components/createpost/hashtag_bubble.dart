@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/services/creating_post.dart';
@@ -27,6 +28,8 @@ class HashtagBubble extends StatelessWidget {
           onTap: () {
             if (isPostView) {
               showModalBottomSheet(
+                constraints:
+                    BoxConstraints(maxWidth: kIsWeb ? 500.0 : double.infinity),
                 context: context,
                 isScrollControlled: true,
                 builder: (context) => SingleChildScrollView(

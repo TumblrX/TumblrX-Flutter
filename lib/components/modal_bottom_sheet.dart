@@ -11,7 +11,10 @@ class ModalBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Color(0xFF757575),
+      decoration: BoxDecoration(
+        color: Color(0xFF757575),
+        border: Border.fromBorderSide(BorderSide.none),
+      ),
       child: Container(
         padding: const EdgeInsets.all(10.0),
         decoration: BoxDecoration(

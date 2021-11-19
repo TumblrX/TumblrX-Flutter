@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/components/createpost/tags_list_view.dart';
@@ -47,6 +48,8 @@ class PostTags extends StatelessWidget {
               ),
               onPressed: () {
                 showModalBottomSheet(
+                  constraints: BoxConstraints(
+                      maxWidth: kIsWeb ? 500.0 : double.infinity),
                   context: context,
                   isScrollControlled: true,
                   builder: (context) => SingleChildScrollView(
