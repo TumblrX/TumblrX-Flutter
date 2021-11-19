@@ -57,7 +57,7 @@ class _BottomNavBarWidgetState extends State<BottomNavBarWidget> {
           backgroundColor: Colors.blueGrey[900],
         ),
       ],
-      backgroundColor: Colors.blueGrey[900],
+      backgroundColor: Theme.of(context).primaryColor,
       showSelectedLabels: false,
       showUnselectedLabels: false,
       selectedItemColor: Colors.white,

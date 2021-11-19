@@ -87,3 +87,8 @@ const KPickTagsInfoText = TextStyle(
     color: Colors.grey,
     fontWeight: FontWeight.bold);
 
+final List<String> reactionIcons = [
+  "assets/icon/message.png",
+  "assets/icon/repeat.png",
+  "assets/icon/love.png"
+];

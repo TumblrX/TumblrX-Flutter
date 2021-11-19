@@ -1,4 +1,7 @@
+import 'package:flutter/widgets.dart';
+import 'package:tumblrx/components/post/link_preview_widget.dart';
 import 'package:tumblrx/models/posts/block_poster.dart';
+import 'package:flutter_link_previewer/flutter_link_previewer.dart';
 
 class LinkBlock {
   String type;
@@ -40,5 +43,12 @@ class LinkBlock {
       data['poster'] = this.poster.map((v) => v.toJson()).toList();
     }
     return data;
+  }
+
+  Widget showBlock() {
+    return Column(children: [
+      LinkPreviewWidget(this.url),
+      this.description == null ? Container() : Text(this.description),
+    ]);
   }
 }

@@ -1,6 +1,12 @@
+import 'package:flutter/material.dart';
+import 'package:tumblrx/components/post/video_player_widget.dart';
+import 'package:tumblrx/models/posts/block_media.dart';
+import 'package:tumblrx/models/posts/block_poster.dart';
+
 class VideoBlock {
   String type;
   Media media;
+  String provide;
   List<Poster> poster = [];
   List<Poster> filmstrip = [];
   bool canAutoplayOnCellular;
@@ -8,6 +14,7 @@ class VideoBlock {
   VideoBlock(
       {this.type,
       this.media,
+      this.provide,
       this.poster,
       this.filmstrip,
       this.canAutoplayOnCellular});
@@ -43,57 +50,8 @@ class VideoBlock {
     data['can_autoplay_on_cellular'] = this.canAutoplayOnCellular;
     return data;
   }
-}
 
-class Media {
-  String type;
-  String url;
-  int height;
-  int width;
-  bool hd;
-
-  Media({this.type, this.url, this.height, this.width, this.hd});
-
-  Media.fromJson(Map<String, dynamic> json) {
-    type = json['type'];
-    url = json['url'];
-    height = json['height'];
-    width = json['width'];
-    hd = json['hd'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['type'] = this.type;
-    data['url'] = this.url;
-    data['height'] = this.height;
-    data['width'] = this.width;
-    data['hd'] = this.hd;
-    return data;
-  }
-}
-
-class Poster {
-  String type;
-  String url;
-  int width;
-  int height;
-
-  Poster({this.type, this.url, this.width, this.height});
-
-  Poster.fromJson(Map<String, dynamic> json) {
-    type = json['type'];
-    url = json['url'];
-    width = json['width'];
-    height = json['height'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['type'] = this.type;
-    data['url'] = this.url;
-    data['width'] = this.width;
-    data['height'] = this.height;
-    return data;
+  Widget showBlock() {
+    return VideoPlayerWidget(this.media.url, this.provide);
   }
 }

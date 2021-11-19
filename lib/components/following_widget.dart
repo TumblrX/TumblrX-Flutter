@@ -11,8 +11,11 @@ class FollowingScreen extends StatelessWidget {
         itemBuilder: (context, index) {
           return content.posts[index].showPost();
         },
-        separatorBuilder: (context, index) => SizedBox(
-          height: 12.0,
+        separatorBuilder: (context, index) => Container(
+          child: SizedBox(
+            height: 15.0,
+          ),
+          color: Theme.of(context).primaryColor,
         ),
       ),
     );

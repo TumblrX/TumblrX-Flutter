@@ -6,6 +6,7 @@ import 'package:tumblrx/models/posts/image_block.dart';
 import 'package:tumblrx/models/posts/link_block.dart';
 import 'package:tumblrx/models/posts/text_block.dart';
 import 'package:tumblrx/models/posts/video_block.dart';
+import 'package:tumblrx/models/user/blog.dart';
 
 class Post {
   String blogName; //The short name used to uniquely identify a blog
@@ -62,15 +63,22 @@ class Post {
     });
   }
 
+  Blog getBlogData() {
+    return new Blog(title: "passant");
+  }
+
   Column showPost() {
+    Blog postBlog = getBlogData();
     return Column(
       children: [
-        PostHeader(),
+        PostHeader(postBlog),
         Divider(),
         Column(
           children: content.map<Widget>((block) => block.showBlock()).toList(),
         ),
-        Divider(),
+        Divider(
+          color: Colors.transparent,
+        ),
         PostFooter(584, true),
       ],
     );

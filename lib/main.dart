@@ -56,8 +56,7 @@ class MyApp extends StatelessWidget {
           return PageRouteBuilder(pageBuilder: (_, __, ___) => PageNotFound());
         },
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSwatch(
-              primarySwatch: Colors.blueGrey, accentColor: Colors.blueAccent),
+          primaryColor: Color.fromRGBO(0, 0, 39, 1),
         ),
         debugShowCheckedModeBanner: false,
         initialRoute: WelcomeScreen.id,

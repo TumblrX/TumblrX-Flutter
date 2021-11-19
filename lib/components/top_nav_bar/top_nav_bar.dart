@@ -8,7 +8,7 @@ class TopNavBar extends StatelessWidget {
       floating: true,
       leading: TumblrXIcon(),
       leadingWidth: 30.0,
-      backgroundColor: Colors.blueGrey[900],
+      backgroundColor: Theme.of(context).primaryColor,
       title: Row(
         mainAxisSize: MainAxisSize.max,
         textDirection: TextDirection.ltr,
