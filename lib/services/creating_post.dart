@@ -1,26 +1,23 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:giphy_get/giphy_get.dart';
 import 'package:image_picker/image_picker.dart';
+
 import 'package:tumblrx/models/creatingpost/text_field_data.dart';
+import 'package:tumblrx/models/posts/text_block.dart';
+
 import 'package:tumblrx/utilities/constants.dart';
 import 'package:http/http.dart' as http;
+import 'package:tumblrx/utilities/hex_color_value.dart';
 
 ///A Class that manages all creating post functionalities and prepare data for back end
 class CreatingPost extends ChangeNotifier {
   ///followed tags of the current user
   List<String> followedHashtags;
 
-  ///blog usernames of the current user
-  List<String> blogUsernames;
-
-  ///titles of the current user
-  Map<String, String> blogUsernamesTitles;
-
   ///chosen blog username for the post
   String blogUsername;
-
-  ///chosen blog title for the post
-  String blogTitle;
 
   ///determines if posting is allowed
   bool isPostEnabled;
@@ -50,16 +47,8 @@ class CreatingPost extends ChangeNotifier {
   ImagePicker _picker;
 
   ///Initializes all post options and variables.
-  void initializePostOptions() {
+  void initializePostOptions(BuildContext context) {
     lastFocusedIndex = 0;
-    blogUsernames = ['ammarovic21', 'ammmar', 'ammaar'];
-    blogUsernamesTitles = {
-      'ammarovic21': 'title1',
-      'ammmar': 'title2',
-      'ammaar': 'title3'
-    };
-    blogUsername = 'ammarovic21';
-    blogTitle = 'title1';
     isPostEnabled = false;
     shareToTwitter = false;
     postOption = PostOption.now;
@@ -93,13 +82,6 @@ class CreatingPost extends ChangeNotifier {
     ];
     _changeFocus(0);
     _picker = ImagePicker();
-    notifyListeners();
-  }
-
-  ///takes a chosen [username] and to set the current chosen blog username and its title
-  void setPostBlogUsername(String username) {
-    blogUsername = username;
-    blogTitle = blogUsernamesTitles[username];
     notifyListeners();
   }
 
@@ -330,6 +312,7 @@ class CreatingPost extends ChangeNotifier {
   void addImage({bool isCamera}) async {
     final XFile image = await _picker.pickImage(
         source: isCamera ? ImageSource.camera : ImageSource.gallery);
+
     if (image != null) {
       Map img = {'type': PostContentType.image, 'content': image};
       postContent.insert(lastFocusedIndex + 1, img);
@@ -357,5 +340,142 @@ class CreatingPost extends ChangeNotifier {
       return null;
     }
     return response.file;
+  }
+
+  void postData() async {
+    // String url =
+    //     'https://54bd9e92-6a19-4377-840f-23886631e1a8.mock.pstmn.io/createpost'; //TODO: edit it
+    // var req = http.MultipartRequest('POST', Uri.parse(url));
+    String tags = chosenHashtags.join(', ');
+    Map requestBody = {
+      'postType': 'text',
+      'tags': tags,
+      'is_private': postOption == PostOption.private,
+      'is_draft': postOption == PostOption.draft,
+      'send_to_twitter': shareToTwitter
+    };
+    print(requestBody);
+
+    List<Map> postContentList = [];
+    for (int i = 0; i < postContent.length; i++) {
+      if (postContent[i]['type'] == PostContentType.text) {
+        int textLength = postContent[i]['content']['data']
+            .textEditingController
+            .value
+            .text
+            .length;
+        if (textLength > 0) postContentList.add(_getTextBlockMap(i));
+      } else if (postContent[i]['type'] == PostContentType.gif) {
+        postContentList.add(_getGifBlockMap(i));
+      } else if (postContent[i]['type'] == PostContentType.link) {
+        postContentList.add(_getLinkBlockMap(i));
+      } else if (postContent[i]['type'] == PostContentType.image) {
+        Map map = _getImageBlockMap(i);
+        //final length = await postContent[i]['content'].length();
+        // req.files.add(http.MultipartFile(map['identifier'],
+        //     postContent[i]['content'].readAsBytes().asStream(), length,
+        //     filename: postContent[i]['content'].name));
+        requestBody[map['identifier']] = postContent[i]['content'].name;
+        postContentList.add(map);
+      } else if (postContent[i]['type'] == PostContentType.video) {
+        Map map = _getVideoBlockMap(i);
+        //final length = await postContent[i]['content'].length();
+        // req.files.add(http.MultipartFile(map['identifier'],
+        //     postContent[i]['content'].readAsBytes().asStream(), length,
+        //     filename: postContent[i]['content'].name));
+        requestBody[map['identifier']] = postContent[i]['content'].name;
+        postContentList.add(map);
+      }
+    }
+
+    requestBody['content'] = postContentList;
+    var response = await http.post(
+        Uri.parse(
+            'https://54bd9e92-6a19-4377-840f-23886631e1a8.mock.pstmn.io/createpost'),
+        body: jsonEncode(requestBody),
+        headers: {'Content-type': 'application/json'});
+    print('Response status: ${response.statusCode}');
+    // req.fields['postType'] = 'text';
+    // req.fields['content'] = 'any content';
+    // final response = await req.send();
+    // print(response.statusCode);
+    // //req.fields['content'] = postContentList;
+  }
+
+  ///Converts text data of index [i] to final map block format
+  Map _getTextBlockMap(int i) {
+    int textLength = postContent[i]['content']['data']
+        .textEditingController
+        .value
+        .text
+        .length;
+
+    List<InlineFormatting> formattings = [];
+    if (postContent[i]['content']['data'].isBold) {
+      InlineFormatting formatting =
+          InlineFormatting(start: 0, end: textLength - 1, type: 'bold');
+      formattings.add(formatting);
+    }
+    if (postContent[i]['content']['data'].isItalic) {
+      InlineFormatting formatting =
+          InlineFormatting(start: 0, end: textLength - 1, type: 'italic');
+      formattings.add(formatting);
+    }
+    if (postContent[i]['content']['data'].isLineThrough) {
+      InlineFormatting formatting = InlineFormatting(
+          start: 0, end: textLength - 1, type: 'strikethrough');
+      formattings.add(formatting);
+    }
+    InlineFormatting formatting =
+        InlineFormatting(start: 0, end: textLength - 1, type: 'color');
+    int red = postContent[i]['content']['data'].color.red;
+    int blue = postContent[i]['content']['data'].color.blue;
+    int green = postContent[i]['content']['data'].color.green;
+    String hexColor = getHexValue(red, blue, green);
+    formatting.setHexColor(hexColor);
+    formattings.add(formatting);
+
+    TextBlock textBlock = TextBlock(
+        postContent[i]['content']['data']
+            .textStyleType
+            .toString()
+            .substring(14),
+        postContent[i]['content']['data'].textEditingController.value.text,
+        formattings);
+    Map block = textBlock.toJson();
+    List<InlineFormatting> formattingList = block['formatting'];
+    List<Map> jsonFormatting = [];
+    for (int i = 0; i < formattingList.length; i++) {
+      jsonFormatting.add(formattingList[i].toJson());
+    }
+    block['formatting'] = jsonFormatting;
+
+    return block;
+  }
+
+  ///Converts gif of index [i] to final map block format
+  Map _getGifBlockMap(int i) {
+    return {'type': 'gif', 'url': postContent[i]['content']['link']};
+  }
+
+  ///Converts link of index [i] to final map block format
+  Map _getLinkBlockMap(int i) {
+    return {'type': 'link', 'url': postContent[i]['content']['link']};
+  }
+
+  ///Converts image of index [i] to final map block format
+  Map _getImageBlockMap(int i) {
+    return {
+      'type': 'image',
+      'identifier': i.toString() + DateTime.now().toString()
+    };
+  }
+
+  ///Converts video of index [i] to final map block format
+  Map _getVideoBlockMap(int i) {
+    return {
+      'media': 'video',
+      'identifier': i.toString() + DateTime.now().toString()
+    };
   }
 }
