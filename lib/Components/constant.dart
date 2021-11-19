@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tumblrx/Components/show_image.dart';
-
+///all constant, variable , widget and function which use more than one
 class Constant extends StatelessWidget {
   static Widget buildBottomSheetAvatar(BuildContext context) {
     //bottomsheet for avatar
@@ -49,19 +49,28 @@ class Constant extends StatelessWidget {
 
   static Widget createNewTumblr() {
     //the shape of create new tumblr
-    return DropdownMenuItem(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return PopupMenuItem( child: 
+      Row(
+        
         children: <Widget>[
           Icon(
             Icons.add_circle_outline,
             color: Color(0xffa8a7a7),
           ),
+          SizedBox(width: 5,),
+        
           Text('Create a new Tumblr')
         ],
       ),
-      value: 'create',
-    );
+      value: 'create',);
+  }
+
+  static String toLengthFifteen(String text) {
+    if (text.length > 15) {
+      return (text.substring(0, 15) + "...");
+    } else {
+      return text;
+    }
   }
 
   static Color accent = Color(0xffffff00);
@@ -82,8 +91,7 @@ class Constant extends StatelessWidget {
   static String avatarPath = 'images/avatar.png';
   static String profileDescription = 'i want to finish this project';
   //for tumbler blogs
-  final tumblrsBlogs = ['account1', 'account2'];
-
+  static List tumblrsBlog = ['account1', 'account2'];
   @override
   Widget build(BuildContext context) {
     return Container();

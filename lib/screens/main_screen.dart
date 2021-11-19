@@ -44,7 +44,7 @@ class _MainScreenState extends State<MainScreen> {
           return false;
         }
       }),
-      child: SafeArea(
+      child: Container(
         child: Scaffold(
           body: PageView(
             controller: _controller,

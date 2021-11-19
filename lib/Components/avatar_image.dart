@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tumblrx/Components/constant.dart';
-
+/// for avatar image
 class AvatarImage extends StatefulWidget {
   @override
   _AvatarImageState createState() => _AvatarImageState();

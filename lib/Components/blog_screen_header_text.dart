@@ -12,12 +12,12 @@ class TextWriting extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Text(
+          children: <Widget>[  
+            Text(   ///title
               'Untitled',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 38),
             ),
-            Text(
+            Text( ///description
               Constant.profileDescription,
             )
           ],

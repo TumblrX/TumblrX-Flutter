@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tumblrx/Components/constant.dart';
-
+/// for square avatar
 class Square extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

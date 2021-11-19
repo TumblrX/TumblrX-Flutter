@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:tumblrx/Components/constant.dart';
-
+///to show a circle behind avatar
 class Avatar extends StatefulWidget {
   @override
   _AvatarState createState() => _AvatarState();
