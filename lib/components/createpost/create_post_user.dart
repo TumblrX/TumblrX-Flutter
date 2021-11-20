@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tumblrx/models/user/account.dart';
-import 'package:tumblrx/services/creating_post.dart';
+import 'package:tumblrx/models/user/user.dart';
 
 import 'post_blog_choice.dart';
 

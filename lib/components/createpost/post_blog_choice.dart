@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tumblrx/models/user/account.dart';
+import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/services/creating_post.dart';
 
 ///Shows the blog choice where the post will be added to.
