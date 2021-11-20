@@ -8,7 +8,10 @@ import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/services/creating_post.dart';
 
 class FeedScreen extends StatelessWidget {
+  /// unique id to navigate to the screen
   static final String id = 'feed_screen';
+
+  /// build widget as a placeholder for feed posts widgets
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -19,7 +19,7 @@ class Authentication extends ChangeNotifier {
   ///Returns the visibility state of the password textfield
   bool get isObscurecontent => isObscureSignUp;
 
-  /* TODO:
+  /* todo:
  should also check if this email already exists from the mockservice
  */
   /// Checks if the email is in valid form for signup
