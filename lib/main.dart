@@ -17,6 +17,8 @@ import 'package:tumblrx/services/theme.dart';
 import 'package:tumblrx/screens/welcome_screen_login.dart';
 import 'package:tumblrx/screens/welcome_screen_signup.dart';
 import 'package:tumblrx/screens/signup_pick_tags.dart';
+import 'package:tumblrx/screens/signup_user_data.dart';
+import 'package:tumblrx/screens/login_user_data.dart';
 
 void main() {
   runApp(MyApp());
@@ -36,9 +38,18 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<CreatingPost>(
           create: (context) => CreatingPost(),
         ),
+
+        // ChangeNotifierProxyProvider<Authentication, User>(
+        //   create: (_) => User(Provider.of<Authentication>(context, listen: false)),
+        //   update: (_, authentication, user) =>
+        //       user..name = authentication.userName,
+
+        // ),
+
         ChangeNotifierProvider<User>(
           create: (context) => User(),
         ),
+
         ChangeNotifierProvider<Content>(
           create: (context) => Content(),
         ),
@@ -72,8 +83,15 @@ class MyApp extends StatelessWidget {
           SignupScreen.id: (context) => SignupScreen(),
           SignUpAgeCheck.id: (context) => SignUpAgeCheck(),
           SignUpPickTags.id: (context) => SignUpPickTags(),
+          SignUpUserData.id: (context) => SignUpUserData(),
+          LogInUserData.id: (context) => LogInUserData(),
         },
       ),
     );
   }
 }
+
+// ChangeNotifierProvider<User>(
+//           create: (context) => User(),
+
+//         ),

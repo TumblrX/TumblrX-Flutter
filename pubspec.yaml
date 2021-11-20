@@ -44,6 +44,7 @@ dependencies:
   intl: ^0.15.7
   #flutter_link_previewer: ^2.6.0
   #youtube_player_flutter: ^8.0.0
+  
 
 dev_dependencies:
   flutter_test:
