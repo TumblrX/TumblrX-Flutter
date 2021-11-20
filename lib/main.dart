@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tumblrx/models/post.dart';
 import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/screens/blog_screen.dart';
 import 'package:tumblrx/screens/main_screen.dart';
@@ -29,6 +30,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<Authentication>(
           create: (context) => Authentication(),
         ),
+        ChangeNotifierProvider<Post>(create: (context) => Post()),
         ChangeNotifierProvider<CreatingPost>(
           create: (context) => CreatingPost(),
         ),

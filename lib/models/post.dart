@@ -8,7 +8,10 @@ Description:
     in addition to build the post widget for rendering
 */
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:tumblrx/components/post/post_footer.dart';
 import 'package:tumblrx/components/post/post_header.dart';
 import 'package:tumblrx/models/posts/audio_block.dart';
@@ -19,10 +22,9 @@ import 'package:tumblrx/models/posts/video_block.dart';
 import 'package:tumblrx/models/user/blog.dart';
 import 'package:intl/intl.dart';
 import 'package:tumblrx/services/api_provider.dart';
-
 import 'dart:convert' as convert;
 
-class Post {
+class Post extends ChangeNotifier {
   /// The short name used to uniquely identify a blog
   String blogName;
 
@@ -65,7 +67,13 @@ class Post {
   /// The reblog trail items, if any.
   List trail = [];
 
+  /// total number of notes
+  int totalNotes;
+
   Post({this.blogName, this.liked, this.content});
+
+  /// blog object who published this post
+  Blog postBlog;
 
   /// Constructs a new instance usin parsed json data
   Post.fromJson(Map<String, dynamic> parsedJson) {
@@ -98,7 +106,10 @@ class Post {
       liked = parsedJson['liked'];
     else
       throw Exception("missing required paramter liked");
-
+    if (parsedJson.containsKey('totalNotes'))
+      totalNotes = parsedJson['totalNotes'];
+    else
+      totalNotes = 0;
     if (parsedJson.containsKey('state'))
       state = parsedJson['state'];
     else
@@ -160,8 +171,10 @@ class Post {
 
       if (response.statusCode != 200)
         throw Exception('post ID or reblog_key was not found');
+      else
+        liked = true;
     } catch (error) {
-      throw Exception(error.message);
+      throw Exception(error.message.toString());
     }
   }
 
@@ -178,8 +191,10 @@ class Post {
 
       if (response.statusCode != 200)
         throw Exception('post ID or reblog_key was not found');
+      else
+        liked = false;
     } catch (error) {
-      throw Exception(error.message);
+      throw Exception(error.message.toString());
     }
   }
 
@@ -217,26 +232,40 @@ class Post {
 
   /// API for post object to edit the post
   void editPost() async {
-    final String url =
-        'https://54bd9e92-6a19-4377-840f-23886631e1a8.mock.pstmn.io/posts/id=$id';
-    try {} catch (error) {}
+    final String endPoint = 'posts';
+    final Map<String, dynamic> queryParameters = {"id": id};
+    try {
+      final Response response =
+          await MockHttpRepository.sendPostRequest(endPoint, queryParameters);
+      if (response.statusCode != 200)
+        throw Exception('post ID or reblog_key was not found');
+    } catch (error) {
+      throw Exception(error.message);
+    }
   }
 
   /// API for post object to fetch a post
-  void fetchPost() async {
-    final String url =
-        'https://54bd9e92-6a19-4377-840f-23886631e1a8.mock.pstmn.io/posts/id=$id';
-    try {} catch (error) {}
+  static Future<Post> fetchPost(String id) async {
+    try {
+      final String endPoint = 'posts/id=$id';
+      final Response response =
+          await MockHttpRepository.sendGetRequest(endPoint);
+      if (response.statusCode != 200) throw Exception(response.body.toString());
+      final resposeObject =
+          convert.jsonDecode(response.body) as Map<String, dynamic>;
+      return Post.fromJson(resposeObject);
+    } catch (error) {
+      throw Exception(error.message);
+    }
   }
 
   /// API for post object to get the post blog data
-  Blog getBlogData() {
-    return new Blog(title: "passant");
+  Future<Blog> getBlogData() async {
+    return await Blog.getInfo(blogName);
   }
 
   /// API for post object to render the post
   Container showPost() {
-    Blog postBlog = getBlogData();
     return Container(
       child: Column(
         children: [
@@ -249,7 +278,7 @@ class Post {
           Divider(
             color: Colors.transparent,
           ),
-          PostFooter(584, true),
+          PostFooter(totalNotes, liked),
         ],
       ),
     );

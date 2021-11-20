@@ -9,7 +9,11 @@ class Content extends ChangeNotifier {
   }
 
   void updateContent(List<Post> postList) {
-    _posts = postList;
+    _posts.addAll(postList);
+  }
+
+  void deletePost(String id) {
+    _posts.removeWhere((element) => element.id == id);
   }
 
   // return copy of the posts list

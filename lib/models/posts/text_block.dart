@@ -19,7 +19,7 @@ class TextBlock {
   String _text;
 
   /// Integer to nest the block
-  int _indentLevel = 0;
+  //int _indentLevel = 0;
 
   /// List of Inline formatting applied on the text
   List<InlineFormatting> _formatting = [];

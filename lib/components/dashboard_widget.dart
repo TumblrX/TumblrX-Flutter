@@ -7,10 +7,14 @@ Description:
 */
 
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
+import 'package:provider/provider.dart';
 import 'package:tumblrx/models/post.dart';
 import 'package:tumblrx/services/api_provider.dart';
 
 import 'dart:convert' as convert;
+
+import 'package:tumblrx/services/content.dart';
 
 class DashboardScreen extends StatefulWidget {
   /// endpoint to which went the get request
@@ -65,16 +69,32 @@ class _DashboardScreenState extends State<DashboardScreen> {
   /// and update the cumulative list of posts after parsing the response
   Future<List<Post>> _getListOfPosts() async {
     _isLoading = true;
-    final response = await MockHttpRepository.sendGetRequest(
-        'user/${widget._endpoint}', {"blog-identifier": "virtualtumblr"});
+
+    // request body
+    final String endPoint = 'user/${widget._endpoint}';
+    final Map<String, dynamic> queryParams = {
+      "blog-identifier": "virtualtumblr"
+    };
+    // send get request to 'user/dashboard' | 'user/foryou'
+    final Response response =
+        await MockHttpRepository.sendGetRequest(endPoint, req: queryParams);
+
+    if (response.statusCode != 200) return [];
+
     final resposeObject =
         convert.jsonDecode(response.body) as Map<String, dynamic>;
 
+    // construct list of posts object from the parsed json response
     List<Post> postsArray =
-        List<Map<String, dynamic>>.from(resposeObject['posts'])
-            .map((e) => new Post.fromJson(e))
-            .toList();
+        List<Map<String, dynamic>>.from(resposeObject['posts']).map((e) {
+      return new Post.fromJson(e);
+    }).toList();
 
+    for (var i = 0; i < postsArray.length; i++) {
+      postsArray[i].postBlog = await postsArray[i].getBlogData();
+    }
+
+    // update state with retrieve list of posts
     setState(() {
       if (_pageNum == 1) {
         _totalPosts = resposeObject['total_posts'];
@@ -84,13 +104,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
       }
       _pageNum++;
     });
+    Provider.of<Content>(context, listen: false).updateContent(postsArray);
     return _arrayOfPosts;
   }
 
   /// Builds the ListView widget to view posts
   Widget _buildListView() {
     return ListView.builder(
-        itemCount: _arrayOfPosts == null ? 0 : _arrayOfPosts.length,
+        itemCount: _totalPosts == null ? 0 : _totalPosts,
         controller: _controller,
         itemBuilder: (BuildContext context, int index) {
           return _arrayOfPosts[index].showPost();
@@ -121,15 +142,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         child: CircularProgressIndicator(),
                       ),
                     )
-                  : Container(
-                      child: LinearProgressIndicator(
-                        minHeight: 5,
-                      ),
+                  : SizedBox(
+                      height: 3,
+                      child: LinearProgressIndicator(),
                     );
             case ConnectionState.done:
-              if (!snapshot.hasError && snapshot.data != null) {
+              if (snapshot.data != null) {
                 _isLoading = false;
                 return _buildListView();
+              } else {
+                return Container(
+                  child: Center(
+                    child: Icon(Icons.exposure_minus_1_sharp),
+                  ),
+                );
               }
               break;
             default:

@@ -22,7 +22,6 @@ class ProfileIcon extends StatelessWidget {
 
   /// builds the stacked blogs icons to choose from
   Widget _buildAccountPicker(User user) {
-    if (user != null) print(user.blogs[0].blogAvatar);
     return Material(
       color: Colors.transparent,
       child: Column(

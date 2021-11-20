@@ -30,7 +30,6 @@ class PostHeader extends StatelessWidget {
     // constants to size widgets
     final double avatarWidth = 40;
     final double postHeaderHeight = 60;
-
     return SizedBox(
       height: postHeaderHeight,
       child: TextButton(
@@ -40,18 +39,51 @@ class PostHeader extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Image.asset(
-              "assets/icon/default_avatar.png",
-              //blogData.getBlogAvatar(),
-              width: avatarWidth,
-            ),
+            blogData != null
+                ? FutureBuilder(
+                    future: blogData.getBlogAvatar(),
+                    builder: (BuildContext ctx, AsyncSnapshot snapshot) {
+                      if (snapshot.hasError)
+                        return CircleAvatar(
+                          child: Icon(Icons.error),
+                        );
+                      switch (snapshot.connectionState) {
+                        case ConnectionState.none:
+                        case ConnectionState.waiting:
+                        case ConnectionState.active:
+                          return CircleAvatar(
+                            maxRadius: avatarWidth / 2,
+                            child: CircularProgressIndicator(),
+                          );
+                          break;
+                        case ConnectionState.done:
+                          print(snapshot.data);
+                          return Image.network(
+                            snapshot.data,
+                            width: avatarWidth,
+                            errorBuilder: (context, exception, _) =>
+                                CircleAvatar(
+                              backgroundColor: Colors.white,
+                              child: Icon(Icons.error),
+                            ),
+                          );
+                          break;
+                      }
+                      return CircleAvatar(
+                        backgroundColor: Colors.white,
+                        child: Icon(Icons.error),
+                      );
+                    })
+                : CircleAvatar(
+                    child: Icon(Icons.error),
+                  ),
             Expanded(
               child: Row(
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(left: 8.0, right: 5.0),
                     child: Text(
-                      blogData.title,
+                      blogData.name,
                       style: TextStyle(color: Colors.black),
                     ),
                   ),

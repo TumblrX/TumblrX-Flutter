@@ -6,6 +6,8 @@ Description:
 */
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:tumblrx/models/post.dart';
 import 'package:tumblrx/utilities/constants.dart';
 
 class PostFooter extends StatelessWidget {
@@ -20,18 +22,6 @@ class PostFooter extends StatelessWidget {
   // constants to size the icons
   final double _reactionsIconSize = 23;
   final double _interactIocnSize = 15;
-
-  /// callback on tap heart icon
-  void _likePost() {}
-
-  /// callback on tap comment icon
-  void _commentOnPost() {}
-
-  /// callback on tap reblog icon
-  void _reblogPost() {}
-
-  /// callback on tap share icon
-  void _sharePost() {}
 
   /// callback on tap notes icon/number
   void _showNotesPage() {}
@@ -99,53 +89,56 @@ class PostFooter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: _notesCount > 0
-                ? [
-                    InkResponse(
-                      onTap: _showNotesPage,
-                      child: notesIcons(),
-                    ),
-                    TextButton(
-                      child: Text(
-                        '$_notesCount notes',
-                        style: TextStyle(color: Colors.grey[700], fontSize: 16),
+    return Consumer<Post>(
+      builder: (context, post, child) => Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: _notesCount > 0
+                  ? [
+                      InkResponse(
+                        onTap: () => post.commentOnPost(),
+                        child: notesIcons(),
                       ),
-                      onPressed: _showNotesPage,
+                      TextButton(
+                        child: Text(
+                          '$_notesCount notes',
+                          style:
+                              TextStyle(color: Colors.grey[700], fontSize: 16),
+                        ),
+                        onPressed: _showNotesPage,
+                      ),
+                    ]
+                  : [],
+            ),
+            Row(
+              children: [
+                _actionIcon("assets/icon/share.png", () => post.showPost()),
+                _actionIcon("assets/icon/chat.png", () => post.commentOnPost()),
+                _actionIcon("assets/icon/reblog.png", () => post.reblogPost()),
+                IconButton(
+                  onPressed: () => post.likePost(),
+                  padding: EdgeInsets.all(0.0),
+                  icon: Container(
+                    decoration: BoxDecoration(shape: BoxShape.circle),
+                    child: Image.asset(
+                      "assets/icon/heart.png",
+                      fit: BoxFit.fitWidth,
+                      width: _interactIocnSize,
+                      height: _interactIocnSize,
+                      colorBlendMode: BlendMode.modulate,
+                      color: _liked ? Colors.red : Colors.white,
                     ),
-                  ]
-                : [],
-          ),
-          Row(
-            children: [
-              _actionIcon("assets/icon/share.png", _sharePost),
-              _actionIcon("assets/icon/chat.png", _commentOnPost),
-              _actionIcon("assets/icon/reblog.png", _reblogPost),
-              IconButton(
-                onPressed: _likePost,
-                padding: EdgeInsets.all(0.0),
-                icon: Container(
-                  decoration: BoxDecoration(shape: BoxShape.circle),
-                  child: Image.asset(
-                    "assets/icon/heart.png",
-                    fit: BoxFit.fitWidth,
-                    width: _interactIocnSize,
-                    height: _interactIocnSize,
-                    colorBlendMode: BlendMode.modulate,
-                    color: _liked ? Colors.red : Colors.white,
                   ),
+                  enableFeedback: false,
                 ),
-                enableFeedback: false,
-              ),
-            ],
-          ),
-        ],
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
