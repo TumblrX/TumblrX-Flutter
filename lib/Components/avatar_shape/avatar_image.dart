@@ -21,7 +21,7 @@ class _AvatarImageState extends State<AvatarImage> {
             backgroundImage: AssetImage( BlogScreenConstant.avatarPath),
           ),
           onTap: () {
-            //bottom sheet of avatar
+            ////bottom sheet of avatar
             showModalBottomSheet(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20.0)),
