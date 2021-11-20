@@ -20,6 +20,8 @@ import 'package:tumblrx/screens/signup_pick_tags.dart';
 import 'package:tumblrx/screens/signup_user_data.dart';
 import 'package:tumblrx/screens/login_user_data.dart';
 
+import 'components/my_custom_scroll_behavior.dart';
+
 void main() {
   runApp(MyApp());
 }
@@ -65,6 +67,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
+        scrollBehavior: MyCustomScrollBehavior(),
         onUnknownRoute: (RouteSettings settings) {
           return PageRouteBuilder(pageBuilder: (_, __, ___) => PageNotFound());
         },

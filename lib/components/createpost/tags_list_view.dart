@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 
 import 'hashtag_bubble.dart';
 
+///Horizontal ListView of chosen or suggested tags depending on boolean value isPostView.
 class TagsListView extends StatelessWidget {
+  ///List of tags to be shown.
   final List<String> tagsList;
+
+  ///Boolean value that determines if the tag is chosen or suggested.
   final bool isPostView;
   TagsListView({this.tagsList, this.isPostView = false});
 

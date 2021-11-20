@@ -271,9 +271,11 @@ packages:
   giphy_get:
     dependency: "direct main"
     description:
-      name: giphy_get
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "."
+      ref: HEAD
+      resolved-ref: "169b1e6f96495c597b76a770674ffbd17f8d0a33"
+      url: "https://github.com/AmmarMohamed21/giphy_get"
+    source: git
     version: "2.0.3"
   glob:
     dependency: transitive

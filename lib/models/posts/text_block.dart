@@ -18,6 +18,9 @@ class TextBlock {
   /// Text Block content
   String _text;
 
+  ///Text block constructor that takes the [_subtype], [_text] and [_formatting]
+  TextBlock(this._subtype, this._text, this._formatting);
+
   /// Integer to nest the block
   //int _indentLevel = 0;
 
@@ -42,6 +45,7 @@ class TextBlock {
   /// Returns a JSON version of the object
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {};
+    data['type'] = 'text';
     data['subtype'] = _subtype;
     data['text'] = _text;
     data['formatting'] = _formatting;
@@ -75,6 +79,10 @@ class InlineFormatting {
   String blogUrl;
 
   InlineFormatting({this.start, this.end, this.type});
+
+  void setHexColor(String hexValue) {
+    hex = hexValue;
+  }
 
   InlineFormatting.fromJson(Map<String, dynamic> parsedJson) {
     start = parsedJson['start'];

@@ -8,12 +8,20 @@ class User extends ChangeNotifier {
   int likes;
   List<Blog> blogs = [
     new Blog(
-      name: "passant",
-      title: "passant",
+      name: "ammarovic21",
+      title: "ammar",
       primary: true,
       blogType: "public",
       followers: 20,
       blogAvatar: "assets/icon/default_avatar.png",
+    ),
+    new Blog(
+      name: "passant",
+      title: "passant",
+      primary: false,
+      blogType: "public",
+      followers: 20,
+      blogAvatar: "assets/icon/avatar2.png",
     ),
   ];
   String activeBlogName;
@@ -54,4 +62,14 @@ class User extends ChangeNotifier {
   }
 
   String get activeBlog => activeBlogName;
+
+  ///Returns the link to the current active blog avatar
+  String getActiveBlogAvatar() {
+    for (int i = 0; i < blogs.length; i++) {
+      if (blogs[i].name == activeBlog) {
+        return blogs[i].blogAvatar;
+      }
+    }
+    return null;
+  }
 }

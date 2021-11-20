@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/services/creating_post.dart';
@@ -6,9 +7,16 @@ import 'package:tumblrx/services/creating_post.dart';
 import 'add_tags.dart';
 import '../modal_bottom_sheet.dart';
 
+///A bubble shape that contains the tag of a creating post.
+///It has multiple views depends on its state whether it is chosen, suggested or chosen during adding more tags.
 class HashtagBubble extends StatelessWidget {
+  ///The tag value
   final String hashtag;
+
+  ///determines if the bubble is for suggestions
   final bool isSuggested;
+
+  ///determines if the bubble is for post view so have on tap functionality
   final bool isPostView;
   HashtagBubble(
       {this.hashtag, this.isSuggested = false, this.isPostView = false});
@@ -20,6 +28,8 @@ class HashtagBubble extends StatelessWidget {
           onTap: () {
             if (isPostView) {
               showModalBottomSheet(
+                constraints:
+                    BoxConstraints(maxWidth: kIsWeb ? 500.0 : double.infinity),
                 context: context,
                 isScrollControlled: true,
                 builder: (context) => SingleChildScrollView(

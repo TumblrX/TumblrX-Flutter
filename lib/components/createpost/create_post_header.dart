@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/components/modal_bottom_sheet.dart';
@@ -6,6 +7,7 @@ import 'package:tumblrx/utilities/constants.dart';
 
 import 'create_post_options.dart';
 
+///The Top header of the creating post container shows posting options button and Post button
 class CreatePostHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -68,7 +70,8 @@ class CreatePostHeader extends StatelessWidget {
           ),
           onPressed: Provider.of<CreatingPost>(context).isPostEnabled
               ? () {
-                  Navigator.pop(context);
+                  Provider.of<CreatingPost>(context, listen: false)
+                      .postData(context);
                 }
               : null,
         ),
@@ -82,6 +85,8 @@ class CreatePostHeader extends StatelessWidget {
           ),
           onTap: () {
             showModalBottomSheet(
+              constraints:
+                  BoxConstraints(maxWidth: kIsWeb ? 500.0 : double.infinity),
               context: context,
               isScrollControlled: true,
               builder: (context) => SingleChildScrollView(
