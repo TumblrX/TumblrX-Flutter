@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tumblrx/Components/blog_screen_constant.dart';
 
-class AvatarImage extends StatefulWidget {
+class AvatarImage extends StatefulWidget {  ///this to get the shape of circle avatar
   @override
   _AvatarImageState createState() => _AvatarImageState();
 }

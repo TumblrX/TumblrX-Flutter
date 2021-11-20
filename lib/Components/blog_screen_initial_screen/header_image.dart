@@ -81,7 +81,8 @@ class _HeaderImageState extends State<HeaderImage> {
                   /// to start from  begining in vertical
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
-                    IconButton( tooltip: 'Search blog',
+                    IconButton(
+                      tooltip: 'Search blog',
                       icon: Icon(
                         Icons.search,
                       ),
@@ -104,14 +105,16 @@ class _HeaderImageState extends State<HeaderImage> {
                             MaterialPageRoute(builder: (context) => Edit()));
                       },
                     ),
-                    IconButton( tooltip: 'Share',
+                    IconButton(
+                      tooltip: 'Share',
                       icon: Icon(Icons.share),
                       color: Colors.white,
                       onPressed: () {
                         print('share is pressed');
                       },
                     ),
-                    IconButton( tooltip: 'Account',
+                    IconButton(
+                      tooltip: 'Account',
                       icon: Icon(Icons.settings),
                       color: Colors.white,
                       onPressed: () {

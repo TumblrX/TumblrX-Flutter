@@ -17,6 +17,7 @@ class _BlogScreenState extends State<BlogScreen>
   TabController _tabController;
   @override
   void initState() {
+    ///this controller for Tabs bar
     ///function used for Tab bars
     _tabController = new TabController(length: 3, vsync: this);
     super.initState();
@@ -60,6 +61,7 @@ class _BlogScreenState extends State<BlogScreen>
                   ///color of indicator of selected item releted to label
                   tabs: [
                     Tooltip(
+                      ///Tooltip for when press long icon pop label
                       message: 'Posts',
                       child: Tab(text: 'Posts'),
                       preferBelow: false,

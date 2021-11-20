@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class ShowImage extends StatelessWidget {
+class ShowImage extends StatelessWidget {    ///this for show image in Blog screen to see full image (cover image /avatar image )  
   final String img;
   ShowImage(this.img);
   @override

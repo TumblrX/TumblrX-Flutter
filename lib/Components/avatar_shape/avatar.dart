@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:tumblrx/Components/blog_screen_constant.dart';
 
-class Avatar extends StatefulWidget {
+class Avatar extends StatefulWidget {   ///this for a circle avatar without image
   @override
   _AvatarState createState() => _AvatarState();
 }

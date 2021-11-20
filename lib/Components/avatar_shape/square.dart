@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tumblrx/Components/blog_screen_constant.dart';
 
-class Square extends StatelessWidget {
+class Square extends StatelessWidget {   ///square avatar of Blog Screen
   @override
   Widget build(BuildContext context) {
     return Positioned(

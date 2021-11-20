@@ -7,6 +7,7 @@ import 'package:tumblrx/screens/page_not_found.dart';
 import 'package:tumblrx/screens/signup_agecheck.dart';
 import 'package:tumblrx/screens/welcome_screen.dart';
 import 'package:tumblrx/services/authentication.dart';
+import 'package:tumblrx/services/blog_screen.dart';
 import 'package:tumblrx/services/content.dart';
 import 'package:tumblrx/services/messaging.dart';
 import 'package:tumblrx/services/notifications.dart';
@@ -49,6 +50,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<Themes>(
           create: (context) => Themes(),
+        ),
+         ChangeNotifierProvider<BlogScreenConstant>(
+          create: (context) => BlogScreenConstant(),
         ),
       ],
       child: MaterialApp(

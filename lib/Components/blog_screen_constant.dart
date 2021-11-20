@@ -3,7 +3,8 @@ import 'package:tumblrx/Components/blog_screen_initial_screen/show_image.dart';
 
 ///all constant, variable , widget and function which use more than one
 class Constant {
-  static Widget buildBottomSheetAvatar(BuildContext context) { /// function pop up bottom sheet when click avatar
+  static Widget buildBottomSheetAvatar(BuildContext context) {
+    /// function pop up bottom sheet when click avatar
     //bottomsheet for avatar
 
     return Column(
@@ -69,21 +70,43 @@ class Constant {
 
   static String toLengthFifteen(String text) {
     if (text.length > 15) {
-      return (text.substring(0, 15) + "...");
+      {
+      
+        return (text.substring(0, 15) + "...");
+      }
     } else {
       return text;
     }
   }
 
+  static void setBlogScreenDescription(String description) {
+    profileDescription = description;
+  }
+
+  static String getBlogScreenDescription() {
+    return profileDescription;
+  }
+
   static Color accent = Color(0xffffff00);
 
-  static Color bottomCoverColor = Color(0xffb03fa8); ///color of header
-  static String valueOfDropList = 'unknown'; ///intial value in drop list
+  static Color bottomCoverColor = Color(0xffb03fa8);
+
+  ///color of header
+  static String valueOfDropList = 'unknown';
+
+  ///intial value in drop list
   static List<bool> isSelect = [true, false, false];
+
   ///color which selected(post/Likes/Following)
-  static Color posts = Color(0xffffff00); ///color post
-  static Color likes = Color(0xffffc7c1c1); ///color likes
-  static Color following = Color(0xffffc7c1c1); ///color following
+  static Color posts = Color(0xffffff00);
+
+  ///color post
+  static Color likes = Color(0xffffc7c1c1);
+
+  ///color likes
+  static Color following = Color(0xffffc7c1c1);
+
+  ///color following
   //to choice between posts/likes/following
   static Color postsUnderline = Color(0xffffff00);
   static Color likesUnderline = Color(0xffb03fa8);
@@ -92,6 +115,7 @@ class Constant {
   static String headerImgPath = 'images/header.png';
   static String avatarPath = 'images/avatar.png';
   static String profileDescription = 'i want to finish this project';
+
   ///for tumbler blogs
-  static List tumblrsBlog = ['account1', 'account2'];
+  static List tumblrsBlog = [userName, 'account2'];
 }
