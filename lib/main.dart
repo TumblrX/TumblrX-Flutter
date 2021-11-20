@@ -16,6 +16,7 @@ import 'package:tumblrx/services/theme.dart';
 import 'package:tumblrx/screens/welcome_screen_login.dart';
 import 'package:tumblrx/screens/welcome_screen_signup.dart';
 import 'package:tumblrx/screens/signup_pick_tags.dart';
+import 'package:tumblrx/screens/signup_user_data.dart';
 
 void main() {
   runApp(MyApp());
@@ -69,6 +70,7 @@ class MyApp extends StatelessWidget {
           SignupScreen.id: (context) => SignupScreen(),
           SignUpAgeCheck.id: (context) => SignUpAgeCheck(),
           SignUpPickTags.id: (context) => SignUpPickTags(),
+          SignUpUserData.id: (context) => SignUpUserData(),
         },
       ),
     );
