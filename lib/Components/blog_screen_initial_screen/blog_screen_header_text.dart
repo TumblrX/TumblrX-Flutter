@@ -10,7 +10,7 @@ class TextWriting extends StatelessWidget {   ///this area which has title and d
         alignment: Alignment.center,
         color:   BlogScreenConstant.bottomCoverColor,
         padding: const EdgeInsets.all(25.0),
-        //height: 123,
+        ///height: 123,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,   
           crossAxisAlignment: CrossAxisAlignment.center,
