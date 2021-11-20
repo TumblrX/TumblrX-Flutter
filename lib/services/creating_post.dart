@@ -1,12 +1,9 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:giphy_get/giphy_get.dart';
 import 'package:image_picker/image_picker.dart';
-
 import 'package:tumblrx/models/creatingpost/text_field_data.dart';
 import 'package:tumblrx/models/posts/text_block.dart';
-
 import 'package:tumblrx/utilities/constants.dart';
 import 'package:http/http.dart' as http;
 import 'package:tumblrx/utilities/hex_color_value.dart';
@@ -342,19 +339,19 @@ class CreatingPost extends ChangeNotifier {
     return response.file;
   }
 
+  ///It maps the collected data about the post to the final form and send it in a post request.
   void postData() async {
     // String url =
     //     'https://54bd9e92-6a19-4377-840f-23886631e1a8.mock.pstmn.io/createpost'; //TODO: edit it
     // var req = http.MultipartRequest('POST', Uri.parse(url));
     String tags = chosenHashtags.join(', ');
-    Map requestBody = {
+    Map<String, dynamic> requestBody = {
       'postType': 'text',
       'tags': tags,
       'is_private': postOption == PostOption.private,
       'is_draft': postOption == PostOption.draft,
       'send_to_twitter': shareToTwitter
     };
-    print(requestBody);
 
     List<Map> postContentList = [];
     for (int i = 0; i < postContent.length; i++) {
@@ -387,19 +384,21 @@ class CreatingPost extends ChangeNotifier {
         postContentList.add(map);
       }
     }
-
     requestBody['content'] = postContentList;
-    var response = await http.post(
-        Uri.parse(
-            'https://54bd9e92-6a19-4377-840f-23886631e1a8.mock.pstmn.io/createpost'),
-        body: jsonEncode(requestBody),
-        headers: {'Content-type': 'application/json'});
-    print('Response status: ${response.statusCode}');
-    // req.fields['postType'] = 'text';
-    // req.fields['content'] = 'any content';
-    // final response = await req.send();
-    // print(response.statusCode);
-    // //req.fields['content'] = postContentList;
+
+    try {
+      var response = await http.post(
+          Uri.parse(
+              'https://54bd9e92-6a19-4377-840f-23886631e1a8.mock.pstmn.io/createpost'),
+          body: jsonEncode(requestBody),
+          headers: {'Content-type': 'application/json'});
+      print('Response status: ${response.statusCode}');
+    } catch (e) {
+      print(e);
+    }
+
+    // req.fields.addAll(requestBody);
+    //final response = await req.send();
   }
 
   ///Converts text data of index [i] to final map block format
