@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class BlogScreenConstant extends ChangeNotifier {
+class BlogScreenConstantProvider extends ChangeNotifier {
   Color bottomCoverColor;
 
   void initialization() {

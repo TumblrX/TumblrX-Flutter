@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:tumblrx/Components/blog_screen_constant.dart';
 
-class Square extends StatelessWidget {   ///square avatar of Blog Screen
+  
+/// for square avatar
+class Square extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return Positioned(
@@ -20,8 +23,8 @@ class Square extends StatelessWidget {   ///square avatar of Blog Screen
             // )
 
             decoration: BoxDecoration(
-              color: Constant.bottomCoverColor,
-              border: Border.all(width: 3, color: Constant.bottomCoverColor),
+              color: BlogScreenConstant.bottomCoverColor,
+              border: Border.all(width: 3, color:  BlogScreenConstant.bottomCoverColor),
               borderRadius: BorderRadius.circular(3),
             ),
           ),
@@ -30,7 +33,7 @@ class Square extends StatelessWidget {   ///square avatar of Blog Screen
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20.0)),
                 context: context,
-                builder: Constant.buildBottomSheetAvatar);
+                builder:  BlogScreenConstant.buildBottomSheetAvatar);
           },
         ));
   }

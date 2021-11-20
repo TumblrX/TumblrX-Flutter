@@ -51,8 +51,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<Themes>(
           create: (context) => Themes(),
         ),
-         ChangeNotifierProvider<BlogScreenConstant>(
-          create: (context) => BlogScreenConstant(),
+         ChangeNotifierProvider<BlogScreenConstantProvider>(
+          create: (context) => BlogScreenConstantProvider(),
         ),
       ],
       child: MaterialApp(

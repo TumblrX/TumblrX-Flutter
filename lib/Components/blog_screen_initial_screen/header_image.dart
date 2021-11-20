@@ -10,7 +10,7 @@ class HeaderImage extends StatefulWidget {
 }
 
 class _HeaderImageState extends State<HeaderImage> {
-  String selectItem = Constant.toLengthFifteen(Constant.tumblrsBlog[0]);
+  String selectItem =  BlogScreenConstant.toLengthFifteen( BlogScreenConstant.tumblrsBlog[0]);
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -37,14 +37,14 @@ class _HeaderImageState extends State<HeaderImage> {
                         setState(() {
                           ///every time we select item from drop down list
                           selectItem =
-                              Constant.toLengthFifteen(value.toString());
+                              BlogScreenConstant.toLengthFifteen(value.toString());
 
                           ///function if numbers of character more than 15 make it 15
                         });
                       },
                       itemBuilder: (BuildContext context) {
                         return [
-                          for (var i = 0; i < Constant.tumblrsBlog.length; i++)
+                          for (var i = 0; i <  BlogScreenConstant.tumblrsBlog.length; i++)
 
                             ///loop  to display all blogs
 
@@ -61,13 +61,13 @@ class _HeaderImageState extends State<HeaderImage> {
                                   SizedBox(
                                     width: 5,
                                   ),
-                                  Text(Constant.tumblrsBlog[i])
+                                  Text( BlogScreenConstant.tumblrsBlog[i])
                                 ],
                               ),
-                              value: Constant.tumblrsBlog[i],
+                              value:  BlogScreenConstant.tumblrsBlog[i],
                             ),
                           PopupMenuDivider(),
-                          Constant.createNewTumblr(),
+                          BlogScreenConstant.createNewTumblr(),
 
                           ///create new blogs
                         ];
@@ -128,7 +128,7 @@ class _HeaderImageState extends State<HeaderImage> {
         //color: Colors.green,
         decoration: BoxDecoration(
             image: DecorationImage(
-                image: AssetImage(Constant.headerImgPath),
+                image: AssetImage( BlogScreenConstant.headerImgPath),
                 fit: BoxFit.fill)), //dummy image
         height: MediaQuery.of(context).size.height / 3.6, //(200)
       ),
@@ -139,7 +139,7 @@ class _HeaderImageState extends State<HeaderImage> {
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20.0)),
             context: context,
-            builder: Constant.buildBottomSheetHeaderImage);
+            builder:  BlogScreenConstant.buildBottomSheetHeaderImage);
       },
     );
   }

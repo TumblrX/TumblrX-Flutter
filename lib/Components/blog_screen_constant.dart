@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tumblrx/Components/blog_screen_initial_screen/show_image.dart';
-
 ///all constant, variable , widget and function which use more than one
-class Constant {
+class BlogScreenConstant extends StatelessWidget {
   static Widget buildBottomSheetAvatar(BuildContext context) {
     /// function pop up bottom sheet when click avatar
     //bottomsheet for avatar
@@ -20,7 +19,7 @@ class Constant {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => ShowImage(Constant.avatarPath)));
+                    builder: (context) => ShowImage(avatarPath)));
           },
         )
       ],
@@ -42,7 +41,7 @@ class Constant {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => ShowImage(Constant.headerImgPath)));
+                    builder: (context) => ShowImage(headerImgPath)));
           },
         )
       ],
@@ -51,6 +50,7 @@ class Constant {
 
   static Widget createNewTumblr() {
     //the shape of create new tumblr
+
     return PopupMenuItem(
       child: Row(
         children: <Widget>[
@@ -71,7 +71,6 @@ class Constant {
   static String toLengthFifteen(String text) {
     if (text.length > 15) {
       {
-      
         return (text.substring(0, 15) + "...");
       }
     } else {
@@ -118,4 +117,8 @@ class Constant {
 
   ///for tumbler blogs
   static List tumblrsBlog = [userName, 'account2'];
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
 }

@@ -8,19 +8,19 @@ class TextWriting extends StatelessWidget {   ///this area which has title and d
     return Container(
        
         alignment: Alignment.center,
-        color:  Constant.bottomCoverColor,
+        color:   BlogScreenConstant.bottomCoverColor,
         padding: const EdgeInsets.all(25.0),
         //height: 123,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,   
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Text(
+          children: <Widget>[  
+            Text(   ///title
               'Untitled',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 38),
             ),
-            Text(
-              Constant.profileDescription,
+            Text( ///description
+               BlogScreenConstant.profileDescription,
             )
           ],
         )

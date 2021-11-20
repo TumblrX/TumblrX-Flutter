@@ -14,7 +14,7 @@ class _EditButtonsState extends State<EditButtons> {
       children: <Widget>[
        SizedBox(width: 120,
          child: ElevatedButton(onPressed: () {}, child: Text('Background',style:TextStyle(color: Color(0xffc7c1c1))),style:ButtonStyle(
-        backgroundColor:MaterialStateProperty.all<Color>(Constant.bottomCoverColor),
+        backgroundColor:MaterialStateProperty.all<Color>( BlogScreenConstant.bottomCoverColor),
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
           side: BorderSide(color:Color(0xffc7c1c1)),
           borderRadius:BorderRadius.circular(20.0))),
@@ -24,7 +24,7 @@ class _EditButtonsState extends State<EditButtons> {
          SizedBox(
            width: 110,
         child: ElevatedButton(onPressed: () {}, child: Text('Accent',style:TextStyle(color: Color(0xffc7c1c1))),style:ButtonStyle(
-        backgroundColor:MaterialStateProperty.all<Color>(Constant. accent),
+        backgroundColor:MaterialStateProperty.all<Color>( BlogScreenConstant. accent),
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
           side: BorderSide(color:Color(0xffc7c1c1)),
           borderRadius:BorderRadius.circular(20.0))),

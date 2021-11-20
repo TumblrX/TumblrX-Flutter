@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tumblrx/Components/blog_screen_constant.dart';
@@ -49,11 +48,11 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
             ),
           ),
           Container(
-              color: Constant.bottomCoverColor,
+              color: BlogScreenConstant.bottomCoverColor,
               child: TabBar(
                 unselectedLabelColor: Color(0xffc7c1c1),
-                labelColor: Constant.accent,
-                indicatorColor: Constant.accent,
+                labelColor:BlogScreenConstant.accent,
+                indicatorColor: BlogScreenConstant.accent,
                 tabs: [
                   Tab(
                     text: 'Posts',
