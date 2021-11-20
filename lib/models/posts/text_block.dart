@@ -32,13 +32,10 @@ class TextBlock {
     if (parsedJson.containsKey('formatting') &&
         parsedJson['formatting'] != null) {
       List<Map<String, dynamic>> formatting =
-          parsedJson['formatting'] as List<Map<String, dynamic>>;
+          List<Map<String, dynamic>>.from(parsedJson['formatting']);
 
       this._formatting.addAll(
           formatting.map((e) => new InlineFormatting.fromJson(e)).toList());
-      // for (var format in parsedJson['formatting']) {
-      //   this._formatting.add(new InlineFormatting.fromJson(format));
-      // }
     }
   }
 
@@ -112,6 +109,9 @@ class InlineFormatting {
     switch (type) {
       case 'bold':
         formattedText = "<bold>$originalText</bold> ";
+        break;
+      case 'italic':
+        formattedText = "<italic>$originalText</italic> ";
         break;
       case 'strikethrough':
         formattedText = " <strikethrough>$originalText</strikethrough> ";

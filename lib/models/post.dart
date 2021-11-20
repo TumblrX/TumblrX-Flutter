@@ -18,6 +18,9 @@ import 'package:tumblrx/models/posts/text_block.dart';
 import 'package:tumblrx/models/posts/video_block.dart';
 import 'package:tumblrx/models/user/blog.dart';
 import 'package:intl/intl.dart';
+import 'package:tumblrx/services/api_provider.dart';
+
+import 'dart:convert' as convert;
 
 class Post {
   /// The short name used to uniquely identify a blog
@@ -67,62 +70,117 @@ class Post {
   /// Constructs a new instance usin parsed json data
   Post.fromJson(Map<String, dynamic> parsedJson) {
     // identifiers
-    if (parsedJson.containsKey('blog_name')) blogName = parsedJson['blog_name'];
-    if (parsedJson.containsKey('id')) id = parsedJson['id'];
+    if (parsedJson.containsKey('blog_name'))
+      blogName = parsedJson['blog_name'];
+    else
+      throw Exception("missing required paramter blog_name");
+    if (parsedJson.containsKey('id'))
+      id = parsedJson['id'];
+    else
+      throw Exception("missing required paramter id");
     // post info
+
     if (parsedJson.containsKey('date')) {
       date = DateFormat("yyyy-MM-dd hh:mm:ss").parse(parsedJson['date']);
-    }
+    } else
+      throw Exception("missing required paramter date");
+
     if (parsedJson.containsKey('reblog_key'))
       reblogKey = parsedJson['reblog_key'];
+    else
+      throw Exception("missing required paramter reblog_key");
+
     if (parsedJson.containsKey('tags')) {
       for (var i = 0; i < parsedJson['tags'].length; i++)
         tags.add(parsedJson['tags'][i].toString());
     }
-    if (parsedJson.containsKey('liked')) liked = parsedJson['liked'];
-    if (parsedJson.containsKey('state')) state = parsedJson['state'];
+    if (parsedJson.containsKey('liked'))
+      liked = parsedJson['liked'];
+    else
+      throw Exception("missing required paramter liked");
+
+    if (parsedJson.containsKey('state'))
+      state = parsedJson['state'];
+    else
+      throw Exception("missing required paramter state");
+
     // post content
     if (parsedJson.containsKey('content'))
-      parsePostContent(parsedJson['content']);
+      try {
+        parsePostContent(parsedJson['content']);
+      } catch (error) {
+        throw error.toString();
+      }
+    else
+      throw Exception("missing required paramter content");
   }
 
   /// Construct the right block for each of the Post content
   /// Text, Audio, Video, Image, and Link
   void parsePostContent(json) {
-    json.forEach((obj) {
-      switch (obj['type']) {
-        case 'text':
-          content.add(new TextBlock.fromJson(obj));
-          break;
-        case 'audio':
-          content.add(new AudioBlock.fromJson(obj));
-          break;
-        case 'video':
-          content.add(new VideoBlock.fromJson(obj));
-          break;
-        case 'image':
-          content.add(new ImageBlock.fromJson(obj));
-          break;
-        case 'link':
-          content.add(new LinkBlock.fromJson(obj));
-          break;
-        default:
-      }
-    });
+    List parsedConent = [];
+    try {
+      json.forEach((obj) {
+        switch (obj['type']) {
+          case 'text':
+            parsedConent.add(new TextBlock.fromJson(obj));
+            break;
+          case 'audio':
+            parsedConent.add(new AudioBlock.fromJson(obj));
+            break;
+          case 'video':
+            parsedConent.add(new VideoBlock.fromJson(obj));
+            break;
+          case 'image':
+            parsedConent.add(new ImageBlock.fromJson(obj));
+            break;
+          case 'link':
+            parsedConent.add(new LinkBlock.fromJson(obj));
+            break;
+          default:
+            throw Exception("invalid post type");
+        }
+      });
+      content.addAll(parsedConent);
+    } catch (error) {
+      throw Exception(error.message);
+    }
   }
 
   /// API for post object to like the post
   void likePost() async {
-    final String url =
-        'https://54bd9e92-6a19-4377-840f-23886631e1a8.mock.pstmn.io/user/like?id=$id&reblog_key=$reblogKey';
-    try {} catch (error) {}
+    final String endPoint = 'user/like';
+    final Map<String, dynamic> queryParameters = {
+      "id": id,
+      "reblog_key": reblogKey
+    };
+    try {
+      final response =
+          await MockHttpRepository.sendPostRequest(endPoint, queryParameters);
+
+      if (response.statusCode != 200)
+        throw Exception('post ID or reblog_key was not found');
+    } catch (error) {
+      throw Exception(error.message);
+    }
   }
 
   /// API for post object to unlike the post
   void unlikePost() async {
-    final String url =
-        'https://54bd9e92-6a19-4377-840f-23886631e1a8.mock.pstmn.io/user/unlike?id=$id&reblog_key=$reblogKey';
-    try {} catch (error) {}
+    final String endPoint = 'user/unlike';
+    final Map<String, dynamic> queryParameters = {
+      "id": id,
+      "reblog_key": reblogKey
+    };
+    try {
+      final response =
+          await MockHttpRepository.sendPostRequest(endPoint, queryParameters);
+
+      if (response.statusCode != 200)
+        throw Exception('post ID or reblog_key was not found');
+    } catch (error) {
+      throw Exception(error.message);
+    }
   }
 
   /// API for post object to comment on the post
@@ -142,9 +200,19 @@ class Post {
 
   /// API for post object to delete the post
   void deletePost() async {
-    final String url =
-        'https://54bd9e92-6a19-4377-840f-23886631e1a8.mock.pstmn.io/user/delete?id=$id';
-    try {} catch (error) {}
+    final String endPoint = 'post/delete';
+    final Map<String, dynamic> queryParameters = {
+      "id": id,
+    };
+    try {
+      final response =
+          await MockHttpRepository.sendPostRequest(endPoint, queryParameters);
+
+      if (response.statusCode != 200)
+        throw Exception('post ID or reblog_key was not found');
+    } catch (error) {
+      throw Exception(error.message);
+    }
   }
 
   /// API for post object to edit the post

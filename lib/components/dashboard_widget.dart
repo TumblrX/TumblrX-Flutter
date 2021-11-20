@@ -2,22 +2,26 @@
 Author: Passant Abdelgalil
 Description: 
     This file creates a statefulwdiget class to use for rendering
-    the user dashboard in tab 'Following' in the user's feed, using
-    the retrieved data from endpoint 'user/dashboard'
+    the user dashboard in tab 'Stuff For You' in the user's feed, using
+    the retrieved data from endpoint 'user/foryou'
 */
 
 import 'package:flutter/material.dart';
 import 'package:tumblrx/models/post.dart';
+import 'package:tumblrx/services/api_provider.dart';
 
-import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
-class FollowingScreen extends StatefulWidget {
+class DashboardScreen extends StatefulWidget {
+  /// endpoint to which went the get request
+  final String _endpoint;
+  DashboardScreen(this._endpoint);
+
   @override
-  State<FollowingScreen> createState() => _FollowingScreenState();
+  State<DashboardScreen> createState() => _DashboardScreenState();
 }
 
-class _FollowingScreenState extends State<FollowingScreen> {
+class _DashboardScreenState extends State<DashboardScreen> {
   /// integer used for pagination
   int _pageNum = 1;
 
@@ -61,16 +65,16 @@ class _FollowingScreenState extends State<FollowingScreen> {
   /// and update the cumulative list of posts after parsing the response
   Future<List<Post>> _getListOfPosts() async {
     _isLoading = true;
-    final String url =
-        'https://54bd9e92-6a19-4377-840f-23886631e1a8.mock.pstmn.io/user/dashboard?blog-identifier="virtualtumblr"';
-    final Uri uri = Uri.parse(url);
-    final response = await http.get(uri);
+    final response = await MockHttpRepository.sendGetRequest(
+        'user/${widget._endpoint}', {"blog-identifier": "virtualtumblr"});
     final resposeObject =
         convert.jsonDecode(response.body) as Map<String, dynamic>;
-    List<Post> postsArray = [];
-    for (Map<String, dynamic> post in resposeObject['posts']) {
-      postsArray.add(new Post.fromJson(post));
-    }
+
+    List<Post> postsArray =
+        List<Map<String, dynamic>>.from(resposeObject['posts'])
+            .map((e) => new Post.fromJson(e))
+            .toList();
+
     setState(() {
       if (_pageNum == 1) {
         _totalPosts = resposeObject['total_posts'];
@@ -99,6 +103,14 @@ class _FollowingScreenState extends State<FollowingScreen> {
       child: FutureBuilder<List<Post>>(
         future: future,
         builder: (BuildContext ctx, AsyncSnapshot snapshot) {
+          if (snapshot.hasError) {
+            print(snapshot.error);
+            return Container(
+              child: Center(
+                child: Icon(Icons.error_outline),
+              ),
+            );
+          }
           switch (snapshot.connectionState) {
             case ConnectionState.none:
             case ConnectionState.active:

@@ -1,46 +1,49 @@
-import 'package:http/http.dart' as http;
-import 'dart:convert' as convert;
+import 'package:http/http.dart';
+import 'package:http/http.dart';
 
-abstract class HttpRepository {
-  const HttpRepository();
-
-  Future sendGetRequest(String endPoint, Map<String, dynamic> req);
-  Future sendPostRequest(String endPoint, Map<String, dynamic> req);
-}
-
-class MockHttpRepository extends HttpRepository {
-  final String api =
+class MockHttpRepository {
+  static final String api =
       'https://54bd9e92-6a19-4377-840f-23886631e1a8.mock.pstmn.io/';
-  const MockHttpRepository();
-  @override
-  Future sendGetRequest(String endPoint, Map<String, dynamic> req) async {
-    final Uri uri = Uri.parse('$api/$endPoint');
-    http.get(uri);
-    await Future.delayed(const Duration(seconds: 2));
-    return;
+
+  static Future sendGetRequest(
+      String endPoint, Map<String, dynamic> req) async {
+    String fullUrl = "$api/$endPoint?";
+    for (var reqParam in req.entries) {
+      if (reqParam.value is String)
+        fullUrl += '${reqParam.key}="${reqParam.value}"';
+      else
+        fullUrl += '${reqParam.key}=${reqParam.value}';
+    }
+    final Uri uri = Uri.parse(fullUrl);
+
+    return get(uri);
   }
 
-  @override
-  Future sendPostRequest(String endPoint, Map<String, dynamic> req) async {
-    // TODO: implement sendRequest
-    await Future.delayed(const Duration(seconds: 2));
-    return;
+  static Future<Response> sendPostRequest(
+      String endPoint, Map<String, dynamic> req,
+      {Map<String, String> headers}) async {
+    String fullUrl = "$api/$endPoint";
+    String reqBody = "";
+    for (var reqParam in req.entries) {
+      if (reqParam.value is String)
+        reqBody += '${reqParam.key}="${reqParam.value}"';
+      else
+        reqBody += '${reqParam.key}=${reqParam.value}';
+    }
+    final Uri uri = Uri.parse(fullUrl);
+    return post(uri, body: reqBody);
   }
 }
 
-class ApiHttpRepository extends HttpRepository {
+class ApiHttpRepository {
   const ApiHttpRepository();
 
-  @override
   Future sendPostRequest(String endPoint, Map<String, dynamic> req) async {
-    // TODO: implement REAL sendRequest
     await Future.delayed(const Duration(seconds: 2));
     return;
   }
 
-  @override
   Future sendGetRequest(String endPoint, Map<String, dynamic> req) async {
-    // TODO: implement sendRequest
     await Future.delayed(const Duration(seconds: 2));
     return;
   }
