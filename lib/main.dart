@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tumblrx/models/user/account.dart';
+import 'package:tumblrx/models/post.dart';
+import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/screens/blog_screen.dart';
 import 'package:tumblrx/screens/main_screen.dart';
 import 'package:tumblrx/screens/page_not_found.dart';
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<Authentication>(
           create: (context) => Authentication(),
         ),
+        ChangeNotifierProvider<Post>(create: (context) => Post()),
         ChangeNotifierProvider<CreatingPost>(
           create: (context) => CreatingPost(),
         ),
@@ -67,8 +69,7 @@ class MyApp extends StatelessWidget {
           return PageRouteBuilder(pageBuilder: (_, __, ___) => PageNotFound());
         },
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSwatch(
-              primarySwatch: Colors.blueGrey, accentColor: Colors.blueAccent),
+          primaryColor: Color.fromRGBO(0, 0, 39, 1),
         ),
         debugShowCheckedModeBanner: false,
         initialRoute: WelcomeScreen.id,

@@ -1,18 +1,27 @@
+/*
+Author: Passant Abdelgalil
+Description: 
+    A widget for the profile icon in the bottom nav bar with animation
+    to open the overlay entry to choose between blogs
+*/
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/components/bottom_nav_bar/account_icon.dart';
-import 'package:tumblrx/models/user/account.dart';
+import 'package:tumblrx/models/user/user.dart';
 
 class ProfileIcon extends StatelessWidget {
+  // passed callback function from parent widget to use on tap event
   final Function _onTab;
+  // parent context to access the overlay of the screen
   final BuildContext _context;
+
+  // key of the bottom nav bar to use to access it
   final GlobalKey _key;
-  OverlayEntry _switchAccountsOverlayEntry;
 
   ProfileIcon(this._context, this._key, this._onTab);
 
+  /// builds the stacked blogs icons to choose from
   Widget _buildAccountPicker(User user) {
-    if (user != null) print(user.blogs[0].blogAvatar);
     return Material(
       color: Colors.transparent,
       child: Column(
@@ -25,7 +34,8 @@ class ProfileIcon extends StatelessWidget {
     );
   }
 
-  void _showPicker(key, User user) {
+  /// inserts the overaly entry of the blogs picker
+  OverlayEntry _showPicker(key, User user) {
     // get the overlay stack of the screen
     final OverlayState overlayState = Overlay.of(_context);
     // get the context of the Profile Icon
@@ -35,7 +45,7 @@ class ProfileIcon extends StatelessWidget {
     // get offset of the Profile icon
     final Offset offset = renderBox.localToGlobal(Offset.zero);
 
-    _switchAccountsOverlayEntry = OverlayEntry(
+    OverlayEntry _switchAccountsOverlayEntry = OverlayEntry(
       builder: (context) {
         EdgeInsets padding = MediaQuery.of(context).padding;
         Size screenSize = MediaQuery.of(context).size;
@@ -59,14 +69,17 @@ class ProfileIcon extends StatelessWidget {
 
     // insert the custom popup menu
     overlayState.insert(_switchAccountsOverlayEntry);
+    return _switchAccountsOverlayEntry;
   }
 
   @override
   Widget build(BuildContext context) {
+    OverlayEntry _switchAccountsOverlayEntry;
+
     return Consumer<User>(builder: (ctx, user, child) {
       return GestureDetector(
         onLongPressStart: (_) {
-          _showPicker(_key, user);
+          _switchAccountsOverlayEntry = _showPicker(_key, user);
         },
         onLongPressEnd: (_) {
           user.updateActiveBlog();

@@ -39,8 +39,12 @@ dependencies:
   image_picker: ^0.8.4+1
   video_player: ^2.2.3
   dartdoc: ^4.1.0
+  styled_text: ^3.0.4+1
+  url_launcher: ^6.0.13
+  intl: ^0.15.7
+  #flutter_link_previewer: ^2.6.0
+  #youtube_player_flutter: ^8.0.0
   
-
 
 dev_dependencies:
   flutter_test:
@@ -81,6 +85,7 @@ flutter:
     - assets/icon/default_avatar.png
     - assets/icon/chat.png
     - assets/icon/love.png
+    - assets/icon/unlike.png
     - assets/icon/message.png
     - assets/icon/repeat.png
     - assets/icon/reblog.png

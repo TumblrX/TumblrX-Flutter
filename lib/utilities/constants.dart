@@ -76,6 +76,13 @@ const KPickTagsInfoText = TextStyle(
     color: Colors.grey,
     fontWeight: FontWeight.bold);
 
+
+final List<String> reactionIcons = [
+  "assets/icon/message.png",
+  "assets/icon/repeat.png",
+  "assets/icon/love.png"
+];
+
 //small text info
 const KTextInfo = TextStyle(
   fontFamily: 'Pacifico',
@@ -83,3 +90,4 @@ const KTextInfo = TextStyle(
   color: Color(0xff8C8C8C),
   fontWeight: FontWeight.bold,
 );
+

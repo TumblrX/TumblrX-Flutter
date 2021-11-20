@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tumblrx/Components/constant.dart';
+import 'package:tumblrx/components/constant.dart';
 
 class Search extends StatefulWidget {
   @override
