@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/components/createpost/tags_list_view.dart';
 import 'package:tumblrx/services/creating_post.dart';
-
 import 'chosen_tags_list.dart';
 
+///A Widget that allows you to add tags and see your already added tags
 class AddTags extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

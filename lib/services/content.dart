@@ -8,10 +8,13 @@ class Content extends ChangeNotifier {
     _posts = parsedJson['body'];
   }
 
-  // void addPost() {
-  //   _posts.add(value);
-  //   notifyListeners();
-  // }
+  void updateContent(List<Post> postList) {
+    _posts.addAll(postList);
+  }
+
+  void deletePost(String id) {
+    _posts.removeWhere((element) => element.id == id);
+  }
 
   // return copy of the posts list
   List<Post> get posts => [..._posts];

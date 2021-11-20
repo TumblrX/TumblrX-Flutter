@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tumblrx/models/user/account.dart';
+import 'package:tumblrx/models/post.dart';
+import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/screens/blog_screen.dart';
 import 'package:tumblrx/screens/main_screen.dart';
 import 'package:tumblrx/screens/page_not_found.dart';
@@ -17,6 +18,10 @@ import 'package:tumblrx/services/theme.dart';
 import 'package:tumblrx/screens/welcome_screen_login.dart';
 import 'package:tumblrx/screens/welcome_screen_signup.dart';
 import 'package:tumblrx/screens/signup_pick_tags.dart';
+import 'package:tumblrx/screens/signup_user_data.dart';
+import 'package:tumblrx/screens/login_user_data.dart';
+
+import 'components/my_custom_scroll_behavior.dart';
 
 void main() {
   runApp(MyApp());
@@ -30,12 +35,22 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<Authentication>(
           create: (context) => Authentication(),
         ),
+        ChangeNotifierProvider<Post>(create: (context) => Post()),
         ChangeNotifierProvider<CreatingPost>(
           create: (context) => CreatingPost(),
         ),
+
+        // ChangeNotifierProxyProvider<Authentication, User>(
+        //   create: (_) => User(Provider.of<Authentication>(context, listen: false)),
+        //   update: (_, authentication, user) =>
+        //       user..name = authentication.userName,
+
+        // ),
+
         ChangeNotifierProvider<User>(
           create: (context) => User(),
         ),
+
         ChangeNotifierProvider<Content>(
           create: (context) => Content(),
         ),
@@ -56,12 +71,12 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
+        scrollBehavior: MyCustomScrollBehavior(),
         onUnknownRoute: (RouteSettings settings) {
           return PageRouteBuilder(pageBuilder: (_, __, ___) => PageNotFound());
         },
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSwatch(
-              primarySwatch: Colors.blueGrey, accentColor: Colors.blueAccent),
+          primaryColor: Color.fromRGBO(0, 0, 39, 1),
         ),
         debugShowCheckedModeBanner: false,
         initialRoute: WelcomeScreen.id,
@@ -73,8 +88,15 @@ class MyApp extends StatelessWidget {
           SignupScreen.id: (context) => SignupScreen(),
           SignUpAgeCheck.id: (context) => SignUpAgeCheck(),
           SignUpPickTags.id: (context) => SignUpPickTags(),
+          SignUpUserData.id: (context) => SignUpUserData(),
+          LogInUserData.id: (context) => LogInUserData(),
         },
       ),
     );
   }
 }
+
+// ChangeNotifierProvider<User>(
+//           create: (context) => User(),
+
+//         ),

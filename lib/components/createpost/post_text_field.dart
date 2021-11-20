@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -5,6 +6,8 @@ import 'package:tumblrx/services/creating_post.dart';
 
 import 'additional_style_options.dart';
 
+///Text Field Editor where the style can be updated.
+///Pressing Enter or newline will add Additional TextField while Backspace will delete it.
 class PostTextField extends StatelessWidget {
   final int index;
   final TextEditingController textEditingController;
@@ -33,6 +36,8 @@ class PostTextField extends StatelessWidget {
       child: GestureDetector(
         onDoubleTap: () {
           showModalBottomSheet(
+            constraints:
+                BoxConstraints(maxWidth: kIsWeb ? 500.0 : double.infinity),
             context: context,
             isScrollControlled: true,
             builder: (context) => SingleChildScrollView(

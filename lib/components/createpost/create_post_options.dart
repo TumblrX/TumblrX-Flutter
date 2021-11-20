@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:tumblrx/services/creating_post.dart';
 import 'package:tumblrx/utilities/constants.dart';
 
+///List of creating post options: (Post Now, Private, Draft, Sharing to Twitter)
 class CreatePostOptions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -15,7 +16,7 @@ class CreatePostOptions extends StatelessWidget {
           ),
           title: Text('Post now'),
           trailing: Radio<PostOption>(
-            value: PostOption.now,
+            value: PostOption.published,
             groupValue: Provider.of<CreatingPost>(context).postOption,
             onChanged: (value) {
               Provider.of<CreatingPost>(context, listen: false)
@@ -56,7 +57,7 @@ class CreatePostOptions extends StatelessWidget {
             },
           ),
         ),
-        Provider.of<CreatingPost>(context).postOption == PostOption.now
+        Provider.of<CreatingPost>(context).postOption == PostOption.published
             ? ListTile(
                 title: Text('Share to Twitter'),
                 trailing: Switch(

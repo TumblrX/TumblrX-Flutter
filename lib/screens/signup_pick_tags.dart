@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tumblrx/utilities/constants.dart';
+import 'package:tumblrx/services/authentication.dart';
+import 'package:provider/provider.dart';
 
 class SignUpPickTags extends StatefulWidget {
   static final String id = 'SignUp_PickTags';
@@ -14,7 +16,7 @@ class _SignUpPickTagsState extends State<SignUpPickTags> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.indigo[900],
+      backgroundColor: Color(0xff001935),
       body: Container(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -25,7 +27,7 @@ class _SignUpPickTagsState extends State<SignUpPickTags> {
                 Padding(
                   padding: const EdgeInsets.all(15.0),
                   child: ElevatedButton(
-                    onPressed: null,
+                    onPressed: () {},
                     /* TODO:
                      while(Navigator.canPop()){Navigator.pop()}
                      Navigator.pushNamed('main_screen)*/

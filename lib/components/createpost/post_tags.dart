@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/components/createpost/tags_list_view.dart';
@@ -6,6 +7,7 @@ import 'package:tumblrx/services/creating_post.dart';
 import '../modal_bottom_sheet.dart';
 import 'add_tags.dart';
 
+///A Widget that shows chosen tags if available or option to add tags.
 class PostTags extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -46,6 +48,8 @@ class PostTags extends StatelessWidget {
               ),
               onPressed: () {
                 showModalBottomSheet(
+                  constraints: BoxConstraints(
+                      maxWidth: kIsWeb ? 500.0 : double.infinity),
                   context: context,
                   isScrollControlled: true,
                   builder: (context) => SingleChildScrollView(

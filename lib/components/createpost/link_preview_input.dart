@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/services/creating_post.dart';
 
+///A Modal Bottom Sheet that takes a Link to be shown for preview
 class LinkPreviewInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

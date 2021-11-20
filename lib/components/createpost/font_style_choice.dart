@@ -3,7 +3,9 @@ import 'package:provider/provider.dart';
 import 'package:tumblrx/services/creating_post.dart';
 import 'package:tumblrx/utilities/constants.dart';
 
+///Shows the Text Style choice
 class FontStyleChoice extends StatelessWidget {
+  ///The Text Style Type
   final TextStyleType type;
   FontStyleChoice({this.type});
   @override

@@ -1,22 +1,38 @@
 import 'package:flutter/material.dart';
 
-enum PostOption { now, draft, private }
+///Options of the post (Now, Draft, Private)
+enum PostOption { published, draft, private }
+
+///Types of post content elements
 enum PostContentType { text, link, gif, image, video, music }
 
+///Normal Text Style
 const TextStyle kNormalTextStyle = TextStyle();
+
+///Bigger Test Style Type
 const TextStyle kBiggerTextStyle = TextStyle(fontSize: 20.0);
+
+///Biggest Test Style Type
 const TextStyle kBiggestTextStyle = TextStyle(fontSize: 28.0);
+
+///Quote Test Style Type
 const TextStyle kQuoteTextStyle =
     TextStyle(fontSize: 32.0, fontFamily: 'PTSerif');
+
+///Chat Test Style Type
 const TextStyle kChatTextStyle = TextStyle(
   fontSize: 16.0,
   fontFamily: 'SourceCodePro',
 );
+
+///Lucille Test Style Type
 const TextStyle kLucilleTextStyle =
     TextStyle(fontSize: 36.0, fontFamily: 'GreatVibes');
 
+///Text Style Types
 enum TextStyleType { Normal, Bigger, Biggest, Quote, Chat, Lucille }
 
+///Mapping Style Types to its Style
 const Map<TextStyleType, TextStyle> kTextStyleMap = {
   TextStyleType.Normal: kNormalTextStyle,
   TextStyleType.Bigger: kBiggerTextStyle,
@@ -45,7 +61,7 @@ const KWelcomeScreenButton = TextStyle(
 const KTextButton = TextStyle(
   fontFamily: 'Pacifico',
   fontSize: 20.0,
-  color: Colors.cyan,
+  color: Color(0xff8C8C8C),
   fontWeight: FontWeight.bold,
 );
 
@@ -57,17 +73,6 @@ const KHintTextForTextField = TextStyle(
   fontWeight: FontWeight.bold,
 );
 
-//for the age check page
-const KTextFieldDecoration = const InputDecoration(
-  border: UnderlineInputBorder(),
-  labelText: 'How old are you?',
-  labelStyle: KHintTextForTextField,
-  enabledBorder: UnderlineInputBorder(
-    borderSide: BorderSide(
-      color: Colors.white,
-    ),
-  ),
-);
 // bold text
 const KHeadLines = TextStyle(
     fontFamily: 'Pacifico',
@@ -87,3 +92,16 @@ const KPickTagsInfoText = TextStyle(
     color: Colors.grey,
     fontWeight: FontWeight.bold);
 
+final List<String> reactionIcons = [
+  "assets/icon/message.png",
+  "assets/icon/repeat.png",
+  "assets/icon/love.png"
+];
+
+//small text info
+const KTextInfo = TextStyle(
+  fontFamily: 'Pacifico',
+  fontSize: 15.0,
+  color: Color(0xff8C8C8C),
+  fontWeight: FontWeight.bold,
+);

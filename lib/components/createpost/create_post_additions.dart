@@ -7,6 +7,7 @@ import 'add_tags.dart';
 import '../modal_bottom_sheet.dart';
 import 'link_preview_input.dart';
 
+///Widget of creating post additions buttons like styling, adding media, tags and so on.
 class CreatePostAdditions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -41,6 +42,8 @@ class CreatePostAdditions extends StatelessWidget {
             Provider.of<CreatingPost>(context, listen: false)
                 .saveFocusedIndex();
             showModalBottomSheet(
+              constraints:
+                  BoxConstraints(maxWidth: kIsWeb ? 500.0 : double.infinity),
               context: context,
               isScrollControlled: true,
               builder: (context) => SingleChildScrollView(
@@ -182,6 +185,8 @@ class CreatePostAdditions extends StatelessWidget {
           ),
           onTap: () {
             showModalBottomSheet(
+              constraints:
+                  BoxConstraints(maxWidth: kIsWeb ? 500.0 : double.infinity),
               context: context,
               isScrollControlled: true,
               builder: (context) => SingleChildScrollView(

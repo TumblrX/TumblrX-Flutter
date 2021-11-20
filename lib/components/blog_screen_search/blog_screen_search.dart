@@ -1,7 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tumblrx/Components/blog_screen_constant.dart';
+import 'package:tumblrx/components/blog_screen_constant.dart';
 
 class Search extends StatefulWidget {  ///search of avatar
   @override
