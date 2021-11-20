@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/screens/main_screen.dart';
-//import 'package:tumblrx/screens/signup_pick_tags.dart';
 import 'package:tumblrx/services/authentication.dart';
 import 'package:tumblrx/utilities/constants.dart';
 
-class SignUpUserData extends StatelessWidget {
-  static final String id = 'SignUpUserData';
+class LogInUserData extends StatelessWidget {
+  static final String id = 'LogInUserData';
   final _formkey = GlobalKey<FormState>();
 
   @override
@@ -21,10 +20,19 @@ class SignUpUserData extends StatelessWidget {
             key: _formkey,
             child: Column(
               children: <Widget>[
-                // the next button on the upper right of the screen
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
+                    //     the title
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(0, 10, 70, 10),
+                      child: Text(
+                        't',
+                        style: KWelcomeScreenTitle,
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    // the next button on the upper right of the screen
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0, 5, 5, 0),
                       child: ElevatedButton(
@@ -39,7 +47,7 @@ class SignUpUserData extends StatelessWidget {
                           }
                         },
                         child: Text(
-                          'Next',
+                          'Login',
                           style: KTextButton,
                         ),
                         style:
@@ -48,23 +56,8 @@ class SignUpUserData extends StatelessWidget {
                     ),
                   ],
                 ),
-                //     the title
-                Padding(
-                  padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                  child: Text(
-                    'What should we call you?',
-                    style: KHeadLines1,
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                //     some info
-                Padding(
-                  padding: EdgeInsets.fromLTRB(30, 10, 20, 10),
-                  child: Text(
-                    'You will need a name to make your own posts, customize your blog, and message people.',
-                    style: KTextInfo,
-                    textAlign: TextAlign.center,
-                  ),
+                SizedBox(
+                  height: 100,
                 ),
                 // first textfield to enter the email
                 Padding(
@@ -111,27 +104,6 @@ class SignUpUserData extends StatelessWidget {
                               : Icons.visibility_off,
                         ),
                       ),
-                      labelStyle: KHintTextForTextField,
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-                //the third textfield to enter the name
-                Padding(
-                  padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                  child: TextFormField(
-                    validator: (name) {
-                      return Provider.of<Authentication>(context, listen: false)
-                          .checkValidName(name);
-                    },
-                    decoration: InputDecoration(
-                      border: UnderlineInputBorder(),
-                      labelText: 'name',
                       labelStyle: KHintTextForTextField,
                       enabledBorder: UnderlineInputBorder(
                         borderSide: BorderSide(
