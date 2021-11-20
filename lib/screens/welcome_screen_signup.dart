@@ -23,9 +23,12 @@ class SignupScreen extends StatelessWidget {
                 height: 100,
               ),
               TextButton(
-                child: Text(
-                  '          Sign up with Email           ',
-                  style: KWelcomeScreenButton,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(50, 0, 50, 0),
+                  child: Text(
+                    'Sign up with Email',
+                    style: KWelcomeScreenButton,
+                  ),
                 ),
                 onPressed: () {
                   Navigator.pushNamed(context, SignUpAgeCheck.id);
@@ -40,9 +43,12 @@ class SignupScreen extends StatelessWidget {
                 height: 15,
               ),
               TextButton(
-                child: Text(
-                  '           Sign up with Google               ',
-                  style: KWelcomeScreenButton,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(45, 0, 45, 0),
+                  child: Text(
+                    'Sign up with Google',
+                    style: KWelcomeScreenButton,
+                  ),
                 ),
                 onPressed: () {},
                 style: TextButton.styleFrom(
