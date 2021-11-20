@@ -1,3 +1,8 @@
+/*
+Author: Passant Abdelgalil
+Description: 
+    a stateful widget for the animated tumblr icon that changes its color on pressed event
+*/
 import 'package:flutter/material.dart';
 
 class TumblrXIcon extends StatefulWidget {

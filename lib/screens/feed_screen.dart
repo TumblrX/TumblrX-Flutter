@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tumblrx/components/Stuff_for_you_widget.dart';
+import 'package:tumblrx/components/stuff_for_you_widget.dart';
 import 'package:tumblrx/components/createpost/create_post.dart';
 import 'package:tumblrx/components/following_widget.dart';
 import 'package:tumblrx/components/top_nav_bar/top_nav_bar.dart';

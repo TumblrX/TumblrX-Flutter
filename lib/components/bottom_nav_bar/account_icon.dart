@@ -1,10 +1,19 @@
+/*
+Author: Passant Abdelgalil
+Description: 
+    A widget for the blog icon in the overlay entry with animation
+    to switch between blogs
+*/
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/models/user/blog.dart';
 
 class AccountIcon extends StatefulWidget {
+  // blog object to update the current blog on select
   final Blog _blog;
+  // string to hold the previously selected blog
   final String _defaultBlogName;
 
   AccountIcon(this._blog, this._defaultBlogName);
@@ -13,9 +22,13 @@ class AccountIcon extends StatefulWidget {
 }
 
 class _AccountIconState extends State<AccountIcon> {
+  // flag to indicate if the user selects the blog icon
   bool _isHovered = false;
 
-  void setSelection(bool selectionState) {
+  // update the flag state with the passed parameter
+  // the parameter should be true on ['hover', 'enter'] events
+  // and false on 'exit' event
+  void _setSelection(bool selectionState) {
     setState(() {
       this._isHovered = selectionState;
     });
@@ -26,15 +39,15 @@ class _AccountIconState extends State<AccountIcon> {
     return Consumer<User>(
       builder: (ctx, user, child) => MouseRegion(
         onHover: (event) {
-          setSelection(true);
+          _setSelection(true);
           user.setActiveBlog(widget._blog.name);
         },
         onEnter: (event) {
-          setSelection(true);
+          _setSelection(true);
           user.setActiveBlog(widget._blog.name);
         },
         onExit: (event) {
-          setSelection(false);
+          _setSelection(false);
           user.setActiveBlog(widget._defaultBlogName);
         },
         child: Padding(

@@ -1,3 +1,6 @@
+import 'package:http/http.dart' as http;
+import 'dart:convert' as convert;
+
 class Blog {
   String name; //the short name of the blog
   String title; //the title of the blog
@@ -45,7 +48,39 @@ class Blog {
     return data;
   }
 
-  String getBlogAvatar() {
-    return "assets/icon/default_avatar.png";
+  Future<void> getBlogAvatar() async {
+    final String url =
+        'https://54bd9e92-6a19-4377-840f-23886631e1a8.mock.pstmn.io/blog/$name/avatar';
+    final Uri uri = Uri.parse(url);
+    try {
+      final response = await http.get(uri);
+      if (response.statusCode == 200) {
+        final responseParsed = convert.jsonDecode(response.body);
+        return responseParsed['avatar_url'];
+      } else {
+        // handle failed request
+      }
+    } catch (error) {
+      // handle failed request
+    }
+  }
+
+  void getInfo() async {
+    final String key = "api_key";
+    final String url =
+        'https://54bd9e92-6a19-4377-840f-23886631e1a8.mock.pstmn.io/blog/$name/info?api_key={$key}';
+    try {} catch (error) {}
+  }
+
+  void getPosts() async {
+    final String url =
+        'https://54bd9e92-6a19-4377-840f-23886631e1a8.mock.pstmn.io/blog/$name/posts/';
+    try {} catch (error) {}
+  }
+
+  void blockBlog(String toBlock) async {
+    String url =
+        'https://54bd9e92-6a19-4377-840f-23886631e1a8.mock.pstmn.io/blog/$name/blocks';
+    try {} catch (error) {}
   }
 }

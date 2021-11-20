@@ -1,23 +1,48 @@
+/*
+Author: Passant Abdelgalil
+Description: 
+    This file creates a class as an API for text block content in addition
+    to inline class 'InlineFormatting' to handle inline formatting for
+    the block content.
+*/
+
 import 'package:flutter/widgets.dart';
 import 'package:styled_text/styled_text.dart';
 import 'package:tumblrx/utilities/text_format.dart';
 
 class TextBlock {
+  /// Subtype of the text: 'heading1', 'quote', 'heading2', 'chat',
+  /// 'ordered-list-item', 'unordered-list-item'
   String _subtype;
+
+  /// Text Block content
   String _text;
+
+  /// Integer to nest the block
+  int _indentLevel = 0;
+
+  /// List of Inline formatting applied on the text
   List<InlineFormatting> _formatting = [];
 
+  /// Constructs a new instance usin parsed json data
   TextBlock.fromJson(Map<String, dynamic> parsedJson) {
     this._text = parsedJson['text'];
     if (parsedJson.containsKey('subtype'))
       this._subtype = parsedJson['subtype'];
     if (parsedJson.containsKey('formatting') &&
         parsedJson['formatting'] != null) {
-      this
-          ._formatting
-          .add(new InlineFormatting.fromJson(parsedJson['formatting']));
+      List<Map<String, dynamic>> formatting =
+          parsedJson['formatting'] as List<Map<String, dynamic>>;
+
+      this._formatting.addAll(
+          formatting.map((e) => new InlineFormatting.fromJson(e)).toList());
+      // for (var format in parsedJson['formatting']) {
+      //   this._formatting.add(new InlineFormatting.fromJson(format));
+      // }
     }
   }
+
+  /// Returns a JSON version of the object
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {};
     data['subtype'] = _subtype;
@@ -26,6 +51,7 @@ class TextBlock {
     return data;
   }
 
+  /// Apply inline formatting on the text if any
   String formatText() {
     for (var format in _formatting) {
       _text = format.applyFormat(_text);
@@ -33,6 +59,7 @@ class TextBlock {
     return _text;
   }
 
+  /// API for text block object to render it
   Widget showBlock() {
     _text = this.formatText();
     return StyledText(

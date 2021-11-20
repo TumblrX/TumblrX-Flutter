@@ -1,19 +1,36 @@
+/*
+Author: Passant Abdelgalil
+Description: 
+    The post header widget that contains blog name, follow button,
+    and options icon
+*/
+
 import 'package:flutter/material.dart';
 import 'package:tumblrx/models/user/blog.dart';
 
 class PostHeader extends StatelessWidget {
+  /// blog object of the post
   final Blog blogData;
   PostHeader(this.blogData);
 
+  /// navigate to the blog screen to view blog info
   void _showBlog(BuildContext context) {
     Navigator.of(context)
         .pushNamed('blog_screen', arguments: blogData.toJson());
   }
 
+  /// callback function to request following the post blog
+  void _followBlog() {}
+
+  /// callback to open a dialog with blog options
+  void _showBlogOptions() {}
+
   @override
   Widget build(BuildContext context) {
+    // constants to size widgets
     final double avatarWidth = 40;
     final double postHeaderHeight = 60;
+
     return SizedBox(
       height: postHeaderHeight,
       child: TextButton(
@@ -24,7 +41,8 @@ class PostHeader extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Image.asset(
-              blogData.getBlogAvatar(),
+              "assets/icon/default_avatar.png",
+              //blogData.getBlogAvatar(),
               width: avatarWidth,
             ),
             Expanded(
@@ -38,7 +56,7 @@ class PostHeader extends StatelessWidget {
                     ),
                   ),
                   TextButton(
-                    onPressed: null,
+                    onPressed: _followBlog,
                     child: Text(
                       'Follow',
                       style: TextStyle(
@@ -49,7 +67,7 @@ class PostHeader extends StatelessWidget {
               ),
             ),
             IconButton(
-              onPressed: null,
+              onPressed: _showBlogOptions,
               icon: Icon(Icons.more_horiz),
             ),
           ],

@@ -1,15 +1,26 @@
+/*
+Author: Passant Abdelgalil
+Description: 
+    A widget for the profile icon in the bottom nav bar with animation
+    to open the overlay entry to choose between blogs
+*/
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/components/bottom_nav_bar/account_icon.dart';
 import 'package:tumblrx/models/user/user.dart';
 
 class ProfileIcon extends StatelessWidget {
+  // passed callback function from parent widget to use on tap event
   final Function _onTab;
+  // parent context to access the overlay of the screen
   final BuildContext _context;
+
+  // key of the bottom nav bar to use to access it
   final GlobalKey _key;
 
   ProfileIcon(this._context, this._key, this._onTab);
 
+  /// builds the stacked blogs icons to choose from
   Widget _buildAccountPicker(User user) {
     if (user != null) print(user.blogs[0].blogAvatar);
     return Material(
@@ -24,6 +35,7 @@ class ProfileIcon extends StatelessWidget {
     );
   }
 
+  /// inserts the overaly entry of the blogs picker
   OverlayEntry _showPicker(key, User user) {
     // get the overlay stack of the screen
     final OverlayState overlayState = Overlay.of(_context);

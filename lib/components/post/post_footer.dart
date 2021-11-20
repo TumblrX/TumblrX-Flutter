@@ -1,19 +1,42 @@
+/*
+Author: Passant Abdelgalil
+Description: 
+    The post footer widget that contains reactions count and icons, and 
+    post options: share, comment, reblog, and like/unlike
+*/
+
 import 'package:flutter/material.dart';
 import 'package:tumblrx/utilities/constants.dart';
 
 class PostFooter extends StatelessWidget {
+  /// total number of notes
   final int _notesCount;
+
+  /// flag for the user's like/unlike on the post
   final bool _liked;
+
   PostFooter(this._notesCount, this._liked);
+
+  // constants to size the icons
   final double _reactionsIconSize = 23;
   final double _interactIocnSize = 15;
+
+  /// callback on tap heart icon
   void _likePost() {}
+
+  /// callback on tap comment icon
   void _commentOnPost() {}
+
+  /// callback on tap reblog icon
   void _reblogPost() {}
+
+  /// callback on tap share icon
   void _sharePost() {}
 
+  /// callback on tap notes icon/number
   void _showNotesPage() {}
 
+  /// Build the widget of the passed reaction icon
   Widget _reactionIcon(String iconPath) {
     return ClipOval(
       child: Container(
@@ -31,6 +54,7 @@ class PostFooter extends StatelessWidget {
     );
   }
 
+  /// Build the widget with actions icon ['like', 'reblog', 'comment', 'share]
   Widget _actionIcon(String iconPath, Function callback) {
     return IconButton(
       iconSize: _interactIocnSize,
@@ -48,11 +72,16 @@ class PostFooter extends StatelessWidget {
     );
   }
 
+  /// Builds the widget of stacked notes icon ['likes', 'reblogs', 'comments']
   Widget notesIcons() {
+    // constant shifting amount, should be < icon size
     final double shiftAmount = 20.0;
+
+    // list of notes icon widget
     final List<Widget> icons =
         reactionIcons.map((e) => _reactionIcon(e)).toList();
 
+    // generate stacked icons by applying margin = shiftamount * icon index
     List<Widget> stacked = List<Widget>.generate(icons.length, (index) {
       return Container(
         width: _reactionsIconSize,
@@ -61,8 +90,9 @@ class PostFooter extends StatelessWidget {
         margin: EdgeInsets.only(left: shiftAmount * index),
       );
     });
+
+    // stacked notes icon widget
     return Stack(
-      textDirection: TextDirection.ltr,
       children: stacked.reversed.toList(),
     );
   }

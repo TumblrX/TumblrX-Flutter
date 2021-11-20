@@ -1,3 +1,13 @@
+/*
+Author: Passant Abdelgalil
+Description: 
+    The main screen after sign in, a template to inject other routes
+    but with a shared bottom navigation bar among all of them
+
+    Main structure is:
+      * routes screen ['feed', 'search', 'notification', or 'profile page']
+      * bottom navigation bar 
+*/
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:tumblrx/components/bottom_nav_bar/bottom_nav_bar.dart';
@@ -13,22 +23,29 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  // control the PageView widget logic of naviagtionn
   PageController _controller;
+  // Notifier of current selected page index to update bottom navigation
+  // bar selectedIndex state
   ValueNotifier<int> _selectedIndex;
 
   @override
   void initState() {
     super.initState();
+    // initializing controller
     _controller = PageController();
+    // initializing the notifier with 0 value
     _selectedIndex = ValueNotifier(0);
   }
 
+  // updates the state with the current selected index
   void _onPageChanged(int index) {
     setState(() {
       this._selectedIndex.value = index;
     });
   }
 
+  // dispose listners on removing the screen from the tree permanently
   @override
   void dispose() {
     _controller.dispose();
@@ -39,29 +56,30 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
+      // handle android back button logic
       onWillPop: () => Future.sync(() {
+        // if the current page is the home page, then exit the app
         if (_controller.page.round() == _controller.initialPage)
           return true;
+        // else, jump to the home page no matter what
         else {
           _controller.jumpToPage(_controller.initialPage);
           return false;
         }
       }),
-      child: SafeArea(
-        child: Scaffold(
-          body: PageView(
-            controller: _controller,
-            onPageChanged: _onPageChanged,
-            physics: const NeverScrollableScrollPhysics(),
-            children: [
-              FeedScreen(),
-              SearchScreen(),
-              NotificationsScreen(),
-              BlogScreen(),
-            ],
-          ),
-          bottomNavigationBar: BottomNavBarWidget(_controller, _selectedIndex),
+      child: Scaffold(
+        body: PageView(
+          controller: _controller,
+          onPageChanged: _onPageChanged,
+          physics: const NeverScrollableScrollPhysics(),
+          children: [
+            FeedScreen(),
+            SearchScreen(),
+            NotificationsScreen(),
+            BlogScreen(),
+          ],
         ),
+        bottomNavigationBar: BottomNavBarWidget(_controller, _selectedIndex),
       ),
     );
   }

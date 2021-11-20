@@ -2,8 +2,8 @@
 Author: Passant Abdelgalil
 Description: 
     This file creates a statefulwdiget class to use for rendering
-    the user dashboard in tab 'Following' in the user's feed, using
-    the retrieved data from endpoint 'user/dashboard'
+    the user dashboard in tab 'Stuff For You' in the user's feed, using
+    the retrieved data from endpoint 'user/foryou'
 */
 
 import 'package:flutter/material.dart';
@@ -12,12 +12,12 @@ import 'package:tumblrx/models/post.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
-class FollowingScreen extends StatefulWidget {
+class StuffForYouWidget extends StatefulWidget {
   @override
-  State<FollowingScreen> createState() => _FollowingScreenState();
+  State<StuffForYouWidget> createState() => _StuffForYouWidgetState();
 }
 
-class _FollowingScreenState extends State<FollowingScreen> {
+class _StuffForYouWidgetState extends State<StuffForYouWidget> {
   /// integer used for pagination
   int _pageNum = 1;
 
@@ -62,7 +62,7 @@ class _FollowingScreenState extends State<FollowingScreen> {
   Future<List<Post>> _getListOfPosts() async {
     _isLoading = true;
     final String url =
-        'https://54bd9e92-6a19-4377-840f-23886631e1a8.mock.pstmn.io/user/dashboard?blog-identifier="virtualtumblr"';
+        'https://54bd9e92-6a19-4377-840f-23886631e1a8.mock.pstmn.io/user/foryou?blog-identifier="virtualtumblr"';
     final Uri uri = Uri.parse(url);
     final response = await http.get(uri);
     final resposeObject =
