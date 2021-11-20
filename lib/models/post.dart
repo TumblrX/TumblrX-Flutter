@@ -154,7 +154,7 @@ class Post extends ChangeNotifier {
       });
       content.addAll(parsedConent);
     } catch (error) {
-      throw Exception(error);
+      throw error;
     }
   }
 
