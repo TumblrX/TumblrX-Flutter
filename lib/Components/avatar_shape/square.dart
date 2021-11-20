@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tumblrx/Components/constant.dart';
+import 'package:tumblrx/Components/blog_screen_constant.dart';
 
 class Square extends StatelessWidget {
   @override

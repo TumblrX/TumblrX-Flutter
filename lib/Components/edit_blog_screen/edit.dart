@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../constant.dart';
+import '../blog_screen_constant.dart';
 import 'edit_bottons.dart';
 
 class Edit extends StatefulWidget {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tumblrx/Components/constant.dart';
-import 'package:tumblrx/Components/edit/edit.dart';
-import 'blog_screen_search/blog_screen_search.dart';
+import 'package:tumblrx/Components/blog_screen_constant.dart';
+import 'package:tumblrx/Components/edit_blog_screen/edit.dart';
+import '../blog_screen_search/blog_screen_search.dart';
 
 /// this class display header image of blog screen ,icons and drop down list
 class HeaderImage extends StatefulWidget {
@@ -43,8 +43,7 @@ class _HeaderImageState extends State<HeaderImage> {
                         });
                       },
                       itemBuilder: (BuildContext context) {
-                        return 
-                        [
+                        return [
                           for (var i = 0; i < Constant.tumblrsBlog.length; i++)
 
                             ///loop  to display all blogs
@@ -72,15 +71,17 @@ class _HeaderImageState extends State<HeaderImage> {
 
                           ///create new blogs
                         ];
-                       },
-                     )
-                   ],
+                      },
+                    )
+                  ],
                 ),
                 Row(
-                  crossAxisAlignment: CrossAxisAlignment.start, /// to start from  begining in vertical
+                  crossAxisAlignment: CrossAxisAlignment.start,
+
+                  /// to start from  begining in vertical
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
-                    IconButton(
+                    IconButton( tooltip: 'Search blog',
                       icon: Icon(
                         Icons.search,
                       ),
@@ -94,6 +95,7 @@ class _HeaderImageState extends State<HeaderImage> {
                       },
                     ),
                     IconButton(
+                      tooltip: 'Edit',
                       icon: Icon(Icons.color_lens),
                       color: Colors.white,
                       onPressed: () {
@@ -102,14 +104,14 @@ class _HeaderImageState extends State<HeaderImage> {
                             MaterialPageRoute(builder: (context) => Edit()));
                       },
                     ),
-                    IconButton(
+                    IconButton( tooltip: 'Share',
                       icon: Icon(Icons.share),
                       color: Colors.white,
                       onPressed: () {
                         print('share is pressed');
                       },
                     ),
-                    IconButton(
+                    IconButton( tooltip: 'Account',
                       icon: Icon(Icons.settings),
                       color: Colors.white,
                       onPressed: () {
@@ -128,7 +130,9 @@ class _HeaderImageState extends State<HeaderImage> {
         height: MediaQuery.of(context).size.height / 3.6, //(200)
       ),
       onTap: () {
-        showModalBottomSheet(///to pop the bottom sheet when when click in header image
+        showModalBottomSheet(
+
+            ///to pop the bottom sheet when when click in header image
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20.0)),
             context: context,

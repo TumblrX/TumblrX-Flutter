@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:tumblrx/Components/show_image.dart';
+import 'package:tumblrx/Components/blog_screen_initial_screen/show_image.dart';
+
 ///all constant, variable , widget and function which use more than one
-class Constant extends StatelessWidget {
-  static Widget buildBottomSheetAvatar(BuildContext context) {
+class Constant {
+  static Widget buildBottomSheetAvatar(BuildContext context) { /// function pop up bottom sheet when click avatar
     //bottomsheet for avatar
 
     return Column(
@@ -49,20 +50,21 @@ class Constant extends StatelessWidget {
 
   static Widget createNewTumblr() {
     //the shape of create new tumblr
-    return PopupMenuItem( child: 
-      Row(
-        
+    return PopupMenuItem(
+      child: Row(
         children: <Widget>[
           Icon(
             Icons.add_circle_outline,
             color: Color(0xffa8a7a7),
           ),
-          SizedBox(width: 5,),
-        
+          SizedBox(
+            width: 5,
+          ),
           Text('Create a new Tumblr')
         ],
       ),
-      value: 'create',);
+      value: 'create',
+    );
   }
 
   static String toLengthFifteen(String text) {
@@ -75,13 +77,13 @@ class Constant extends StatelessWidget {
 
   static Color accent = Color(0xffffff00);
 
-  static Color bottomCoverColor = Color(0xffb03fa8); //color of header
-  static String valueOfDropList = 'unknown'; //intial value in drop list
+  static Color bottomCoverColor = Color(0xffb03fa8); ///color of header
+  static String valueOfDropList = 'unknown'; ///intial value in drop list
   static List<bool> isSelect = [true, false, false];
-  //color which selected(post/Likes/Following)
-  static Color posts = Color(0xffffff00); //color post
-  static Color likes = Color(0xffffc7c1c1); //color likes
-  static Color following = Color(0xffffc7c1c1); //color following
+  ///color which selected(post/Likes/Following)
+  static Color posts = Color(0xffffff00); ///color post
+  static Color likes = Color(0xffffc7c1c1); ///color likes
+  static Color following = Color(0xffffc7c1c1); ///color following
   //to choice between posts/likes/following
   static Color postsUnderline = Color(0xffffff00);
   static Color likesUnderline = Color(0xffb03fa8);
@@ -90,10 +92,6 @@ class Constant extends StatelessWidget {
   static String headerImgPath = 'images/header.png';
   static String avatarPath = 'images/avatar.png';
   static String profileDescription = 'i want to finish this project';
-  //for tumbler blogs
+  ///for tumbler blogs
   static List tumblrsBlog = ['account1', 'account2'];
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
 }
