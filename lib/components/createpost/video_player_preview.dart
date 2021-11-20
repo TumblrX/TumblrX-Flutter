@@ -19,7 +19,6 @@ class _VideoPlayerPreviewState extends State<VideoPlayerPreview> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     print(widget.file);
     _playVideo(widget.file);

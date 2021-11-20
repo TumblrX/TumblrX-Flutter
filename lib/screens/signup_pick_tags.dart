@@ -26,7 +26,7 @@ class _SignUpPickTagsState extends State<SignUpPickTags> {
                   padding: const EdgeInsets.all(15.0),
                   child: ElevatedButton(
                     onPressed: null,
-                    /* TODO:
+                    /* todo:
                      while(Navigator.canPop()){Navigator.pop()}
                      Navigator.pushNamed('main_screen)*/
                     child: Text(

@@ -1,13 +1,19 @@
 import 'package:http/http.dart';
 
+/// MockAPI class to use for testing
 class MockHttpRepository {
+  /// API key for mock server
   static final String api =
       'https://54bd9e92-6a19-4377-840f-23886631e1a8.mock.pstmn.io/';
 
+  /// API to send get requests
+  /// @endPoint : the end point to which send the request
+  /// @req : request query parameters as map<String, dynamic>
   static Future sendGetRequest(String endPoint,
       {Map<String, dynamic> req}) async {
     String fullUrl = "$api/$endPoint?";
 
+    // adding query parameters if any
     if (req != null)
       for (var reqParam in req.entries) {
         if (reqParam.value is String)
@@ -15,15 +21,21 @@ class MockHttpRepository {
         else
           fullUrl += '${reqParam.key}=${reqParam.value}';
       }
+
     final Uri uri = Uri.parse(fullUrl);
 
     return get(uri);
   }
 
+  /// API to send post requests
+  /// @endPoint : the end point to which send the request
+  /// @req : request body as map<String, dynamic>
   static Future<Response> sendPostRequest(
       String endPoint, Map<String, dynamic> req,
       {Map<String, String> headers}) async {
     String fullUrl = "$api/$endPoint";
+
+    // constructin the request body from passed map
     String reqBody = "";
     for (var reqParam in req.entries) {
       if (reqParam.value is String)
@@ -36,14 +48,22 @@ class MockHttpRepository {
   }
 }
 
+/// Real API class
 class ApiHttpRepository {
-  const ApiHttpRepository();
+  /// API key for real server
+  final String api = '';
 
+  /// API to send get requests
+  /// @endPoint : the end point to which send the request
+  /// @req : request query parameters as map<String, dynamic>
   Future sendPostRequest(String endPoint, Map<String, dynamic> req) async {
     await Future.delayed(const Duration(seconds: 2));
     return;
   }
 
+  /// API to send post requests
+  /// @endPoint : the end point to which send the request
+  /// @req : request body as map<String, dynamic>
   Future sendGetRequest(String endPoint, Map<String, dynamic> req) async {
     await Future.delayed(const Duration(seconds: 2));
     return;

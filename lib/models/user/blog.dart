@@ -124,14 +124,12 @@ class Blog {
   }
 
   void getPosts() async {
-    final String url =
-        'https://54bd9e92-6a19-4377-840f-23886631e1a8.mock.pstmn.io/blog/$name/posts/';
+    //final String url = 'blog/$name/posts/';
     try {} catch (error) {}
   }
 
   void blockBlog(String toBlock) async {
-    String url =
-        'https://54bd9e92-6a19-4377-840f-23886631e1a8.mock.pstmn.io/blog/$name/blocks';
+    //String url = 'blog/$name/blocks';
     try {} catch (error) {}
   }
 }

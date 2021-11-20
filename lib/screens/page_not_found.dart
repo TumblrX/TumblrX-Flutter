@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// Dummy screen to render when things go wrong
 class PageNotFound extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
