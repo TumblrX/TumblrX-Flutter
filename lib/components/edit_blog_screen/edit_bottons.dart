@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tumblrx/components/constant.dart';
+import '../blog_screen_constant.dart';
 
 class EditButtons extends StatefulWidget {
   @override
@@ -21,7 +21,7 @@ class _EditButtonsState extends State<EditButtons> {
                   style: TextStyle(color: Color(0xffc7c1c1))),
               style: ButtonStyle(
                 backgroundColor:
-                    MaterialStateProperty.all<Color>(Constant.bottomCoverColor),
+                    MaterialStateProperty.all<Color>(BlogScreenConstant.bottomCoverColor),
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
                         side: BorderSide(color: Color(0xffc7c1c1)),
@@ -38,7 +38,7 @@ class _EditButtonsState extends State<EditButtons> {
             child: Text('Accent', style: TextStyle(color: Color(0xffc7c1c1))),
             style: ButtonStyle(
               backgroundColor:
-                  MaterialStateProperty.all<Color>(Constant.accent),
+                  MaterialStateProperty.all<Color>(BlogScreenConstant.accent),
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
                       side: BorderSide(color: Color(0xffc7c1c1)),

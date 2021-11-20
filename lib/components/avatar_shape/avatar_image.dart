@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:tumblrx/components/constant.dart';
+import 'package:tumblrx/Components/blog_screen_constant.dart';
 
+///this to get the shape of circle avatar
+
+/// for avatar image
 class AvatarImage extends StatefulWidget {
+
   @override
   _AvatarImageState createState() => _AvatarImageState();
 }
@@ -14,15 +18,15 @@ class _AvatarImageState extends State<AvatarImage> {
         child: GestureDetector(
           child: CircleAvatar(
             radius: 38,
-            backgroundImage: AssetImage(Constant.avatarPath),
+            backgroundImage: AssetImage( BlogScreenConstant.avatarPath),
           ),
           onTap: () {
-            //bottom sheet of avatar
+            ///bottom sheet of avatar
             showModalBottomSheet(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20.0)),
                 context: context,
-                builder: Constant.buildBottomSheetAvatar);
+                builder:  BlogScreenConstant.buildBottomSheetAvatar);
           },
         ));
   }

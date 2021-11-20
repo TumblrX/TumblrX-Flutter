@@ -1,66 +1,98 @@
 import 'package:flutter/material.dart';
-import 'package:tumblrx/components/constant.dart';
-import 'package:tumblrx/components/avatar.dart';
-import 'package:tumblrx/components/header_image.dart';
-import 'package:tumblrx/components/blog_screen_header_text.dart';
-import 'package:tumblrx/components/avatar_image.dart';
-
+import 'package:tumblrx/Components/blog_screen_constant.dart';
+import 'package:tumblrx/Components/avatar_shape/avatar.dart';
+import 'package:tumblrx/Components/blog_screen_initial_screen/header_image.dart';
+import 'package:tumblrx/Components/blog_screen_initial_screen/blog_screen_header_text.dart';
+import 'package:tumblrx/Components/avatar_shape/avatar_image.dart';
+///This a initial screen you see when press on profile from navigation bar
 class BlogScreen extends StatefulWidget {
   static final String id = 'blog_screen';
   @override
   _BlogScreenState createState() => _BlogScreenState();
 }
-
 class _BlogScreenState extends State<BlogScreen>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
   @override
   void initState() {
+    ///this controller for Tabs bar
+    ///function used for Tab bars
     _tabController = new TabController(length: 3, vsync: this);
     super.initState();
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
         body: Container(
       child: Column(
+
+          /// couloum have(the header image , avatar,title, description and tab bars )
+
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Stack(alignment: Alignment.center, children: <Widget>[
               Column(
-                children: [
-                  HeaderImage(),
+                children:<Widget> [
+
+                
+                  ///display header image with icons and drop down list
+
+                 HeaderImage(), ///display header image with icons and drop down list
+
                   TextWriting(),
                 ],
               ),
-              //Square(),
+              //Square(),   ///show an avatar in square
               Avatar(),
+
+              /// show avatar in circle
               AvatarImage()
             ]),
             Container(
-                color: Constant.bottomCoverColor,
+
+                /// start of Tab Bars
+                color: BlogScreenConstant.bottomCoverColor,
                 child: TabBar(
                   unselectedLabelColor: Color(0xffc7c1c1),
-                  labelColor: Constant.accent,
-                  indicatorColor: Constant.accent,
+                  labelColor:  BlogScreenConstant.accent,
+
+                  ///color of label of selected item we can change it from edit
+                  indicatorColor:  BlogScreenConstant.accent,
+
+
+                 ///color of indicator of selected item releted to label
+
                   tabs: [
-                    Tab(text: 'Posts'),
-                    Tab(
-                      text: 'Likes',
+                    Tooltip(
+                      ///Tooltip for when press long icon pop label
+                      message: 'Posts',
+                      child: Tab(text: 'Posts'),
+                      preferBelow: false,
                     ),
-                    Tab(
-                      text: 'Followings',
+
+                    Tooltip(
+                      message: 'Likes',
+                      child: Tab(text: 'Likes'),
+                      preferBelow: false,
+                    ),
+                    Tooltip(
+                      message: 'Following',
+                      child: Tab(
+                        text: 'Following',
+                      ),
+                      preferBelow: false,
                     )
+
                   ],
                   controller: _tabController,
                   indicatorSize: TabBarIndicatorSize.tab,
                 )),
-            Expanded(
+            Expanded( /// pages which display content of each tab bar
                 child: Container(
-              color: Constant.bottomCoverColor,
+              color:  BlogScreenConstant.bottomCoverColor,
               child: TabBarView(
-                children: [Text('Posts'), Text('Likes'), Text('Followings')],
+                children: [Text('Posts'), Text('Likes'), Text('Following')],
                 controller: _tabController,
               ),
             ))

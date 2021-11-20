@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:tumblrx/components/show_image.dart';
-
-class Constant extends StatelessWidget {
+import 'package:tumblrx/Components/blog_screen_initial_screen/show_image.dart';
+///all constant, variable , widget and function which use more than one
+class BlogScreenConstant extends StatelessWidget {
   static Widget buildBottomSheetAvatar(BuildContext context) {
+    /// function pop up bottom sheet when click avatar
     //bottomsheet for avatar
 
     return Column(
@@ -18,7 +19,7 @@ class Constant extends StatelessWidget {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => ShowImage(Constant.avatarPath)));
+                    builder: (context) => ShowImage(avatarPath)));
           },
         )
       ],
@@ -40,7 +41,7 @@ class Constant extends StatelessWidget {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => ShowImage(Constant.headerImgPath)));
+                    builder: (context) => ShowImage(headerImgPath)));
           },
         )
       ],
@@ -49,13 +50,16 @@ class Constant extends StatelessWidget {
 
   static Widget createNewTumblr() {
     //the shape of create new tumblr
-    return DropdownMenuItem(
+
+    return PopupMenuItem(
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Icon(
             Icons.add_circle_outline,
             color: Color(0xffa8a7a7),
+          ),
+          SizedBox(
+            width: 5,
           ),
           Text('Create a new Tumblr')
         ],
@@ -64,15 +68,44 @@ class Constant extends StatelessWidget {
     );
   }
 
+  static String toLengthFifteen(String text) {
+    if (text.length > 15) {
+      {
+        return (text.substring(0, 15) + "...");
+      }
+    } else {
+      return text;
+    }
+  }
+
+  static void setBlogScreenDescription(String description) {
+    profileDescription = description;
+  }
+
+  static String getBlogScreenDescription() {
+    return profileDescription;
+  }
+
   static Color accent = Color(0xffffff00);
 
-  static Color bottomCoverColor = Color(0xffb03fa8); //color of header
-  static String valueOfDropList = 'unknown'; //intial value in drop list
+  static Color bottomCoverColor = Color(0xffb03fa8);
+
+  ///color of header
+  static String valueOfDropList = 'unknown';
+
+  ///intial value in drop list
   static List<bool> isSelect = [true, false, false];
-  //color which selected(post/Likes/Following)
-  static Color posts = Color(0xffffff00); //color post
-  static Color likes = Color(0xffffc7c1c1); //color likes
-  static Color following = Color(0xffffc7c1c1); //color following
+
+  ///color which selected(post/Likes/Following)
+  static Color posts = Color(0xffffff00);
+
+  ///color post
+  static Color likes = Color(0xffffc7c1c1);
+
+  ///color likes
+  static Color following = Color(0xffffc7c1c1);
+
+  ///color following
   //to choice between posts/likes/following
   static Color postsUnderline = Color(0xffffff00);
   static Color likesUnderline = Color(0xffb03fa8);
@@ -81,9 +114,9 @@ class Constant extends StatelessWidget {
   static String headerImgPath = 'images/header.png';
   static String avatarPath = 'images/avatar.png';
   static String profileDescription = 'i want to finish this project';
-  //for tumbler blogs
-  final tumblrsBlogs = ['account1', 'account2'];
 
+  ///for tumbler blogs
+  static List tumblrsBlog = [userName, 'account2'];
   @override
   Widget build(BuildContext context) {
     return Container();

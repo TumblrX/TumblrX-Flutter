@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../constant.dart';
+import '../blog_screen_constant.dart';
 import 'edit_bottons.dart';
 
 class Edit extends StatefulWidget {
@@ -12,7 +12,7 @@ class _EditState extends State<Edit> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Container(
-      color: Constant.bottomCoverColor,
+      color: BlogScreenConstant.bottomCoverColor,
       child: Column(
         children: <Widget>[
           TextField(
