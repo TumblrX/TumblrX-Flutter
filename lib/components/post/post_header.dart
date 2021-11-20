@@ -25,6 +25,10 @@ class PostHeader extends StatelessWidget {
   /// callback to open a dialog with blog options
   void _showBlogOptions() {}
 
+  Widget _errorAvatar() => CircleAvatar(
+        child: Icon(Icons.error),
+      );
+
   @override
   Widget build(BuildContext context) {
     // constants to size widgets
@@ -32,79 +36,74 @@ class PostHeader extends StatelessWidget {
     final double postHeaderHeight = 60;
     return SizedBox(
       height: postHeaderHeight,
-      child: TextButton(
-        style: ButtonStyle(
-            padding: MaterialStateProperty.all(EdgeInsets.only(left: 15.0))),
-        onPressed: () => _showBlog(context),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            blogData != null
-                ? FutureBuilder(
-                    future: blogData.getBlogAvatar(),
-                    builder: (BuildContext ctx, AsyncSnapshot snapshot) {
-                      if (snapshot.hasError)
-                        return CircleAvatar(
-                          child: Icon(Icons.error),
-                        );
-                      switch (snapshot.connectionState) {
-                        case ConnectionState.none:
-                        case ConnectionState.waiting:
-                        case ConnectionState.active:
-                          return CircleAvatar(
-                            maxRadius: avatarWidth / 2,
-                            child: CircularProgressIndicator(),
-                          );
-                          break;
-                        case ConnectionState.done:
-                          print(snapshot.data);
-                          return Image.network(
-                            snapshot.data,
-                            width: avatarWidth,
-                            errorBuilder: (context, exception, _) =>
-                                CircleAvatar(
-                              backgroundColor: Colors.white,
-                              child: Icon(Icons.error),
-                            ),
-                          );
-                          break;
-                      }
-                      return CircleAvatar(
-                        backgroundColor: Colors.white,
-                        child: Icon(Icons.error),
-                      );
-                    })
-                : CircleAvatar(
-                    child: Icon(Icons.error),
-                  ),
-            Expanded(
+      child: blogData == null
+          ? Center(
+              child: Icon(
+                Icons.error,
+              ),
+            )
+          : TextButton(
+              style: ButtonStyle(
+                padding: MaterialStateProperty.all(EdgeInsets.only(left: 15.0)),
+              ),
+              onPressed: () => _showBlog(context),
               child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8.0, right: 5.0),
-                    child: Text(
-                      blogData.name,
-                      style: TextStyle(color: Colors.black),
+                  FutureBuilder(
+                      future: blogData.getBlogAvatar(),
+                      builder: (BuildContext ctx, AsyncSnapshot snapshot) {
+                        if (snapshot.hasError) return _errorAvatar();
+                        switch (snapshot.connectionState) {
+                          case ConnectionState.none:
+                          case ConnectionState.waiting:
+                          case ConnectionState.active:
+                            return CircleAvatar(
+                              maxRadius: avatarWidth / 2,
+                              child: CircularProgressIndicator(),
+                            );
+                            break;
+                          case ConnectionState.done:
+                            return Image.network(
+                              snapshot.data,
+                              width: avatarWidth,
+                              errorBuilder: (context, exception, _) =>
+                                  _errorAvatar(),
+                            );
+
+                            break;
+                        }
+                        return _errorAvatar();
+                      }),
+                  Expanded(
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8.0, right: 5.0),
+                          child: Text(
+                            blogData.name,
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        ),
+                        // todo: displayed only if not one of blog's followers
+                        TextButton(
+                          onPressed: _followBlog,
+                          child: Text(
+                            'Follow',
+                            style: TextStyle(
+                                color: Theme.of(context).colorScheme.secondary),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  TextButton(
-                    onPressed: _followBlog,
-                    child: Text(
-                      'Follow',
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.secondary),
-                    ),
+                  IconButton(
+                    onPressed: _showBlogOptions,
+                    icon: Icon(Icons.more_horiz),
                   ),
                 ],
               ),
             ),
-            IconButton(
-              onPressed: _showBlogOptions,
-              icon: Icon(Icons.more_horiz),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

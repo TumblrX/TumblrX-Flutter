@@ -125,7 +125,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
         future: future,
         builder: (BuildContext ctx, AsyncSnapshot snapshot) {
           if (snapshot.hasError) {
-            print(snapshot.error);
             return Container(
               child: Center(
                 child: Icon(Icons.error_outline),
