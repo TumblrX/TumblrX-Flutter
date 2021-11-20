@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:tumblrx/components/welcome_screen_image.dart';
 import 'package:tumblrx/utilities/constants.dart';
 import 'package:tumblrx/screens/welcome_screen_login.dart';
+import 'package:tumblrx/screens/welcome_screen_signup.dart';
 
 class WelcomeScreen extends StatelessWidget {
   static final String id = 'welcome_screen';
@@ -25,13 +26,16 @@ class WelcomeScreen extends StatelessWidget {
                 height: 100,
               ),
               TextButton(
-                child: Text(
-                  '               Sign up               ',
-                  style: KWelcomeScreenButton,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(100, 0, 100, 0),
+                  child: Text(
+                    'Sign up',
+                    style: KWelcomeScreenButton,
+                  ),
                 ),
                 onPressed: () {
-                  Navigator.of(context).pushNamed('main_screen');
-                  //Navigator.pushNamed(context, SignupScreen.id);
+                  // Navigator.of(context).pushNamed('main_screen');
+                  Navigator.pushNamed(context, SignupScreen.id);
                 },
                 style: TextButton.styleFrom(
                   backgroundColor: Colors.white,
@@ -43,9 +47,12 @@ class WelcomeScreen extends StatelessWidget {
                 height: 15,
               ),
               TextButton(
-                child: Text(
-                  '              Log in                 ',
-                  style: KWelcomeScreenButton,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(100, 0, 100, 0),
+                  child: Text(
+                    'Log in',
+                    style: KWelcomeScreenButton,
+                  ),
                 ),
                 onPressed: () {
                   Navigator.pushNamed(context, LoginScreen.id);

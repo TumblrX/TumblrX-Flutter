@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tumblrx/Components/constant.dart';
-import 'package:tumblrx/Components/edit/edit.dart';
+import 'package:tumblrx/components/constant.dart';
+import 'package:tumblrx/components/edit/edit.dart';
 import 'blog_screen_search/blog_screen_search.dart';
 
 class HeaderImage extends StatefulWidget {

@@ -61,7 +61,7 @@ const KWelcomeScreenButton = TextStyle(
 const KTextButton = TextStyle(
   fontFamily: 'Pacifico',
   fontSize: 20.0,
-  color: Colors.cyan,
+  color: Color(0xff8C8C8C),
   fontWeight: FontWeight.bold,
 );
 
@@ -73,17 +73,6 @@ const KHintTextForTextField = TextStyle(
   fontWeight: FontWeight.bold,
 );
 
-//for the age check page
-const KTextFieldDecoration = const InputDecoration(
-  border: UnderlineInputBorder(),
-  labelText: 'How old are you?',
-  labelStyle: KHintTextForTextField,
-  enabledBorder: UnderlineInputBorder(
-    borderSide: BorderSide(
-      color: Colors.white,
-    ),
-  ),
-);
 // bold text
 const KHeadLines = TextStyle(
     fontFamily: 'Pacifico',
@@ -102,3 +91,17 @@ const KPickTagsInfoText = TextStyle(
     fontSize: 20.0,
     color: Colors.grey,
     fontWeight: FontWeight.bold);
+
+final List<String> reactionIcons = [
+  "assets/icon/message.png",
+  "assets/icon/repeat.png",
+  "assets/icon/love.png"
+];
+
+//small text info
+const KTextInfo = TextStyle(
+  fontFamily: 'Pacifico',
+  fontSize: 15.0,
+  color: Color(0xff8C8C8C),
+  fontWeight: FontWeight.bold,
+);

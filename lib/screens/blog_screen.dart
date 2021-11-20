@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:tumblrx/Components/constant.dart';
-import 'package:tumblrx/Components/avatar.dart';
-import 'package:tumblrx/Components/header_image.dart';
-import 'package:tumblrx/Components/blog_screen_header_text.dart';
-import 'package:tumblrx/Components/avatar_image.dart';
+import 'package:tumblrx/components/constant.dart';
+import 'package:tumblrx/components/avatar.dart';
+import 'package:tumblrx/components/header_image.dart';
+import 'package:tumblrx/components/blog_screen_header_text.dart';
+import 'package:tumblrx/components/avatar_image.dart';
 
 class BlogScreen extends StatefulWidget {
   static final String id = 'blog_screen';
