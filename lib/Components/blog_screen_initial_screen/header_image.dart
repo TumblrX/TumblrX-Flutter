@@ -100,7 +100,7 @@ class _HeaderImageState extends State<HeaderImage> {
                       icon: Icon(Icons.color_lens),
                       color: Colors.white,
                       onPressed: () {
-                        //go to edit page
+                        ///go to edit page
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) => Edit()));
                       },
