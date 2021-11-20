@@ -40,27 +40,35 @@ class MediaWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: _openFulScreenPreview,
-      onLongPress: _openOptionsDialog,
-      child: Padding(
-        padding: EdgeInsets.only(bottom: 4.0),
-        child: Image.network(
-          this._url,
-          width: this._width,
-          height: this._height,
-          loadingBuilder: (context, child, loadingProgress) =>
-              (loadingProgress == null)
-                  ? child
-                  : Container(
-                      color: Colors.grey[200],
-                      child: SizedBox(
-                        width: this._width,
-                        height: this._height,
-                      )),
-          errorBuilder: (context, error, stackTrace) => noImage(),
+    try {
+      return GestureDetector(
+        onTap: _openFulScreenPreview,
+        onLongPress: _openOptionsDialog,
+        child: Padding(
+          padding: EdgeInsets.only(bottom: 4.0),
+          child: Image.network(
+            this._url,
+            width: this._width,
+            height: this._height,
+            loadingBuilder: (context, child, loadingProgress) =>
+                (loadingProgress == null)
+                    ? child
+                    : Container(
+                        color: Colors.grey[200],
+                        child: SizedBox(
+                          width: this._width,
+                          height: this._height,
+                        )),
+            errorBuilder: (context, error, stackTrace) => noImage(),
+          ),
         ),
-      ),
-    );
+      );
+    } catch (error) {
+      return Container(
+        child: Center(
+          child: Icon(Icons.error),
+        ),
+      );
+    }
   }
 }

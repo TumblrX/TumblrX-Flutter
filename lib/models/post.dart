@@ -120,7 +120,7 @@ class Post extends ChangeNotifier {
       try {
         parsePostContent(parsedJson['content']);
       } catch (error) {
-        throw error.toString();
+        throw error;
       }
     else
       throw Exception("missing required paramter content");
@@ -154,7 +154,7 @@ class Post extends ChangeNotifier {
       });
       content.addAll(parsedConent);
     } catch (error) {
-      throw Exception(error.message);
+      throw Exception(error);
     }
   }
 

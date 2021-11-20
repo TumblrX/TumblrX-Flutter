@@ -125,6 +125,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         future: future,
         builder: (BuildContext ctx, AsyncSnapshot snapshot) {
           if (snapshot.hasError) {
+            Navigator.of(context).pushNamed('not_found');
             return Container(
               child: Center(
                 child: Icon(Icons.error_outline),

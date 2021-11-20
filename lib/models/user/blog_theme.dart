@@ -1,3 +1,4 @@
+/// A class that represents blog theme options
 class BlogTheme {
   String avatarShape;
   String backgroundColor;

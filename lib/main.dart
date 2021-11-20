@@ -30,7 +30,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<Authentication>(
           create: (context) => Authentication(),
         ),
-        ChangeNotifierProvider<Post>(create: (context) => Post()),
+        ChangeNotifierProvider<Post>(
+          create: (context) => Post(),
+        ),
         ChangeNotifierProvider<CreatingPost>(
           create: (context) => CreatingPost(),
         ),
