@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 ///Options of the post (Now, Draft, Private)
-enum PostOption { now, draft, private }
+enum PostOption { published, draft, private }
 
 ///Types of post content elements
 enum PostContentType { text, link, gif, image, video, music }

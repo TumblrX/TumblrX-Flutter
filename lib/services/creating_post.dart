@@ -2,8 +2,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:giphy_get/giphy_get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:tumblrx/models/creatingpost/text_field_data.dart';
 import 'package:tumblrx/models/posts/text_block.dart';
+import 'package:tumblrx/models/user/account.dart';
 import 'package:tumblrx/utilities/constants.dart';
 import 'package:http/http.dart' as http;
 import 'package:tumblrx/utilities/hex_color_value.dart';
@@ -48,7 +50,7 @@ class CreatingPost extends ChangeNotifier {
     lastFocusedIndex = 0;
     isPostEnabled = false;
     shareToTwitter = false;
-    postOption = PostOption.now;
+    postOption = PostOption.published;
     chosenHashtags = [];
     followedHashtags = [
       'art',
@@ -82,7 +84,7 @@ class CreatingPost extends ChangeNotifier {
     notifyListeners();
   }
 
-  ///sets the [option] of the post whether it's (Post Now, Private, Draft)
+  ///sets the [option] of the post whether it's (Post Now(Published), Private, Draft)
   void choosePostOption(PostOption option) {
     postOption = option;
     notifyListeners();
@@ -340,7 +342,7 @@ class CreatingPost extends ChangeNotifier {
   }
 
   ///It maps the collected data about the post to the final form and send it in a post request.
-  void postData() async {
+  void postData(BuildContext context) async {
     // String url =
     //     'https://54bd9e92-6a19-4377-840f-23886631e1a8.mock.pstmn.io/createpost'; //TODO: edit it
     // var req = http.MultipartRequest('POST', Uri.parse(url));
@@ -348,9 +350,11 @@ class CreatingPost extends ChangeNotifier {
     Map<String, dynamic> requestBody = {
       'postType': 'text',
       'tags': tags,
-      'is_private': postOption == PostOption.private,
-      'is_draft': postOption == PostOption.draft,
-      'send_to_twitter': shareToTwitter
+      'state': postOption.toString().substring(12),
+      'send_to_twitter': shareToTwitter,
+      'blogAttribution': {
+        'blogTitle': Provider.of<User>(context, listen: false).activeBlog,
+      }
     };
 
     List<Map> postContentList = [];

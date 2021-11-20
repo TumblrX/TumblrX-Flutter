@@ -70,7 +70,8 @@ class CreatePostHeader extends StatelessWidget {
           ),
           onPressed: Provider.of<CreatingPost>(context).isPostEnabled
               ? () {
-                  Provider.of<CreatingPost>(context, listen: false).postData();
+                  Provider.of<CreatingPost>(context, listen: false)
+                      .postData(context);
                 }
               : null,
         ),

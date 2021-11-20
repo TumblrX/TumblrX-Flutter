@@ -16,7 +16,7 @@ class CreatePostOptions extends StatelessWidget {
           ),
           title: Text('Post now'),
           trailing: Radio<PostOption>(
-            value: PostOption.now,
+            value: PostOption.published,
             groupValue: Provider.of<CreatingPost>(context).postOption,
             onChanged: (value) {
               Provider.of<CreatingPost>(context, listen: false)
@@ -57,7 +57,7 @@ class CreatePostOptions extends StatelessWidget {
             },
           ),
         ),
-        Provider.of<CreatingPost>(context).postOption == PostOption.now
+        Provider.of<CreatingPost>(context).postOption == PostOption.published
             ? ListTile(
                 title: Text('Share to Twitter'),
                 trailing: Switch(

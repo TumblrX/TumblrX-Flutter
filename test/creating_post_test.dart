@@ -18,7 +18,7 @@ void main() {
       expect(post.shareToTwitter, false);
       expect(post.lastFocusedIndex, 0);
       expect(post.chosenTextStyle, TextStyleType.Normal);
-      expect(post.postOption, PostOption.now);
+      expect(post.postOption, PostOption.published);
     });
 
     test('Setting post option to draft', () {
