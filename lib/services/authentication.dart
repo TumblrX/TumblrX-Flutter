@@ -8,16 +8,16 @@ class Authentication extends ChangeNotifier {
   String userName;
   String userEmail;
   String userPassword;
-  bool isObscure = true; //for the signup to hide the password
+  bool isObscureSignUp = true; //for the signup to hide the password
 
   ///Changes the visibility state of the password textfield
   void toggleisObscure() {
-    isObscure = !isObscure;
+    isObscureSignUp = !isObscureSignUp;
     notifyListeners();
   }
 
   ///Returns the visibility state of the password textfield
-  bool get isObscurecontent => isObscure;
+  bool get isObscurecontent => isObscureSignUp;
 
   /* TODO:
  should also check if this email already exists from the mockservice
@@ -71,5 +71,16 @@ class Authentication extends ChangeNotifier {
     int temp = int.parse(age);
     userAge = temp;
     notifyListeners();
+  }
+
+  String checkExistEmail(String email) {
+    if (email == null || email.isEmpty) {
+      return 'Please enter some text';
+    } else if (email.contains('@') && email.contains('.com')) {
+      userEmail = email;
+      notifyListeners();
+      return null;
+    } else
+      return 'unvalid email';
   }
 }
