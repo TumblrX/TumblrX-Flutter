@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:giphy_get/giphy_get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -347,6 +348,7 @@ class CreatingPost extends ChangeNotifier {
     //     'https://54bd9e92-6a19-4377-840f-23886631e1a8.mock.pstmn.io/createpost'; //TODO: edit it
     // var req = http.MultipartRequest('POST', Uri.parse(url));
     String tags = chosenHashtags.join(', ');
+
     Map<String, dynamic> requestBody = {
       'postType': 'text',
       'tags': tags,
@@ -376,7 +378,10 @@ class CreatingPost extends ChangeNotifier {
         // req.files.add(http.MultipartFile(map['identifier'],
         //     postContent[i]['content'].readAsBytes().asStream(), length,
         //     filename: postContent[i]['content'].name));
-        requestBody[map['identifier']] = postContent[i]['content'].name;
+        requestBody[map['identifier']] = MultipartFile.fromBytes(postContent[i]
+                ['content']
+            .readAsBytes()
+            .asStream()); //postContent[i]['content'].name;
         postContentList.add(map);
       } else if (postContent[i]['type'] == PostContentType.video) {
         Map map = _getVideoBlockMap(i);
@@ -384,18 +389,24 @@ class CreatingPost extends ChangeNotifier {
         // req.files.add(http.MultipartFile(map['identifier'],
         //     postContent[i]['content'].readAsBytes().asStream(), length,
         //     filename: postContent[i]['content'].name));
-        requestBody[map['identifier']] = postContent[i]['content'].name;
+        requestBody[map['identifier']] = MultipartFile.fromBytes(
+            postContent[i]['content'].readAsBytes().asStream());
         postContentList.add(map);
       }
     }
     requestBody['content'] = postContentList;
 
     try {
-      var response = await http.post(
-          Uri.parse(
-              'https://54bd9e92-6a19-4377-840f-23886631e1a8.mock.pstmn.io/createpost'),
-          body: jsonEncode(requestBody),
-          headers: {'Content-type': 'application/json'});
+      var body = FormData.fromMap(requestBody);
+      var dio = Dio();
+      var response = await dio.post(
+          'https://54bd9e92-6a19-4377-840f-23886631e1a8.mock.pstmn.io/createpost',
+          data: body);
+      // var response = await http.post(
+      //     Uri.parse(
+      //         'https://54bd9e92-6a19-4377-840f-23886631e1a8.mock.pstmn.io/createpost'),
+      //     body: jsonEncode(requestBody),
+      //     headers: {'Content-type': 'application/json'});
       print('Response status: ${response.statusCode}');
     } catch (e) {
       print(e);
