@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:giphy_get/giphy_get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:tumblrx/components/modal_bottom_sheet.dart';
 import 'package:tumblrx/models/creatingpost/text_field_data.dart';
 import 'package:tumblrx/models/posts/text_block.dart';
 import 'package:tumblrx/models/user/user.dart';
@@ -312,7 +313,6 @@ class CreatingPost extends ChangeNotifier {
   void addImage({bool isCamera}) async {
     final XFile image = await _picker.pickImage(
         source: isCamera ? ImageSource.camera : ImageSource.gallery);
-
     if (image != null) {
       Map img = {'type': PostContentType.image, 'content': image};
       postContent.insert(lastFocusedIndex + 1, img);
@@ -352,7 +352,7 @@ class CreatingPost extends ChangeNotifier {
     Map<String, dynamic> requestBody = {
       'postType': 'text',
       'tags': tags,
-      'state': postOption.toString().substring(12),
+      'state': postOption.toString().substring(11),
       'send_to_twitter': shareToTwitter,
       'blogAttribution': {
         'blogTitle': Provider.of<User>(context, listen: false).activeBlog,
@@ -378,10 +378,10 @@ class CreatingPost extends ChangeNotifier {
         // req.files.add(http.MultipartFile(map['identifier'],
         //     postContent[i]['content'].readAsBytes().asStream(), length,
         //     filename: postContent[i]['content'].name));
-        requestBody[map['identifier']] = MultipartFile.fromBytes(postContent[i]
-                ['content']
-            .readAsBytes()
-            .asStream()); //postContent[i]['content'].name;
+        requestBody[map['identifier']] = await MultipartFile.fromFile(
+            postContent[i]['content'].path,
+            filename: postContent[i]['content']
+                .name); //postContent[i]['content'].name;
         postContentList.add(map);
       } else if (postContent[i]['type'] == PostContentType.video) {
         Map map = _getVideoBlockMap(i);
@@ -389,8 +389,9 @@ class CreatingPost extends ChangeNotifier {
         // req.files.add(http.MultipartFile(map['identifier'],
         //     postContent[i]['content'].readAsBytes().asStream(), length,
         //     filename: postContent[i]['content'].name));
-        requestBody[map['identifier']] = MultipartFile.fromBytes(
-            postContent[i]['content'].readAsBytes().asStream());
+        requestBody[map['identifier']] = await MultipartFile.fromFile(
+            postContent[i]['content'].path,
+            filename: postContent[i]['content'].name);
         postContentList.add(map);
       }
     }
@@ -398,6 +399,7 @@ class CreatingPost extends ChangeNotifier {
 
     try {
       var body = FormData.fromMap(requestBody);
+      print(body.fields);
       var dio = Dio();
       var response = await dio.post(
           'https://54bd9e92-6a19-4377-840f-23886631e1a8.mock.pstmn.io/createpost',
@@ -493,4 +495,3 @@ class CreatingPost extends ChangeNotifier {
     };
   }
 }
-
