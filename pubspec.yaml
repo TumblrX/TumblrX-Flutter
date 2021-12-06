@@ -44,6 +44,7 @@ dependencies:
   styled_text: ^3.0.4+1
   url_launcher: ^6.0.13
   intl: ^0.15.7
+  dio: ^4.0.4
   #flutter_link_previewer: ^2.6.0
   #youtube_player_flutter: ^8.0.0
   
