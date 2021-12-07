@@ -6,7 +6,6 @@ Description:
     the retrieved data from endpoint 'user/foryou'
 */
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:provider/provider.dart';

@@ -1,11 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tumblrx/Components/blog_screen_constant.dart';
-import 'package:tumblrx/Components/avatar_shape/avatar.dart';
-import 'package:tumblrx/Components/blog_screen_initial_screen/header_image.dart';
-import 'package:tumblrx/Components/blog_screen_initial_screen/blog_screen_header_text.dart';
-import 'package:tumblrx/Components/avatar_shape/avatar_image.dart';
+import 'package:tumblrx/components/blog_screen_constant.dart';
+import 'package:tumblrx/components/avatar_shape/avatar.dart';
+import 'package:tumblrx/components/blog_screen_initial_screen/header_image.dart';
+import 'package:tumblrx/components/blog_screen_initial_screen/blog_screen_header_text.dart';
+import 'package:tumblrx/components/avatar_shape/avatar_image.dart';
 import 'package:tumblrx/components/createpost/create_post.dart';
 import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/services/creating_post.dart';
