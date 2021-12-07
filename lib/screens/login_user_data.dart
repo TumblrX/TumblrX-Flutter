@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/screens/main_screen.dart';
 import 'package:tumblrx/services/authentication.dart';
 import 'package:tumblrx/utilities/constants.dart';
@@ -43,8 +44,12 @@ class LogInUserData extends StatelessWidget {
                                   .loginRequest())
                             return null;
                           else {
-                            Provider.of<Authentication>(context, listen: false)
-                                .loginGetUserInfo();
+                            final Map<String, dynamic> response =
+                                await Provider.of<Authentication>(context,
+                                        listen: false)
+                                    .loginGetUserInfo(context);
+                            Provider.of<User>(context, listen: false)
+                                .setLoginUserData(response);
                             while (Navigator.canPop(context)) {
                               Navigator.pop(context);
                             }
