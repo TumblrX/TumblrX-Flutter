@@ -6,6 +6,7 @@ Description:
     the retrieved data from endpoint 'user/foryou'
 */
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:provider/provider.dart';
@@ -121,6 +122,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      color: Colors.white,
       child: FutureBuilder<List<Post>>(
         future: future,
         builder: (BuildContext ctx, AsyncSnapshot snapshot) {

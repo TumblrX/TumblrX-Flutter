@@ -1,10 +1,8 @@
-import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:giphy_get/giphy_get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:tumblrx/components/modal_bottom_sheet.dart';
 import 'package:tumblrx/models/creatingpost/text_field_data.dart';
 import 'package:tumblrx/models/posts/text_block.dart';
 import 'package:tumblrx/models/user/user.dart';
@@ -402,7 +400,7 @@ class CreatingPost extends ChangeNotifier {
       print(body.fields);
       var dio = Dio();
       var response = await dio.post(
-          'https://54bd9e92-6a19-4377-840f-23886631e1a8.mock.pstmn.io/createpost',
+          'https://1b0da51d-62c7-4172-b0c5-c290339c6fb6.mock.pstmn.io/createpost',
           data: body);
       // var response = await http.post(
       //     Uri.parse(
