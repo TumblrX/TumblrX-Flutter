@@ -36,10 +36,15 @@ class LogInUserData extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0, 5, 5, 0),
                       child: ElevatedButton(
-                        onPressed: () {
-                          if (!_formkey.currentState.validate())
+                        onPressed: () async {
+                          if (!_formkey.currentState.validate() ||
+                              !await Provider.of<Authentication>(context,
+                                      listen: false)
+                                  .loginRequest())
                             return null;
                           else {
+                            Provider.of<Authentication>(context, listen: false)
+                                .loginGetUserInfo();
                             while (Navigator.canPop(context)) {
                               Navigator.pop(context);
                             }
