@@ -1,4 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:tumblrx/models/user/user.dart';
+import 'package:tumblrx/services/api_provider.dart';
+import 'dart:convert' as convert;
 
 ///Contains the user data for login and sign up
 ///
@@ -9,6 +15,8 @@ class Authentication extends ChangeNotifier {
   String userEmail;
   String userPassword;
   bool isObscureSignUp = true; //for the signup to hide the password
+  String token; //for user authorization
+  bool emailExist = false;
 
   ///Changes the visibility state of the password textfield
   void toggleisObscure() {
@@ -18,6 +26,9 @@ class Authentication extends ChangeNotifier {
 
   ///Returns the visibility state of the password textfield
   bool get isObscurecontent => isObscureSignUp;
+
+  ///indicates if the user exist or not
+  bool get doesEmailExist => emailExist;
 
   /* todo:
  should also check if this email already exists from the mockservice
@@ -29,6 +40,8 @@ class Authentication extends ChangeNotifier {
   String checkValidEmail(String email) {
     if (email == null || email.isEmpty) {
       return 'Please enter some text';
+      // } else if (!emailExist) {
+      //   return 'email doesnot exist';
     } else if (email.contains('@') && email.contains('.com')) {
       userEmail = email;
       notifyListeners();
@@ -65,22 +78,81 @@ class Authentication extends ChangeNotifier {
     }
   }
 
+  ///sends a post request to the API
+  ///
+  ///checks if the user exist
+  ///And sets the user token
+  Future<bool> loginRequest() async {
+    final String endPoint = 'user/login';
+
+    Map<String, dynamic> loginRequestBody = {
+      "email": userEmail,
+      "password": userPassword
+    };
+
+    try {
+      //  final response =
+      //       await MockHttpRepository.sendPostRequest(endPoint, loginRequestBody);
+      final response = await http.post(
+          Uri.parse(
+              'https://1b0da51d-62c7-4172-b0c5-c290339c6fb6.mock.pstmn.io/login'),
+          body: convert.jsonEncode(loginRequestBody),
+          headers: {'content-type': 'application/json'});
+
+      if (response.statusCode == 400) {
+        return false;
+      } else if (response.statusCode != 200) {
+        throw Exception('error in the connection');
+      } else {
+        var resposeObject = convert.jsonDecode(response.body);
+        token = resposeObject['token'];
+        emailExist = true;
+        notifyListeners();
+        print(response.statusCode);
+        print(token);
+        print(emailExist);
+        // return User.fromJson(resposeObject);
+        return true;
+      }
+    } catch (error) {
+      throw Exception(error.message.toString());
+    }
+  }
+
+  ///sends a get request to the API
+  ///
+  ///gets the user info that the user is authorized to access
+  void loginGetUserInfo() async {
+    final String endPoint = 'user/info';
+
+    try {
+      final response = await http.get(
+        Uri.parse(
+            'https://1b0da51d-62c7-4172-b0c5-c290339c6fb6.mock.pstmn.io/user/info'),
+        // Send authorization headers to the backend.
+        headers: {HttpHeaders.authorizationHeader: '$token'},
+      );
+
+      if (response.statusCode != 200)
+        throw Exception('user isnot authorized');
+      else {
+        var resposeObject = convert.jsonDecode(response.body);
+        print(response.statusCode);
+        User.fromJson(resposeObject);
+
+        // return User.fromJson(resposeObject);
+
+      }
+    } catch (error) {
+      throw Exception(error.message.toString());
+    }
+  }
+
   ///Sets the user age
   void setUserAge(String age) {
     // print(age);
     int temp = int.parse(age);
     userAge = temp;
     notifyListeners();
-  }
-
-  String checkExistEmail(String email) {
-    if (email == null || email.isEmpty) {
-      return 'Please enter some text';
-    } else if (email.contains('@') && email.contains('.com')) {
-      userEmail = email;
-      notifyListeners();
-      return null;
-    } else
-      return 'unvalid email';
   }
 }
