@@ -30,7 +30,7 @@ class PostBlogChoice extends StatelessWidget {
             CircleAvatar(
               radius: 18.0,
               backgroundImage: AssetImage(
-                avatar,
+                avatar == null ? "assets/icon/avatar2.png" : avatar,
               ),
               //will be later to changed to NetworkImage
             ),

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/services/api_provider.dart';
 import 'dart:convert' as convert;
@@ -94,8 +95,7 @@ class Authentication extends ChangeNotifier {
       //  final response =
       //       await MockHttpRepository.sendPostRequest(endPoint, loginRequestBody);
       final response = await http.post(
-          Uri.parse(
-              'https://1b0da51d-62c7-4172-b0c5-c290339c6fb6.mock.pstmn.io/login'),
+          Uri.parse('http://10.0.2.2:4000/api/user/login'),
           body: convert.jsonEncode(loginRequestBody),
           headers: {'content-type': 'application/json'});
 
@@ -115,14 +115,14 @@ class Authentication extends ChangeNotifier {
         return true;
       }
     } catch (error) {
-      throw Exception(error.message.toString());
+      print(error);
     }
   }
 
   ///sends a get request to the API
   ///
   ///gets the user info that the user is authorized to access
-  void loginGetUserInfo() async {
+  Future<Map<String, dynamic>> loginGetUserInfo(BuildContext context) async {
     final String endPoint = 'user/info';
 
     try {
@@ -136,9 +136,13 @@ class Authentication extends ChangeNotifier {
       if (response.statusCode != 200)
         throw Exception('user isnot authorized');
       else {
-        var resposeObject = convert.jsonDecode(response.body);
+        Map<String, dynamic> responseObject =
+            convert.jsonDecode(response.body) as Map<String, dynamic>;
         print(response.statusCode);
-        User.fromJson(resposeObject);
+        print(responseObject);
+        return responseObject;
+        // Provider.of<User>(context, listen: false)
+        //     .setLoginUserData(responseObject);
 
         // return User.fromJson(resposeObject);
 

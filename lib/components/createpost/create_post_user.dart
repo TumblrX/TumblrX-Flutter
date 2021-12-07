@@ -38,7 +38,12 @@ class CreatePostUser extends StatelessWidget {
             CircleAvatar(
               radius: 18.0,
               backgroundImage: AssetImage(
-                Provider.of<User>(context, listen: false).getActiveBlogAvatar(),
+                Provider.of<User>(context, listen: false)
+                            .getActiveBlogAvatar() !=
+                        null
+                    ? Provider.of<User>(context, listen: false)
+                        .getActiveBlogAvatar()
+                    : "assets/icon/avatar2.png",
               ),
               //will be later to changed to NetworkImage
             ),

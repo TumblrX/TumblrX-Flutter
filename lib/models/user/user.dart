@@ -59,6 +59,24 @@ class User extends ChangeNotifier {
     }
   }
 
+  ///set user data after login
+  void setLoginUserData(Map<String, dynamic> json) {
+    if (json.containsKey('following')) following = json['following'];
+    if (json.containsKey('default_post_format'))
+      defaultPostFormat = json['default_post_format'];
+    if (json.containsKey('name'))
+      name = json['name'];
+    else
+      throw Exception('missing required parameter name');
+    if (json.containsKey('likes')) likes = json['likes'];
+
+    if (json['blogs'] != null) {
+      json['blogs'].forEach((v) {
+        blogs.add(new Blog.fromJson(v));
+      });
+    }
+  }
+
   /// function to export the user object as a JSON object
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {};
