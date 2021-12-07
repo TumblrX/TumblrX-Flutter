@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tumblrx/Components/blog_screen_initial_screen/show_image.dart';
+
 ///all constant, variable , widget and function which use more than one
 class BlogScreenConstant extends StatelessWidget {
   static Widget buildBottomSheetAvatar(BuildContext context) {
@@ -16,10 +17,8 @@ class BlogScreenConstant extends StatelessWidget {
         ListTile(
           title: Text('View your avatar'),
           onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => ShowImage(avatarPath)));
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => ShowImage(avatarPath)));
           },
         )
       ],
@@ -110,6 +109,7 @@ class BlogScreenConstant extends StatelessWidget {
   static Color postsUnderline = Color(0xffffff00);
   static Color likesUnderline = Color(0xffb03fa8);
   static Color followingUnderline = Color(0xffb03fa8);
+  static String title = 'untitled';
   static String userName = 'nervouswinner';
   static String headerImgPath = 'images/header.png';
   static String avatarPath = 'images/avatar.png';

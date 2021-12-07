@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tumblrx/Components/blog_screen_constant.dart';
+import 'package:tumblrx/services/blog_screen.dart';
 
   
 /// for square avatar
@@ -7,6 +9,8 @@ class Square extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final blogProvider = Provider.of<BlogScreenConstantProvider>(context);
+
     return Positioned(
         top: 135,
         child: GestureDetector(
@@ -23,8 +27,8 @@ class Square extends StatelessWidget {
             // )
 
             decoration: BoxDecoration(
-              color: BlogScreenConstant.bottomCoverColor,
-              border: Border.all(width: 3, color:  BlogScreenConstant.bottomCoverColor),
+              color: blogProvider.getBottomColor(),
+              border: Border.all(width: 3, color:   blogProvider.getBottomColor()),
               borderRadius: BorderRadius.circular(3),
             ),
           ),

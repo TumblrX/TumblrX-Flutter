@@ -1,9 +1,13 @@
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tumblrx/components/blog_screen_constant.dart';
+import 'package:tumblrx/screens/blog_screen.dart';
+import 'package:tumblrx/services/blog_screen.dart';
 
-class Search extends StatefulWidget {  ///search of avatar
+class Search extends StatefulWidget {
+  ///search of avatar
   @override
   _SearchState createState() => _SearchState();
 }
@@ -18,6 +22,8 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+     final blogProvider = Provider.of<BlogScreenConstantProvider>(context);
+
     return Scaffold(
       body: Column(
         children: <Widget>[
@@ -40,18 +46,38 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
                 Container(
                     margin: const EdgeInsets.only(top: 20.0),
                     child: IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                         Navigator.pop(
+                    context,
+                    MaterialPageRoute(builder: (context) => BlogScreen()),
+                  );
+              
+              
+              },
                       icon: Icon(Icons.arrow_back),
                       color: Colors.white,
                     )),
+                Padding(
+                  padding: EdgeInsets.only(left: 50, top: 20, right: 20),
+                  child: TextField(
+                      style: TextStyle(color: Colors.white),
+                      textInputAction: TextInputAction.search,
+                      showCursor: false,
+                      decoration: new InputDecoration(
+                        hintStyle:
+                            TextStyle(color: Color(0xffffc7c1c1), fontSize: 18),
+                        hintText: ('Search ' + BlogScreenConstant.userName),
+                        border: InputBorder.none,
+                      )),
+                )
               ],
             ),
           ),
           Container(
-              color: BlogScreenConstant.bottomCoverColor,
+              color: blogProvider.getBottomColor(),
               child: TabBar(
                 unselectedLabelColor: Color(0xffc7c1c1),
-                labelColor:BlogScreenConstant.accent,
+                labelColor:blogProvider.geaccentColor(),
                 indicatorColor: BlogScreenConstant.accent,
                 tabs: [
                   Tab(

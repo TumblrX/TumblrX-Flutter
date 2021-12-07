@@ -1,21 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:tumblrx/Components/blog_screen_constant.dart';
+import 'package:provider/provider.dart';
+import 'package:tumblrx/services/blog_screen.dart';
 
 
 ///to show a circle behind avatar
-class Avatar extends StatefulWidget {
-  @override
-  _AvatarState createState() => _AvatarState();
-}
 
-class _AvatarState extends State<Avatar> {
+class Avatar extends  StatelessWidget{
   @override
   Widget build(BuildContext context) {
+    final blogProvider = Provider.of<BlogScreenConstantProvider>(context);
+
     return Positioned(
         top: 140,
         child: CircleAvatar(
           radius: 41,
-          backgroundColor:  BlogScreenConstant.bottomCoverColor,
+          backgroundColor:  blogProvider.getBottomColor(),
         ));
   }
 }
