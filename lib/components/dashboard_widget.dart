@@ -121,6 +121,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      color: Colors.white,
       child: FutureBuilder<List<Post>>(
         future: future,
         builder: (BuildContext ctx, AsyncSnapshot snapshot) {

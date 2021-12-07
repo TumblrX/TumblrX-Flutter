@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tumblrx/Components/blog_screen_constant.dart';
-
+import 'package:tumblrx/components/blog_screen_constant.dart';
 
 ///to show a circle behind avatar
 class Avatar extends StatefulWidget {
@@ -15,7 +14,7 @@ class _AvatarState extends State<Avatar> {
         top: 140,
         child: CircleAvatar(
           radius: 41,
-          backgroundColor:  BlogScreenConstant.bottomCoverColor,
+          backgroundColor: BlogScreenConstant.bottomCoverColor,
         ));
   }
 }

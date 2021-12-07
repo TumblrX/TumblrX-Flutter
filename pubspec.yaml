@@ -45,6 +45,7 @@ dependencies:
   url_launcher: ^6.0.13
   intl: ^0.15.7
   dio: ^4.0.4
+  flutter_dotenv: ^5.0.2
   #flutter_link_previewer: ^2.6.0
   #youtube_player_flutter: ^8.0.0
   
@@ -96,6 +97,8 @@ flutter:
     - assets/icon/heart.png
     - assets/icon/avatar2.png
     - images/
+    - .env.development
+    - .env.production
 
 
     

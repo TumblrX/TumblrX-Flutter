@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tumblrx/Components/blog_screen_constant.dart';
-import 'package:tumblrx/Components/edit_blog_screen/edit.dart';
+import 'package:tumblrx/components/blog_screen_constant.dart';
+import 'package:tumblrx/components/edit_blog_screen/edit.dart';
 import '../blog_screen_search/blog_screen_search.dart';
 
 /// this class display header image of blog screen ,icons and drop down list
@@ -10,7 +10,8 @@ class HeaderImage extends StatefulWidget {
 }
 
 class _HeaderImageState extends State<HeaderImage> {
-  String selectItem =  BlogScreenConstant.toLengthFifteen( BlogScreenConstant.tumblrsBlog[0]);
+  String selectItem =
+      BlogScreenConstant.toLengthFifteen(BlogScreenConstant.tumblrsBlog[0]);
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -36,15 +37,17 @@ class _HeaderImageState extends State<HeaderImage> {
                       onSelected: (value) {
                         setState(() {
                           ///every time we select item from drop down list
-                          selectItem =
-                              BlogScreenConstant.toLengthFifteen(value.toString());
+                          selectItem = BlogScreenConstant.toLengthFifteen(
+                              value.toString());
 
                           ///function if numbers of character more than 15 make it 15
                         });
                       },
                       itemBuilder: (BuildContext context) {
                         return [
-                          for (var i = 0; i <  BlogScreenConstant.tumblrsBlog.length; i++)
+                          for (var i = 0;
+                              i < BlogScreenConstant.tumblrsBlog.length;
+                              i++)
 
                             ///loop  to display all blogs
 
@@ -61,10 +64,10 @@ class _HeaderImageState extends State<HeaderImage> {
                                   SizedBox(
                                     width: 5,
                                   ),
-                                  Text( BlogScreenConstant.tumblrsBlog[i])
+                                  Text(BlogScreenConstant.tumblrsBlog[i])
                                 ],
                               ),
-                              value:  BlogScreenConstant.tumblrsBlog[i],
+                              value: BlogScreenConstant.tumblrsBlog[i],
                             ),
                           PopupMenuDivider(),
                           BlogScreenConstant.createNewTumblr(),
@@ -128,7 +131,7 @@ class _HeaderImageState extends State<HeaderImage> {
         //color: Colors.green,
         decoration: BoxDecoration(
             image: DecorationImage(
-                image: AssetImage( BlogScreenConstant.headerImgPath),
+                image: AssetImage(BlogScreenConstant.headerImgPath),
                 fit: BoxFit.fill)), //dummy image
         height: MediaQuery.of(context).size.height / 3.6, //(200)
       ),
@@ -139,7 +142,7 @@ class _HeaderImageState extends State<HeaderImage> {
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20.0)),
             context: context,
-            builder:  BlogScreenConstant.buildBottomSheetHeaderImage);
+            builder: BlogScreenConstant.buildBottomSheetHeaderImage);
       },
     );
   }

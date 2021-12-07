@@ -15,18 +15,35 @@ class FeedScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: DefaultTabController(
-        length: 2,
-        child: NestedScrollView(
-          floatHeaderSlivers: true,
-          headerSliverBuilder: (context, innerBoxIsScrolled) {
-            return [TopNavBar()];
-          },
-          body: TabBarView(
-            children: [
-              DashboardScreen('dashboard'),
-              DashboardScreen('foryou'),
-            ],
+      body: Center(
+        child: DefaultTabController(
+          length: 2,
+          child: NestedScrollView(
+            floatHeaderSlivers: true,
+            headerSliverBuilder: (context, innerBoxIsScrolled) {
+              return [TopNavBar()];
+            },
+            body: Scaffold(
+              backgroundColor: Color(0xFF001935),
+              body: Center(
+                child: Container(
+                  constraints: !kIsWeb
+                      ? BoxConstraints()
+                      : BoxConstraints(
+                          maxWidth: 750.0,
+                          minWidth: MediaQuery.of(context).size.width < 750
+                              ? MediaQuery.of(context).size.width * 0.9
+                              : 750.0,
+                        ),
+                  child: TabBarView(
+                    children: [
+                      DashboardScreen('dashboard'),
+                      DashboardScreen('foryou'),
+                    ],
+                  ),
+                ),
+              ),
+            ),
           ),
         ),
       ),
