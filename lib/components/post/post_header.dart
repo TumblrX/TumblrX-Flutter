@@ -64,8 +64,12 @@ class PostHeader extends StatelessWidget {
                             );
                             break;
                           case ConnectionState.done:
+                            print(snapshot.data);
                             return Image.network(
                               snapshot.data,
+                              loadingBuilder:
+                                  (context, child, loadingProgress) =>
+                                      CircularProgressIndicator(),
                               width: avatarWidth,
                               errorBuilder: (context, exception, _) =>
                                   _errorAvatar(),

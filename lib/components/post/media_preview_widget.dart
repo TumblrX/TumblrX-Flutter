@@ -5,7 +5,7 @@
       A stateless widget to preview media blocks [image, GIF] in a post 
 */
 import 'package:flutter/material.dart';
-
+import 'package:cached_network_image/cached_network_image.dart';
 class MediaWidget extends StatelessWidget {
   /// URL of the media to embed
   final String _url;
@@ -41,24 +41,18 @@ class MediaWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     try {
+      print(this._url);
       return GestureDetector(
         onTap: _openFulScreenPreview,
         onLongPress: _openOptionsDialog,
         child: Padding(
           padding: EdgeInsets.only(bottom: 4.0),
-          child: Image.network(
+          child: CachedNetworkImage Image.network(
             this._url,
             width: this._width,
             height: this._height,
             loadingBuilder: (context, child, loadingProgress) =>
-                (loadingProgress == null)
-                    ? child
-                    : Container(
-                        color: Colors.grey[200],
-                        child: SizedBox(
-                          width: this._width,
-                          height: this._height,
-                        )),
+                (loadingProgress == null) ? child : CircularProgressIndicator(),
             errorBuilder: (context, error, stackTrace) => noImage(),
           ),
         ),

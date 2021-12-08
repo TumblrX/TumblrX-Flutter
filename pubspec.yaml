@@ -46,6 +46,7 @@ dependencies:
   intl: ^0.15.7
   dio: ^4.0.4
   flutter_dotenv: ^5.0.2
+  cached_network_image: ^3.2.0
   #flutter_link_previewer: ^2.6.0
   #youtube_player_flutter: ^8.0.0
   
@@ -87,18 +88,18 @@ flutter:
     - images/avatar.png
     - assets/icon/Tumblr_Logo_t_Icon_White.png
     - assets/icon/default_avatar.png
-    - assets/icon/chat.png
-    - assets/icon/love.png
+    - assets/icon/notes.png
+    - assets/icon/heart.png
     - assets/icon/unlike.png
-    - assets/icon/message.png
-    - assets/icon/repeat.png
     - assets/icon/reblog.png
+    - assets/icon/reblogs.png
+    - assets/icon/edit.png
     - assets/icon/share.png
     - assets/icon/heart.png
     - assets/icon/avatar2.png
     - images/
-    - .env.development
-    - .env.production
+    #- .env.development
+    #- .env.production
 
 
     

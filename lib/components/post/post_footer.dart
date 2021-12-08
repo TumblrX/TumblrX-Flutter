@@ -7,7 +7,9 @@ Description:
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tumblrx/components/post/share_post/share_post_widget.dart';
 import 'package:tumblrx/models/post.dart';
+import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/utilities/constants.dart';
 
 class PostFooter extends StatelessWidget {
@@ -45,7 +47,7 @@ class PostFooter extends StatelessWidget {
   }
 
   /// Build the widget with actions icon ['like', 'reblog', 'comment', 'share]
-  Widget _actionIcon(String iconPath, Function callback) {
+  Widget _actionIcon(String iconPath, Function callback, Color color) {
     return IconButton(
       iconSize: _interactIocnSize,
       onPressed: callback,
@@ -54,8 +56,9 @@ class PostFooter extends StatelessWidget {
         child: Image.asset(
           iconPath,
           fit: BoxFit.fitWidth,
-          // width: _interactIocnSize,
           height: _interactIocnSize,
+          colorBlendMode: BlendMode.modulate,
+          color: color,
         ),
       ),
       enableFeedback: false,
@@ -89,6 +92,7 @@ class PostFooter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String activeBlogName = Provider.of<User>(context).activeBlog;
     return Consumer<Post>(
       builder: (context, post, child) => Padding(
         padding: const EdgeInsets.all(8.0),
@@ -105,7 +109,7 @@ class PostFooter extends StatelessWidget {
                       ),
                       TextButton(
                         child: Text(
-                          '$_notesCount notes',
+                          '${post.totalNotes} notes',
                           style:
                               TextStyle(color: Colors.grey[700], fontSize: 16),
                         ),
@@ -114,29 +118,29 @@ class PostFooter extends StatelessWidget {
                     ]
                   : [],
             ),
-            Row(
-              children: [
-                _actionIcon("assets/icon/share.png", () => post.showPost()),
-                _actionIcon("assets/icon/chat.png", () => post.commentOnPost()),
-                _actionIcon("assets/icon/reblog.png", () => post.reblogPost()),
-                IconButton(
-                  onPressed: () => post.likePost(),
-                  padding: EdgeInsets.all(0.0),
-                  icon: Container(
-                    decoration: BoxDecoration(shape: BoxShape.circle),
-                    child: Image.asset(
-                      "assets/icon/heart.png",
-                      fit: BoxFit.fitWidth,
-                      width: _interactIocnSize,
-                      height: _interactIocnSize,
-                      colorBlendMode: BlendMode.modulate,
-                      color: _liked ? Colors.red : Colors.white,
-                    ),
-                  ),
-                  enableFeedback: false,
-                ),
+            Row(children: [
+              ...[
+                _actionIcon(
+                    "assets/icon/share.png",
+                    () => showModalBottomSheet(
+                          context: context,
+                          builder: (context) => SharePost(),
+                        ),
+                    Colors.white),
+                _actionIcon("assets/icon/chat.png", () => post.commentOnPost(),
+                    Colors.white),
+                _actionIcon("assets/icon/reblog.png", () => post.reblogPost(),
+                    Colors.white),
+                _actionIcon("assets/icon/heart.png", () => post.likePost(),
+                    _liked ? Colors.red : Colors.white),
               ],
-            ),
+              if (post.blogName == activeBlogName) ...[
+                _actionIcon("assets/icon/remove.png", () => post.deletePost(),
+                    Colors.white),
+                _actionIcon("assets/icon/edit.png", () => post.showPost(),
+                    Colors.white),
+              ]
+            ]),
           ],
         ),
       ),

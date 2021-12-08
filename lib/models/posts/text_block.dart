@@ -8,9 +8,10 @@ Description:
 
 import 'package:flutter/widgets.dart';
 import 'package:styled_text/styled_text.dart';
+import 'package:tumblrx/models/posts/post_block.dart';
 import 'package:tumblrx/utilities/text_format.dart';
 
-class TextBlock {
+class TextBlock extends PostBlock {
   /// Subtype of the text: 'heading1', 'quote', 'heading2', 'chat',
   /// 'ordered-list-item', 'unordered-list-item'
   String _subtype;
@@ -19,7 +20,8 @@ class TextBlock {
   String _text;
 
   ///Text block constructor that takes the [_subtype], [_text] and [_formatting]
-  TextBlock(this._subtype, this._text, this._formatting);
+  TextBlock(String type, this._subtype, this._text, this._formatting)
+      : super.withType(type);
 
   /// Integer to nest the block
   //int _indentLevel = 0;
@@ -28,21 +30,28 @@ class TextBlock {
   List<InlineFormatting> _formatting = [];
 
   /// Constructs a new instance usin parsed json data
-  TextBlock.fromJson(Map<String, dynamic> parsedJson) {
-    this._text = parsedJson['text'];
-    if (parsedJson.containsKey('subtype'))
-      this._subtype = parsedJson['subtype'];
-    if (parsedJson.containsKey('formatting') &&
-        parsedJson['formatting'] != null) {
+  TextBlock.fromJson(Map<String, dynamic> json) {
+    if (json.containsKey('type') && json['type'].toString().trim().isNotEmpty)
+      super.type = json['type'];
+    else
+      throw Exception('missing required parameter "type"');
+    if (json.containsKey('text'))
+      this._text = json['text'];
+    else
+      throw Exception('missing required parameter "text"');
+    if (json.containsKey('subtype')) this._subtype = json['subtype'];
+    if (json.containsKey('formatting') && json['formatting'] != null) {
       List<Map<String, dynamic>> formatting =
-          List<Map<String, dynamic>>.from(parsedJson['formatting']);
+          List<Map<String, dynamic>>.from(json['formatting']);
 
       this._formatting.addAll(
           formatting.map((e) => new InlineFormatting.fromJson(e)).toList());
+      _text = this.formatText();
     }
   }
 
   /// Returns a JSON version of the object
+  @override
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {};
     data['type'] = 'text';
@@ -61,8 +70,8 @@ class TextBlock {
   }
 
   /// API for text block object to render it
+  @override
   Widget showBlock() {
-    _text = this.formatText();
     return StyledText(
       text: _text,
       tags: formattingTags(),

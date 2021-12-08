@@ -96,6 +96,8 @@ class Blog {
           await MockHttpRepository.sendGetRequest(endPoint, req: reqParameters);
       if (response.statusCode == 200) {
         final responseParsed = convert.jsonDecode(response.body);
+
+        print(responseParsed['avatar_url']);
         return responseParsed['avatar_url'];
       } else {
         // handle failed request

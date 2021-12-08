@@ -166,8 +166,8 @@ class Post extends ChangeNotifier {
       "reblog_key": reblogKey
     };
     try {
-      final response =
-          await MockHttpRepository.sendPostRequest(endPoint, queryParameters);
+      final response = await MockHttpRepository.sendPostRequest(
+          endPoint, convert.jsonEncode(queryParameters));
 
       if (response.statusCode != 200)
         throw Exception('post ID or reblog_key was not found');
@@ -186,8 +186,8 @@ class Post extends ChangeNotifier {
       "reblog_key": reblogKey
     };
     try {
-      final response =
-          await MockHttpRepository.sendPostRequest(endPoint, queryParameters);
+      final response = await MockHttpRepository.sendPostRequest(
+          endPoint, convert.jsonEncode(queryParameters));
 
       if (response.statusCode != 200)
         throw Exception('post ID or reblog_key was not found');
@@ -220,8 +220,8 @@ class Post extends ChangeNotifier {
       "id": id,
     };
     try {
-      final response =
-          await MockHttpRepository.sendPostRequest(endPoint, queryParameters);
+      final response = await MockHttpRepository.sendPostRequest(
+          endPoint, convert.jsonEncode(queryParameters));
 
       if (response.statusCode != 200)
         throw Exception('post ID or reblog_key was not found');
@@ -235,8 +235,8 @@ class Post extends ChangeNotifier {
     final String endPoint = 'posts';
     final Map<String, dynamic> queryParameters = {"id": id};
     try {
-      final Response response =
-          await MockHttpRepository.sendPostRequest(endPoint, queryParameters);
+      final Response response = await MockHttpRepository.sendPostRequest(
+          endPoint, convert.jsonEncode(queryParameters));
       if (response.statusCode != 200)
         throw Exception('post ID or reblog_key was not found');
     } catch (error) {

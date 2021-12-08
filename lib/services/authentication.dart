@@ -92,12 +92,13 @@ class Authentication extends ChangeNotifier {
     };
 
     try {
-      //  final response =
-      //       await MockHttpRepository.sendPostRequest(endPoint, loginRequestBody);
-      final response = await http.post(
-          Uri.parse('http://10.0.2.2:4000/api/user/login'),
-          body: convert.jsonEncode(loginRequestBody),
+      final response = await MockHttpRepository.sendPostRequest(
+          endPoint, convert.jsonEncode(loginRequestBody),
           headers: {'content-type': 'application/json'});
+      // final response = await http.post(
+      //     Uri.parse('http://10.0.2.2:4000/api/user/login'),
+      //     body: convert.jsonEncode(loginRequestBody),
+      //     headers: {'content-type': 'application/json'});
 
       if (response.statusCode == 400) {
         return false;
@@ -108,14 +109,15 @@ class Authentication extends ChangeNotifier {
         token = resposeObject['token'];
         emailExist = true;
         notifyListeners();
-        print(response.statusCode);
-        print(token);
-        print(emailExist);
+        // print(response.statusCode);
+        // print(token);
+        // print(emailExist);
         // return User.fromJson(resposeObject);
         return true;
       }
     } catch (error) {
       print(error);
+      return false;
     }
   }
 

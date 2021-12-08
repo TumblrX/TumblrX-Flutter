@@ -1,10 +1,12 @@
 import 'package:http/http.dart';
-import 'package:tumblrx/utilities/environment.dart';
+//import 'package:tumblrx/utilities/environment.dart';
 
 /// MockAPI class to use for testing
 class MockHttpRepository {
   /// API key for mock server
-  static final String api = Environment.apiUrl;
+//  static final String api = Environment.apiUrl;
+  static final String api =
+      'https://1b0da51d-62c7-4172-b0c5-c290339c6fb6.mock.pstmn.io';
 
   /// API to send get requests
   /// @endPoint : the end point to which send the request
@@ -30,21 +32,23 @@ class MockHttpRepository {
   /// API to send post requests
   /// @endPoint : the end point to which send the request
   /// @req : request body as map<String, dynamic>
-  static Future<Response> sendPostRequest(
-      String endPoint, Map<String, dynamic> req,
+  static Future<Response> sendPostRequest(String endPoint, String reqBody,
       {Map<String, String> headers}) async {
     String fullUrl = "$api/$endPoint";
 
-    // constructin the request body from passed map
-    String reqBody = "";
-    for (var reqParam in req.entries) {
-      if (reqParam.value is String)
-        reqBody += '${reqParam.key}="${reqParam.value}"';
-      else
-        reqBody += '${reqParam.key}=${reqParam.value}';
-    }
+    // // constructin the request body from passed map
+    // String reqBody = "";
+    // for (var reqParam in req.entries) {
+    //   if (reqParam.value is String)
+    //     reqBody += '${reqParam.key}="${reqParam.value}"';
+    //   else
+    //     reqBody += '${reqParam.key}=${reqParam.value}';
+    // }
     final Uri uri = Uri.parse(fullUrl);
-    return post(uri, body: reqBody);
+    if (headers != null)
+      return post(uri, body: reqBody, headers: headers);
+    else
+      return post(uri, body: reqBody);
   }
 }
 

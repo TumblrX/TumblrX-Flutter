@@ -42,6 +42,7 @@ class ImageBlock {
 
   /// API for image block object to render it
   Widget showBlock() {
+    print(media[0].url);
     return Column(
       children: media != null
           ? media
