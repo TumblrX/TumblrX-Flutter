@@ -4,7 +4,8 @@ import 'package:tumblrx/utilities/environment.dart';
 /// MockAPI class to use for testing
 class MockHttpRepository {
   /// API key for mock server
-  static final String api = Environment.apiUrl;
+  static final String api =
+      'https://1b0da51d-62c7-4172-b0c5-c290339c6fb6.mock.pstmn.io/';
 
   /// API to send get requests
   /// @endPoint : the end point to which send the request
@@ -51,7 +52,7 @@ class MockHttpRepository {
 /// Real API class
 class ApiHttpRepository {
   /// API key for real server
-  final String api = '';
+  final String api = Environment.apiUrl;
 
   /// API to send get requests
   /// @endPoint : the end point to which send the request

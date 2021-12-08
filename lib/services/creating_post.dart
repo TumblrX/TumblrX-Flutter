@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:tumblrx/models/creatingpost/text_field_data.dart';
 import 'package:tumblrx/models/posts/text_block.dart';
 import 'package:tumblrx/models/user/user.dart';
+import 'package:tumblrx/services/api_provider.dart';
 import 'package:tumblrx/utilities/constants.dart';
 import 'package:http/http.dart' as http;
 import 'package:tumblrx/utilities/hex_color_value.dart';
@@ -399,9 +400,8 @@ class CreatingPost extends ChangeNotifier {
       var body = FormData.fromMap(requestBody);
       print(body.fields);
       var dio = Dio();
-      var response = await dio.post(
-          'https://1b0da51d-62c7-4172-b0c5-c290339c6fb6.mock.pstmn.io/createpost',
-          data: body);
+      var response =
+          await dio.post(MockHttpRepository.api + 'createpost', data: body);
       // var response = await http.post(
       //     Uri.parse(
       //         'https://54bd9e92-6a19-4377-840f-23886631e1a8.mock.pstmn.io/createpost'),

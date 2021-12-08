@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tumblrx/components/blog_screen_constant.dart';
+import 'package:tumblrx/models/user/user.dart';
 
 class TextWriting extends StatelessWidget {
   ///this area which has title and discription
@@ -18,7 +20,7 @@ class TextWriting extends StatelessWidget {
           children: <Widget>[
             Text(
               ///title
-              'Untitled',
+              Provider.of<User>(context).getActiveBlogTitle(),
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 38),
             ),
             Text(
