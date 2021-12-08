@@ -18,6 +18,12 @@ class Authentication extends ChangeNotifier {
   bool isObscureSignUp = true; //for the signup to hide the password
   String token; //for user authorization
   bool emailExist = false;
+  String loginErrorMessage = "";
+
+  ///returns error message if the user doesnot exist
+  String getLogInErrorMessage() {
+    return loginErrorMessage;
+  }
 
   ///Changes the visibility state of the password textfield
   void toggleisObscure() {
@@ -31,9 +37,6 @@ class Authentication extends ChangeNotifier {
   ///indicates if the user exist or not
   bool get doesEmailExist => emailExist;
 
-  /* todo:
- should also check if this email already exists from the mockservice
- */
   /// Checks if the email is in valid form for signup
   ///
   /// Returns an error message if the email is invalid
@@ -95,13 +98,18 @@ class Authentication extends ChangeNotifier {
       //  final response =
       //       await MockHttpRepository.sendPostRequest(endPoint, loginRequestBody);
       final response = await http.post(
-          Uri.parse('http://10.0.2.2:4000/api/user/login'),
+          Uri.parse('http://localhost:3500/api/user/login'),
           body: convert.jsonEncode(loginRequestBody),
           headers: {'content-type': 'application/json'});
 
+      //if i get a bad response then this user doesnot exist
       if (response.statusCode == 400) {
+        print("400");
+        loginErrorMessage = "wrong Email or password please try again";
+        notifyListeners();
         return false;
       } else if (response.statusCode != 200) {
+        print('!200');
         throw Exception('error in the connection');
       } else {
         var resposeObject = convert.jsonDecode(response.body);
@@ -127,8 +135,7 @@ class Authentication extends ChangeNotifier {
 
     try {
       final response = await http.get(
-        Uri.parse(
-            'https://1b0da51d-62c7-4172-b0c5-c290339c6fb6.mock.pstmn.io/user/info'),
+        Uri.parse('http://localhost:3500/api/user/info'),
         // Send authorization headers to the backend.
         headers: {HttpHeaders.authorizationHeader: '$token'},
       );

@@ -20,11 +20,12 @@ class LogInUserData extends StatelessWidget {
           child: Form(
             key: _formkey,
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
-                    //     the title
+                    //     the title    //
                     Padding(
                       padding: EdgeInsets.fromLTRB(0, 10, 70, 10),
                       child: Text(
@@ -33,7 +34,7 @@ class LogInUserData extends StatelessWidget {
                         textAlign: TextAlign.center,
                       ),
                     ),
-                    // the next button on the upper right of the screen
+                    // the next button on the upper right of the screen    //
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0, 5, 5, 0),
                       child: ElevatedButton(
@@ -68,6 +69,20 @@ class LogInUserData extends StatelessWidget {
                 ),
                 SizedBox(
                   height: 100,
+                ),
+                //error message if the user doesnot exist //
+                Padding(
+                  padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                  child: Text(
+                    Provider.of<Authentication>(context).getLogInErrorMessage(),
+                    style: TextStyle(
+                      fontFamily: 'Pacifico',
+                      fontSize: 14.0,
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.start,
+                  ),
                 ),
                 // first textfield to enter the email
                 Padding(
