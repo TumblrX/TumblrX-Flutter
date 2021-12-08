@@ -39,11 +39,8 @@ class CreatePostUser extends StatelessWidget {
               radius: 18.0,
               backgroundImage: AssetImage(
                 Provider.of<User>(context, listen: false)
-                            .getActiveBlogAvatar() !=
-                        null
-                    ? Provider.of<User>(context, listen: false)
-                        .getActiveBlogAvatar()
-                    : "assets/icon/avatar2.png",
+                        .getActiveBlogAvatar() ??
+                    "assets/icon/avatar2.png",
               ),
               //will be later to changed to NetworkImage
             ),
@@ -51,7 +48,7 @@ class CreatePostUser extends StatelessWidget {
               width: 10.0,
             ),
             Text(
-              Provider.of<User>(context).activeBlog,
+              Provider.of<User>(context).activeBlogName,
               style: TextStyle(
                 fontSize: 18.0,
                 fontWeight: FontWeight.bold,

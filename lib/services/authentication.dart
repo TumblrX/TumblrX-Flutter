@@ -98,7 +98,7 @@ class Authentication extends ChangeNotifier {
       //  final response =
       //       await MockHttpRepository.sendPostRequest(endPoint, loginRequestBody);
       final response = await http.post(
-          Uri.parse('http://localhost:3500/api/user/login'),
+          Uri.parse('http://localhost:4000/api/user/login'),
           body: convert.jsonEncode(loginRequestBody),
           headers: {'content-type': 'application/json'});
 
@@ -135,7 +135,7 @@ class Authentication extends ChangeNotifier {
 
     try {
       final response = await http.get(
-        Uri.parse('http://localhost:3500/api/user/info'),
+        Uri.parse('http://localhost:4000/api/user/info'),
         // Send authorization headers to the backend.
         headers: {HttpHeaders.authorizationHeader: '$token'},
       );

@@ -54,7 +54,8 @@ class _AccountIconState extends State<AccountIcon> {
           padding: const EdgeInsets.all(12.0),
           child: CircleAvatar(
             radius: _isHovered ? 30.0 : 25.0,
-            backgroundImage: AssetImage(widget._blog.blogAvatar),
+            backgroundImage: AssetImage(
+                widget._blog.blogAvatar ?? "assets/icon/avatar2.png"),
           ),
         ),
       ),
