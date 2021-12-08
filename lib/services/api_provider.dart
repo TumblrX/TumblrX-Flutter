@@ -52,7 +52,7 @@ class MockHttpRepository {
 /// Real API class
 class ApiHttpRepository {
   /// API key for real server
-  final String api = Environment.apiUrl;
+  static final String api = Environment.apiUrl;
 
   /// API to send get requests
   /// @endPoint : the end point to which send the request
