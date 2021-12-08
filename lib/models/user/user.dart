@@ -18,22 +18,22 @@ class User extends ChangeNotifier {
 
   /// list of tumblr blogs for the user
   List<Blog> blogs = [
-    new Blog(
-      name: "ammarovic21",
-      title: "ammar",
-      primary: true,
-      blogType: "public",
-      followers: 20,
-      blogAvatar: "assets/icon/default_avatar.png",
-    ),
-    new Blog(
-      name: "passant",
-      title: "passant",
-      primary: false,
-      blogType: "public",
-      followers: 20,
-      blogAvatar: "assets/icon/avatar2.png",
-    ),
+    // new Blog(
+    //   name: "ammarovic21",
+    //   title: "ammar",
+    //   primary: true,
+    //   blogType: "public",
+    //   followers: 20,
+    //   blogAvatar: "assets/icon/default_avatar.png",
+    // ),
+    // new Blog(
+    //   name: "passant",
+    //   title: "passant",
+    //   primary: false,
+    //   blogType: "public",
+    //   followers: 20,
+    //   blogAvatar: "assets/icon/avatar2.png",
+    // ),
   ];
 
   /// name of the currently active/used blog
@@ -71,6 +71,7 @@ class User extends ChangeNotifier {
     if (json.containsKey('likes')) likes = json['likes'];
 
     if (json['blogs'] != null) {
+      setActiveBlog(json['blogs'][0]['handle']);
       json['blogs'].forEach((v) {
         blogs.add(new Blog.fromJson(v));
       });

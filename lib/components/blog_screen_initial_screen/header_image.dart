@@ -12,8 +12,8 @@ class HeaderImage extends StatefulWidget {
 }
 
 class _HeaderImageState extends State<HeaderImage> {
-  String selectItem =
-      BlogScreenConstant.toLengthFifteen(BlogScreenConstant.tumblrsBlog[0]);
+  // String selectItem =
+  //     BlogScreenConstant.toLengthFifteen(BlogScreenConstant.tumblrsBlog[0]);
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -27,7 +27,9 @@ class _HeaderImageState extends State<HeaderImage> {
               children: [
                 Row(
                   children: <Widget>[
-                    Text(selectItem,
+                    Text(
+                        BlogScreenConstant.toLengthFifteen(
+                            Provider.of<User>(context).activeBlogName),
                         style: TextStyle(
                           color: Colors.white,
                         )),
@@ -39,8 +41,8 @@ class _HeaderImageState extends State<HeaderImage> {
                       onSelected: (value) {
                         setState(() {
                           ///every time we select item from drop down list
-                          selectItem = BlogScreenConstant.toLengthFifteen(
-                              value.toString());
+                          // selectItem = BlogScreenConstant.toLengthFifteen(
+                          //     value.toString());
                           Provider.of<User>(context, listen: false)
                               .setActiveBlog(value);
 

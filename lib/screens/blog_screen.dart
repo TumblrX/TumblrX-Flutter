@@ -36,8 +36,8 @@ class _BlogScreenState extends State<BlogScreen>
           backgroundColor: Colors.blue,
           child: Icon(Icons.edit),
           onPressed: () {
-            Provider.of<User>(context, listen: false)
-                .setActiveBlog('ammarovic21');
+            // Provider.of<User>(context, listen: false)
+            //     .setActiveBlog('ammarovic21');
             double topPadding = MediaQuery.of(context).padding.top;
             Provider.of<CreatingPost>(context, listen: false)
                 .initializePostOptions(context);

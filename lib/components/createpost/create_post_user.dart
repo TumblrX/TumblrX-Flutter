@@ -48,7 +48,7 @@ class CreatePostUser extends StatelessWidget {
               width: 10.0,
             ),
             Text(
-              Provider.of<User>(context).activeBlog,
+              Provider.of<User>(context).activeBlogName,
               style: TextStyle(
                 fontSize: 18.0,
                 fontWeight: FontWeight.bold,
