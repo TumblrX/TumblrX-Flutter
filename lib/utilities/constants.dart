@@ -61,7 +61,7 @@ const KWelcomeScreenButton = TextStyle(
 const KTextButton = TextStyle(
   fontFamily: 'Pacifico',
   fontSize: 20.0,
-  color: Color(0xff8C8C8C),
+  color: Colors.white,
   fontWeight: FontWeight.bold,
 );
 
