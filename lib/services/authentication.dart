@@ -1,9 +1,6 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:provider/provider.dart';
-import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/services/api_provider.dart';
 import 'dart:convert' as convert;
 
@@ -95,8 +92,6 @@ class Authentication extends ChangeNotifier {
     };
 
     try {
-      //  final response =
-      //       await MockHttpRepository.sendPostRequest(endPoint, loginRequestBody);
       final response = await http.post(
           Uri.parse(ApiHttpRepository.api + 'api/user/login'),
           body: convert.jsonEncode(loginRequestBody),
@@ -112,8 +107,8 @@ class Authentication extends ChangeNotifier {
         print('!200');
         throw Exception('error in the connection');
       } else {
-        var resposeObject = convert.jsonDecode(response.body);
-        token = resposeObject['token'];
+        var responseObject = convert.jsonDecode(response.body);
+        token = responseObject['token'];
         emailExist = true;
         notifyListeners();
         print(response.statusCode);
@@ -130,7 +125,7 @@ class Authentication extends ChangeNotifier {
   ///sends a get request to the API
   ///
   ///gets the user info that the user is authorized to access
-  Future<Map<String, dynamic>> loginGetUserInfo(BuildContext context) async {
+  Future<Map<String, dynamic>> loginGetUserInfo() async {
     final String endPoint = 'user/info';
 
     try {
@@ -141,18 +136,27 @@ class Authentication extends ChangeNotifier {
       );
 
       if (response.statusCode != 200)
-        throw Exception('user isnot authorized');
+        throw Exception('user is not authorized');
       else {
         Map<String, dynamic> responseObject =
             convert.jsonDecode(response.body) as Map<String, dynamic>;
         print(response.statusCode);
         print(responseObject);
+        try {
+          final blogsResponse = await http.get(
+            Uri.parse(ApiHttpRepository.api + 'api/user/get-blogs'),
+            // Send authorization headers to the backend.
+            headers: {HttpHeaders.authorizationHeader: '$token'},
+          );
+          if (blogsResponse.statusCode != 200)
+            throw Exception('error in getting blogs');
+          print(convert.jsonDecode(blogsResponse.body));
+          responseObject['blogs'] = convert.jsonDecode(blogsResponse.body);
+        } catch (error) {
+          throw Exception(error.message.toString());
+        }
+        print(responseObject);
         return responseObject;
-        // Provider.of<User>(context, listen: false)
-        //     .setLoginUserData(responseObject);
-
-        // return User.fromJson(resposeObject);
-
       }
     } catch (error) {
       throw Exception(error.message.toString());

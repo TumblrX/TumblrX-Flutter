@@ -48,7 +48,7 @@ class LogInUserData extends StatelessWidget {
                             final Map<String, dynamic> response =
                                 await Provider.of<Authentication>(context,
                                         listen: false)
-                                    .loginGetUserInfo(context);
+                                    .loginGetUserInfo();
                             Provider.of<User>(context, listen: false)
                                 .setLoginUserData(response);
                             while (Navigator.canPop(context)) {

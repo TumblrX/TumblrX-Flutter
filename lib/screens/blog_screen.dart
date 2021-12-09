@@ -7,7 +7,6 @@ import 'package:tumblrx/components/blog_screen_initial_screen/header_image.dart'
 import 'package:tumblrx/components/blog_screen_initial_screen/blog_screen_header_text.dart';
 import 'package:tumblrx/components/avatar_shape/avatar_image.dart';
 import 'package:tumblrx/components/createpost/create_post.dart';
-import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/services/creating_post.dart';
 
 ///This a initial screen you see when press on profile from navigation bar
@@ -36,8 +35,6 @@ class _BlogScreenState extends State<BlogScreen>
           backgroundColor: Colors.blue,
           child: Icon(Icons.edit),
           onPressed: () {
-            // Provider.of<User>(context, listen: false)
-            //     .setActiveBlog('ammarovic21');
             double topPadding = MediaQuery.of(context).padding.top;
             Provider.of<CreatingPost>(context, listen: false)
                 .initializePostOptions(context);
