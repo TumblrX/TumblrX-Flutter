@@ -159,7 +159,7 @@ class Post extends ChangeNotifier {
   }
 
   /// API for post object to like the post
-  void likePost() async {
+  Future<bool> likePost() async {
     final String endPoint = 'user/like';
     final Map<String, dynamic> queryParameters = {
       "id": id,
@@ -171,15 +171,17 @@ class Post extends ChangeNotifier {
 
       if (response.statusCode != 200)
         throw Exception('post ID or reblog_key was not found');
-      else
+      else {
         liked = true;
+        return true;
+      }
     } catch (error) {
       throw Exception(error.message.toString());
     }
   }
 
   /// API for post object to unlike the post
-  void unlikePost() async {
+  Future<bool> unlikePost() async {
     final String endPoint = 'user/unlike';
     final Map<String, dynamic> queryParameters = {
       "id": id,
@@ -191,8 +193,10 @@ class Post extends ChangeNotifier {
 
       if (response.statusCode != 200)
         throw Exception('post ID or reblog_key was not found');
-      else
+      else {
         liked = false;
+        return true;
+      }
     } catch (error) {
       throw Exception(error.message.toString());
     }

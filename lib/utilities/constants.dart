@@ -61,7 +61,7 @@ const KWelcomeScreenButton = TextStyle(
 const KTextButton = TextStyle(
   fontFamily: 'Pacifico',
   fontSize: 20.0,
-  color: Color(0xff8C8C8C),
+  color: Colors.white,
   fontWeight: FontWeight.bold,
 );
 
@@ -93,9 +93,9 @@ const KPickTagsInfoText = TextStyle(
     fontWeight: FontWeight.bold);
 
 final List<String> reactionIcons = [
-  "assets/icon/message.png",
-  "assets/icon/repeat.png",
-  "assets/icon/love.png"
+  "assets/icon/notes.png",
+  "assets/icon/reblogs.png",
+  "assets/icon/heart.png"
 ];
 
 //small text info

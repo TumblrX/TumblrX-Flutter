@@ -9,6 +9,7 @@ Description:
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/models/post.dart';
+import 'package:tumblrx/services/authentication.dart';
 
 import 'package:tumblrx/services/content.dart';
 
@@ -29,11 +30,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   /// to re-send the GET request
   ScrollController _controller;
 
-  /// future retrieved from the GET request containing the
-  /// newly set of posts to be viewd
-  Future<List<Post>> future;
-
   Content content;
+  Authentication auth;
 
   @override
   void initState() {
@@ -48,7 +46,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   void _scrollListner() async {
     if (!content.hasMore()) return;
     if (_controller.position.pixels == _controller.position.maxScrollExtent) {
-      await content.getMorePosts(widget._endpoint, _pageNum);
+      await content.getMorePosts(widget._endpoint, _pageNum, auth);
 
       setState(() {
         _pageNum += 1;
@@ -63,21 +61,28 @@ class _DashboardScreenState extends State<DashboardScreen> {
             content.hasMore() ? content.posts.length + 1 : content.posts.length,
         controller: _controller,
         itemBuilder: (BuildContext context, int index) {
-          return (index == content.posts.length)
-              ? LinearProgressIndicator()
-              : content.posts[index].showPost();
+          // if end of list, return linear progress
+          if (index == content.posts.length && index > 0)
+            return LinearProgressIndicator();
+          // if it's actually a post return its widget
+          if (index > 0) return content.posts[index].showPost();
+          // otherwise return empty container
+          return Container(
+            child: Center(
+              child: Icon(Icons.sensors_sharp),
+            ),
+          );
         });
   }
 
   @override
   Widget build(BuildContext context) {
     content = Provider.of<Content>(context, listen: false);
-    // get first packet of posts to render
-    future = content.getMorePosts(widget._endpoint, _pageNum);
+    auth = Provider.of<Authentication>(context, listen: false);
     return Container(
       color: Colors.white,
       child: FutureBuilder<List<Post>>(
-        future: future,
+        future: content.getMorePosts(widget._endpoint, _pageNum, auth),
         builder: (BuildContext ctx, AsyncSnapshot snapshot) {
           if (snapshot.hasError) {
             Navigator.of(context).pushNamed('not_found');

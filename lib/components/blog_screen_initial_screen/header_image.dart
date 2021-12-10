@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tumblrx/components/blog_screen_constant.dart';
 import 'package:tumblrx/components/edit_blog_screen/edit.dart';
+import 'package:tumblrx/models/user/user.dart';
 import '../blog_screen_search/blog_screen_search.dart';
 
 /// this class display header image of blog screen ,icons and drop down list
@@ -10,8 +12,8 @@ class HeaderImage extends StatefulWidget {
 }
 
 class _HeaderImageState extends State<HeaderImage> {
-  String selectItem =
-      BlogScreenConstant.toLengthFifteen(BlogScreenConstant.tumblrsBlog[0]);
+  // String selectItem =
+  //     BlogScreenConstant.toLengthFifteen(BlogScreenConstant.tumblrsBlog[0]);
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -25,7 +27,9 @@ class _HeaderImageState extends State<HeaderImage> {
               children: [
                 Row(
                   children: <Widget>[
-                    Text(selectItem,
+                    Text(
+                        BlogScreenConstant.toLengthFifteen(
+                            Provider.of<User>(context).activeBlogName),
                         style: TextStyle(
                           color: Colors.white,
                         )),
@@ -37,8 +41,10 @@ class _HeaderImageState extends State<HeaderImage> {
                       onSelected: (value) {
                         setState(() {
                           ///every time we select item from drop down list
-                          selectItem = BlogScreenConstant.toLengthFifteen(
-                              value.toString());
+                          // selectItem = BlogScreenConstant.toLengthFifteen(
+                          //     value.toString());
+                          Provider.of<User>(context, listen: false)
+                              .setActiveBlog(value);
 
                           ///function if numbers of character more than 15 make it 15
                         });
@@ -46,7 +52,10 @@ class _HeaderImageState extends State<HeaderImage> {
                       itemBuilder: (BuildContext context) {
                         return [
                           for (var i = 0;
-                              i < BlogScreenConstant.tumblrsBlog.length;
+                              i <
+                                  Provider.of<User>(context, listen: false)
+                                      .blogs
+                                      .length;
                               i++)
 
                             ///loop  to display all blogs
@@ -58,16 +67,25 @@ class _HeaderImageState extends State<HeaderImage> {
                                     child: Image(
                                       height: 30,
                                       width: 30,
-                                      image: AssetImage('images/avatar.png'),
+                                      image: AssetImage(Provider.of<User>(
+                                                  context,
+                                                  listen: false)
+                                              .blogs[i]
+                                              .blogAvatar ??
+                                          "assets/icon/avatar2.png"),
                                     ),
                                   ),
                                   SizedBox(
                                     width: 5,
                                   ),
-                                  Text(BlogScreenConstant.tumblrsBlog[i])
+                                  Text(Provider.of<User>(context, listen: false)
+                                      .blogs[i]
+                                      .name)
                                 ],
                               ),
-                              value: BlogScreenConstant.tumblrsBlog[i],
+                              value: Provider.of<User>(context, listen: false)
+                                  .blogs[i]
+                                  .name,
                             ),
                           PopupMenuDivider(),
                           BlogScreenConstant.createNewTumblr(),

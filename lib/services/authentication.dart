@@ -1,9 +1,6 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:provider/provider.dart';
-import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/services/api_provider.dart';
 import 'dart:convert' as convert;
 
@@ -18,6 +15,12 @@ class Authentication extends ChangeNotifier {
   bool isObscureSignUp = true; //for the signup to hide the password
   String token; //for user authorization
   bool emailExist = false;
+  String loginErrorMessage = "";
+
+  ///returns error message if the user doesnot exist
+  String getLogInErrorMessage() {
+    return loginErrorMessage;
+  }
 
   ///Changes the visibility state of the password textfield
   void toggleisObscure() {
@@ -31,9 +34,6 @@ class Authentication extends ChangeNotifier {
   ///indicates if the user exist or not
   bool get doesEmailExist => emailExist;
 
-  /* todo:
- should also check if this email already exists from the mockservice
- */
   /// Checks if the email is in valid form for signup
   ///
   /// Returns an error message if the email is invalid
@@ -92,21 +92,23 @@ class Authentication extends ChangeNotifier {
     };
 
     try {
-      final response = await MockHttpRepository.sendPostRequest(
-          endPoint, convert.jsonEncode(loginRequestBody),
+      final response = await http.post(
+          Uri.parse('${ApiHttpRepository.api}api/user/login'),
+          body: convert.jsonEncode(loginRequestBody),
           headers: {'content-type': 'application/json'});
-      // final response = await http.post(
-      //     Uri.parse('http://10.0.2.2:4000/api/user/login'),
-      //     body: convert.jsonEncode(loginRequestBody),
-      //     headers: {'content-type': 'application/json'});
 
+      //if i get a bad response then this user doesnot exist
       if (response.statusCode == 400) {
+        print("400");
+        loginErrorMessage = "wrong Email or password please try again";
+        notifyListeners();
         return false;
       } else if (response.statusCode != 200) {
+        print('!200');
         throw Exception('error in the connection');
       } else {
-        var resposeObject = convert.jsonDecode(response.body);
-        token = resposeObject['token'];
+        var responseObject = convert.jsonDecode(response.body);
+        token = responseObject['token'];
         emailExist = true;
         notifyListeners();
         // print(response.statusCode);
@@ -124,30 +126,38 @@ class Authentication extends ChangeNotifier {
   ///sends a get request to the API
   ///
   ///gets the user info that the user is authorized to access
-  Future<Map<String, dynamic>> loginGetUserInfo(BuildContext context) async {
+  Future<Map<String, dynamic>> loginGetUserInfo() async {
     final String endPoint = 'user/info';
 
     try {
       final response = await http.get(
-        Uri.parse(
-            'https://1b0da51d-62c7-4172-b0c5-c290339c6fb6.mock.pstmn.io/user/info'),
+        Uri.parse(ApiHttpRepository.api + 'api/user/info'),
         // Send authorization headers to the backend.
         headers: {HttpHeaders.authorizationHeader: '$token'},
       );
 
       if (response.statusCode != 200)
-        throw Exception('user isnot authorized');
+        throw Exception('user is not authorized');
       else {
         Map<String, dynamic> responseObject =
             convert.jsonDecode(response.body) as Map<String, dynamic>;
         print(response.statusCode);
         print(responseObject);
+        try {
+          final blogsResponse = await http.get(
+            Uri.parse(ApiHttpRepository.api + 'api/user/get-blogs'),
+            // Send authorization headers to the backend.
+            headers: {HttpHeaders.authorizationHeader: '$token'},
+          );
+          if (blogsResponse.statusCode != 200)
+            throw Exception('error in getting blogs');
+          print(convert.jsonDecode(blogsResponse.body));
+          responseObject['blogs'] = convert.jsonDecode(blogsResponse.body);
+        } catch (error) {
+          throw Exception(error.message.toString());
+        }
+        print(responseObject);
         return responseObject;
-        // Provider.of<User>(context, listen: false)
-        //     .setLoginUserData(responseObject);
-
-        // return User.fromJson(resposeObject);
-
       }
     } catch (error) {
       throw Exception(error.message.toString());

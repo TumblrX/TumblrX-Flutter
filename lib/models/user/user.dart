@@ -18,22 +18,22 @@ class User extends ChangeNotifier {
 
   /// list of tumblr blogs for the user
   List<Blog> blogs = [
-    new Blog(
-      name: "ammarovic21",
-      title: "ammar",
-      primary: true,
-      blogType: "public",
-      followers: 20,
-      blogAvatar: "assets/icon/default_avatar.png",
-    ),
-    new Blog(
-      name: "passant",
-      title: "passant",
-      primary: false,
-      blogType: "public",
-      followers: 20,
-      blogAvatar: "assets/icon/avatar2.png",
-    ),
+    // new Blog(
+    //   name: "ammarovic21",
+    //   title: "ammar",
+    //   primary: true,
+    //   blogType: "public",
+    //   followers: 20,
+    //   blogAvatar: "assets/icon/default_avatar.png",
+    // ),
+    // new Blog(
+    //   name: "passant",
+    //   title: "passant",
+    //   primary: false,
+    //   blogType: "public",
+    //   followers: 20,
+    //   blogAvatar: "assets/icon/avatar2.png",
+    // ),
   ];
 
   /// name of the currently active/used blog
@@ -71,6 +71,7 @@ class User extends ChangeNotifier {
     if (json.containsKey('likes')) likes = json['likes'];
 
     if (json['blogs'] != null) {
+      setActiveBlog(json['blogs'][0]['handle']);
       json['blogs'].forEach((v) {
         blogs.add(new Blog.fromJson(v));
       });
@@ -94,6 +95,7 @@ class User extends ChangeNotifier {
   /// API to set active/used blog name
   void setActiveBlog(String blogName) {
     activeBlogName = blogName;
+    updateActiveBlog();
   }
 
   /// API to notify listeners when the activeblog is changed
@@ -109,6 +111,16 @@ class User extends ChangeNotifier {
     for (int i = 0; i < blogs.length; i++) {
       if (blogs[i].name == activeBlog) {
         return blogs[i].blogAvatar;
+      }
+    }
+    return null;
+  }
+
+  ///Returns the title of the current active blog
+  String getActiveBlogTitle() {
+    for (int i = 0; i < blogs.length; i++) {
+      if (blogs[i].name == activeBlog) {
+        return blogs[i].title;
       }
     }
     return null;

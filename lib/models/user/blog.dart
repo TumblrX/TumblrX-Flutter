@@ -53,10 +53,12 @@ class Blog {
       this.blogAvatar});
 
   Blog.fromJson(Map<String, dynamic> json) {
-    if (json.containsKey('name'))
-      name = json['name'];
+    if (json.containsKey('handle') ||
+        json.containsKey(
+            'name')) //TODO: will be only handle like the last api update
+      name = json['handle'] ?? json['name'];
     else
-      throw Exception('missing required parameter "name"');
+      throw Exception('missing required parameter "handle"');
 
     if (json.containsKey('title'))
       title = json['title'];

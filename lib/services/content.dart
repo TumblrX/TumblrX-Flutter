@@ -4,12 +4,14 @@ import 'package:tumblrx/models/post.dart';
 import 'package:tumblrx/services/api_provider.dart';
 import 'dart:convert' as convert;
 
+import 'package:tumblrx/services/authentication.dart';
+
 /// A class that holds a list of retrieved posts for later accessing
 class Content extends ChangeNotifier {
   /// list of posts
   List<Post> _posts = [];
 
-  int _totalPosts = 0;
+  int _totalPosts = -1;
 
   bool _isLoading = false;
   Content();
@@ -49,21 +51,23 @@ class Content extends ChangeNotifier {
   /// return whether there are more posts to load or not
   bool hasMore() => _totalPosts == _posts.length;
 
-  Future<List<Post>> getMorePosts(String endPoint, int pageNum) async {
+  Future<List<Post>> getMorePosts(
+      String endPoint, int pageNum, Authentication auth) async {
     final String route = 'user/$endPoint';
-    final Map<String, dynamic> queryParams = {
-      "blog-identifier": "virtualtumblr",
-      "page": pageNum,
-    };
-    // send get request to 'user/dashboard' | 'user/foryou'
-    final Response response =
-        await MockHttpRepository.sendGetRequest(route, req: queryParams);
 
+    // send get request to 'user/dashboard' | 'user/foryou'
+
+    Map<String, String> headers = {'Authorization': auth.token};
+    final Response response =
+        await ApiHttpRepository.sendGetRequest(route, headers: headers);
+
+    print(response.body);
     if (response.statusCode != 200) return [];
 
     final resposeObject =
         convert.jsonDecode(response.body) as Map<String, dynamic>;
 
+    print(resposeObject);
     if (pageNum == 1) {
       _totalPosts = resposeObject['total_posts'];
     }

@@ -1,12 +1,11 @@
 import 'package:http/http.dart';
-//import 'package:tumblrx/utilities/environment.dart';
+import 'package:tumblrx/utilities/environment.dart';
 
 /// MockAPI class to use for testing
 class MockHttpRepository {
   /// API key for mock server
-//  static final String api = Environment.apiUrl;
   static final String api =
-      'https://1b0da51d-62c7-4172-b0c5-c290339c6fb6.mock.pstmn.io';
+      'https://1b0da51d-62c7-4172-b0c5-c290339c6fb6.mock.pstmn.io/';
 
   /// API to send get requests
   /// @endPoint : the end point to which send the request
@@ -55,7 +54,7 @@ class MockHttpRepository {
 /// Real API class
 class ApiHttpRepository {
   /// API key for real server
-  final String api = '';
+  static final String api = Environment.apiUrl;
 
   /// API to send get requests
   /// @endPoint : the end point to which send the request
@@ -68,8 +67,10 @@ class ApiHttpRepository {
   /// API to send post requests
   /// @endPoint : the end point to which send the request
   /// @req : request body as map<String, dynamic>
-  Future sendGetRequest(String endPoint, Map<String, dynamic> req) async {
-    await Future.delayed(const Duration(seconds: 2));
-    return;
+  static Future sendGetRequest(String endPoint,
+      {Map<String, String> headers}) async {
+    final Uri uri = Uri.parse('${api}api/$endPoint');
+    if (headers != null) return await post(uri, headers: headers);
+    return await post(uri);
   }
 }
