@@ -13,7 +13,9 @@ pipeline {
         }
         stage('Test') {
             steps {
-                echo 'no tests so done'
+                 sh'''
+                    docker build -f ./Dockertest .
+                 '''
             }
         }
         stage('Deploy') {
