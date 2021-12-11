@@ -206,7 +206,7 @@ class Post {
             parsedConent.add(new AudioBlock.fromJson(obj));
             break;
           case 'video':
-            parsedConent.add(new VideoBlock.fromJson(obj));
+            //parsedConent.add(new VideoBlock.fromJson(obj));
             break;
           case 'image':
             //parsedConent.add(new ImageBlock.fromJson(obj));
@@ -337,10 +337,12 @@ class Post {
   Container showPost(int index) {
     return Container(
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           PostHeader(index),
           Divider(),
           Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children:
                 content.map<Widget>((block) => block.showBlock()).toList(),
           ),

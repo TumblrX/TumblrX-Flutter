@@ -19,6 +19,8 @@ class TextBlock extends PostBlock {
   /// Text Block content
   String _text;
 
+  //String _formattedText;
+
   ///Text block constructor that takes the [_subtype], [_text] and [_formatting]
   TextBlock(String type, this._subtype, this._text, this._formatting)
       : super.withType(type);
@@ -48,8 +50,25 @@ class TextBlock extends PostBlock {
           List<Map<String, dynamic>>.from(json['formatting']);
 
       try {
-        this._formatting.addAll(
-            formatting.map((e) => new InlineFormatting.fromJson(e)).toList());
+        List<InlineFormatting> parsedFormats =
+            formatting.map((e) => new InlineFormatting.fromJson(e)).toList();
+        parsedFormats.sort((a, b) {
+          // case 0: both are applied on the same substring
+          if (a.start == b.start && a.end == b.end) return 0;
+          // case 1: a is applied on a substring that is after b's
+          if (a.start > b.start) return -1;
+          if (a.start < b.start) return 1;
+
+          if (a.start == b.start) {
+            // case 2: a should be the inner format [e.g [<b><a>text</a>restOfText</b>]
+            if (a.end < b.end) return -1;
+
+            // case 3: b should be the inner format [e.g [<a><b>text</b>restOfText</a>]
+            return 1;
+          }
+          return 0;
+        });
+        this._formatting.addAll(parsedFormats);
 
         _text = this.formatText();
       } catch (err) {
@@ -80,9 +99,12 @@ class TextBlock extends PostBlock {
   /// API for text block object to render it
   @override
   Widget showBlock() {
-    return StyledText(
-      text: _text,
-      tags: formattingTags(),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: StyledText(
+        text: _text,
+        tags: formattingTags(),
+      ),
     );
   }
 }
@@ -97,28 +119,34 @@ class InlineFormatting {
 
   InlineFormatting({this.start, this.end, this.type});
 
+  @override
+  String toString() {
+    return 'start: $start, end: $end, type: $type';
+  }
+
   void setHexColor(String hexValue) {
     hex = hexValue;
   }
 
   InlineFormatting.fromJson(Map<String, dynamic> parsedJson) {
     if (parsedJson.containsKey('start'))
-      start = parsedJson['start'];
+      this.start = parsedJson['start'];
     else
       throw Exception('missing required parameter "start"');
     if (parsedJson.containsKey('end'))
-      end = parsedJson['end'];
+      this.end = parsedJson['end'];
     else
       throw Exception('missing required parameter "end"');
     if (parsedJson.containsKey('type'))
-      type = parsedJson['type'];
+      this.type = parsedJson['type'];
     else
       throw Exception('missing required parameter "type"');
 
-    if (parsedJson.containsKey('url')) url = parsedJson['url'];
-    if (parsedJson.containsKey('hex')) url = parsedJson['hex'];
+    if (parsedJson.containsKey('url')) this.url = parsedJson['url'];
+    if (parsedJson.containsKey('hex')) this.hex = parsedJson['hex'];
 
-    if (parsedJson.containsKey('blog_url')) blogUrl = parsedJson['blog_url'];
+    if (parsedJson.containsKey('blog_url'))
+      this.blogUrl = parsedJson['blog_url'];
   }
 
   Map<String, dynamic> toJson() {
@@ -137,29 +165,27 @@ class InlineFormatting {
     int start = this.start;
     int end = this.end + 1;
 
-    String originalText = (end >= text.length
-        ? text.substring(start)
-        : text.substring(start, end));
+    String originalText = text.substring(start, end);
     String formattedText;
     switch (type) {
       case 'bold':
-        formattedText = "<bold>$originalText</bold> ";
+        formattedText = "<bold>$originalText</bold>";
         break;
       case 'italic':
-        formattedText = "<italic>$originalText</italic> ";
+        formattedText = "<italic>$originalText</italic>";
         break;
       case 'strikethrough':
-        formattedText = " <strikethrough>$originalText</strikethrough> ";
+        formattedText = "<strikethrough>$originalText</strikethrough>";
         break;
       case 'link':
-        formattedText = " <link href=${this.url}>$originalText</link> ";
+        formattedText = "<link href=${this.url}>$originalText</link>";
         break;
       case 'color':
-        formattedText = " <color text=\"${this.hex}\">$originalText</color> ";
+        print(this.hex);
+        formattedText = '<color text="${this.hex}">$originalText</color>';
         break;
       case 'mention': // "uuid": , "name": , "url":
-        formattedText =
-            " <mention href=${this.blogUrl}>$originalText</mention> ";
+        formattedText = "<mention href=${this.blogUrl}>$originalText</mention>";
         break;
       default:
         formattedText = originalText;
