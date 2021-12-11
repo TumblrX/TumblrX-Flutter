@@ -62,8 +62,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
         setState(() {});
       });
-      // rebuild to view linear progress
-      setState(() {});
     }
   }
 

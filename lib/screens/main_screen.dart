@@ -10,11 +10,13 @@ Description:
 */
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 import 'package:tumblrx/components/bottom_nav_bar/bottom_nav_bar.dart';
 import 'package:tumblrx/screens/blog_screen.dart';
 import 'package:tumblrx/screens/feed_screen.dart';
 import 'package:tumblrx/screens/notifications_screen.dart';
 import 'package:tumblrx/screens/search_screen.dart';
+import 'package:tumblrx/services/content.dart';
 
 /// class to build main screen when the user successfully log in
 class MainScreen extends StatefulWidget {

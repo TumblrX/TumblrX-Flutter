@@ -30,11 +30,9 @@ Map<String, StyledTextTagBase> formattingTags(
     'color': StyledTextCustomTag(
       baseStyle: TextStyle(),
       parse: (baseStyle, attributes) {
-        print(attributes);
         if (attributes.containsKey('text') &&
             attributes['text'].substring(0, 1) == '#' &&
             attributes['text'].length >= 6) {
-          print('parsing color attribute');
           final String hexColor = attributes['text'].substring(1);
           final String alphaChannel =
               (hexColor.length == 8 ? hexColor.substring(6, 8) : 'FF');

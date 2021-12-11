@@ -24,6 +24,10 @@ class Content extends ChangeNotifier {
       print('$error @ content from json');
     }
   }
+  void resetContent() {
+    _totalPosts = 0;
+    _posts = [];
+  }
 
   /// delete a certain post with the passed id from the list
   void deletePost(String id) {
@@ -62,6 +66,7 @@ class Content extends ChangeNotifier {
     // if unsuccessful request return empty list
     if (response.statusCode != 200) {
       print(response.body);
+      _isLoading = false;
       return [];
     }
 
