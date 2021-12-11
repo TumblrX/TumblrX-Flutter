@@ -11,31 +11,22 @@ class Content extends ChangeNotifier {
   /// list of posts
   List<Post> _posts = [];
 
-  int _totalPosts = -1;
+  int _totalPosts = 0;
 
   bool _isLoading = false;
   Content();
 
   /// class constructor from parsed JSON
-  Content.fromJson(Map<String, dynamic> parsedJson) {
+  Content.fromJson(List<Map<String, dynamic>> parsedJson) {
     try {
-      if (parsedJson.containsKey('body'))
-        _posts = parsedJson['body'].map((e) => new Post.fromJson(e)).toList();
-      else
-        print('no argument called body');
+      _posts = parsedJson.map((e) => new Post.fromJson(e)).toList();
     } catch (error) {
-      print(error.toString());
+      print('$error @ content from json');
     }
   }
 
-  /// update the posts list with passed data
-  /// used in ViewList.builder for feed screen
-  void updateContent(List<Post> postList) {
-    _posts.addAll(postList);
-  }
-
   /// delete a certain post with the passed id from the list
-  void deletePost(int id) {
+  void deletePost(String id) {
     _posts.removeWhere((element) => element.id == id);
   }
 
@@ -53,36 +44,50 @@ class Content extends ChangeNotifier {
 
   Future<List<Post>> getMorePosts(
       String endPoint, int pageNum, Authentication auth) async {
+    // if already a request is being processed,return
+    if (isLoading) return [];
+
+    // set loading flag
+    _isLoading = true;
+
+    // construct request data
     final String route = 'user/$endPoint';
+    final Map<String, dynamic> queryParams = {'page': 1, 'limit': 20};
+    Map<String, String> headers = {'Authorization': auth.token};
 
     // send get request to 'user/dashboard' | 'user/foryou'
+    final Response response = await ApiHttpRepository.sendGetRequest(route,
+        headers: headers, query: queryParams);
 
-    Map<String, String> headers = {'Authorization': auth.token};
-    final Response response =
-        await ApiHttpRepository.sendGetRequest(route, headers: headers);
+    // if unsuccessful request return empty list
+    if (response.statusCode != 200) {
+      print(response.body);
+      return [];
+    }
 
-    print(response.body);
-    if (response.statusCode != 200) return [];
-
+    // decode reponse
     final resposeObject =
         convert.jsonDecode(response.body) as Map<String, dynamic>;
 
-    print(resposeObject);
+    // for pagination, set total number of posts
     if (pageNum == 1) {
-      _totalPosts = resposeObject['total_posts'];
+      _totalPosts = resposeObject['posts'].length ?? 0;
     }
+    List<Post> postsArray;
+    try {
+      // type casting to list of map objects
+      List postsList = List<Map<String, dynamic>>.from(resposeObject['posts']);
 
-    // construct list of posts object from the parsed json response
-    List<Post> postsArray =
-        List<Map<String, dynamic>>.from(resposeObject['posts']).map((e) {
-      return new Post.fromJson(e);
-    }).toList();
+      // construct list of posts object from the parsed json response
+      postsArray = postsList.map((e) => new Post.fromJson(e)).toList();
 
-    for (var i = 0; i < postsArray.length; i++) {
-      postsArray[i].postBlog = await postsArray[i].getBlogData();
-      _posts.add(postsArray[i]);
+      // insert newely fetched data to the list
+      _posts.addAll(postsArray);
+    } catch (err) {
+      print(err);
+      postsArray = [];
     }
-
+    _isLoading = false;
     return postsArray;
   }
 }

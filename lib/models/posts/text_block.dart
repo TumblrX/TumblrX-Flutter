@@ -35,18 +35,26 @@ class TextBlock extends PostBlock {
       super.type = json['type'];
     else
       throw Exception('missing required parameter "type"');
+
     if (json.containsKey('text'))
       this._text = json['text'];
     else
       throw Exception('missing required parameter "text"');
+
     if (json.containsKey('subtype')) this._subtype = json['subtype'];
+
     if (json.containsKey('formatting') && json['formatting'] != null) {
       List<Map<String, dynamic>> formatting =
           List<Map<String, dynamic>>.from(json['formatting']);
 
-      this._formatting.addAll(
-          formatting.map((e) => new InlineFormatting.fromJson(e)).toList());
-      _text = this.formatText();
+      try {
+        this._formatting.addAll(
+            formatting.map((e) => new InlineFormatting.fromJson(e)).toList());
+
+        _text = this.formatText();
+      } catch (err) {
+        print('error in formatting $err');
+      }
     }
   }
 
@@ -94,9 +102,19 @@ class InlineFormatting {
   }
 
   InlineFormatting.fromJson(Map<String, dynamic> parsedJson) {
-    start = parsedJson['start'];
-    end = parsedJson['end'];
-    type = parsedJson['type'];
+    if (parsedJson.containsKey('start'))
+      start = parsedJson['start'];
+    else
+      throw Exception('missing required parameter "start"');
+    if (parsedJson.containsKey('end'))
+      end = parsedJson['end'];
+    else
+      throw Exception('missing required parameter "end"');
+    if (parsedJson.containsKey('type'))
+      type = parsedJson['type'];
+    else
+      throw Exception('missing required parameter "type"');
+
     if (parsedJson.containsKey('url')) url = parsedJson['url'];
     if (parsedJson.containsKey('hex')) url = parsedJson['hex'];
 

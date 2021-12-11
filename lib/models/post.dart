@@ -24,12 +24,20 @@ import 'package:intl/intl.dart';
 import 'package:tumblrx/services/api_provider.dart';
 import 'dart:convert' as convert;
 
-class Post extends ChangeNotifier {
+class Post {
   /// The short name used to uniquely identify a blog
-  String blogName;
+  String blogTitle;
+
+  String blogHandle;
+
+  String blogAvatar;
+
+  bool isAvatarCircle;
 
   /// Post's unique id
-  int id;
+  String id;
+
+  String blogId;
 
   /// post's unique "genesis" ID† as a String
   String gensisPostId;
@@ -58,6 +66,8 @@ class Post extends ChangeNotifier {
   ///  the current state of the post
   String state;
 
+  String postType;
+
   /// The content of the post
   List content = [];
 
@@ -68,71 +78,127 @@ class Post extends ChangeNotifier {
   List trail = [];
 
   /// total number of notes
-  int totalNotes;
+  int totalNotes = 0;
 
-  Post({this.blogName, this.liked, this.content});
+  /// number of comments on the post
+  int commentsCount = 0;
+
+  /// number of likes on the post
+  int likesCount = 0;
+
+  /// number of reblogs on the post
+  int reblogsCount = 0;
+
+  Post({this.liked, this.content});
 
   /// blog object who published this post
   Blog postBlog;
 
   /// Constructs a new instance usin parsed json data
   Post.fromJson(Map<String, dynamic> parsedJson) {
-    // identifiers
-    if (parsedJson.containsKey('blog_name'))
-      blogName = parsedJson['blog_name'];
-    else
-      throw Exception("missing required paramter blog_name");
-    if (parsedJson.containsKey('id'))
-      id = parsedJson['id'];
-    else
-      throw Exception("missing required paramter id");
-    // post info
+    // ==================== post related data =========================
 
-    if (parsedJson.containsKey('date')) {
-      date = DateFormat("yyyy-MM-dd hh:mm:ss").parse(parsedJson['date']);
-    } else
-      throw Exception("missing required paramter date");
+    // post identifier '_id'
+    if (parsedJson.containsKey('_id'))
+      id = parsedJson['_id'];
+    else
+      throw Exception('missing required paramter "id"');
 
-    if (parsedJson.containsKey('reblog_key'))
-      reblogKey = parsedJson['reblog_key'];
+    // post type
+    if (parsedJson.containsKey('postType'))
+      postType = parsedJson['postType'];
     else
-      throw Exception("missing required paramter reblog_key");
+      throw Exception('missing required parameter "postType"');
 
-    if (parsedJson.containsKey('tags')) {
-      for (var i = 0; i < parsedJson['tags'].length; i++)
-        tags.add(parsedJson['tags'][i].toString());
-    }
-    if (parsedJson.containsKey('liked'))
-      liked = parsedJson['liked'];
-    else
-      throw Exception("missing required paramter liked");
-    if (parsedJson.containsKey('totalNotes'))
-      totalNotes = parsedJson['totalNotes'];
-    else
-      totalNotes = 0;
+    // post state ('published, draft, queued)
     if (parsedJson.containsKey('state'))
       state = parsedJson['state'];
     else
       throw Exception("missing required paramter state");
 
+    // post publishing data
+    if (parsedJson.containsKey('publishedOn')) {
+      DateTime dateTime =
+          DateTime.fromMillisecondsSinceEpoch(parsedJson['publishedOn'] * 1000);
+      date = DateFormat('yyyy-MM-dd hh:mm').parse(dateTime.toString());
+    } else
+      throw Exception("missing required paramter publishedOn");
+
+    // post reblog key
+    // if (parsedJson.containsKey('reblog_key'))
+    //   reblogKey = parsedJson['reblog_key'];
+    // else
+    //   throw Exception("missing required paramter reblog_key");
+    // post flag liked (true => user likes, false => user unlikes)
+    // if (parsedJson.containsKey('liked'))
+    //   liked = parsedJson['liked'];
+    // else
+    //   throw Exception("missing required paramter liked");
+    liked = true;
+
+    // number of comments on the post
+    if (parsedJson.containsKey('commentsCount'))
+      commentsCount = parsedJson['commentsCount'];
+
+    // number of likes on the post
+    if (parsedJson.containsKey('likesCount'))
+      likesCount = parsedJson['likesCount'];
+
+    // number of reblogs on the post
+    if (parsedJson.containsKey('reblogsCount'))
+      reblogsCount = parsedJson['reblogsCount'];
+
+    // calculating total number of notes for viewing purposes
+    totalNotes = commentsCount ?? 0 + likesCount ?? 0 + reblogsCount ?? 0;
+
+    List<dynamic> parsedTags = List<dynamic>.from(parsedJson['tags']);
+    // post tags
+    if (parsedJson.containsKey('tags')) {
+      for (var i = 0; i < parsedTags.length; i++)
+        tags.add(parsedJson['tags'][i].toString());
+    }
+
     // post content
-    if (parsedJson.containsKey('content'))
-      try {
-        parsePostContent(parsedJson['content']);
-      } catch (error) {
-        throw error;
-      }
-    else
+    if (parsedJson.containsKey('content')) {
+      parsePostContent(List<Map<String, dynamic>>.from(parsedJson['content']));
+    } else
       throw Exception("missing required paramter content");
+
+    // ========================= post blog data ========================
+
+    if (!parsedJson.containsKey('blogAttribution'))
+      throw Exception('missing required paramter "blogAttribution"');
+    Map<String, dynamic> blogData =
+        parsedJson['blogAttribution'] as Map<String, dynamic>;
+
+    // blog identifier '_id'
+    if (blogData.containsKey('_id'))
+      blogId = blogData['_id'];
+    else
+      throw Exception('missing required paramter "id" in blogAttribution');
+
+    // blog title
+    if (blogData.containsKey('title')) blogTitle = blogData['title'];
+    // blog handle
+    if (blogData.containsKey('handle')) blogHandle = blogData['handle'];
+    // blog avatar url
+    if (blogData.containsKey('avatar'))
+      blogAvatar = blogData['avatar'] == 'none'
+          ? "https://64.media.tumblr.com/9f9b498bf798ef43dddeaa78cec7b027/tumblr_o51oavbMDx1ugpbmuo7_500.png"
+          : blogData['avatar'];
+    // blog avatar shape flag (true => circular, false => rectangular)
+    if (blogData.containsKey('isAvatarCircle'))
+      isAvatarCircle = blogData['isAvatarCircle'];
   }
 
   /// Construct the right block for each of the Post content
   /// Text, Audio, Video, Image, and Link
-  void parsePostContent(json) {
+  void parsePostContent(List<Map<String, dynamic>> json) {
     List parsedConent = [];
     try {
       json.forEach((obj) {
-        switch (obj['type']) {
+        print(obj['type'].toString().trim());
+        switch (obj['type'].toString().trim()) {
           case 'text':
             parsedConent.add(new TextBlock.fromJson(obj));
             break;
@@ -143,7 +209,7 @@ class Post extends ChangeNotifier {
             parsedConent.add(new VideoBlock.fromJson(obj));
             break;
           case 'image':
-            parsedConent.add(new ImageBlock.fromJson(obj));
+            //parsedConent.add(new ImageBlock.fromJson(obj));
             break;
           case 'link':
             parsedConent.add(new LinkBlock.fromJson(obj));
@@ -154,7 +220,7 @@ class Post extends ChangeNotifier {
       });
       content.addAll(parsedConent);
     } catch (error) {
-      throw error;
+      print('$error @ parseContent');
     }
   }
 
@@ -218,7 +284,7 @@ class Post extends ChangeNotifier {
   }
 
   /// API for post object to delete the post
-  void deletePost() async {
+  Future<bool> deletePost() async {
     final String endPoint = 'post/delete';
     final Map<String, dynamic> queryParameters = {
       "id": id,
@@ -229,8 +295,10 @@ class Post extends ChangeNotifier {
 
       if (response.statusCode != 200)
         throw Exception('post ID or reblog_key was not found');
+      return true;
     } catch (error) {
-      throw Exception(error.message);
+      print(error);
+      return false;
     }
   }
 
@@ -243,8 +311,10 @@ class Post extends ChangeNotifier {
           endPoint, convert.jsonEncode(queryParameters));
       if (response.statusCode != 200)
         throw Exception('post ID or reblog_key was not found');
+
+      // TODO: Please update class attributes which were requested to update
     } catch (error) {
-      throw Exception(error.message);
+      print(error.message);
     }
   }
 
@@ -263,17 +333,12 @@ class Post extends ChangeNotifier {
     }
   }
 
-  /// API for post object to get the post blog data
-  Future<Blog> getBlogData() async {
-    return await Blog.getInfo(blogName);
-  }
-
   /// API for post object to render the post
-  Container showPost() {
+  Container showPost(int index) {
     return Container(
       child: Column(
         children: [
-          PostHeader(postBlog),
+          PostHeader(index),
           Divider(),
           Column(
             children:
@@ -282,7 +347,7 @@ class Post extends ChangeNotifier {
           Divider(
             color: Colors.transparent,
           ),
-          PostFooter(totalNotes, liked),
+          PostFooter(index),
         ],
       ),
     );

@@ -38,41 +38,52 @@ class _DashboardScreenState extends State<DashboardScreen> {
     // intialize the controller and add a listner with _scrollListner
     // as a callback function
     _controller = ScrollController()..addListener(_scrollListner);
-
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
   }
 
   /// Callback function for scrolling events to load/stop loading posts
   void _scrollListner() async {
     if (!content.hasMore()) return;
-    if (_controller.position.pixels == _controller.position.maxScrollExtent) {
-      await content.getMorePosts(widget._endpoint, _pageNum, auth);
+    if (_controller.position.pixels >= _controller.position.maxScrollExtent &&
+        !content.isLoading) {
+      content.getMorePosts(widget._endpoint, _pageNum, auth).then((value) {
+        // rebuild to update pagenum and remove linear progress
+        setState(() {
+          _pageNum++;
+        });
+      }).catchError((err) {
+        print('error in dashboard widget while loading more posts $err');
 
-      setState(() {
-        _pageNum += 1;
+        setState(() {});
       });
+      // rebuild to view linear progress
+      setState(() {});
     }
   }
 
   /// Builds the ListView widget to view posts
   Widget _buildListView() {
-    return ListView.builder(
-        itemCount:
-            content.hasMore() ? content.posts.length + 1 : content.posts.length,
-        controller: _controller,
-        itemBuilder: (BuildContext context, int index) {
-          // if end of list, return linear progress
-          if (index == content.posts.length && index > 0)
-            return LinearProgressIndicator();
-          // if it's actually a post return its widget
-          if (index > 0) return content.posts[index].showPost();
-          // otherwise return empty container
-          return Container(
-            child: Center(
-              child: Icon(Icons.sensors_sharp),
-            ),
-          );
-        });
+    return Stack(
+      children: [
+        ListView.builder(
+          itemCount: content.totalPosts,
+          controller: _controller,
+          itemBuilder: (BuildContext context, int index) =>
+              content.posts[index].showPost(index),
+        ),
+        content.isLoading
+            ? LinearProgressIndicator()
+            : Container(
+                height: 0,
+              )
+      ],
+    );
   }
 
   @override

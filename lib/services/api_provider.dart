@@ -68,9 +68,16 @@ class ApiHttpRepository {
   /// @endPoint : the end point to which send the request
   /// @req : request body as map<String, dynamic>
   static Future sendGetRequest(String endPoint,
-      {Map<String, String> headers}) async {
+      {Map<String, String> headers, Map<String, dynamic> query}) async {
+    if (query != null) {
+      endPoint = endPoint + '?';
+      query.forEach((key, value) {
+        endPoint = '$endPoint$key=$value&';
+      });
+      endPoint = endPoint.substring(0, endPoint.length - 1);
+    }
     final Uri uri = Uri.parse('${api}api/$endPoint');
-    if (headers != null) return await post(uri, headers: headers);
-    return await post(uri);
+    if (headers != null) return await get(uri, headers: headers);
+    return await get(uri);
   }
 }
