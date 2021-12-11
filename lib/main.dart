@@ -22,6 +22,7 @@ import 'package:tumblrx/screens/signup_user_data.dart';
 import 'package:tumblrx/screens/login_user_data.dart';
 
 import 'components/my_custom_scroll_behavior.dart';
+import 'models/user/blog.dart';
 
 void main() {
   runApp(MyApp());
@@ -50,7 +51,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<User>(
           create: (context) => User(),
         ),
-
+         ChangeNotifierProvider<Blog>(
+          create: (context) => Blog(),
+        ), 
         ChangeNotifierProvider<Content>(
           create: (context) => Content(),
         ),

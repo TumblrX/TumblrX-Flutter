@@ -1,8 +1,8 @@
 import 'package:http/http.dart';
 
 class MockHttpRepository {
-  static final String api =
-      'https://54bd9e92-6a19-4377-840f-23886631e1a8.mock.pstmn.io/';
+  static final String api =   
+      'https://42df9e63-8c72-4982-889d-d3bafb7577bf.mock.pstmn.io/';
 
   static Future sendGetRequest(String endPoint,
       {Map<String, dynamic> req}) async {

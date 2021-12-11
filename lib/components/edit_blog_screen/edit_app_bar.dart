@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tumblrx/components/edit_blog_screen/alert_dialgue.dart';
 import 'package:tumblrx/screens/blog_screen.dart';
 
 class EditAppBar {
@@ -13,7 +14,8 @@ class EditAppBar {
           children: <Widget>[
             IconButton(
                 onPressed: () {
-                  Navigator.pop(
+                  
+                    Navigator.pop(
                     context,
                     MaterialPageRoute(builder: (context) => BlogScreen()),
                   );

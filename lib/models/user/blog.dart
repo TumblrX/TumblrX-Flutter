@@ -1,9 +1,13 @@
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
 import 'dart:convert' as convert;
-
 import 'package:tumblrx/services/api_provider.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 
-class Blog {
+import 'blog_theme.dart';
+
+class Blog extends ChangeNotifier {
   /// The user's tumblr short name
   String name;
 
@@ -43,6 +47,9 @@ class Blog {
 
   /// The total number of posts to this blog
   int posts;
+
+  /// themes of Blog
+  BlogTheme blogTheme;
 
   Blog(
       {this.name,
@@ -96,6 +103,7 @@ class Blog {
           await MockHttpRepository.sendGetRequest(endPoint, req: reqParameters);
       if (response.statusCode == 200) {
         final responseParsed = convert.jsonDecode(response.body);
+
         return responseParsed['avatar_url'];
       } else {
         // handle failed request
@@ -133,5 +141,41 @@ class Blog {
     String url =
         'https://54bd9e92-6a19-4377-840f-23886631e1a8.mock.pstmn.io/blog/$name/blocks';
     try {} catch (error) {}
+  }
+
+  void setBlogAvatar(String avatar) {
+    blogAvatar = avatar;
+    notifyListeners();
+  }
+
+  void setBlogBackGroundColor(String color) {
+    blogTheme.backgroundColor = color;
+    notifyListeners();
+  }
+
+  void setHeaderImage(String image) {
+    blogTheme.headerImage = image;
+    notifyListeners();
+  }
+
+  void setAvatarShape(String shape) {
+    blogTheme.avatarShape = shape;
+    notifyListeners();
+  }
+
+  String getAvatarShape() {
+    return blogTheme.avatarShape;
+  }
+
+  String getHeaderImage() {
+    return blogTheme.headerImage;
+  }
+
+  static Future pickImage(int indicator) async {
+    final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+    print(image.path);
+    if (image == null) return;
+    if (indicator == 1) Blog().setBlogAvatar(image.path);
+    if (indicator == 2) Blog().setHeaderImage(image.path);
   }
 }

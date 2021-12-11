@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/models/user/user.dart';
-
 import 'post_blog_choice.dart';
 
 ///Shows the user of Creating post and allows you to choose the blog that post will be added into.

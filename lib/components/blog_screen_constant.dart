@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tumblrx/Components/blog_screen_initial_screen/show_image.dart';
+import 'blog_screen_initial_screen/create_new_tumblr.dart';
+import 'edit_blog_screen/edit.dart';
 
 ///all constant, variable , widget and function which use more than one
 class BlogScreenConstant extends StatelessWidget {
@@ -12,7 +14,12 @@ class BlogScreenConstant extends StatelessWidget {
       children: <Widget>[
         ListTile(
           title: Text('Change your avatar'),
-          onTap: () {},
+          onTap: () {
+              Navigator.push(context,
+                MaterialPageRoute(builder: (context) =>Edit()));
+                     
+
+          },
         ),
         ListTile(
           title: Text('View your avatar'),
@@ -32,7 +39,9 @@ class BlogScreenConstant extends StatelessWidget {
       children: <Widget>[
         ListTile(
           title: Text('Change your header image'),
-          onTap: () {},
+          onTap: () {  Navigator.push(context,
+                MaterialPageRoute(builder: (context) =>Edit()));
+                     },
         ),
         ListTile(
           title: Text('View your header imge'),
@@ -47,26 +56,7 @@ class BlogScreenConstant extends StatelessWidget {
     );
   }
 
-  static Widget createNewTumblr() {
-    //the shape of create new tumblr
-
-    return PopupMenuItem(
-      child: Row(
-        children: <Widget>[
-          Icon(
-            Icons.add_circle_outline,
-            color: Color(0xffa8a7a7),
-          ),
-          SizedBox(
-            width: 5,
-          ),
-          Text('Create a new Tumblr')
-        ],
-      ),
-      value: 'create',
-    );
-  }
-
+  
   static String toLengthFifteen(String text) {
     if (text.length > 15) {
       {
@@ -77,17 +67,9 @@ class BlogScreenConstant extends StatelessWidget {
     }
   }
 
-  static void setBlogScreenDescription(String description) {
-    profileDescription = description;
-  }
-
-  static String getBlogScreenDescription() {
-    return profileDescription;
-  }
-
   static Color accent = Color(0xffffff00);
 
-  static Color bottomCoverColor = Color(0xffb03fa8);
+  //static Color bottomCoverColor = Color(0xffb03fa8);
 
   ///color of header
   static String valueOfDropList = 'unknown';
@@ -109,11 +91,11 @@ class BlogScreenConstant extends StatelessWidget {
   static Color postsUnderline = Color(0xffffff00);
   static Color likesUnderline = Color(0xffb03fa8);
   static Color followingUnderline = Color(0xffb03fa8);
-  static String title = 'untitled';
+  //static String title = 'untitled';
   static String userName = 'nervouswinner';
   static String headerImgPath = 'images/header.png';
   static String avatarPath = 'images/avatar.png';
-  static String profileDescription = 'i want to finish this project';
+  // static String profileDescription = 'i want to finish this project';
 
   ///for tumbler blogs
   static List tumblrsBlog = [userName, 'account2'];

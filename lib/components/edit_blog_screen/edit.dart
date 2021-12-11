@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:tumblrx/components/edit_blog_screen/edit_app_bar.dart';
 import 'package:tumblrx/services/blog_screen.dart';
 import '../blog_screen_constant.dart';
+import 'cover_image_bottomsheet.dart';
+import 'edit_avatar.dart';
 import 'edit_bottons.dart';
 
 class Edit extends StatefulWidget {
@@ -11,6 +13,8 @@ class Edit extends StatefulWidget {
 }
 
 class _EditState extends State<Edit> {
+  
+
   TextEditingController titleController = new TextEditingController();
 
   TextEditingController descriptionController = new TextEditingController();
@@ -19,28 +23,43 @@ class _EditState extends State<Edit> {
     final blogProvider = Provider.of<BlogScreenConstantProvider>(context);
     return Scaffold(
         body: Container(
-      color: BlogScreenConstant.bottomCoverColor,
-      child: Column(
+      color: blogProvider.getBottomColor(),
+      child:Stack(
+        children: [
+          Column(
         children: <Widget>[
           Stack(
+            
             children: <Widget>[
-              Container(
-                  height: MediaQuery.of(context).size.height / 3.2,
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: AssetImage('images/header.png'),
-                          fit: BoxFit.fill)),
-                  child: Align(
-                    alignment: Alignment.bottomRight,
-                    child: Icon(
-                      Icons.edit_outlined,
-                      color: Colors.white,
-                    ),
-                  )),
+              GestureDetector(
+                child: Container(
+                    height: MediaQuery.of(context).size.height / 3.2,
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: AssetImage('images/header.png'),
+                            fit: BoxFit.fill)),
+                    child: Align(
+                      alignment: Alignment.bottomRight,
+                      child: Icon(
+                        Icons.edit_outlined,
+                        color: Colors.white,
+                      ),
+                    )),
+                onTap: () {
+                   ///bottom sheet for cover image
+                  showModalBottomSheet( context: context,
+                builder:CoverImageBottomSheet().build);
+
+                  
+                },
+              ),
               EditAppBar().defaultAppBar(context),
+
             ],
+            
           ),
-          GestureDetector(
+          Container(
+            padding: EdgeInsets.only(top:20),
             child: TextField(
               textAlign: TextAlign.center,
               textInputAction: TextInputAction.newline,
@@ -63,7 +82,7 @@ class _EditState extends State<Edit> {
                 blogProvider.setTitle(value.toString());
               },
             ),
-            onTap: () {},
+           
           ),
           TextField(
             textAlign: TextAlign.center,
@@ -89,6 +108,12 @@ class _EditState extends State<Edit> {
           EditButtons()
         ],
       ),
-    ));
+      EditAvatar().editCircleAvatar(context)
+     // EditAvatar().editSquareAvatar(context)
+
+
+        ],
+       
+    )));
   }
 }

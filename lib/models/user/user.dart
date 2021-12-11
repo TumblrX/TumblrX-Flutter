@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:tumblrx/models/user/blog.dart';
 
+
 class User extends ChangeNotifier {
   int following;
   String defaultPostFormat;
@@ -28,6 +29,8 @@ class User extends ChangeNotifier {
 
   User();
 
+
+ 
   User.fromJson(Map<String, dynamic> json) {
     following = json['following'];
     defaultPostFormat = json['default_post_format'];
@@ -72,4 +75,22 @@ class User extends ChangeNotifier {
     }
     return null;
   }
+   String getActiveBlogTitle() {
+    for (int i = 0; i < blogs.length; i++) {
+      if (blogs[i].name == activeBlog) {
+        return blogs[i].title;
+      }
+    }
+    return null;
+  }
+  String getActiveBlogDescription() {
+    for (int i = 0; i < blogs.length; i++) {
+      if (blogs[i].name == activeBlog) {
+        return blogs[i].description;
+      }
+    }
+    return null;
+  }
+  
+ 
 }
