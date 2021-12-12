@@ -343,7 +343,7 @@ class CreatingPost extends ChangeNotifier {
 
   ///It maps the collected data about the post to the final form and send it in a post request.
   void postData(BuildContext context) async {
-    // String url =
+    String url = 'https://1b0da51d-62c7-4172-b0c5-c290339c6fb6.mock.pstmn.io';
     //     'https://54bd9e92-6a19-4377-840f-23886631e1a8.mock.pstmn.io/createpost'; //TODO: edit it
     // var req = http.MultipartRequest('POST', Uri.parse(url));
     String tags = chosenHashtags.join(', ');
@@ -354,7 +354,7 @@ class CreatingPost extends ChangeNotifier {
       'state': postOption.toString().substring(11),
       'send_to_twitter': shareToTwitter,
       'blogAttribution': {
-        'blogTitle': Provider.of<User>(context, listen: false).activeBlog,
+        'blogTitle': Provider.of<User>(context, listen: false).activeBlogTitle,
       }
     };
 
@@ -450,6 +450,7 @@ class CreatingPost extends ChangeNotifier {
     formattings.add(formatting);
 
     TextBlock textBlock = TextBlock(
+        "text",
         postContent[i]['content']['data']
             .textStyleType
             .toString()

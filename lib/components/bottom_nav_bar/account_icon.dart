@@ -40,22 +40,25 @@ class _AccountIconState extends State<AccountIcon> {
       builder: (ctx, user, child) => MouseRegion(
         onHover: (event) {
           _setSelection(true);
-          user.setActiveBlog(widget._blog.name);
+          user.setActiveBlog(widget._blog.handle);
+          user.setActiveBlogTitle(widget._blog.title);
         },
         onEnter: (event) {
           _setSelection(true);
-          user.setActiveBlog(widget._blog.name);
+          user.setActiveBlog(widget._blog.handle);
+          user.setActiveBlogTitle(widget._blog.title);
         },
         onExit: (event) {
           _setSelection(false);
           user.setActiveBlog(widget._defaultBlogName);
+          user.setActiveBlogTitle(widget._blog.title);
         },
         child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: CircleAvatar(
             radius: _isHovered ? 30.0 : 25.0,
-            backgroundImage: AssetImage(
-                widget._blog.blogAvatar ?? "assets/icon/avatar2.png"),
+            backgroundImage: AssetImage(widget._blog.blogAvatar ??
+                "uploads/post/image/post-1639258474966-61b28a610a654cdd7b39171c.jpeg"),
           ),
         ),
       ),

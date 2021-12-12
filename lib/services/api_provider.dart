@@ -31,21 +31,23 @@ class MockHttpRepository {
   /// API to send post requests
   /// @endPoint : the end point to which send the request
   /// @req : request body as map<String, dynamic>
-  static Future<Response> sendPostRequest(
-      String endPoint, Map<String, dynamic> req,
+  static Future<Response> sendPostRequest(String endPoint, String reqBody,
       {Map<String, String> headers}) async {
     String fullUrl = "$api/$endPoint";
 
-    // constructin the request body from passed map
-    String reqBody = "";
-    for (var reqParam in req.entries) {
-      if (reqParam.value is String)
-        reqBody += '${reqParam.key}="${reqParam.value}"';
-      else
-        reqBody += '${reqParam.key}=${reqParam.value}';
-    }
+    // // constructin the request body from passed map
+    // String reqBody = "";
+    // for (var reqParam in req.entries) {
+    //   if (reqParam.value is String)
+    //     reqBody += '${reqParam.key}="${reqParam.value}"';
+    //   else
+    //     reqBody += '${reqParam.key}=${reqParam.value}';
+    // }
     final Uri uri = Uri.parse(fullUrl);
-    return post(uri, body: reqBody);
+    if (headers != null)
+      return post(uri, body: reqBody, headers: headers);
+    else
+      return post(uri, body: reqBody);
   }
 }
 
@@ -65,8 +67,17 @@ class ApiHttpRepository {
   /// API to send post requests
   /// @endPoint : the end point to which send the request
   /// @req : request body as map<String, dynamic>
-  Future sendGetRequest(String endPoint, Map<String, dynamic> req) async {
-    await Future.delayed(const Duration(seconds: 2));
-    return;
+  static Future sendGetRequest(String endPoint,
+      {Map<String, String> headers, Map<String, dynamic> query}) async {
+    if (query != null) {
+      endPoint = endPoint + '?';
+      query.forEach((key, value) {
+        endPoint = '$endPoint$key=$value&';
+      });
+      endPoint = endPoint.substring(0, endPoint.length - 1);
+    }
+    final Uri uri = Uri.parse('${api}api/$endPoint');
+    if (headers != null) return await get(uri, headers: headers);
+    return await get(uri);
   }
 }

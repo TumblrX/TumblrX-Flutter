@@ -58,7 +58,7 @@ class PostBlogChoice extends StatelessWidget {
               ],
             ),
             Spacer(),
-            Provider.of<User>(context).activeBlog == username
+            Provider.of<User>(context).activeBlogName == username
                 ? Icon(
                     Icons.done,
                     color: Colors.blue,
