@@ -1,5 +1,5 @@
 class BlogTheme {
-  String avatarShape='circle';
+  String avatarShape;
   String backgroundColor;
   String bodyFont;
   String headerImage;

@@ -1,7 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:tumblrx/models/user/blog.dart';
-
-
 class User extends ChangeNotifier {
   int following;
   String defaultPostFormat;

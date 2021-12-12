@@ -6,18 +6,14 @@ import '../blog_screen_constant.dart';
 import 'cover_image_bottomsheet.dart';
 import 'edit_avatar.dart';
 import 'edit_bottons.dart';
-
 class Edit extends StatefulWidget {
   @override
   _EditState createState() => _EditState();
 }
-
 class _EditState extends State<Edit> {
-  
+  TextEditingController titleController = new TextEditingController(text: 'title');//i will put initial title here
 
-  TextEditingController titleController = new TextEditingController();
-
-  TextEditingController descriptionController = new TextEditingController();
+  TextEditingController descriptionController = new TextEditingController(text: 'description');//i will put initial title here
   @override
   Widget build(BuildContext context) {
     final blogProvider = Provider.of<BlogScreenConstantProvider>(context);
@@ -61,6 +57,7 @@ class _EditState extends State<Edit> {
           Container(
             padding: EdgeInsets.only(top:20),
             child: TextField(
+              
               textAlign: TextAlign.center,
               textInputAction: TextInputAction.newline,
               style: TextStyle(
@@ -110,9 +107,7 @@ class _EditState extends State<Edit> {
       ),
       EditAvatar().editCircleAvatar(context)
      // EditAvatar().editSquareAvatar(context)
-
-
-        ],
+             ],
        
     )));
   }

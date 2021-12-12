@@ -2,9 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
 import 'dart:convert' as convert;
 import 'package:tumblrx/services/api_provider.dart';
-import 'dart:io';
 import 'package:image_picker/image_picker.dart';
-
 import 'blog_theme.dart';
 
 class Blog extends ChangeNotifier {

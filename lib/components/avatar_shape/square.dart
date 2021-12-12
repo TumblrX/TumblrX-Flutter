@@ -6,7 +6,6 @@ import 'package:tumblrx/services/blog_screen.dart';
   
 /// for square avatar
 class Square extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     final blogProvider = Provider.of<BlogScreenConstantProvider>(context);

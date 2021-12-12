@@ -2,16 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/Components/blog_screen_constant.dart';
 import 'package:tumblrx/services/blog_screen.dart';
-
 ///this to get the shape of circle avatar
-
 /// for avatar image
 class AvatarImage extends StatefulWidget {
 
   @override
   _AvatarImageState createState() => _AvatarImageState();
 }
-
 class _AvatarImageState extends State<AvatarImage> {
   @override
   Widget build(BuildContext context) {
