@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:styled_text/tags/styled_text_tag.dart';
 import 'package:styled_text/tags/styled_text_tag_action.dart';
 import 'package:styled_text/tags/styled_text_tag_base.dart';
+import 'package:styled_text/tags/styled_text_tag_custom.dart';
 import 'package:tumblrx/utilities/constants.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -26,7 +27,22 @@ Map<String, StyledTextTagBase> formattingTags(
     'quote': StyledTextTag(style: kQuoteTextStyle),
     'chat': StyledTextTag(style: kChatTextStyle),
     'lucille': StyledTextTag(style: kLucilleTextStyle),
-    'color': StyledTextTag(style: TextStyle(color: color)),
+    'color': StyledTextCustomTag(
+      baseStyle: TextStyle(),
+      parse: (baseStyle, attributes) {
+        if (attributes.containsKey('text') &&
+            attributes['text'].substring(0, 1) == '#' &&
+            attributes['text'].length >= 6) {
+          final String hexColor = attributes['text'].substring(1);
+          final String alphaChannel =
+              (hexColor.length == 8 ? hexColor.substring(6, 8) : 'FF');
+          final Color color =
+              Color(int.parse('0x$alphaChannel' + hexColor.substring(0, 6)));
+          return baseStyle.copyWith(color: color);
+        }
+        return baseStyle;
+      },
+    ),
     'mention': StyledTextActionTag((_, attrs) => mentionCallback()),
   };
 }

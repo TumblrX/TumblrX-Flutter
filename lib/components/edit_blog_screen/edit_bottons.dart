@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:tumblrx/services/blog_screen.dart';
 import '../blog_screen_constant.dart';
 
 class EditButtons extends StatefulWidget {
@@ -8,7 +10,10 @@ class EditButtons extends StatefulWidget {
 
 class _EditButtonsState extends State<EditButtons> {
   @override
+
   Widget build(BuildContext context) {
+     final blogProvider = Provider.of<BlogScreenConstantProvider>(context);
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -21,7 +26,7 @@ class _EditButtonsState extends State<EditButtons> {
                   style: TextStyle(color: Color(0xffc7c1c1))),
               style: ButtonStyle(
                 backgroundColor:
-                    MaterialStateProperty.all<Color>(BlogScreenConstant.bottomCoverColor),
+                    MaterialStateProperty.all<Color>(blogProvider.getBottomColor()),
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
                         side: BorderSide(color: Color(0xffc7c1c1)),

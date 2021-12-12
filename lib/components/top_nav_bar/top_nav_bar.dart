@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:tumblrx/components/top_nav_bar/tumblrx_icon.dart';
 
 class TopNavBar extends StatelessWidget {
+  final TabController _controller;
+  TopNavBar(this._controller);
   //constanst for rendering the widget
 
   /// tumblr logo icon width
@@ -45,6 +47,7 @@ class TopNavBar extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           TabBar(
+            controller: _controller,
             isScrollable: true,
             labelPadding: EdgeInsets.symmetric(
                 horizontal: _horizontalLabelPadding,

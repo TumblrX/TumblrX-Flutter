@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/models/user/user.dart';
-
 import 'post_blog_choice.dart';
 
 ///Shows the user of Creating post and allows you to choose the blog that post will be added into.
@@ -67,12 +66,12 @@ class CreatePostUser extends StatelessWidget {
 
   List<Widget> getBlogs(BuildContext context) {
     List<Widget> blogs = [];
-    for (int i = 0; i < Provider.of<User>(context).blogs.length; i++) {
+    for (int i = 0; i < Provider.of<User>(context).userBlogs.length; i++) {
       blogs.add(
         PostBlogChoice(
-          username: Provider.of<User>(context).blogs[i].name,
-          blogTitle: Provider.of<User>(context).blogs[i].title,
-          avatar: Provider.of<User>(context).blogs[i].blogAvatar,
+          username: Provider.of<User>(context).userBlogs[i].handle,
+          blogTitle: Provider.of<User>(context).userBlogs[i].title,
+          avatar: Provider.of<User>(context).userBlogs[i].blogAvatar,
         ),
       );
     }

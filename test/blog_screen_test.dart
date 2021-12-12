@@ -17,10 +17,7 @@ void main() {
       String image = imageObject.img;
       expect(image, 'images/avatar.dart');
     });
-    test('Blog Screen discription', () {
-      BlogScreenConstant.setBlogScreenDescription('hello world');
-      expect(BlogScreenConstant.getBlogScreenDescription(), 'hello world');
-    });
+    
     test('set and get cover color ', () {
       final blogScreen = BlogScreenConstantProvider();
 

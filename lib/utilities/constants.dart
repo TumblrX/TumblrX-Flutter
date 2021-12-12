@@ -93,11 +93,17 @@ const KPickTagsInfoText = TextStyle(
     fontWeight: FontWeight.bold);
 
 final List<String> reactionIcons = [
-  "assets/icon/message.png",
-  "assets/icon/repeat.png",
-  "assets/icon/love.png"
+  "assets/icon/notes.png",
+  "assets/icon/reblogs.png",
+  "assets/icon/heart.png"
 ];
 
+const String likeIcon = "assets/icon/like.png";
+const String commentIcon = "assets/icon/chat.png";
+const String editIcon = "assets/icon/edit.png";
+const String reblogIcon = "assets/icon/reblog.png";
+const String shareIcon = "assets/icon/share.png";
+const String deleteIcon = "assets/icon/remove.png";
 //small text info
 const KTextInfo = TextStyle(
   fontFamily: 'Pacifico',
