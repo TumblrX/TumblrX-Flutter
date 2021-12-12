@@ -34,10 +34,11 @@ class User extends ChangeNotifier {
   List<Blog> _blogs = [];
 
   /// name of the currently active/used blog
-  String _activeBlogName;
+  //String _activeBlogName;
+  int _activeBlogIndex;
 
   /// title of the currently active/used blog
-  String _activeBlogTitle;
+  //String _activeBlogTitle;
 
   User();
 
@@ -45,10 +46,10 @@ class User extends ChangeNotifier {
   User.fromJson(Map<String, dynamic> json) {
     // =====
     // username
-    if (json.containsKey('username'))
-      _username = json['username'];
+    if (json.containsKey('name'))
+      _username = json['name'];
     else
-      throw Exception('missing required parameter "username"');
+      throw Exception('missing required parameter "name"');
 
     // blogs list
     if (json['blogs'] != null) {
@@ -107,14 +108,13 @@ class User extends ChangeNotifier {
 
     if (json['blogs'] != null) {
       // TODO : change this to handler
-      setActiveBlog(json['blogs'][0]['name']);
-      setActiveBlogTitle(json['blogs'][0]['title']);
       try {
         json['blogs'].forEach((v) {
           _blogs.add(new Blog.fromJson(v));
         });
+        setActiveBlog(json['blogs'][0]['handle']);
       } catch (err) {
-        print(err);
+        print('error in creating blogs $err');
       }
     }
   }
@@ -135,13 +135,16 @@ class User extends ChangeNotifier {
 
   /// API to set active/used blog name
   void setActiveBlog(String blogName) {
-    _activeBlogName = blogName;
+    //_activeBlogName = blogName;
+    _activeBlogIndex =
+        _blogs.indexWhere((element) => element.handle == blogName);
     //updateActiveBlog();
   }
 
-  void setActiveBlogTitle(String blogTitle) {
-    _activeBlogTitle = blogTitle;
-  }
+  // void setActiveBlogTitle(String blogTitle) {
+  //   _activeBlogTitle = blogTitle;
+  //   print(blogTitle);
+  // }
 
   /// API to notify listeners when the activeblog is changed
   void updateActiveBlog() {
@@ -149,42 +152,47 @@ class User extends ChangeNotifier {
   }
 
   /// getter for active blog name
-  String get activeBlogName => _activeBlogName;
+  int get activeBlogIndex => _activeBlogIndex;
 
   /// getter for active blog title
-  String get activeBlogTitle => _activeBlogTitle;
+  //String get activeBlogTitle => _activeBlogTitle;
 
   /// getter for active user blogs list
   List<Blog> get userBlogs => _blogs;
 
   ///Returns the link to the current active blog avatar
   String getActiveBlogAvatar() {
-    for (int i = 0; i < _blogs.length; i++) {
-      if (_blogs[i].handle == activeBlogName) {
-        return _blogs[i].blogAvatar;
-      }
-    }
-    return null;
+    // for (int i = 0; i < _blogs.length; i++) {
+    //   if (_blogs[i].handle == activeBlogName) {
+    //     return _blogs[i].blogAvatar;
+    //   }
+    // }
+    // return null;
+    return _blogs[_activeBlogIndex].blogAvatar;
   }
 
   ///Returns the title of the current active blog
   String getActiveBlogTitle() {
-    for (int i = 0; i < _blogs.length; i++) {
-      if (_blogs[i].handle == activeBlogName) {
-        return _blogs[i].title;
-      }
-    }
-    return null;
+    // for (int i = 0; i < _blogs.length; i++) {
+    //   if (_blogs[i].handle == activeBlogName) {
+    //     return _blogs[i].title;
+    //   }
+    // }
+    // return null;
+    return _blogs[_activeBlogIndex].title;
   }
- 
+
   String getActiveBlogDescription() {
-    for (int i = 0; i < _blogs.length; i++) {
-      if (_blogs[i].handle == _activeBlogName) {
-        return _blogs[i].getBlogDescription();
-      }
-    }
-    return null;
+    //for (int i = 0; i < _blogs.length; i++) {
+    //   if (_blogs[i].handle == _activeBlogName) {
+    //     return _blogs[i].getBlogDescription();
+    //   }
+    // }
+    // return null;
+    return _blogs[_activeBlogIndex].getBlogDescription();
   }
-  
- 
+
+  String getActiveBlogName() {
+    return _blogs[_activeBlogIndex].handle;
+  }
 }

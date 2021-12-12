@@ -20,13 +20,12 @@ class BlogScreen extends StatefulWidget {
 class _BlogScreenState extends State<BlogScreen>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
-  
+
   @override
   void initState() {
-  
     ///this controller for Tabs bar
     ///function used for Tab bars
-    
+
     _tabController = new TabController(length: 3, vsync: this);
 
     super.initState();
@@ -35,9 +34,9 @@ class _BlogScreenState extends State<BlogScreen>
   @override
   Widget build(BuildContext context) {
     final blogProvider = Provider.of<BlogScreenConstantProvider>(context);
-    
+
     return Scaffold(
-       backgroundColor: Color(0xFF001935),
+        backgroundColor: Color(0xFF001935),
         floatingActionButton: FloatingActionButton(
           backgroundColor: Colors.blue,
           child: Icon(Icons.edit),
@@ -73,6 +72,14 @@ class _BlogScreenState extends State<BlogScreen>
                 /// i will chnge it and make it equal total no of following-3*40
 
                 child: Container(
+                  constraints: !kIsWeb
+                      ? BoxConstraints()
+                      : BoxConstraints(
+                          maxWidth: 750.0,
+                          minWidth: MediaQuery.of(context).size.width < 750
+                              ? MediaQuery.of(context).size.width * 0.9
+                              : 750.0,
+                        ),
                   child: Column(
 
                       /// couloum have(the header image , avatar,title, description and tab bars )
@@ -83,7 +90,7 @@ class _BlogScreenState extends State<BlogScreen>
                           Column(
                             children: <Widget>[
                               ///display header image with icons and drop down list
-                                  
+
                               HeaderImage(),
 
                               ///display header image with icons and drop down list

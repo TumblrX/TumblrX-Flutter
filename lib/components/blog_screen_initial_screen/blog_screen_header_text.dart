@@ -21,13 +21,13 @@ class TextWriting extends StatelessWidget {
           children: <Widget>[
             Text(
               ///title
-              Provider.of<User>(context).activeBlogTitle,
+              Provider.of<User>(context).getActiveBlogTitle(),
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 38),
             ),
             Text(
-              ///description
-             blogProvider.profileDescription
-            )
+
+                ///description
+                blogProvider.profileDescription)
           ],
         )
 

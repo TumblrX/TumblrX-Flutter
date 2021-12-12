@@ -27,7 +27,7 @@ class ProfileIcon extends StatelessWidget {
       child: Column(
         children: (user != null && user.userBlogs != null)
             ? user.userBlogs
-                .map((blog) => AccountIcon(blog, user.activeBlogName))
+                .map((blog) => AccountIcon(blog, user.getActiveBlogName()))
                 .toList()
             : [Container()],
       ),
