@@ -1,10 +1,12 @@
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
 import 'package:tumblrx/models/post.dart';
 import 'dart:convert' as convert;
-
 import 'package:tumblrx/services/api_provider.dart';
+import 'package:image_picker/image_picker.dart';
+import 'blog_theme.dart';
 
-class Blog {
+class Blog extends ChangeNotifier {
   /// The user's tumblr short name
   String _handle;
 
@@ -53,6 +55,9 @@ class Blog {
 
   /// list of posts of this blog
   List<Post> _posts;
+
+  /// themes of Blog
+  BlogTheme blogTheme;
 
   Blog(
       [this._handle,
@@ -179,5 +184,47 @@ class Blog {
   void blockBlog(String toBlock) async {
     //String url = 'blog/$name/blocks';
     try {} catch (error) {}
+  }
+
+  void setBlogAvatar(String avatar) {
+    _blogAvatar = avatar;
+    notifyListeners();
+  }
+
+  void setBlogBackGroundColor(String color) {
+    blogTheme.backgroundColor = color;
+    notifyListeners();
+  }
+
+  void setHeaderImage(String image) {
+    blogTheme.headerImage = image;
+    notifyListeners();
+  }
+
+  void setAvatarShape(String shape) {
+    blogTheme.avatarShape = shape;
+    notifyListeners();
+  }
+
+  String getAvatarShape() {
+    return blogTheme.avatarShape;
+  }
+
+  String getHeaderImage() {
+    return blogTheme.headerImage;
+  }
+
+  String  getBlogDescription()
+  {
+
+    return _description;
+  }
+
+  static Future pickImage(int indicator) async {
+    final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+    print(image.path);
+    if (image == null) return;
+    if (indicator == 1) Blog().setBlogAvatar(image.path);
+    if (indicator == 2) Blog().setHeaderImage(image.path);
   }
 }

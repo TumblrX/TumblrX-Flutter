@@ -4,6 +4,7 @@ import 'package:tumblrx/components/blog_screen_constant.dart';
 import 'package:tumblrx/components/edit_blog_screen/edit.dart';
 import 'package:tumblrx/models/user/user.dart';
 import '../blog_screen_search/blog_screen_search.dart';
+import 'create_new_tumblr.dart';
 
 /// this class display header image of blog screen ,icons and drop down list
 class HeaderImage extends StatefulWidget {
@@ -12,8 +13,8 @@ class HeaderImage extends StatefulWidget {
 }
 
 class _HeaderImageState extends State<HeaderImage> {
-  // String selectItem =
-  //     BlogScreenConstant.toLengthFifteen(BlogScreenConstant.tumblrsBlog[0]);
+  String selectItem =
+      BlogScreenConstant.toLengthFifteen(BlogScreenConstant.tumblrsBlog[0]);
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -39,12 +40,31 @@ class _HeaderImageState extends State<HeaderImage> {
                       onSelected: (value) {
                         setState(() {
                           ///every time we select item from drop down list
-                          // selectItem = BlogScreenConstant.toLengthFifteen(
-                          //     value.toString());
                           Provider.of<User>(context, listen: false)
                               .setActiveBlog(value);
-                          Provider.of<User>(context, listen: false)
-                              .updateActiveBlog();
+
+
+                              if (value=='create')
+                              {
+                                Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => CreateNewTumblrPage()),
+  );
+
+
+                              }
+
+                              ///////////////////////////////////////////////////////////////
+                          // selectItem = BlogScreenConstant.toLengthFifteen(
+                          //     value.toString());
+                        //  Provider.of<User>(context, listen: false)
+                          //    .setActiveBlog(value);
+                          //Provider.of<User>(context, listen: false)
+                            //  .updateActiveBlog();
+
+                        ////////////////////////////////////////////////////////////////////////////////
+
+
 
                           ///function if numbers of character more than 15 make it 15
                         });
@@ -88,11 +108,27 @@ class _HeaderImageState extends State<HeaderImage> {
                                   .handle,
                             ),
                           PopupMenuDivider(),
-                          BlogScreenConstant.createNewTumblr(),
+                          PopupMenuItem(
+                            child: Row(
+                              children: <Widget>[
+                                Icon(
+                                  Icons.add_circle_outline,
+                                  color: Color(0xffa8a7a7),
+                                ),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                Text('Create a new Tumblr')
+                              ],
+                            ),
+                            value: 'create',
+                           
+                          )
 
                           ///create new blogs
                         ];
                       },
+                      
                     )
                   ],
                 ),
