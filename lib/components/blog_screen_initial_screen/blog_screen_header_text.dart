@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/services/blog_screen.dart';
 
 class TextWriting extends StatelessWidget {
@@ -25,7 +26,7 @@ class TextWriting extends StatelessWidget {
             ),
             Text(
               ///description
-              BlogScreenConstant.profileDescription,
+             blogProvider.profileDescription
             )
           ],
         )
