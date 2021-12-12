@@ -6,4 +6,11 @@ class BlogTheme {
   String headerImage;
   String headerImageFocused;
   String headerImagePoster;
+  String titleColor;
+  String titleFont;
+  String titleFontWeight;
+  bool showAvatar;
+  bool showDescription;
+  bool showHeaderImage;
+  bool showTitle;
 }

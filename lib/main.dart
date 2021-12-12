@@ -24,6 +24,7 @@ import 'package:tumblrx/screens/login_user_data.dart';
 import 'package:tumblrx/utilities/environment.dart';
 
 import 'components/my_custom_scroll_behavior.dart';
+import 'models/user/blog.dart';
 
 Future<void> main() async {
   await dotenv.load(fileName: Environment.fileName);
@@ -58,7 +59,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<User>(
           create: (context) => User(),
         ),
-
+         ChangeNotifierProvider<Blog>(
+          create: (context) => Blog(),
+        ), 
         ChangeNotifierProvider<Content>(
           create: (context) => Content(),
         ),

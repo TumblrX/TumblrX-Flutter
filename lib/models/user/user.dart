@@ -176,4 +176,15 @@ class User extends ChangeNotifier {
     }
     return null;
   }
+ 
+  String getActiveBlogDescription() {
+    for (int i = 0; i < _blogs.length; i++) {
+      if (_blogs[i].handle == _activeBlogName) {
+        return _blogs[i].getBlogDescription();
+      }
+    }
+    return null;
+  }
+  
+ 
 }
