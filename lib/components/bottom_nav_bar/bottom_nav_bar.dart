@@ -30,8 +30,8 @@ class _BottomNavBarWidgetState extends State<BottomNavBarWidget> {
       setState(() {
         _selectedIndex = widget._selectedIndexNotifier.value;
       });
-      super.initState();
     });
+    super.initState();
   }
 
   /// update the state of the bar and navigate to the tapped page
