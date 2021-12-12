@@ -27,9 +27,7 @@ class _HeaderImageState extends State<HeaderImage> {
               children: [
                 Row(
                   children: <Widget>[
-                    Text(
-                        BlogScreenConstant.toLengthFifteen(
-                            Provider.of<User>(context).activeBlogName),
+                    Text(Provider.of<User>(context).activeBlogTitle,
                         style: TextStyle(
                           color: Colors.white,
                         )),

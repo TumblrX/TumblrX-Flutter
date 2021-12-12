@@ -20,7 +20,7 @@ class TextWriting extends StatelessWidget {
           children: <Widget>[
             Text(
               ///title
-              Provider.of<User>(context).getActiveBlogTitle(),
+              Provider.of<User>(context).activeBlogTitle,
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 38),
             ),
             Text(
