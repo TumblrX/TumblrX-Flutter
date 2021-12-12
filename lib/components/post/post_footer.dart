@@ -28,6 +28,8 @@ class _PostFooterState extends State<PostFooter> {
 
   final double _interactIocnSize = 15;
 
+  final String errorMessage = 'Something went wrong!';
+
   OverlayEntry _blogsSelectorPopup;
 
   /// flag for the user's like/unlike on the post
@@ -57,24 +59,23 @@ class _PostFooterState extends State<PostFooter> {
         setState(() {
           _liked = !_liked;
         });
+      else
+        showSnackBarMessage(errorMessage);
     }).catchError((e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Something went wrong!'),
-        ),
-      );
+      showSnackBarMessage(errorMessage);
     });
   }
 
   /// callback to insert an overlay entry to choose which blog to use in reblogging
   void _showBlogsPicker(context) {
     User user = Provider.of<User>(context, listen: false);
+    print(user.userBlogs.length);
     final double avatarSize = 50;
     _blogsSelectorPopup = OverlayEntry(
       builder: (ctx) => Material(
         color: Colors.blue.withOpacity(0.3),
         child: Stack(
-          children: user.blogs
+          children: user.userBlogs
               .map((blog) => AnimatedAlign(
                     alignment: Alignment(-0.7, -0.4),
                     duration: Duration(milliseconds: 200),
@@ -191,11 +192,19 @@ class _PostFooterState extends State<PostFooter> {
     );
   }
 
+  void showSnackBarMessage(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: Colors.green,
+        content: Text(message),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // get active blog name to check the action icons view mode
-    String activeBlogName = Provider.of<User>(context).activeBlog;
-
+    String activeBlogTitle = Provider.of<User>(context).activeBlogTitle;
     // get the post object to access its data
     _post = Provider.of<Content>(context).posts[widget._postIndex];
 
@@ -247,18 +256,18 @@ class _PostFooterState extends State<PostFooter> {
               _actionIcon(likeIcon, () => likePost(),
                   _liked ? Colors.red : Colors.white),
             ],
-            if (_post.blogTitle == activeBlogName) ...[
+            if (_post.blogTitle == activeBlogTitle) ...[
               // remove icon
               _actionIcon(deleteIcon, () {
-                try {
-                  _post.deletePost();
-                } catch (error) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('Something went wrong!'),
-                    ),
-                  );
-                }
+                _post.deletePost().then(
+                  (value) {
+                    if (!value) {
+                      showSnackBarMessage(errorMessage);
+                    }
+                  },
+                ).catchError((error) {
+                  showSnackBarMessage(errorMessage);
+                });
               }, Colors.white),
               // edit icon
               _actionIcon(editIcon, () => _post.showPost(widget._postIndex),

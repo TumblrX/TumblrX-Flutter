@@ -44,7 +44,7 @@ class Content extends ChangeNotifier {
   List<Post> get posts => [..._posts];
 
   /// return whether there are more posts to load or not
-  bool hasMore() => _totalPosts == _posts.length;
+  bool hasMore() => _posts.length < _totalPosts;
 
   Future<List<Post>> getMorePosts(
       String endPoint, int pageNum, Authentication auth) async {

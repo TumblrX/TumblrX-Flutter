@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:tumblrx/components/post/post_footer.dart';
 import 'package:tumblrx/components/post/post_header.dart';
+import 'package:tumblrx/components/post/tags_widget.dart';
 import 'package:tumblrx/models/posts/audio_block.dart';
 import 'package:tumblrx/models/posts/image_block.dart';
 import 'package:tumblrx/models/posts/link_block.dart';
@@ -52,7 +53,7 @@ class Post {
   String reblogKey;
 
   /// Tags applied to the post
-  List<String> tags = [];
+  List<String> _tags = [];
 
   /// The URL for the source of the content (for quotes, reblogs, etc)
   String sourceUrl;
@@ -155,7 +156,7 @@ class Post {
     // post tags
     if (parsedJson.containsKey('tags')) {
       for (var i = 0; i < parsedTags.length; i++)
-        tags.add(parsedJson['tags'][i].toString());
+        _tags.add(parsedJson['tags'][i].toString());
     }
 
     // post content
@@ -333,6 +334,8 @@ class Post {
     }
   }
 
+  void navigateToTag(String tag) {}
+
   /// API for post object to render the post
   Container showPost(int index) {
     return Container(
@@ -346,6 +349,10 @@ class Post {
             children:
                 content.map<Widget>((block) => block.showBlock()).toList(),
           ),
+          Divider(
+            color: Colors.transparent,
+          ),
+          TagsWidget(_tags),
           Divider(
             color: Colors.transparent,
           ),

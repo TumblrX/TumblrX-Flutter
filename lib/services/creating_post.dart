@@ -354,7 +354,7 @@ class CreatingPost extends ChangeNotifier {
       'state': postOption.toString().substring(11),
       'send_to_twitter': shareToTwitter,
       'blogAttribution': {
-        'blogTitle': Provider.of<User>(context, listen: false).activeBlog,
+        'blogTitle': Provider.of<User>(context, listen: false).activeBlogTitle,
       }
     };
 

@@ -48,8 +48,8 @@ dependencies:
   flutter_dotenv: ^5.0.2
   cached_network_image: ^3.2.0
   flutter_downloader: ^1.7.1
-  path_provider: ^2.0.8
-  permission_handler: ^8.3.0
+  #path_provider: ^2.0.8
+  #permission_handler: ^7.3.0
   #flutter_link_previewer: ^2.6.0
   #youtube_player_flutter: ^8.0.0
   

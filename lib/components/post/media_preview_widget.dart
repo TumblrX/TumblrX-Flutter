@@ -6,9 +6,9 @@
 */
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
+//import 'package:flutter_downloader/flutter_downloader.dart';
+//import 'package:path_provider/path_provider.dart';
+//import 'package:permission_handler/permission_handler.dart';
 
 //import 'package:cached_network_image/cached_network_image.dart';
 class MediaWidget extends StatelessWidget {
@@ -85,17 +85,17 @@ class MediaWidget extends StatelessWidget {
   void _sharePost() {}
   void _sharePhoto() {}
   void _downloadPhoto() async {
-    // ask for permission to storage for downloading
-    final status = await Permission.storage.request();
-    // if permission is granted, proceed with downloading process
-    if (status.isGranted) {
-      final externalStorageDirectory = await getExternalStorageDirectory();
-      FlutterDownloader.enqueue(
-        url: this._url,
-        savedDir: externalStorageDirectory.path,
-        saveInPublicStorage: true,
-      );
-    }
+    // // ask for permission to storage for downloading
+    // final status = await Permission.storage.request();
+    // // if permission is granted, proceed with downloading process
+    // if (status.isGranted) {
+    //   final externalStorageDirectory = await getExternalStorageDirectory();
+    //   FlutterDownloader.enqueue(
+    //     url: this._url,
+    //     savedDir: externalStorageDirectory.path,
+    //     saveInPublicStorage: true,
+    //   );
+    // }
   }
 
   /// build full screen preview of the tapped media

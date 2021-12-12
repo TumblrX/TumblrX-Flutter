@@ -45,6 +45,8 @@ class _HeaderImageState extends State<HeaderImage> {
                           //     value.toString());
                           Provider.of<User>(context, listen: false)
                               .setActiveBlog(value);
+                          Provider.of<User>(context, listen: false)
+                              .updateActiveBlog();
 
                           ///function if numbers of character more than 15 make it 15
                         });
@@ -54,7 +56,7 @@ class _HeaderImageState extends State<HeaderImage> {
                           for (var i = 0;
                               i <
                                   Provider.of<User>(context, listen: false)
-                                      .blogs
+                                      .userBlogs
                                       .length;
                               i++)
 
@@ -70,7 +72,7 @@ class _HeaderImageState extends State<HeaderImage> {
                                       image: AssetImage(Provider.of<User>(
                                                   context,
                                                   listen: false)
-                                              .blogs[i]
+                                              .userBlogs[i]
                                               .blogAvatar ??
                                           "assets/icon/avatar2.png"),
                                     ),
@@ -79,13 +81,13 @@ class _HeaderImageState extends State<HeaderImage> {
                                     width: 5,
                                   ),
                                   Text(Provider.of<User>(context, listen: false)
-                                      .blogs[i]
-                                      .name)
+                                      .userBlogs[i]
+                                      .handle)
                                 ],
                               ),
                               value: Provider.of<User>(context, listen: false)
-                                  .blogs[i]
-                                  .name,
+                                  .userBlogs[i]
+                                  .handle,
                             ),
                           PopupMenuDivider(),
                           BlogScreenConstant.createNewTumblr(),

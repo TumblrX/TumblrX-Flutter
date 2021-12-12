@@ -67,12 +67,12 @@ class CreatePostUser extends StatelessWidget {
 
   List<Widget> getBlogs(BuildContext context) {
     List<Widget> blogs = [];
-    for (int i = 0; i < Provider.of<User>(context).blogs.length; i++) {
+    for (int i = 0; i < Provider.of<User>(context).userBlogs.length; i++) {
       blogs.add(
         PostBlogChoice(
-          username: Provider.of<User>(context).blogs[i].name,
-          blogTitle: Provider.of<User>(context).blogs[i].title,
-          avatar: Provider.of<User>(context).blogs[i].blogAvatar,
+          username: Provider.of<User>(context).userBlogs[i].handle,
+          blogTitle: Provider.of<User>(context).userBlogs[i].title,
+          avatar: Provider.of<User>(context).userBlogs[i].blogAvatar,
         ),
       );
     }
