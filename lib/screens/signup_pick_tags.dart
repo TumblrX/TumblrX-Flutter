@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:tumblrx/utilities/constants.dart';
-import 'package:tumblrx/services/authentication.dart';
-import 'package:provider/provider.dart';
 
 class SignUpPickTags extends StatefulWidget {
   static final String id = 'SignUp_PickTags';
@@ -28,7 +26,7 @@ class _SignUpPickTagsState extends State<SignUpPickTags> {
                   padding: const EdgeInsets.all(15.0),
                   child: ElevatedButton(
                     onPressed: () {},
-                    /* TODO:
+                    /* todo:
                      while(Navigator.canPop()){Navigator.pop()}
                      Navigator.pushNamed('main_screen)*/
                     child: Text(

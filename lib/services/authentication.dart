@@ -1,4 +1,8 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:tumblrx/services/api_provider.dart';
+import 'dart:convert' as convert;
 
 ///Contains the user data for login and sign up
 ///
@@ -9,6 +13,14 @@ class Authentication extends ChangeNotifier {
   String userEmail;
   String userPassword;
   bool isObscureSignUp = true; //for the signup to hide the password
+  String token; //for user authorization
+  bool emailExist = false;
+  String loginErrorMessage = "";
+
+  ///returns error message if the user doesnot exist
+  String getLogInErrorMessage() {
+    return loginErrorMessage;
+  }
 
   ///Changes the visibility state of the password textfield
   void toggleisObscure() {
@@ -19,9 +31,9 @@ class Authentication extends ChangeNotifier {
   ///Returns the visibility state of the password textfield
   bool get isObscurecontent => isObscureSignUp;
 
-  /* TODO:
- should also check if this email already exists from the mockservice
- */
+  ///indicates if the user exist or not
+  bool get doesEmailExist => emailExist;
+
   /// Checks if the email is in valid form for signup
   ///
   /// Returns an error message if the email is invalid
@@ -29,6 +41,8 @@ class Authentication extends ChangeNotifier {
   String checkValidEmail(String email) {
     if (email == null || email.isEmpty) {
       return 'Please enter some text';
+      // } else if (!emailExist) {
+      //   return 'email doesnot exist';
     } else if (email.contains('@') && email.contains('.com')) {
       userEmail = email;
       notifyListeners();
@@ -65,22 +79,96 @@ class Authentication extends ChangeNotifier {
     }
   }
 
+  ///sends a post request to the API
+  ///
+  ///checks if the user exist
+  ///And sets the user token
+  Future<bool> loginRequest() async {
+    final String endPoint = 'user/login';
+
+    Map<String, dynamic> loginRequestBody = {
+      "email": userEmail,
+      "password": userPassword
+    };
+
+    try {
+      final response = await http.post(
+          Uri.parse('${ApiHttpRepository.api}api/user/login'),
+          body: convert.jsonEncode(loginRequestBody),
+          headers: {'content-type': 'application/json'});
+
+      //if i get a bad response then this user doesnot exist
+      if (response.statusCode == 400) {
+        print("400");
+        loginErrorMessage = "wrong Email or password please try again";
+        notifyListeners();
+        return false;
+      } else if (response.statusCode != 200) {
+        print('!200');
+        throw Exception('error in the connection');
+      } else {
+        var responseObject = convert.jsonDecode(response.body);
+        token = responseObject['token'];
+        emailExist = true;
+        notifyListeners();
+        // print(response.statusCode);
+        // print(token);
+        // print(emailExist);
+        // return User.fromJson(resposeObject);
+        return true;
+      }
+    } catch (error) {
+      print(error);
+      return false;
+    }
+  }
+
+  ///sends a get request to the API
+  ///
+  ///gets the user info that the user is authorized to access
+  Future<Map<String, dynamic>> loginGetUserInfo() async {
+    final String endPoint = 'user/info';
+
+    try {
+      final response = await http.get(
+        Uri.parse(ApiHttpRepository.api + 'api/user/info'),
+        // Send authorization headers to the backend.
+        headers: {HttpHeaders.authorizationHeader: '$token'},
+      );
+
+      if (response.statusCode != 200)
+        throw Exception('user is not authorized');
+      else {
+        Map<String, dynamic> responseObject =
+            convert.jsonDecode(response.body) as Map<String, dynamic>;
+        print(response.statusCode);
+        print(responseObject);
+        try {
+          final blogsResponse = await http.get(
+            Uri.parse(ApiHttpRepository.api + 'api/user/get-blogs'),
+            // Send authorization headers to the backend.
+            headers: {HttpHeaders.authorizationHeader: '$token'},
+          );
+          if (blogsResponse.statusCode != 200)
+            throw Exception('error in getting blogs');
+          print(convert.jsonDecode(blogsResponse.body));
+          responseObject['blogs'] = convert.jsonDecode(blogsResponse.body);
+        } catch (error) {
+          throw Exception(error.message.toString());
+        }
+        print(responseObject);
+        return responseObject;
+      }
+    } catch (error) {
+      throw Exception(error.message.toString());
+    }
+  }
+
   ///Sets the user age
   void setUserAge(String age) {
     // print(age);
     int temp = int.parse(age);
     userAge = temp;
     notifyListeners();
-  }
-
-  String checkExistEmail(String email) {
-    if (email == null || email.isEmpty) {
-      return 'Please enter some text';
-    } else if (email.contains('@') && email.contains('.com')) {
-      userEmail = email;
-      notifyListeners();
-      return null;
-    } else
-      return 'unvalid email';
   }
 }

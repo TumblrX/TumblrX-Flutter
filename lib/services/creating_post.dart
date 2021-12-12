@@ -1,4 +1,4 @@
-import 'dart:convert';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:giphy_get/giphy_get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:tumblrx/models/creatingpost/text_field_data.dart';
 import 'package:tumblrx/models/posts/text_block.dart';
 import 'package:tumblrx/models/user/user.dart';
+import 'package:tumblrx/services/api_provider.dart';
 import 'package:tumblrx/utilities/constants.dart';
 import 'package:http/http.dart' as http;
 import 'package:tumblrx/utilities/hex_color_value.dart';
@@ -311,7 +312,6 @@ class CreatingPost extends ChangeNotifier {
   void addImage({bool isCamera}) async {
     final XFile image = await _picker.pickImage(
         source: isCamera ? ImageSource.camera : ImageSource.gallery);
-
     if (image != null) {
       Map img = {'type': PostContentType.image, 'content': image};
       postContent.insert(lastFocusedIndex + 1, img);
@@ -343,17 +343,18 @@ class CreatingPost extends ChangeNotifier {
 
   ///It maps the collected data about the post to the final form and send it in a post request.
   void postData(BuildContext context) async {
-    // String url =
+    String url = 'https://1b0da51d-62c7-4172-b0c5-c290339c6fb6.mock.pstmn.io';
     //     'https://54bd9e92-6a19-4377-840f-23886631e1a8.mock.pstmn.io/createpost'; //TODO: edit it
     // var req = http.MultipartRequest('POST', Uri.parse(url));
     String tags = chosenHashtags.join(', ');
+
     Map<String, dynamic> requestBody = {
       'postType': 'text',
       'tags': tags,
-      'state': postOption.toString().substring(12),
+      'state': postOption.toString().substring(11),
       'send_to_twitter': shareToTwitter,
       'blogAttribution': {
-        'blogTitle': Provider.of<User>(context, listen: false).activeBlog,
+        'blogTitle': Provider.of<User>(context, listen: false).activeBlogTitle,
       }
     };
 
@@ -376,7 +377,10 @@ class CreatingPost extends ChangeNotifier {
         // req.files.add(http.MultipartFile(map['identifier'],
         //     postContent[i]['content'].readAsBytes().asStream(), length,
         //     filename: postContent[i]['content'].name));
-        requestBody[map['identifier']] = postContent[i]['content'].name;
+        requestBody[map['identifier']] = await MultipartFile.fromFile(
+            postContent[i]['content'].path,
+            filename: postContent[i]['content']
+                .name); //postContent[i]['content'].name;
         postContentList.add(map);
       } else if (postContent[i]['type'] == PostContentType.video) {
         Map map = _getVideoBlockMap(i);
@@ -384,18 +388,25 @@ class CreatingPost extends ChangeNotifier {
         // req.files.add(http.MultipartFile(map['identifier'],
         //     postContent[i]['content'].readAsBytes().asStream(), length,
         //     filename: postContent[i]['content'].name));
-        requestBody[map['identifier']] = postContent[i]['content'].name;
+        requestBody[map['identifier']] = await MultipartFile.fromFile(
+            postContent[i]['content'].path,
+            filename: postContent[i]['content'].name);
         postContentList.add(map);
       }
     }
     requestBody['content'] = postContentList;
 
     try {
-      var response = await http.post(
-          Uri.parse(
-              'https://54bd9e92-6a19-4377-840f-23886631e1a8.mock.pstmn.io/createpost'),
-          body: jsonEncode(requestBody),
-          headers: {'Content-type': 'application/json'});
+      var body = FormData.fromMap(requestBody);
+      print(body.fields);
+      var dio = Dio();
+      var response =
+          await dio.post(MockHttpRepository.api + 'createpost', data: body);
+      // var response = await http.post(
+      //     Uri.parse(
+      //         'https://54bd9e92-6a19-4377-840f-23886631e1a8.mock.pstmn.io/createpost'),
+      //     body: jsonEncode(requestBody),
+      //     headers: {'Content-type': 'application/json'});
       print('Response status: ${response.statusCode}');
     } catch (e) {
       print(e);
@@ -439,6 +450,7 @@ class CreatingPost extends ChangeNotifier {
     formattings.add(formatting);
 
     TextBlock textBlock = TextBlock(
+        "text",
         postContent[i]['content']['data']
             .textStyleType
             .toString()
@@ -482,4 +494,3 @@ class CreatingPost extends ChangeNotifier {
     };
   }
 }
-

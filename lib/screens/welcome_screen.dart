@@ -27,7 +27,7 @@ class WelcomeScreen extends StatelessWidget {
               ),
               TextButton(
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(100, 0, 100, 0),
+                  padding: const EdgeInsets.fromLTRB(95, 0, 95, 0),
                   child: Text(
                     'Sign up',
                     style: KWelcomeScreenButton,

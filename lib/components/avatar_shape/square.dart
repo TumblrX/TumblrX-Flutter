@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:tumblrx/Components/blog_screen_constant.dart';
 import 'package:tumblrx/services/blog_screen.dart';
 
-  
 /// for square avatar
 class Square extends StatelessWidget {
   @override
@@ -16,7 +15,7 @@ class Square extends StatelessWidget {
           child: Container(
             width: MediaQuery.of(context).size.height / 8.7,
             height: MediaQuery.of(context).size.height / 8.8,
-            child:   ClipRRect(
+            child: ClipRRect(
               borderRadius: BorderRadius.circular(3),
               child: Image.asset('images/avatar.png'),
             ),
@@ -36,7 +35,7 @@ class Square extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20.0)),
                 context: context,
-                builder:  BlogScreenConstant.buildBottomSheetAvatar);
+                builder: BlogScreenConstant.buildBottomSheetAvatar);
           },
         ));
   }

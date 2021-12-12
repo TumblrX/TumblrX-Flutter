@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/models/user/user.dart';
-import 'package:tumblrx/services/creating_post.dart';
 
 ///Shows the blog choice where the post will be added to.
 class PostBlogChoice extends StatelessWidget {
@@ -31,7 +30,7 @@ class PostBlogChoice extends StatelessWidget {
             CircleAvatar(
               radius: 18.0,
               backgroundImage: AssetImage(
-                avatar,
+                avatar ?? "assets/icon/avatar2.png",
               ),
               //will be later to changed to NetworkImage
             ),
@@ -59,7 +58,7 @@ class PostBlogChoice extends StatelessWidget {
               ],
             ),
             Spacer(),
-            Provider.of<User>(context).activeBlog == username
+            Provider.of<User>(context).activeBlogName == username
                 ? Icon(
                     Icons.done,
                     color: Colors.blue,

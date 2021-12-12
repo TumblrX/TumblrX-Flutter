@@ -13,12 +13,21 @@ class ImageBlock {
 
   /// Constructs a new instance usin parsed json data
   ImageBlock.fromJson(Map<String, dynamic> json) {
-    type = json['type'];
-    if (json['media'] != null) {
-      json['media'].forEach((v) {
-        media.add(new Media.fromJson(v));
-      });
-    }
+    if (json.containsKey('type'))
+      type = json['type'];
+    else
+      throw Exception('missing reuiqred parameter "type"');
+
+    if (json.containsKey('media')) {
+      try {
+        json['media'].forEach((v) {
+          media.add(new Media.fromJson(v));
+        });
+      } catch (error) {
+        throw Exception(error);
+      }
+    } else
+      throw Exception('missing required paramter "media"');
   }
 
   /// Returns a JSON version of the object
@@ -33,11 +42,18 @@ class ImageBlock {
 
   /// API for image block object to render it
   Widget showBlock() {
+    print(media[0].url);
     return Column(
-      children: media
-          .map<Widget>((mediaObj) =>
-              MediaWidget(mediaObj.url, mediaObj.width, mediaObj.height))
-          .toList(),
+      children: media != null
+          ? media
+              .map<Widget>((mediaObj) =>
+                  MediaWidget(mediaObj.url, mediaObj.width, mediaObj.height))
+              .toList()
+          : Container(
+              child: Center(
+                child: Icon(Icons.error),
+              ),
+            ),
     );
   }
 }

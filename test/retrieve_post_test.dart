@@ -277,4 +277,46 @@ void main() {
               (e) => e.message == "missing required paramter content")));
     });
   });
+
+  test("invalid post type", () {
+    expect(
+        () => Post.fromJson({
+              "blog_name": "citriccomics",
+              "id": 3507845453,
+              "liked": false,
+              "reblog_key": "b0baQtsl",
+              "date": "2011-02-25 20:27:00",
+              "id_string": "3507845453",
+              "post_url": "https://citriccomics.tumblr.com/post/3507845453",
+              "type": "text",
+              "timestamp": 1298665620,
+              "state": "published",
+              "format": "html",
+              "tags": ["tumblrize", "milky dog", "mini comic"],
+              "note_count": 14,
+              "content": [
+                {
+                  "type": "txt",
+                  "text": "some bold and italic text",
+                  "formatting": [
+                    {"start": 5, "end": 9, "type": "bold"},
+                    {"start": 14, "end": 20, "type": "italic"}
+                  ]
+                },
+                {
+                  "type": "image",
+                  "media": [
+                    {
+                      "type": "image/jpeg",
+                      "url":
+                          "http://69.media.tumblr.com/b06fe71cc4ab47e93749df060ff54a90/tumblr_nshp8oVOnV1rg0s9xo1_1280.jpg",
+                      "width": 1280,
+                      "height": 500
+                    }
+                  ]
+                }
+              ]
+            }),
+        throwsA(predicate((e) => e.message == "invalid post type")));
+  });
 }

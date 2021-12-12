@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/screens/main_screen.dart';
 import 'package:tumblrx/services/authentication.dart';
 import 'package:tumblrx/utilities/constants.dart';
@@ -19,11 +20,12 @@ class LogInUserData extends StatelessWidget {
           child: Form(
             key: _formkey,
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
-                    //     the title
+                    //     the title    //
                     Padding(
                       padding: EdgeInsets.fromLTRB(0, 10, 70, 10),
                       child: Text(
@@ -32,14 +34,23 @@ class LogInUserData extends StatelessWidget {
                         textAlign: TextAlign.center,
                       ),
                     ),
-                    // the next button on the upper right of the screen
+                    // the next button on the upper right of the screen    //
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0, 5, 5, 0),
                       child: ElevatedButton(
-                        onPressed: () {
-                          if (!_formkey.currentState.validate())
+                        onPressed: () async {
+                          if (!_formkey.currentState.validate() ||
+                              !await Provider.of<Authentication>(context,
+                                      listen: false)
+                                  .loginRequest())
                             return null;
                           else {
+                            final Map<String, dynamic> response =
+                                await Provider.of<Authentication>(context,
+                                        listen: false)
+                                    .loginGetUserInfo();
+                            Provider.of<User>(context, listen: false)
+                                .setLoginUserData(response);
                             while (Navigator.canPop(context)) {
                               Navigator.pop(context);
                             }
@@ -58,6 +69,20 @@ class LogInUserData extends StatelessWidget {
                 ),
                 SizedBox(
                   height: 100,
+                ),
+                //error message if the user doesnot exist //
+                Padding(
+                  padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                  child: Text(
+                    Provider.of<Authentication>(context).getLogInErrorMessage(),
+                    style: TextStyle(
+                      fontFamily: 'Pacifico',
+                      fontSize: 14.0,
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.start,
+                  ),
                 ),
                 // first textfield to enter the email
                 Padding(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+//import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:provider/provider.dart';
-import 'package:tumblrx/models/post.dart';
 import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/screens/blog_screen.dart';
 import 'package:tumblrx/screens/main_screen.dart';
@@ -20,11 +21,16 @@ import 'package:tumblrx/screens/welcome_screen_signup.dart';
 import 'package:tumblrx/screens/signup_pick_tags.dart';
 import 'package:tumblrx/screens/signup_user_data.dart';
 import 'package:tumblrx/screens/login_user_data.dart';
+import 'package:tumblrx/utilities/environment.dart';
 
 import 'components/my_custom_scroll_behavior.dart';
 import 'models/user/blog.dart';
 
-void main() {
+Future<void> main() async {
+  await dotenv.load(fileName: Environment.fileName);
+  // WidgetsFlutterBinding.ensureInitialized();
+  // await FlutterDownloader.initialize(
+  //     debug: true); // don't forget to set this to false
   runApp(MyApp());
 }
 
@@ -36,7 +42,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<Authentication>(
           create: (context) => Authentication(),
         ),
-        ChangeNotifierProvider<Post>(create: (context) => Post()),
+        // ChangeNotifierProvider<Post>(
+        //   create: (context) => Post(),
+        // ),
         ChangeNotifierProvider<CreatingPost>(
           create: (context) => CreatingPost(),
         ),
@@ -69,7 +77,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<Themes>(
           create: (context) => Themes(),
         ),
-         ChangeNotifierProvider<BlogScreenConstantProvider>(
+        ChangeNotifierProvider<BlogScreenConstantProvider>(
           create: (context) => BlogScreenConstantProvider(),
         ),
       ],

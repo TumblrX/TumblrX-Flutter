@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tumblrx/Components/blog_screen_initial_screen/show_image.dart';
+import 'package:tumblrx/components/blog_screen_initial_screen/show_image.dart';
 import 'blog_screen_initial_screen/create_new_tumblr.dart';
 import 'edit_blog_screen/edit.dart';
 

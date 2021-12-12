@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tumblrx/screens/signup_pick_tags.dart';
 import 'package:tumblrx/screens/signup_user_data.dart';
 import 'package:tumblrx/utilities/constants.dart';
 import 'package:provider/provider.dart';
