@@ -10,26 +10,23 @@ class AvatarImage extends StatefulWidget {
   @override
   _AvatarImageState createState() => _AvatarImageState();
 }
+
 class _AvatarImageState extends State<AvatarImage> {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-    
         top: 143,
         child: GestureDetector(
-        
-          
-          child: CircleAvatar(radius: 42,backgroundColor:  Provider.of<BlogScreenConstantProvider>(context).bottomCoverColor,
-            
-            child: CircleAvatar(
-            radius: 38,
-            backgroundImage: AssetImage(
-              Provider.of<User>(context).getActiveBlogAvatar() ??
-                  "assets/icon/avatar2.png",
-            ),
-          )),
-          
-
+          child: CircleAvatar(
+              radius: 42,
+              backgroundColor: Provider.of<BlogScreenConstantProvider>(context)
+                  .bottomCoverColor,
+              child: CircleAvatar(
+                radius: 38,
+                backgroundImage: NetworkImage(
+                  Provider.of<User>(context).getActiveBlogAvatar(),
+                ),
+              )),
           onTap: () {
             ///bottom sheet of avatar
             showModalBottomSheet(

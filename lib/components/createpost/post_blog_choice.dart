@@ -29,8 +29,8 @@ class PostBlogChoice extends StatelessWidget {
           children: [
             CircleAvatar(
               radius: 18.0,
-              backgroundImage: AssetImage(
-                avatar ?? "assets/icon/avatar2.png",
+              backgroundImage: NetworkImage(
+                avatar,
               ),
               //will be later to changed to NetworkImage
             ),
@@ -58,7 +58,7 @@ class PostBlogChoice extends StatelessWidget {
               ],
             ),
             Spacer(),
-            Provider.of<User>(context).activeBlogName == username
+            Provider.of<User>(context).getActiveBlogName() == username
                 ? Icon(
                     Icons.done,
                     color: Colors.blue,

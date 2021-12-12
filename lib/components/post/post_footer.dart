@@ -204,7 +204,8 @@ class _PostFooterState extends State<PostFooter> {
   @override
   Widget build(BuildContext context) {
     // get active blog name to check the action icons view mode
-    String activeBlogTitle = Provider.of<User>(context).activeBlogTitle;
+    String activeBlogTitle =
+        Provider.of<User>(context, listen: false).getActiveBlogTitle();
     // get the post object to access its data
     _post = Provider.of<Content>(context).posts[widget._postIndex];
 

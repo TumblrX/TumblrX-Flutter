@@ -70,6 +70,7 @@ class Blog extends ChangeNotifier {
 
   Blog.fromJson(Map<String, dynamic> json) {
     // blog handle
+    print(json);
     if (json.containsKey('handle'))
       _handle = json['handle'];
     else
@@ -82,11 +83,14 @@ class Blog extends ChangeNotifier {
       throw Exception('missing required parameter "title"');
 
     if (json.containsKey('avatar')) {
-      _blogAvatar = json['avatar'] == 'none' ??
-          "uploads/post/image/post-1639258474966-61b28a610a654cdd7b39171c.jpeg";
+      _blogAvatar = json['avatar'] == 'none'
+          ? ApiHttpRepository.api +
+              "uploads/post/image/post-1639258474966-61b28a610a654cdd7b39171c.jpeg"
+          : json['avatar'];
     }
     // blog isPrivate flag
     if (json.containsKey('isPrivate')) _isPrivate = json['isPrivate'];
+
     // blog isPrimary flag
     if (json.containsKey('isPrimary')) _isPrimary = json['isPrimary'];
 
@@ -214,9 +218,7 @@ class Blog extends ChangeNotifier {
     return blogTheme.headerImage;
   }
 
-  String  getBlogDescription()
-  {
-
+  String getBlogDescription() {
     return _description;
   }
 
