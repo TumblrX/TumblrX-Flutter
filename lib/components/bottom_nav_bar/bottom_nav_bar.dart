@@ -8,9 +8,10 @@ import 'package:flutter/material.dart';
 import 'package:tumblrx/components/bottom_nav_bar/profile_icon.dart';
 
 class BottomNavBarWidget extends StatefulWidget {
-  // passed controller from parent widget to use for navigation
+  /// passed controller from parent widget to use for navigation
   final PageController _controller;
-  // notifier to update the state of current selected index
+
+  /// notifier to update the state of current selected index
   final ValueNotifier<int> _selectedIndexNotifier;
 
   BottomNavBarWidget(this._controller, this._selectedIndexNotifier);
@@ -41,6 +42,7 @@ class _BottomNavBarWidgetState extends State<BottomNavBarWidget> {
     });
   }
 
+  /// build the bottom navigation bar widget
   @override
   Widget build(BuildContext context) {
     // a key to access the bar and get its position to place

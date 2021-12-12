@@ -1,17 +1,14 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import 'package:provider/provider.dart';
-import 'package:tumblrx/Components/blog_screen_constant.dart';
-import 'package:tumblrx/Components/blog_screen_initial_screen/header_image.dart';
-import 'package:tumblrx/Components/blog_screen_initial_screen/blog_screen_header_text.dart';
-import 'package:tumblrx/Components/avatar_shape/avatar_image.dart';
-import 'package:tumblrx/components/avatar_shape/square.dart';
+import 'package:tumblrx/components/blog_screen_constant.dart';
+import 'package:tumblrx/components/blog_screen_initial_screen/header_image.dart';
+import 'package:tumblrx/components/blog_screen_initial_screen/blog_screen_header_text.dart';
+import 'package:tumblrx/components/avatar_shape/avatar_image.dart';
+import 'package:tumblrx/components/createpost/create_post.dart';
 import 'package:tumblrx/components/following/following_card.dart';
-import 'package:tumblrx/models/user/blog.dart';
-import 'package:tumblrx/models/user/user.dart';
-import 'package:tumblrx/services/api_provider.dart';
 import 'package:tumblrx/services/blog_screen.dart';
-import 'dart:convert' as convert;
+import 'package:tumblrx/services/creating_post.dart';
 
 ///This a initial screen you see when press on profile from navigation bar
 class BlogScreen extends StatefulWidget {
@@ -23,13 +20,13 @@ class BlogScreen extends StatefulWidget {
 class _BlogScreenState extends State<BlogScreen>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
-  Future<Blog> blog;
+  
   @override
   void initState() {
   
     ///this controller for Tabs bar
     ///function used for Tab bars
-    blog = Blog.getInfo("citriccomics");
+    
     _tabController = new TabController(length: 3, vsync: this);
 
     super.initState();
@@ -40,6 +37,33 @@ class _BlogScreenState extends State<BlogScreen>
     final blogProvider = Provider.of<BlogScreenConstantProvider>(context);
     
     return Scaffold(
+       backgroundColor: Color(0xFF001935),
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.blue,
+          child: Icon(Icons.edit),
+          onPressed: () {
+            double topPadding = MediaQuery.of(context).padding.top;
+            Provider.of<CreatingPost>(context, listen: false)
+                .initializePostOptions(context);
+            !kIsWeb
+                ? showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    builder: (context) => SingleChildScrollView(
+                      child: CreatePost(
+                        topPadding: topPadding,
+                      ),
+                    ),
+                  )
+                : showDialog(
+                    context: context,
+                    builder: (_) => AlertDialog(
+                          content: CreatePost(
+                            topPadding: topPadding,
+                          ),
+                        ));
+          },
+        ),
         body: SingleChildScrollView(
             child: ConstrainedBox(
                 constraints: BoxConstraints(

@@ -37,7 +37,9 @@ class CreatePostUser extends StatelessWidget {
             CircleAvatar(
               radius: 18.0,
               backgroundImage: AssetImage(
-                Provider.of<User>(context, listen: false).getActiveBlogAvatar(),
+                Provider.of<User>(context, listen: false)
+                        .getActiveBlogAvatar() ??
+                    "assets/icon/avatar2.png",
               ),
               //will be later to changed to NetworkImage
             ),
@@ -45,7 +47,7 @@ class CreatePostUser extends StatelessWidget {
               width: 10.0,
             ),
             Text(
-              Provider.of<User>(context).activeBlog,
+              Provider.of<User>(context).activeBlogName,
               style: TextStyle(
                 fontSize: 18.0,
                 fontWeight: FontWeight.bold,
@@ -64,12 +66,12 @@ class CreatePostUser extends StatelessWidget {
 
   List<Widget> getBlogs(BuildContext context) {
     List<Widget> blogs = [];
-    for (int i = 0; i < Provider.of<User>(context).blogs.length; i++) {
+    for (int i = 0; i < Provider.of<User>(context).userBlogs.length; i++) {
       blogs.add(
         PostBlogChoice(
-          username: Provider.of<User>(context).blogs[i].name,
-          blogTitle: Provider.of<User>(context).blogs[i].title,
-          avatar: Provider.of<User>(context).blogs[i].blogAvatar,
+          username: Provider.of<User>(context).userBlogs[i].handle,
+          blogTitle: Provider.of<User>(context).userBlogs[i].title,
+          avatar: Provider.of<User>(context).userBlogs[i].blogAvatar,
         ),
       );
     }

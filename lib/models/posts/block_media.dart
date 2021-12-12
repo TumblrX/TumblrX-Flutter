@@ -28,10 +28,17 @@ class Media {
 
   /// Constructs a new instance usin parsed json data
   Media.fromJson(Map<String, dynamic> json) {
-    _type = json['type'];
-    _url = json['url'];
-    _width = json['width'].toDouble();
-    _height = json['height'].toDouble();
+    if (json.containsKey('type'))
+      _type = json['type'];
+    else
+      throw Exception('Missing required parameter "type"');
+    if (json.containsKey('url'))
+      _url = json['url'];
+    else
+      throw Exception('Missing required parameter "url"');
+
+    if (json.containsKey('width')) _width = json['width'].toDouble();
+    if (json.containsKey('height')) _height = json['height'].toDouble();
     if (json.containsKey('poster')) poster = Media.fromJson(json['poster']);
   }
 

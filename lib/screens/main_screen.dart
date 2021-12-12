@@ -16,19 +16,23 @@ import 'package:tumblrx/screens/feed_screen.dart';
 import 'package:tumblrx/screens/notifications_screen.dart';
 import 'package:tumblrx/screens/search_screen.dart';
 
+/// class to build main screen when the user successfully log in
 class MainScreen extends StatefulWidget {
+  /// unique id for the screen to access later
   static final String id = 'main_screen';
   @override
   State<MainScreen> createState() => _MainScreenState();
 }
 
 class _MainScreenState extends State<MainScreen> {
-  // control the PageView widget logic of naviagtionn
+  /// control the PageView widget logic of naviagtionn
   PageController _controller;
-  // Notifier of current selected page index to update bottom navigation
-  // bar selectedIndex state
+
+  /// Notifier of current selected page index to update bottom navigation
+  /// bar selectedIndex state
   ValueNotifier<int> _selectedIndex;
 
+  /// initialize controller and notifier when the widget is initialized
   @override
   void initState() {
     super.initState();
@@ -38,14 +42,14 @@ class _MainScreenState extends State<MainScreen> {
     _selectedIndex = ValueNotifier(0);
   }
 
-  // updates the state with the current selected index
+  /// updates the state with the current selected index
   void _onPageChanged(int index) {
     setState(() {
       this._selectedIndex.value = index;
     });
   }
 
-  // dispose listners on removing the screen from the tree permanently
+  /// dispose listners on removing the screen from the tree permanently
   @override
   void dispose() {
     _controller.dispose();
@@ -53,6 +57,8 @@ class _MainScreenState extends State<MainScreen> {
     super.dispose();
   }
 
+  /// build widget for the main screen of the app with
+  /// pageview to inject routes page
   @override
   Widget build(BuildContext context) {
     return WillPopScope(

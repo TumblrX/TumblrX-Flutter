@@ -25,8 +25,8 @@ class ProfileIcon extends StatelessWidget {
     return Material(
       color: Colors.transparent,
       child: Column(
-        children: (user != null && user.blogs != null)
-            ? user.blogs
+        children: (user != null && user.userBlogs != null)
+            ? user.userBlogs
                 .map((blog) => AccountIcon(blog, user.activeBlogName))
                 .toList()
             : [Container()],

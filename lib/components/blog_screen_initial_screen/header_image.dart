@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tumblrx/Components/blog_screen_constant.dart';
-import 'package:tumblrx/Components/edit_blog_screen/edit.dart';
+import 'package:tumblrx/components/blog_screen_constant.dart';
+import 'package:tumblrx/components/edit_blog_screen/edit.dart';
 import 'package:tumblrx/models/user/user.dart';
 import '../blog_screen_search/blog_screen_search.dart';
 import 'create_new_tumblr.dart';
@@ -28,7 +28,9 @@ class _HeaderImageState extends State<HeaderImage> {
               children: [
                 Row(
                   children: <Widget>[
-                    Text(selectItem,
+                    Text(
+                        BlogScreenConstant.toLengthFifteen(
+                            Provider.of<User>(context).activeBlogName),
                         style: TextStyle(
                           color: Colors.white,
                         )),
@@ -54,13 +56,28 @@ class _HeaderImageState extends State<HeaderImage> {
 
                               }
 
+                              ///////////////////////////////////////////////////////////////
+                          // selectItem = BlogScreenConstant.toLengthFifteen(
+                          //     value.toString());
+                        //  Provider.of<User>(context, listen: false)
+                          //    .setActiveBlog(value);
+                          //Provider.of<User>(context, listen: false)
+                            //  .updateActiveBlog();
+
+                        ////////////////////////////////////////////////////////////////////////////////
+
+
+
                           ///function if numbers of character more than 15 make it 15
                         });
                       },
                       itemBuilder: (BuildContext context) {
                         return [
                           for (var i = 0;
-                              i < BlogScreenConstant.tumblrsBlog.length;
+                              i <
+                                  Provider.of<User>(context, listen: false)
+                                      .userBlogs
+                                      .length;
                               i++)
 
                             ///loop  to display all blogs
@@ -72,16 +89,25 @@ class _HeaderImageState extends State<HeaderImage> {
                                     child: Image(
                                       height: 30,
                                       width: 30,
-                                      image: AssetImage('images/avatar.png'),
+                                      image: AssetImage(Provider.of<User>(
+                                                  context,
+                                                  listen: false)
+                                              .userBlogs[i]
+                                              .blogAvatar ??
+                                          "assets/icon/avatar2.png"),
                                     ),
                                   ),
                                   SizedBox(
                                     width: 5,
                                   ),
-                                  Text(BlogScreenConstant.tumblrsBlog[i])
+                                  Text(Provider.of<User>(context, listen: false)
+                                      .userBlogs[i]
+                                      .handle)
                                 ],
                               ),
-                              value: BlogScreenConstant.tumblrsBlog[i],
+                              value: Provider.of<User>(context, listen: false)
+                                  .userBlogs[i]
+                                  .handle,
                             ),
                           PopupMenuDivider(),
                           PopupMenuItem(

@@ -72,6 +72,7 @@ class CreatePostHeader extends StatelessWidget {
               ? () {
                   Provider.of<CreatingPost>(context, listen: false)
                       .postData(context);
+                  Navigator.pop(context);
                 }
               : null,
         ),
