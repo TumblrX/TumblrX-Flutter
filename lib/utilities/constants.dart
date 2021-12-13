@@ -111,3 +111,18 @@ const KTextInfo = TextStyle(
   color: Color(0xff8C8C8C),
   fontWeight: FontWeight.bold,
 );
+
+///Fixes the subtype of text and map it from mobile view to general database view
+Map<String, dynamic> kMapTextStyleToBackend(Map<String, dynamic> textBlock) {
+  String subtype = textBlock['subtype'];
+  if (subtype == 'normal') {
+    textBlock.remove('subtype');
+  } else if (subtype == 'bigger') {
+    textBlock['subtype'] = 'heading1';
+  } else if (subtype == 'biggest') {
+    textBlock['subtype'] = 'heading2';
+  } else if (subtype == 'lucille') {
+    textBlock['subtype'] = 'quirky';
+  }
+  return textBlock;
+}

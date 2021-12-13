@@ -151,12 +151,12 @@ class Authentication extends ChangeNotifier {
           );
           if (blogsResponse.statusCode != 200)
             throw Exception('error in getting blogs');
-          //print(convert.jsonDecode(blogsResponse.body));
+
           responseObject['blogs'] = convert.jsonDecode(blogsResponse.body);
         } catch (error) {
           throw Exception(error.message.toString());
         }
-        //print(responseObject);
+        print(responseObject);
         return responseObject;
       }
     } catch (error) {

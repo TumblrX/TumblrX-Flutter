@@ -33,12 +33,8 @@ class User extends ChangeNotifier {
   /// list of tumblr blogs for the user
   List<Blog> _blogs = [];
 
-  /// name of the currently active/used blog
-  //String _activeBlogName;
+  /// index of the active blog in [_blogs] list
   int _activeBlogIndex;
-
-  /// title of the currently active/used blog
-  //String _activeBlogTitle;
 
   User();
 
@@ -135,16 +131,9 @@ class User extends ChangeNotifier {
 
   /// API to set active/used blog name
   void setActiveBlog(String blogName) {
-    //_activeBlogName = blogName;
     _activeBlogIndex =
         _blogs.indexWhere((element) => element.handle == blogName);
-    //updateActiveBlog();
   }
-
-  // void setActiveBlogTitle(String blogTitle) {
-  //   _activeBlogTitle = blogTitle;
-  //   print(blogTitle);
-  // }
 
   /// API to notify listeners when the activeblog is changed
   void updateActiveBlog() {
@@ -154,45 +143,31 @@ class User extends ChangeNotifier {
   /// getter for active blog name
   int get activeBlogIndex => _activeBlogIndex;
 
-  /// getter for active blog title
-  //String get activeBlogTitle => _activeBlogTitle;
-
   /// getter for active user blogs list
   List<Blog> get userBlogs => _blogs;
 
   ///Returns the link to the current active blog avatar
   String getActiveBlogAvatar() {
-    // for (int i = 0; i < _blogs.length; i++) {
-    //   if (_blogs[i].handle == activeBlogName) {
-    //     return _blogs[i].blogAvatar;
-    //   }
-    // }
-    // return null;
     return _blogs[_activeBlogIndex].blogAvatar;
   }
 
   ///Returns the title of the current active blog
   String getActiveBlogTitle() {
-    // for (int i = 0; i < _blogs.length; i++) {
-    //   if (_blogs[i].handle == activeBlogName) {
-    //     return _blogs[i].title;
-    //   }
-    // }
-    // return null;
     return _blogs[_activeBlogIndex].title;
   }
 
+  ///Returns the description of the current active blog
   String getActiveBlogDescription() {
-    //for (int i = 0; i < _blogs.length; i++) {
-    //   if (_blogs[i].handle == _activeBlogName) {
-    //     return _blogs[i].getBlogDescription();
-    //   }
-    // }
-    // return null;
     return _blogs[_activeBlogIndex].getBlogDescription();
   }
 
+  ///Returns the handle of the current active blog
   String getActiveBlogName() {
     return _blogs[_activeBlogIndex].handle;
+  }
+
+  ///Returns the id of the current active blog
+  String getActiveBlogId() {
+    return _blogs[_activeBlogIndex].id;
   }
 }

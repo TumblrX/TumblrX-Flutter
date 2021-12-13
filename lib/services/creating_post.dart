@@ -352,7 +352,7 @@ class CreatingPost extends ChangeNotifier {
     // var req = http.MultipartRequest('POST', Uri.parse(url));
     List<Map> files = [];
     Map<String, dynamic> requestBody = {
-      'blog': '61b22d3a0b8aaec60c5af1af',
+      'blog': Provider.of<User>(context, listen: false).getActiveBlogId(),
       'postType': 'text',
       'tags': chosenHashtags,
       'state': postOption.toString().substring(11),
@@ -414,9 +414,13 @@ class CreatingPost extends ChangeNotifier {
       //dio.options.headers['content-Type'] = 'application/json';
       dio.options.headers["authorization"] =
           Provider.of<Authentication>(context, listen: false).token;
-      //print(requestBody);
+      print(convert.jsonEncode(requestBody));
+      print(Provider.of<User>(context, listen: false).getActiveBlogId());
       var response = await dio.post(
-        ApiHttpRepository.api + 'api/blog/61b22d3a0b8aaec60c5af1af/posts',
+        ApiHttpRepository.api +
+            'api/blog/' +
+            Provider.of<User>(context, listen: false).getActiveBlogId() +
+            '/posts',
         data: body,
         onSendProgress: (int sent, int total) {
           print('$sent $total');
@@ -475,6 +479,7 @@ class CreatingPost extends ChangeNotifier {
         postContent[i]['content']['data'].textEditingController.value.text,
         formattings);
     Map block = textBlock.toJson();
+    block = kMapTextStyleToBackend(block);
     List<InlineFormatting> formattingList = block['formatting'];
     List<Map> jsonFormatting = [];
     for (int i = 0; i < formattingList.length; i++) {
