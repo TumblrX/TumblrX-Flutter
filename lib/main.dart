@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-//import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/screens/blog_screen.dart';
@@ -28,9 +27,6 @@ import 'models/user/blog.dart';
 
 Future<void> main() async {
   await dotenv.load(fileName: Environment.fileName);
-  // WidgetsFlutterBinding.ensureInitialized();
-  // await FlutterDownloader.initialize(
-  //     debug: true); // don't forget to set this to false
   runApp(MyApp());
 }
 
@@ -59,9 +55,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<User>(
           create: (context) => User(),
         ),
-         ChangeNotifierProvider<Blog>(
+        ChangeNotifierProvider<Blog>(
           create: (context) => Blog(),
-        ), 
+        ),
         ChangeNotifierProvider<Content>(
           create: (context) => Content(),
         ),

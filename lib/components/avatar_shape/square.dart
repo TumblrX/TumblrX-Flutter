@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tumblrx/Components/blog_screen_constant.dart';
+import 'package:tumblrx/components/blog_screen_constant.dart';
 import 'package:tumblrx/services/blog_screen.dart';
 
 /// for square avatar
@@ -26,7 +26,8 @@ class Square extends StatelessWidget {
 
             decoration: BoxDecoration(
               color: blogProvider.getBottomColor(),
-              border: Border.all(width: 3, color:   blogProvider.getBottomColor()),
+              border:
+                  Border.all(width: 3, color: blogProvider.getBottomColor()),
               borderRadius: BorderRadius.circular(3),
             ),
           ),
