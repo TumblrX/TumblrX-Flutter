@@ -13,6 +13,9 @@ class Blog extends ChangeNotifier {
   /// The display title of the blog
   String _title;
 
+  /// The id of the blog
+  String _id;
+
   /// the URL of the blog
   String _url;
 
@@ -70,7 +73,12 @@ class Blog extends ChangeNotifier {
 
   Blog.fromJson(Map<String, dynamic> json) {
     // blog handle
-    print(json);
+    if (json.containsKey('_id'))
+      _id = json['_id'];
+    else
+      throw Exception('missing required parameter "_id"');
+
+    // blog handle
     if (json.containsKey('handle'))
       _handle = json['handle'];
     else
@@ -139,6 +147,7 @@ class Blog extends ChangeNotifier {
   String get blogAvatar => _blogAvatar;
   String get handle => _handle;
   String get title => _title;
+  String get id => _id;
 
   Future<String> getBlogAvatar() async {
     final String endPoint = 'blog/';
