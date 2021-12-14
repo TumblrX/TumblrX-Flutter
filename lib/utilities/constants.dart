@@ -42,6 +42,8 @@ const Map<TextStyleType, TextStyle> kTextStyleMap = {
   TextStyleType.Lucille: kLucilleTextStyle
 };
 
+const kPrimaryColor = Color(0xFF001935);
+
 //welcome screen title tumblrx
 const KWelcomeScreenTitle = TextStyle(
   fontFamily: 'Pacifico',

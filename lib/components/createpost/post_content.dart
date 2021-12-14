@@ -58,11 +58,18 @@ class PostContent extends StatelessWidget {
             : Image.file(File(postContent[i]['content'].path));
       } else if (postContent[i]['type'] == PostContentType.video) {
         content = VideoPlayerPreview(file: postContent[i]['content']);
+      } else if (postContent[i]['type'] == 'PostReblog') {
+        content = Container(
+            decoration: BoxDecoration(
+                border: Border.all(color: Colors.grey),
+                borderRadius: BorderRadius.all(Radius.circular(10))),
+            child: postContent[i]['content']['data'].showRebloggedPost());
       }
       postContentList.add(
         Stack(children: [
           content,
-          postContent[i]['type'] != PostContentType.text
+          postContent[i]['type'] != PostContentType.text &&
+                  postContent[i]['type'] != 'PostReblog'
               ? Positioned.fill(
                   child: Align(
                     alignment: Alignment.topRight,

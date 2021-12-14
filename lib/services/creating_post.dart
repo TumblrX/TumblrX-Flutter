@@ -4,6 +4,7 @@ import 'package:giphy_get/giphy_get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/models/creatingpost/text_field_data.dart';
+import 'package:tumblrx/models/post.dart';
 import 'package:tumblrx/models/posts/text_block.dart';
 import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/services/api_provider.dart';
@@ -17,6 +18,9 @@ import 'authentication.dart';
 
 ///A Class that manages all creating post functionalities and prepare data for back end
 class CreatingPost extends ChangeNotifier {
+  ///boolean value if the post is reblog
+  bool isReblog;
+
   ///followed tags of the current user
   List<String> followedHashtags;
 
@@ -51,8 +55,10 @@ class CreatingPost extends ChangeNotifier {
   ImagePicker _picker;
 
   ///Initializes all post options and variables.
-  void initializePostOptions(BuildContext context) {
-    lastFocusedIndex = 0;
+  void initializePostOptions(BuildContext context,
+      [bool reblog = false, Post rebloggedPost]) {
+    isReblog = reblog;
+    lastFocusedIndex = reblog ? 1 : 0;
     isPostEnabled = false;
     shareToTwitter = false;
     postOption = PostOption.published;
@@ -76,6 +82,7 @@ class CreatingPost extends ChangeNotifier {
       'poetry'
     ];
     chosenTextStyle = TextStyleType.Normal;
+
     postContent = [
       {
         'type': PostContentType.text,
@@ -84,7 +91,17 @@ class CreatingPost extends ChangeNotifier {
         }
       },
     ];
-    _changeFocus(0);
+    if (isReblog)
+      postContent.insert(
+        0,
+        {
+          'type': 'PostReblog',
+          'content': {
+            'data': rebloggedPost,
+          }
+        },
+      );
+    _changeFocus(isReblog ? 1 : 0);
     _picker = ImagePicker();
     notifyListeners();
   }
@@ -154,7 +171,9 @@ class CreatingPost extends ChangeNotifier {
   ///deletes the text field of the sent [index]
   ///It doesn't delete it if it has index 0
   void removeTextField(int index) {
-    if (index != 0 && postContent[index - 1]['type'] == PostContentType.text) {
+    int firstTextFieldIndex = isReblog ? 1 : 0;
+    if (index != firstTextFieldIndex &&
+        postContent[index - 1]['type'] == PostContentType.text) {
       postContent.removeAt(index);
       _changeFocus(index - 1);
       notifyListeners();
@@ -346,10 +365,7 @@ class CreatingPost extends ChangeNotifier {
   }
 
   ///It maps the collected data about the post to the final form and send it in a post request.
-  void postData(BuildContext context) async {
-    String url = 'https://1b0da51d-62c7-4172-b0c5-c290339c6fb6.mock.pstmn.io';
-    //     'https://54bd9e92-6a19-4377-840f-23886631e1a8.mock.pstmn.io/createpost'; //TODO: edit it
-    // var req = http.MultipartRequest('POST', Uri.parse(url));
+  Future<bool> postData(BuildContext context) async {
     List<Map> files = [];
     Map<String, dynamic> requestBody = {
       'blog': Provider.of<User>(context, listen: false).getActiveBlogId(),
@@ -372,6 +388,9 @@ class CreatingPost extends ChangeNotifier {
             .text
             .length;
         if (textLength > 0) postContentList.add(_getTextBlockMap(i));
+      } else if (postContent[i]['type'] == 'PostReblog') {
+        requestBody =
+            _addReblogBody(requestBody, postContent[i]['content']['data'].id);
       } else if (postContent[i]['type'] == PostContentType.gif) {
         postContentList.add(_getGifBlockMap(i));
       } else if (postContent[i]['type'] == PostContentType.link) {
@@ -415,7 +434,14 @@ class CreatingPost extends ChangeNotifier {
       dio.options.headers["authorization"] =
           Provider.of<Authentication>(context, listen: false).token;
       print(convert.jsonEncode(requestBody));
-      print(Provider.of<User>(context, listen: false).getActiveBlogId());
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: kPrimaryColor,
+          content: Text('Processing the media for your post...'),
+        ),
+      );
+
       var response = await dio.post(
         ApiHttpRepository.api +
             'api/blog/' +
@@ -428,12 +454,14 @@ class CreatingPost extends ChangeNotifier {
       );
 
       print('Response status: ${response.statusCode}');
+      if (response.statusCode == 201 || response.statusCode == 200)
+        return true;
+      else
+        return false;
     } catch (e) {
       print(e);
+      return false;
     }
-
-    // req.fields.addAll(requestBody);
-    //final response = await req.send();
   }
 
   ///Converts text data of index [i] to final map block format
@@ -516,5 +544,12 @@ class CreatingPost extends ChangeNotifier {
   ///Converts video of index [i] to final map block format
   Map _getVideoBlockMap(int i) {
     return {'type': 'video', 'media': 'video/mp4', 'identifier': i.toString()};
+  }
+
+  ///Adds reblog data to the request body
+  Map<String, dynamic> _addReblogBody(Map<String, dynamic> body, String id) {
+    body['reblogData'] = {};
+    body['reblogData']['parentPostId'] = id;
+    return body;
   }
 }
