@@ -84,21 +84,19 @@ flutter:
     - family: SourceCodePro
       fonts:
         - asset: assets/fonts/SourceCodePro-Regular.ttf
+    - family: CustomIcons
+      fonts:
+        - asset: assets/fonts/CustomIcons.ttf
+        
   # To add assets to your application, add an assets section, like this:
   assets:
     - images/header.png
     - images/avatar.png
     - assets/icon/avatar2.png
-    - assets/icon/chat.png
     - assets/icon/default_avatar.png
-    - assets/icon/edit.png
     - assets/icon/heart.png
-    - assets/icon/like.png
     - assets/icon/notes.png
-    - assets/icon/reblog.png
     - assets/icon/reblogs.png
-    - assets/icon/remove.png
-    - assets/icon/share.png
     - assets/icon/Tumblr_Logo_t_Icon_White.png
     - assets/icon/unlike.png
     - images/

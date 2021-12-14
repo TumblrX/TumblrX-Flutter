@@ -13,6 +13,7 @@ import 'package:tumblrx/models/post.dart';
 import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/services/content.dart';
 import 'package:tumblrx/utilities/constants.dart';
+import 'package:tumblrx/utilities/custom_icons.dart';
 
 class PostFooter extends StatefulWidget {
   final _postIndex;
@@ -26,7 +27,7 @@ class PostFooter extends StatefulWidget {
 class _PostFooterState extends State<PostFooter> {
   final double _reactionsIconSize = 23;
 
-  final double _interactIocnSize = 15;
+  final double _interactIocnSize = 18;
 
   final String errorMessage = 'Something went wrong!';
 
@@ -126,21 +127,18 @@ class _PostFooterState extends State<PostFooter> {
   }
 
   /// Build the widget with actions icon ['like', 'reblog', 'comment', 'share]
-  Widget _actionIcon(String iconPath, Function callback, Color color) {
-    return IconButton(
-      iconSize: _interactIocnSize,
-      onPressed: callback,
-      icon: Container(
-        decoration: BoxDecoration(shape: BoxShape.circle),
-        child: Image.asset(
-          iconPath,
-          fit: BoxFit.fitWidth,
-          height: _interactIocnSize,
-          colorBlendMode: BlendMode.modulate,
+  Widget _actionIcon(IconData icon, Function callback, Color color) {
+    return InkWell(
+      onTap: callback,
+      enableFeedback: false,
+      child: Container(
+        padding: EdgeInsets.all(10.0),
+        child: Icon(
+          icon,
+          size: _interactIocnSize,
           color: color,
         ),
       ),
-      enableFeedback: false,
     );
   }
 
@@ -229,37 +227,39 @@ class _PostFooterState extends State<PostFooter> {
                       child: Text(
                         '${_post.totalNotes.toString()} notes',
                         style: TextStyle(color: Colors.grey[700], fontSize: 16),
+                        softWrap: false,
+                        overflow: TextOverflow.ellipsis,
                       ),
                       onPressed: _showNotesPage,
                     ),
                   ]
                 : [],
           ),
-          Row(children: [
+          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
             ...[
               // share icon
               GestureDetector(
                 onLongPress: () => _showBlogsPicker(context),
                 onLongPressEnd: (details) => _blogsSelectorPopup.remove(),
-                child: _actionIcon(
-                    shareIcon, () => _showSharePage(context), Colors.white),
+                child: _actionIcon(CustomIcons.share,
+                    () => _showSharePage(context), Colors.black),
               ),
               // notes icon
-              _actionIcon(commentIcon, _showNotesPage, Colors.white),
+              _actionIcon(CustomIcons.chat, _showNotesPage, Colors.black),
               // reblog icon
               GestureDetector(
                 onLongPress: () {},
                 onLongPressEnd: null,
                 child: _actionIcon(
-                    reblogIcon, () => _post.reblogPost(), Colors.white),
+                    CustomIcons.reblog, () => _post.reblogPost(), Colors.black),
               ),
               // like icon
-              _actionIcon(likeIcon, () => likePost(),
-                  _liked ? Colors.red : Colors.white),
+              _actionIcon(_liked ? CustomIcons.heartFilled : CustomIcons.heart,
+                  () => likePost(), _liked ? Colors.red : Colors.black),
             ],
             if (_post.blogTitle == activeBlogTitle) ...[
               // remove icon
-              _actionIcon(deleteIcon, () {
+              _actionIcon(CustomIcons.remove, () {
                 _post.deletePost().then(
                   (value) {
                     if (!value) {
@@ -269,10 +269,10 @@ class _PostFooterState extends State<PostFooter> {
                 ).catchError((error) {
                   showSnackBarMessage(errorMessage);
                 });
-              }, Colors.white),
+              }, Colors.black),
               // edit icon
-              _actionIcon(editIcon, () => _post.showPost(widget._postIndex),
-                  Colors.white),
+              _actionIcon(Icons.edit_outlined,
+                  () => _post.showPost(widget._postIndex), Colors.black),
             ]
           ]),
         ],
