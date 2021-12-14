@@ -142,7 +142,7 @@ class Authentication extends ChangeNotifier {
         Map<String, dynamic> responseObject =
             convert.jsonDecode(response.body) as Map<String, dynamic>;
         print(response.statusCode);
-        print(responseObject);
+        //print(responseObject);
         try {
           final blogsResponse = await http.get(
             Uri.parse(ApiHttpRepository.api + 'api/user/get-blogs'),
@@ -151,7 +151,7 @@ class Authentication extends ChangeNotifier {
           );
           if (blogsResponse.statusCode != 200)
             throw Exception('error in getting blogs');
-          print(convert.jsonDecode(blogsResponse.body));
+
           responseObject['blogs'] = convert.jsonDecode(blogsResponse.body);
         } catch (error) {
           throw Exception(error.message.toString());

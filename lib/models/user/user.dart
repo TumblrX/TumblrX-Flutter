@@ -33,11 +33,8 @@ class User extends ChangeNotifier {
   /// list of tumblr blogs for the user
   List<Blog> _blogs = [];
 
-  /// name of the currently active/used blog
-  String _activeBlogName;
-
-  /// title of the currently active/used blog
-  String _activeBlogTitle;
+  /// index of the active blog in [_blogs] list
+  int _activeBlogIndex;
 
   /// description of the currently active/used blog
   String _activeDescriptionTitle;
@@ -48,10 +45,10 @@ class User extends ChangeNotifier {
   User.fromJson(Map<String, dynamic> json) {
     // =====
     // username
-    if (json.containsKey('username'))
-      _username = json['username'];
+    if (json.containsKey('name'))
+      _username = json['name'];
     else
-      throw Exception('missing required parameter "username"');
+      throw Exception('missing required parameter "name"');
 
     // blogs list
     if (json['blogs'] != null) {
@@ -110,14 +107,13 @@ class User extends ChangeNotifier {
 
     if (json['blogs'] != null) {
       // TODO : change this to handler
-      setActiveBlog(json['blogs'][0]['name']);
-      setActiveBlogTitle(json['blogs'][0]['title']);
       try {
         json['blogs'].forEach((v) {
           _blogs.add(new Blog.fromJson(v));
         });
+        setActiveBlog(json['blogs'][0]['handle']);
       } catch (err) {
-        print(err);
+        print('error in creating blogs $err');
       }
     }
   }
@@ -138,12 +134,8 @@ class User extends ChangeNotifier {
 
   /// API to set active/used blog name
   void setActiveBlog(String blogName) {
-    _activeBlogName = blogName;
-    //updateActiveBlog();
-  }
-
-  void setActiveBlogTitle(String blogTitle) {
-    _activeBlogTitle = blogTitle;
+    _activeBlogIndex =
+        _blogs.indexWhere((element) => element.handle == blogName);
   }
 
   /// API to notify listeners when the activeblog is changed
@@ -152,42 +144,33 @@ class User extends ChangeNotifier {
   }
 
   /// getter for active blog name
-  String get activeBlogName => _activeBlogName;
-
-  /// getter for active blog title
-  String get activeBlogTitle => _activeBlogTitle;
+  int get activeBlogIndex => _activeBlogIndex;
 
   /// getter for active user blogs list
   List<Blog> get userBlogs => _blogs;
 
   ///Returns the link to the current active blog avatar
   String getActiveBlogAvatar() {
-    for (int i = 0; i < _blogs.length; i++) {
-      if (_blogs[i].handle == activeBlogName) {
-        return _blogs[i].blogAvatar;
-      }
-    }
-    return null;
+    return _blogs[_activeBlogIndex].blogAvatar;
   }
 
   ///Returns the title of the current active blog
   String getActiveBlogTitle() {
-    for (int i = 0; i < _blogs.length; i++) {
-      if (_blogs[i].handle == activeBlogName) {
-        return _blogs[i].title;
-      }
-    }
-    return null;
+    return _blogs[_activeBlogIndex].title;
   }
- 
+
+  ///Returns the description of the current active blog
   String getActiveBlogDescription() {
-    for (int i = 0; i < _blogs.length; i++) {
-      if (_blogs[i].handle == _activeBlogName) {
-        return _blogs[i].getBlogDescription();
-      }
-    }
-    return null;
+    return _blogs[_activeBlogIndex].getBlogDescription();
   }
-  
- 
+
+  ///Returns the handle of the current active blog
+  String getActiveBlogName() {
+    return _blogs[_activeBlogIndex].handle;
+  }
+
+  ///Returns the id of the current active blog
+  String getActiveBlogId() {
+    return _blogs[_activeBlogIndex].id;
+  }
 }

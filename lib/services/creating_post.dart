@@ -10,6 +10,10 @@ import 'package:tumblrx/services/api_provider.dart';
 import 'package:tumblrx/utilities/constants.dart';
 import 'package:http/http.dart' as http;
 import 'package:tumblrx/utilities/hex_color_value.dart';
+import 'dart:convert' as convert;
+import 'package:http_parser/http_parser.dart';
+
+import 'authentication.dart';
 
 ///A Class that manages all creating post functionalities and prepare data for back end
 class CreatingPost extends ChangeNotifier {
@@ -346,15 +350,16 @@ class CreatingPost extends ChangeNotifier {
     String url = 'https://1b0da51d-62c7-4172-b0c5-c290339c6fb6.mock.pstmn.io';
     //     'https://54bd9e92-6a19-4377-840f-23886631e1a8.mock.pstmn.io/createpost'; //TODO: edit it
     // var req = http.MultipartRequest('POST', Uri.parse(url));
-    String tags = chosenHashtags.join(', ');
-
+    List<Map> files = [];
     Map<String, dynamic> requestBody = {
+      'blog': Provider.of<User>(context, listen: false).getActiveBlogId(),
       'postType': 'text',
-      'tags': tags,
+      'tags': chosenHashtags,
       'state': postOption.toString().substring(11),
       'send_to_twitter': shareToTwitter,
       'blogAttribution': {
-        'blogTitle': Provider.of<User>(context, listen: false).activeBlogTitle,
+        'blogTitle':
+            Provider.of<User>(context, listen: false).getActiveBlogTitle(),
       }
     };
 
@@ -373,24 +378,31 @@ class CreatingPost extends ChangeNotifier {
         postContentList.add(_getLinkBlockMap(i));
       } else if (postContent[i]['type'] == PostContentType.image) {
         Map map = _getImageBlockMap(i);
-        //final length = await postContent[i]['content'].length();
-        // req.files.add(http.MultipartFile(map['identifier'],
-        //     postContent[i]['content'].readAsBytes().asStream(), length,
-        //     filename: postContent[i]['content'].name));
+        files.add({
+          'identifier': map['identifier'],
+          'path': postContent[i]['content'].path,
+          'filename': postContent[i]['content'].name,
+          'contentType': MediaType("image", "jpeg")
+        });
         requestBody[map['identifier']] = await MultipartFile.fromFile(
-            postContent[i]['content'].path,
-            filename: postContent[i]['content']
-                .name); //postContent[i]['content'].name;
+          postContent[i]['content'].path,
+          filename: postContent[i]['content'].name,
+          contentType: MediaType("image", "jpeg"),
+        ); //postContent[i]['content'].name;
         postContentList.add(map);
       } else if (postContent[i]['type'] == PostContentType.video) {
         Map map = _getVideoBlockMap(i);
-        //final length = await postContent[i]['content'].length();
-        // req.files.add(http.MultipartFile(map['identifier'],
-        //     postContent[i]['content'].readAsBytes().asStream(), length,
-        //     filename: postContent[i]['content'].name));
+        files.add({
+          'identifier': map['identifier'],
+          'path': postContent[i]['content'].path,
+          'filename': postContent[i]['content'].name,
+          'contentType': MediaType("video", "mp4")
+        });
         requestBody[map['identifier']] = await MultipartFile.fromFile(
-            postContent[i]['content'].path,
-            filename: postContent[i]['content'].name);
+          postContent[i]['content'].path,
+          filename: postContent[i]['content'].name,
+          contentType: MediaType("video", "mp4"),
+        );
         postContentList.add(map);
       }
     }
@@ -398,15 +410,23 @@ class CreatingPost extends ChangeNotifier {
 
     try {
       var body = FormData.fromMap(requestBody);
-      print(body.fields);
       var dio = Dio();
-      var response =
-          await dio.post(MockHttpRepository.api + 'createpost', data: body);
-      // var response = await http.post(
-      //     Uri.parse(
-      //         'https://54bd9e92-6a19-4377-840f-23886631e1a8.mock.pstmn.io/createpost'),
-      //     body: jsonEncode(requestBody),
-      //     headers: {'Content-type': 'application/json'});
+      //dio.options.headers['content-Type'] = 'application/json';
+      dio.options.headers["authorization"] =
+          Provider.of<Authentication>(context, listen: false).token;
+      print(convert.jsonEncode(requestBody));
+      print(Provider.of<User>(context, listen: false).getActiveBlogId());
+      var response = await dio.post(
+        ApiHttpRepository.api +
+            'api/blog/' +
+            Provider.of<User>(context, listen: false).getActiveBlogId() +
+            '/posts',
+        data: body,
+        onSendProgress: (int sent, int total) {
+          print('$sent $total');
+        },
+      );
+
       print('Response status: ${response.statusCode}');
     } catch (e) {
       print(e);
@@ -454,10 +474,12 @@ class CreatingPost extends ChangeNotifier {
         postContent[i]['content']['data']
             .textStyleType
             .toString()
-            .substring(14),
+            .substring(14)
+            .toLowerCase(),
         postContent[i]['content']['data'].textEditingController.value.text,
         formattings);
     Map block = textBlock.toJson();
+    block = kMapTextStyleToBackend(block);
     List<InlineFormatting> formattingList = block['formatting'];
     List<Map> jsonFormatting = [];
     for (int i = 0; i < formattingList.length; i++) {
@@ -470,27 +492,29 @@ class CreatingPost extends ChangeNotifier {
 
   ///Converts gif of index [i] to final map block format
   Map _getGifBlockMap(int i) {
-    return {'type': 'gif', 'url': postContent[i]['content']['link']};
+    return {
+      'type': 'image',
+      'media': 'image/gif',
+      'url': postContent[i]['content']['link']
+    };
   }
 
   ///Converts link of index [i] to final map block format
   Map _getLinkBlockMap(int i) {
-    return {'type': 'link', 'url': postContent[i]['content']['link']};
+    return {
+      'type': 'link',
+      'title': postContent[i]['content']['link'],
+      'url': postContent[i]['content']['link']
+    };
   }
 
   ///Converts image of index [i] to final map block format
   Map _getImageBlockMap(int i) {
-    return {
-      'type': 'image',
-      'identifier': i.toString() + DateTime.now().toString()
-    };
+    return {'type': 'image', 'media': 'image/jpeg', 'identifier': i.toString()};
   }
 
   ///Converts video of index [i] to final map block format
   Map _getVideoBlockMap(int i) {
-    return {
-      'media': 'video',
-      'identifier': i.toString() + DateTime.now().toString()
-    };
+    return {'type': 'video', 'media': 'video/mp4', 'identifier': i.toString()};
   }
 }

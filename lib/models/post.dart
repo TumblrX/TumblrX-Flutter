@@ -103,7 +103,7 @@ class Post {
     if (parsedJson.containsKey('_id'))
       id = parsedJson['_id'];
     else
-      throw Exception('missing required paramter "id"');
+      throw Exception('missing required paramter "_id"');
 
     // post type
     if (parsedJson.containsKey('postType'))
@@ -115,7 +115,7 @@ class Post {
     if (parsedJson.containsKey('state'))
       state = parsedJson['state'];
     else
-      throw Exception("missing required paramter state");
+      throw Exception('missing required paramter "state"');
 
     // post publishing data
     if (parsedJson.containsKey('publishedOn')) {
@@ -123,7 +123,7 @@ class Post {
           DateTime.fromMillisecondsSinceEpoch(parsedJson['publishedOn'] * 1000);
       date = DateFormat('yyyy-MM-dd hh:mm').parse(dateTime.toString());
     } else
-      throw Exception("missing required paramter publishedOn");
+      throw Exception('missing required paramter "publishedOn"');
 
     // post reblog key
     // if (parsedJson.containsKey('reblog_key'))
@@ -163,7 +163,7 @@ class Post {
     if (parsedJson.containsKey('content')) {
       parsePostContent(List<Map<String, dynamic>>.from(parsedJson['content']));
     } else
-      throw Exception("missing required paramter content");
+      throw Exception('missing required paramter "content"');
 
     // ========================= post blog data ========================
 
@@ -176,7 +176,7 @@ class Post {
     if (blogData.containsKey('_id'))
       blogId = blogData['_id'];
     else
-      throw Exception('missing required paramter "id" in blogAttribution');
+      throw Exception('missing required paramter "_id" in blogAttribution');
 
     // blog title
     if (blogData.containsKey('title')) blogTitle = blogData['title'];

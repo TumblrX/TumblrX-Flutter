@@ -28,7 +28,7 @@ class _HeaderImageState extends State<HeaderImage> {
               children: [
                 Row(
                   children: <Widget>[
-                    Text(Provider.of<User>(context).activeBlogTitle,
+                    Text(Provider.of<User>(context).getActiveBlogName(),
                         style: TextStyle(
                           color: Colors.white,
                         )),
@@ -42,29 +42,26 @@ class _HeaderImageState extends State<HeaderImage> {
                           ///every time we select item from drop down list
                           Provider.of<User>(context, listen: false)
                               .setActiveBlog(value);
+                          Provider.of<User>(context, listen: false)
+                              .updateActiveBlog();
 
+                          if (value == 'create') {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => CreateNewTumblrPage()),
+                            );
+                          }
 
-                              if (value=='create')
-                              {
-                                Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) => CreateNewTumblrPage()),
-  );
-
-
-                              }
-
-                              ///////////////////////////////////////////////////////////////
+                          ///////////////////////////////////////////////////////////////
                           // selectItem = BlogScreenConstant.toLengthFifteen(
                           //     value.toString());
-                        //  Provider.of<User>(context, listen: false)
+                          //  Provider.of<User>(context, listen: false)
                           //    .setActiveBlog(value);
                           //Provider.of<User>(context, listen: false)
-                            //  .updateActiveBlog();
+                          //  .updateActiveBlog();
 
-                        ////////////////////////////////////////////////////////////////////////////////
-
-
+                          ////////////////////////////////////////////////////////////////////////////////
 
                           ///function if numbers of character more than 15 make it 15
                         });
@@ -87,12 +84,11 @@ class _HeaderImageState extends State<HeaderImage> {
                                     child: Image(
                                       height: 30,
                                       width: 30,
-                                      image: AssetImage(Provider.of<User>(
-                                                  context,
-                                                  listen: false)
-                                              .userBlogs[i]
-                                              .blogAvatar ??
-                                          "assets/icon/avatar2.png"),
+                                      image: NetworkImage(Provider.of<User>(
+                                              context,
+                                              listen: false)
+                                          .userBlogs[i]
+                                          .blogAvatar),
                                     ),
                                   ),
                                   SizedBox(
@@ -122,13 +118,11 @@ class _HeaderImageState extends State<HeaderImage> {
                               ],
                             ),
                             value: 'create',
-                           
                           )
 
                           ///create new blogs
                         ];
                       },
-                      
                     )
                   ],
                 ),

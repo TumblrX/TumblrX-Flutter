@@ -3,21 +3,63 @@ import 'package:tumblrx/models/post.dart';
 
 void main() {
   group("test handling response of get posts", () {
-    test("missing blog_name", () {
+    test("missing blogAttribution", () {
       expect(
           () => Post.fromJson({
-                "id": 3507845453,
-                "liked": false,
-                "id_string": "3507845453",
-                "post_url": "https://citriccomics.tumblr.com/post/3507845453",
-                "type": "text",
+                "_id": "3507845453",
+                "postType": "text",
                 "date": "2011-02-25 20:27:00",
-                "timestamp": 1298665620,
+                "publishedOn": 1298665620,
                 "state": "published",
-                "format": "html",
-                "reblog_key": "b0baQtsl",
                 "tags": ["tumblrize", "milky dog", "mini comic"],
-                "note_count": 14,
+                "likesCount": 14,
+                "commentsCount": 14,
+                "reblogsCount": 14,
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "some bold and italic text",
+                    "formatting": [
+                      {"start": 5, "end": 9, "type": "bold"},
+                      {"start": 14, "end": 20, "type": "italic"}
+                    ]
+                  },
+                  {
+                    "type": "image",
+                    "media": [
+                      {
+                        "type": "image/jpeg",
+                        "url":
+                            "http://69.media.tumblr.com/b06fe71cc4ab47e93749df060ff54a90/tumblr_nshp8oVOnV1rg0s9xo1_1280.jpg",
+                        "width": 1280,
+                        "height": 500
+                      }
+                    ]
+                  }
+                ]
+              }),
+          throwsA(predicate((e) =>
+              e.message == 'missing required paramter "blogAttribution"')));
+    });
+
+    test("missing _id", () {
+      expect(
+          () => Post.fromJson({
+                "postType": "text",
+                "date": "2011-02-25 20:27:00",
+                "publishedOn": 1298665620,
+                "state": "published",
+                "tags": ["tumblrize", "milky dog", "mini comic"],
+                "likesCount": 14,
+                "commentsCount": 14,
+                "reblogsCount": 14,
+                "blogAttribution": {
+                  "_id": "32154687sad54",
+                  "title": "untitled",
+                  "handle": "ammar",
+                  "avatar": "none",
+                  "isAvatarCircle": true
+                },
                 "content": [
                   {
                     "type": "text",
@@ -42,108 +84,27 @@ void main() {
                 ]
               }),
           throwsA(predicate(
-              (e) => e.message == "missing required paramter blog_name")));
+              (e) => e.message == 'missing required paramter "_id"')));
     });
 
-    test("missing id", () {
+    test("missing publishedOn", () {
       expect(
           () => Post.fromJson({
-                "blog_name": "citriccomics",
-                "liked": false,
-                "id_string": "3507845453",
-                "post_url": "https://citriccomics.tumblr.com/post/3507845453",
-                "type": "text",
+                "_id": "2154878432",
+                "postType": "text",
                 "date": "2011-02-25 20:27:00",
-                "timestamp": 1298665620,
                 "state": "published",
-                "format": "html",
-                "reblog_key": "b0baQtsl",
                 "tags": ["tumblrize", "milky dog", "mini comic"],
-                "note_count": 14,
-                "content": [
-                  {
-                    "type": "text",
-                    "text": "some bold and italic text",
-                    "formatting": [
-                      {"start": 5, "end": 9, "type": "bold"},
-                      {"start": 14, "end": 20, "type": "italic"}
-                    ]
-                  },
-                  {
-                    "type": "image",
-                    "media": [
-                      {
-                        "type": "image/jpeg",
-                        "url":
-                            "http://69.media.tumblr.com/b06fe71cc4ab47e93749df060ff54a90/tumblr_nshp8oVOnV1rg0s9xo1_1280.jpg",
-                        "width": 1280,
-                        "height": 500
-                      }
-                    ]
-                  }
-                ]
-              }),
-          throwsA(
-              predicate((e) => e.message == "missing required paramter id")));
-    });
-
-    test("missing date", () {
-      expect(
-          () => Post.fromJson({
-                "blog_name": "citriccomics",
-                "id": 3507845453,
-                "liked": false,
-                "id_string": "3507845453",
-                "post_url": "https://citriccomics.tumblr.com/post/3507845453",
-                "type": "text",
-                "timestamp": 1298665620,
-                "state": "published",
-                "format": "html",
-                "reblog_key": "b0baQtsl",
-                "tags": ["tumblrize", "milky dog", "mini comic"],
-                "note_count": 14,
-                "content": [
-                  {
-                    "type": "text",
-                    "text": "some bold and italic text",
-                    "formatting": [
-                      {"start": 5, "end": 9, "type": "bold"},
-                      {"start": 14, "end": 20, "type": "italic"}
-                    ]
-                  },
-                  {
-                    "type": "image",
-                    "media": [
-                      {
-                        "type": "image/jpeg",
-                        "url":
-                            "http://69.media.tumblr.com/b06fe71cc4ab47e93749df060ff54a90/tumblr_nshp8oVOnV1rg0s9xo1_1280.jpg",
-                        "width": 1280,
-                        "height": 500
-                      }
-                    ]
-                  }
-                ]
-              }),
-          throwsA(
-              predicate((e) => e.message == "missing required paramter date")));
-    });
-
-    test("missing reblog_key", () {
-      expect(
-          () => Post.fromJson({
-                "blog_name": "citriccomics",
-                "id": 3507845453,
-                "liked": false,
-                "date": "2011-02-25 20:27:00",
-                "id_string": "3507845453",
-                "post_url": "https://citriccomics.tumblr.com/post/3507845453",
-                "type": "text",
-                "timestamp": 1298665620,
-                "state": "published",
-                "format": "html",
-                "tags": ["tumblrize", "milky dog", "mini comic"],
-                "note_count": 14,
+                "likesCount": 14,
+                "commentsCount": 14,
+                "reblogsCount": 14,
+                "blogAttribution": {
+                  "_id": "32154687sad54",
+                  "title": "untitled",
+                  "handle": "ammar",
+                  "avatar": "none",
+                  "isAvatarCircle": true
+                },
                 "content": [
                   {
                     "type": "text",
@@ -168,24 +129,25 @@ void main() {
                 ]
               }),
           throwsA(predicate(
-              (e) => e.message == "missing required paramter reblog_key")));
+              (e) => e.message == 'missing required paramter "publishedOn"')));
     });
-
-    test("missing liked", () {
+    test("missing postType", () {
       expect(
           () => Post.fromJson({
-                "blog_name": "citriccomics",
-                "id": 3507845453,
-                "reblog_key": "b0baQtsl",
-                "date": "2011-02-25 20:27:00",
-                "id_string": "3507845453",
-                "post_url": "https://citriccomics.tumblr.com/post/3507845453",
-                "type": "text",
-                "timestamp": 1298665620,
+                "_id": "3507845453",
+                "publishedOn": 1298665620,
                 "state": "published",
-                "format": "html",
                 "tags": ["tumblrize", "milky dog", "mini comic"],
-                "note_count": 14,
+                "likesCount": 14,
+                "commentsCount": 14,
+                "reblogsCount": 14,
+                "blogAttribution": {
+                  "_id": "32154687sad54",
+                  "title": "untitled",
+                  "handle": "ammar",
+                  "avatar": "none",
+                  "isAvatarCircle": true
+                },
                 "content": [
                   {
                     "type": "text",
@@ -210,25 +172,27 @@ void main() {
                 ]
               }),
           throwsA(predicate(
-              (e) => e.message == "missing required paramter liked")));
+              (e) => e.message == 'missing required parameter "postType"')));
     });
 
     test("missing state", () {
       expect(
           () => Post.fromJson({
-                "blog_name": "citriccomics",
-                "id": 3507845453,
-                "liked": false,
-                "reblog_key": "b0baQtsl",
+                "_id": "3507845453",
+                "postType": "text",
                 "date": "2011-02-25 20:27:00",
-                "id_string": "3507845453",
-                "post_url": "https://citriccomics.tumblr.com/post/3507845453",
-                "type": "text",
-                "timestamp": 1298665620,
-                // "state": "published",
-                "format": "html",
+                "publishedOn": 1298665620,
                 "tags": ["tumblrize", "milky dog", "mini comic"],
-                "note_count": 14,
+                "likesCount": 14,
+                "commentsCount": 14,
+                "reblogsCount": 14,
+                "blogAttribution": {
+                  "_id": "32154687sad54",
+                  "title": "untitled",
+                  "handle": "ammar",
+                  "avatar": "none",
+                  "isAvatarCircle": true
+                },
                 "content": [
                   {
                     "type": "text",
@@ -253,70 +217,31 @@ void main() {
                 ]
               }),
           throwsA(predicate(
-              (e) => e.message == "missing required paramter state")));
+              (e) => e.message == 'missing required paramter "state"')));
     });
 
     test("missing content", () {
       expect(
           () => Post.fromJson({
-                "blog_name": "citriccomics",
-                "id": 3507845453,
-                "liked": false,
-                "reblog_key": "b0baQtsl",
+                "_id": "3507845453",
+                "postType": "text",
                 "date": "2011-02-25 20:27:00",
-                "id_string": "3507845453",
-                "post_url": "https://citriccomics.tumblr.com/post/3507845453",
-                "type": "text",
-                "timestamp": 1298665620,
+                "publishedOn": 1298665620,
                 "state": "published",
-                "format": "html",
                 "tags": ["tumblrize", "milky dog", "mini comic"],
-                "note_count": 14
+                "likesCount": 14,
+                "commentsCount": 14,
+                "reblogsCount": 14,
+                "blogAttribution": {
+                  "_id": "32154687sad54",
+                  "title": "untitled",
+                  "handle": "ammar",
+                  "avatar": "none",
+                  "isAvatarCircle": true
+                },
               }),
           throwsA(predicate(
-              (e) => e.message == "missing required paramter content")));
+              (e) => e.message == 'missing required paramter "content"')));
     });
-  });
-
-  test("invalid post type", () {
-    expect(
-        () => Post.fromJson({
-              "blog_name": "citriccomics",
-              "id": 3507845453,
-              "liked": false,
-              "reblog_key": "b0baQtsl",
-              "date": "2011-02-25 20:27:00",
-              "id_string": "3507845453",
-              "post_url": "https://citriccomics.tumblr.com/post/3507845453",
-              "type": "text",
-              "timestamp": 1298665620,
-              "state": "published",
-              "format": "html",
-              "tags": ["tumblrize", "milky dog", "mini comic"],
-              "note_count": 14,
-              "content": [
-                {
-                  "type": "txt",
-                  "text": "some bold and italic text",
-                  "formatting": [
-                    {"start": 5, "end": 9, "type": "bold"},
-                    {"start": 14, "end": 20, "type": "italic"}
-                  ]
-                },
-                {
-                  "type": "image",
-                  "media": [
-                    {
-                      "type": "image/jpeg",
-                      "url":
-                          "http://69.media.tumblr.com/b06fe71cc4ab47e93749df060ff54a90/tumblr_nshp8oVOnV1rg0s9xo1_1280.jpg",
-                      "width": 1280,
-                      "height": 500
-                    }
-                  ]
-                }
-              ]
-            }),
-        throwsA(predicate((e) => e.message == "invalid post type")));
   });
 }
