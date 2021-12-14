@@ -39,6 +39,9 @@ class User extends ChangeNotifier {
   /// title of the currently active/used blog
   String _activeBlogTitle;
 
+  /// description of the currently active/used blog
+  String _activeDescriptionTitle;
+
   User();
 
   /// constructor of the class using decoded json
