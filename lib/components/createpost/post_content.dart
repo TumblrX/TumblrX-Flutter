@@ -53,11 +53,24 @@ class PostContent extends StatelessWidget {
           ),
         );
       } else if (postContent[i]['type'] == PostContentType.image) {
-        content = kIsWeb
-            ? Image.network(postContent[i]['content'].path)
-            : Image.file(File(postContent[i]['content'].path));
+        if (postContent[i]['content'] is Map &&
+            postContent[i]['content'].containsKey('url')) {
+          Image.network(
+            postContent[i]['content']['url'],
+            headers: {'accept': 'image/*'},
+          );
+        } else {
+          content = kIsWeb
+              ? Image.network(postContent[i]['content'].path)
+              : Image.file(File(postContent[i]['content'].path));
+        }
       } else if (postContent[i]['type'] == PostContentType.video) {
-        content = VideoPlayerPreview(file: postContent[i]['content']);
+        if (postContent[i]['content'] is Map &&
+            postContent[i]['content'].containsKey('url')) {
+          content = VideoPlayerPreview(url: postContent[i]['content']['url']);
+        } else {
+          content = VideoPlayerPreview(file: postContent[i]['content']);
+        }
       } else if (postContent[i]['type'] == 'PostReblog') {
         content = Container(
             decoration: BoxDecoration(

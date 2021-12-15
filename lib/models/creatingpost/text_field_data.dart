@@ -36,4 +36,8 @@ class TextFieldData {
           isLineThrough ? TextDecoration.lineThrough : TextDecoration.none,
     );
   }
+
+  void addText(String text) {
+    textEditingController.text = text;
+  }
 }

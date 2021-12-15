@@ -284,7 +284,7 @@ class Post {
   void reblogPost(BuildContext context) async {
     double topPadding = MediaQuery.of(context).padding.top;
     Provider.of<CreatingPost>(context, listen: false)
-        .initializePostOptions(context, true, this);
+        .initializePostOptions(context, reblog: true, rebloggedPost: this);
     !kIsWeb
         ? showModalBottomSheet(
             context: context,
@@ -331,19 +331,30 @@ class Post {
   }
 
   /// API for post object to edit the post
-  void editPost() async {
-    final String endPoint = 'posts';
-    final Map<String, dynamic> queryParameters = {"id": id};
-    try {
-      final Response response = await MockHttpRepository.sendPostRequest(
-          endPoint, convert.jsonEncode(queryParameters));
-      if (response.statusCode != 200)
-        throw Exception('post ID or reblog_key was not found');
-
-      // TODO: Please update class attributes which were requested to update
-    } catch (error) {
-      print(error.message);
-    }
+  void editPost(BuildContext context) async {
+    double topPadding = MediaQuery.of(context).padding.top;
+    Provider.of<CreatingPost>(context, listen: false).initializePostOptions(
+        context,
+        edit: true,
+        editPostContent: content,
+        editPostId: id);
+    !kIsWeb
+        ? showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            builder: (context) => SingleChildScrollView(
+              child: CreatePost(
+                topPadding: topPadding,
+              ),
+            ),
+          )
+        : showDialog(
+            context: context,
+            builder: (_) => AlertDialog(
+                  content: CreatePost(
+                    topPadding: topPadding,
+                  ),
+                ));
   }
 
   /// API for post object to fetch a post
