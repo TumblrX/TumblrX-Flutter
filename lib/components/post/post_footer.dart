@@ -251,7 +251,7 @@ class _PostFooterState extends State<PostFooter> {
                 onLongPress: () {},
                 onLongPressEnd: null,
                 child: _actionIcon(
-                    reblogIcon, () => _post.reblogPost(), Colors.white),
+                    reblogIcon, () => _post.reblogPost(context), Colors.white),
               ),
               // like icon
               _actionIcon(likeIcon, () => likePost(),
