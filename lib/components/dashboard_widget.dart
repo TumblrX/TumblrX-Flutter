@@ -8,6 +8,7 @@ Description:
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tumblrx/components/post/post_widget.dart';
 import 'package:tumblrx/models/post.dart';
 import 'package:tumblrx/services/authentication.dart';
 
@@ -67,14 +68,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   /// Builds the ListView widget to view posts
   Widget _buildListView() {
+    if (content.posts.isEmpty)
+      return Container(
+        width: 0,
+      );
     return Stack(
       children: [
         ListView.builder(
-          itemCount: content.totalPosts,
-          controller: _controller,
-          itemBuilder: (BuildContext context, int index) =>
-              content.posts[index].showPost(index),
-        ),
+            itemCount: content.totalPosts,
+            controller: _controller,
+            itemBuilder: (BuildContext context, int index) {
+              Post post = content.posts[index];
+              return PostWidget(
+                  postContent: post.content, tags: post.tags, index: index);
+            }),
         content.isLoading
             ? LinearProgressIndicator()
             : Container(

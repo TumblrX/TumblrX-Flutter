@@ -82,10 +82,14 @@ class Content extends ChangeNotifier {
     try {
       // type casting to list of map objects
       List postsList = List<Map<String, dynamic>>.from(resposeObject['posts']);
-
-      // construct list of posts object from the parsed json response
-      postsArray = postsList.map((e) => new Post.fromJson(e)).toList();
-
+      try {
+        // construct list of posts object from the parsed json response
+        postsArray = postsList.map((e) {
+          try {
+            return new Post.fromJson(e);
+          } catch (err) {}
+        }).toList();
+      } catch (err) {}
       // insert newely fetched data to the list
       _posts.addAll(postsArray);
     } catch (err) {

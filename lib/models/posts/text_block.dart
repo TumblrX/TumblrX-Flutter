@@ -56,6 +56,7 @@ class TextBlock extends PostBlock {
       List<Map<String, dynamic>> formatting =
           List<Map<String, dynamic>>.from(json['formatting']);
 
+      print(formatting);
       try {
         List<InlineFormatting> parsedFormats =
             formatting.map((e) => new InlineFormatting.fromJson(e)).toList();
@@ -111,11 +112,15 @@ class TextBlock extends PostBlock {
       rightPadding = result[2];
       prevFormat = format;
     }
+    if (_subtype != null || _subtype.isNotEmpty) {
+      _formattedText = '<$_subtype>$_formattedText</$_subtype>';
+    }
     return _formattedText;
   }
 
   List<InlineFormatting> prepareFormattingList(
       List<InlineFormatting> parsedFormats) {
+    if (parsedFormats.isEmpty) return parsedFormats;
     // variable to store the final result
     List<InlineFormatting> processedFormattingList = [];
 

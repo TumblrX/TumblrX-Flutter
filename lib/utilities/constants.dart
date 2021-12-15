@@ -92,10 +92,6 @@ const KPickTagsInfoText = TextStyle(
     color: Colors.grey,
     fontWeight: FontWeight.bold);
 
-const String likeIcon = "assets/icon/heart.png";
-const String commentIcon = "assets/icon/notes.png";
-const String reblogIcon = "assets/icon/reblogs.png";
-
 //small text info
 const KTextInfo = TextStyle(
   fontFamily: 'Pacifico',
@@ -118,3 +114,10 @@ Map<String, dynamic> kMapTextStyleToBackend(Map<String, dynamic> textBlock) {
   }
   return textBlock;
 }
+
+void Function(BuildContext context, String message, Color color)
+    showSnackBarMessage = (BuildContext context, String message, Color color) =>
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(message),
+          backgroundColor: color,
+        ));

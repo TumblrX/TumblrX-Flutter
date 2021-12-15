@@ -23,10 +23,11 @@ Map<String, StyledTextTagBase> formattingTags(
     'normal': StyledTextTag(style: kNormalTextStyle),
     'strikethrough':
         StyledTextTag(style: TextStyle(decoration: TextDecoration.lineThrough)),
-    'bigger': StyledTextTag(style: kBiggestTextStyle),
+    'heading1': StyledTextTag(style: kBiggerTextStyle),
+    'heading2': StyledTextTag(style: kBiggestTextStyle),
     'quote': StyledTextTag(style: kQuoteTextStyle),
     'chat': StyledTextTag(style: kChatTextStyle),
-    'lucille': StyledTextTag(style: kLucilleTextStyle),
+    'quirky': StyledTextTag(style: kLucilleTextStyle),
     'color': StyledTextCustomTag(
       baseStyle: TextStyle(),
       parse: (baseStyle, attributes) {

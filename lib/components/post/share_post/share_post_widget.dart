@@ -4,7 +4,7 @@ import 'package:tumblrx/components/post/share_post/search_widget.dart';
 import 'package:tumblrx/components/post/share_post/selected_blogs_widget.dart';
 //import 'package:tumblrx/components/post/share_post/search_result_widget.dart';
 
-class SharePost extends StatelessWidget {
+class SharePostWidget extends StatelessWidget {
   static final String id = "share_post";
   final bool enableSending = false;
 

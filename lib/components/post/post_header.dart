@@ -14,19 +14,15 @@ import 'package:tumblrx/services/content.dart';
 class PostHeader extends StatelessWidget {
   /// blog object of the post
   final int _index;
-  PostHeader(this._index);
-
-  String blogTitle;
-  String blogAvatar;
+  final bool _showOptionsIcon;
+  PostHeader({@required int index, bool showOptionsIcon = true})
+      : _index = index,
+        _showOptionsIcon = showOptionsIcon;
 
   /// navigate to the blog screen to view blog info
   void _showBlog(BuildContext context) {
-    Navigator.of(context)
-        .pushNamed('blog_screen', arguments: {'blogTitle': blogTitle});
+    Navigator.of(context).pushNamed('blog_screen');
   }
-
-  /// callback function to request following the post blog
-  void _followBlog() {}
 
   /// callback to open a dialog with blog options
   void _showBlogOptions() {}
@@ -35,17 +31,22 @@ class PostHeader extends StatelessWidget {
         child: Icon(Icons.error),
       );
 
+  Widget _emptyContainer() => Container(
+        width: 0,
+        height: 0,
+      );
   @override
   Widget build(BuildContext context) {
     // constants to size widgets
     final double avatarSize = 40;
     final double postHeaderHeight = 60;
     Post post = Provider.of<Content>(context).posts[_index];
-    blogTitle = post.blogTitle;
-    blogAvatar = post.blogAvatar;
+
+    final bool isRebloged = post.reblogKey == null || post.reblogKey.isEmpty;
+    final bool showFollowButton = true;
     return SizedBox(
       height: postHeaderHeight,
-      child: blogTitle == null
+      child: post.blogTitle == null
           ? Center(
               child: Icon(
                 Icons.error,
@@ -62,7 +63,7 @@ class PostHeader extends StatelessWidget {
                   CachedNetworkImage(
                     width: avatarSize,
                     height: avatarSize,
-                    imageUrl: blogAvatar,
+                    imageUrl: post.blogAvatar,
                     placeholder: (context, url) => SizedBox(
                       width: avatarSize,
                       height: avatarSize,
@@ -77,27 +78,54 @@ class PostHeader extends StatelessWidget {
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(left: 8.0, right: 5.0),
-                          child: Text(
-                            blogTitle,
-                            style: TextStyle(color: Colors.black),
+                          child: Column(
+                            children: [
+                              Text(
+                                post.blogTitle,
+                                style: TextStyle(color: Colors.black),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              isRebloged
+                                  ? Row(
+                                      children: [
+                                        Icon(
+                                          Icons.repeat_outlined,
+                                        ),
+                                        Flexible(
+                                          child: Text(
+                                            post.reblogKey,
+                                            style:
+                                                TextStyle(color: Colors.grey),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  : _emptyContainer(),
+                            ],
                           ),
                         ),
-                        // TODO: displayed only if not one of blog's followers
-                        TextButton(
-                          onPressed: _followBlog,
-                          child: Text(
-                            'Follow',
-                            style: TextStyle(
-                                color: Theme.of(context).colorScheme.secondary),
-                          ),
-                        ),
+                        showFollowButton
+                            ? TextButton(
+                                onPressed: () => post.followBlog(),
+                                child: Text(
+                                  'Follow',
+                                  style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary),
+                                ),
+                              )
+                            : _emptyContainer(),
                       ],
                     ),
                   ),
-                  IconButton(
-                    onPressed: _showBlogOptions,
-                    icon: Icon(Icons.more_horiz),
-                  ),
+                  _showOptionsIcon
+                      ? IconButton(
+                          onPressed: _showBlogOptions,
+                          icon: Icon(Icons.more_horiz),
+                        )
+                      : _emptyContainer(),
                 ],
               ),
             ),
