@@ -508,7 +508,6 @@ class CreatingPost extends ChangeNotifier {
       //dio.options.headers['content-Type'] = 'application/json';
       dio.options.headers["authorization"] =
           Provider.of<Authentication>(context, listen: false).token;
-      print(convert.jsonEncode(requestBody));
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
