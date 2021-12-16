@@ -66,9 +66,11 @@ class CreatingPost extends ChangeNotifier {
       bool edit = false,
       Post rebloggedPost,
       List<Map<String, dynamic>> editPostContent,
-      String editPostId}) {
+      String editPostId,
+      List<String> editPostTags}) {
     isReblog = reblog;
     isEdit = edit;
+    _editPostId = editPostId;
     lastFocusedIndex = reblog ? 1 : 0;
     isPostEnabled = false;
     shareToTwitter = false;
@@ -93,16 +95,16 @@ class CreatingPost extends ChangeNotifier {
       'poetry'
     ];
     chosenTextStyle = TextStyleType.Normal;
-
-    postContent = [
-      {
+    postContent = [];
+    if (!isEdit)
+      postContent.add({
         'type': PostContentType.text,
         'content': {
           'data': TextFieldData(chosenTextStyle),
         }
-      },
-    ];
-    if (isReblog)
+      });
+
+    if (isReblog) {
       postContent.insert(
         0,
         {
@@ -112,10 +114,14 @@ class CreatingPost extends ChangeNotifier {
           }
         },
       );
-    _changeFocus(isReblog ? 1 : 0);
+      setIsEnabled();
+    }
+    if (!isEdit) _changeFocus(isReblog ? 1 : 0);
     _picker = ImagePicker();
     if (isEdit) {
       _mapEditPostContent(editPostContent);
+      if (editPostTags != null) chosenHashtags = editPostTags;
+      addTextField(postContent.length - 1);
     }
     notifyListeners();
   }
@@ -140,7 +146,7 @@ class CreatingPost extends ChangeNotifier {
         postContent.add({
           'type': PostContentType.link,
           'content': {
-            'data': {'link': contentBlock['url']},
+            'link': contentBlock['url'],
           }
         });
       } else if (contentBlock['type'] == 'image' &&
@@ -148,7 +154,7 @@ class CreatingPost extends ChangeNotifier {
         postContent.add({
           'type': PostContentType.gif,
           'content': {
-            'data': {'url': contentBlock['url']},
+            'link': contentBlock['url'],
           }
         });
       } else if (contentBlock['type'] == 'image') {
@@ -510,18 +516,29 @@ class CreatingPost extends ChangeNotifier {
           content: Text('Processing the media for your post...'),
         ),
       );
+
       String createPostEndPoint = 'api/blog/' +
           Provider.of<User>(context, listen: false).getActiveBlogId() +
           '/posts';
       String editPostEndPoint = 'api/post/' + _editPostId;
-      String chosenEndPoint = isEdit ? editPostEndPoint : createPostEndPoint;
-      var response = await dio.post(
-        ApiHttpRepository.api + chosenEndPoint,
-        data: body,
-        onSendProgress: (int sent, int total) {
-          print('$sent $total');
-        },
-      );
+      var response;
+      if (isEdit) {
+        response = await dio.put(
+          ApiHttpRepository.api + editPostEndPoint,
+          data: body,
+          onSendProgress: (int sent, int total) {
+            print('$sent $total');
+          },
+        );
+      } else {
+        response = await dio.post(
+          ApiHttpRepository.api + createPostEndPoint,
+          data: body,
+          onSendProgress: (int sent, int total) {
+            print('$sent $total');
+          },
+        );
+      }
 
       print('Response status: ${response.statusCode}');
       if (response.statusCode == 201 || response.statusCode == 200)
@@ -608,22 +625,24 @@ class CreatingPost extends ChangeNotifier {
 
   ///Converts image of index [i] to final map block format
   Map _getImageBlockMap(int i) {
-    if (postContent[i]['content'].containsKey('url'))
+    if (postContent[i]['content'] is Map &&
+        postContent[i]['content']['data'].containsKey('url'))
       return {
         'type': 'image',
         'media': 'image/jpeg',
-        'url': postContent[i]['content']['url']
+        'url': postContent[i]['content']['data']['url']
       };
     return {'type': 'image', 'media': 'image/jpeg', 'identifier': i.toString()};
   }
 
   ///Converts video of index [i] to final map block format
   Map _getVideoBlockMap(int i) {
-    if (postContent[i]['content'].containsKey('url')) {
+    if (postContent[i]['content'] is Map &&
+        postContent[i]['content']['data'].containsKey('url')) {
       return {
         'type': 'video',
         'media': 'video/mp4',
-        'url': postContent[i]['content']['url']
+        'url': postContent[i]['content']['data']['url']
       };
     }
     return {'type': 'video', 'media': 'video/mp4', 'identifier': i.toString()};

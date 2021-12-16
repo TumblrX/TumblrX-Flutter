@@ -271,8 +271,8 @@ class _PostFooterState extends State<PostFooter> {
                 });
               }, Colors.white),
               // edit icon
-              _actionIcon(editIcon, () => _post.showPost(widget._postIndex),
-                  Colors.white),
+              _actionIcon(
+                  editIcon, () => _post.editPost(context), Colors.white),
             ]
           ]),
         ],

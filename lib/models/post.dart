@@ -78,6 +78,9 @@ class Post {
   /// The content of the post
   List content = [];
 
+  ///Original back-end form post content
+  List<Map<String, dynamic>> unmappedPostContent = [];
+
   /// The layout of the post content.
   List layout = [];
 
@@ -167,6 +170,9 @@ class Post {
 
     // post content
     if (parsedJson.containsKey('content')) {
+      unmappedPostContent = (parsedJson['content'] as List)
+          .map((e) => e as Map<String, dynamic>)
+          .toList(); //keeping original json data to be used in edit post
       parsePostContent(List<Map<String, dynamic>>.from(parsedJson['content']));
     } else
       throw Exception('missing required paramter "content"');
@@ -333,11 +339,13 @@ class Post {
   /// API for post object to edit the post
   void editPost(BuildContext context) async {
     double topPadding = MediaQuery.of(context).padding.top;
+    print(unmappedPostContent);
     Provider.of<CreatingPost>(context, listen: false).initializePostOptions(
         context,
         edit: true,
-        editPostContent: content,
-        editPostId: id);
+        editPostContent: unmappedPostContent,
+        editPostId: id,
+        editPostTags: _tags);
     !kIsWeb
         ? showModalBottomSheet(
             context: context,
