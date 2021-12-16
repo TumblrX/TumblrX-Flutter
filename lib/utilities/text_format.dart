@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:styled_text/tags/styled_text_tag.dart';
 import 'package:styled_text/tags/styled_text_tag_action.dart';
-import 'package:styled_text/tags/styled_text_tag_base.dart';
 import 'package:styled_text/tags/styled_text_tag_custom.dart';
 import 'package:tumblrx/utilities/constants.dart';
 import 'package:url_launcher/url_launcher.dart';

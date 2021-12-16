@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:tumblrx/components/post/share_post/blog_selector_widget.dart';
+import 'package:tumblrx/components/post/share_post/search_blog_result.dart';
 import 'package:tumblrx/components/post/share_post/search_widget.dart';
 import 'package:tumblrx/components/post/share_post/selected_blogs_widget.dart';
-//import 'package:tumblrx/components/post/share_post/search_result_widget.dart';
+import 'package:tumblrx/models/user/blog.dart';
 
 class SharePostWidget extends StatelessWidget {
   static final String id = "share_post";
   final bool enableSending = false;
 
+  final ValueNotifier<List<Blog>> _selectedBlogsNotifier = ValueNotifier([]);
+  final ValueNotifier<List<Blog>> _searchBlogResultsNotifier =
+      ValueNotifier([]);
   Widget topDecoration() => Padding(
         padding: const EdgeInsets.all(8.0),
         child: Center(
@@ -33,7 +37,11 @@ class SharePostWidget extends StatelessWidget {
           const Divider(
             thickness: 2.5,
           ),
-          SearchWidget(),
+          SearchWidget(_searchBlogResultsNotifier),
+          SearchResult(
+            searchResultsNotifier: _searchBlogResultsNotifier,
+            selectedBlogsNotifier: _searchBlogResultsNotifier,
+          ),
           Spacer(),
           const Divider(),
           Row(
@@ -41,7 +49,7 @@ class SharePostWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               enableSending
-                  ? SelectedBlogsWidget()
+                  ? SelectedBlogsWidget(_selectedBlogsNotifier)
                   : Container(
                       height: 0,
                     ),

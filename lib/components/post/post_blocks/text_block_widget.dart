@@ -22,8 +22,7 @@ class TextBlockWidget extends StatelessWidget {
                   width: width,
                   child: TextButton(
                     onPressed: () {
-                      RegExp regExp = new RegExp(r'<.*>');
-
+                      //RegExp regExp = new RegExp(r'<.*>');
 //                      _text.replaceAllMapped(from, (match) => null)
                       // FlutterClipboard.copy(_text).then(()=>
                       //showSnackBarMessage(context, 'Copied to clipboard!',
