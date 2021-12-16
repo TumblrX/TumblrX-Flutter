@@ -24,6 +24,7 @@ class _SearchWidgetState extends State<SearchWidget> {
               height: 35,
               padding: const EdgeInsets.only(left: 10),
               child: TextField(
+              
                 textAlignVertical: TextAlignVertical.bottom,
                 onTap: () => setState(() {
                   searching = true;

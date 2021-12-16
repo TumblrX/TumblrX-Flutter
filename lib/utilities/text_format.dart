@@ -11,8 +11,7 @@ void _openLink(String url) async {
   if (await canLaunch(url)) await launch(url);
 }
 
-Map<String, StyledTextTagBase> formattingTags(
-    {color = Colors.black, mentionCallback}) {
+dynamic formattingTags({color = Colors.black, mentionCallback}) {
   return {
     'bold': StyledTextTag(style: kBiggerTextStyle),
     'italic': StyledTextTag(style: TextStyle(fontStyle: FontStyle.italic)),

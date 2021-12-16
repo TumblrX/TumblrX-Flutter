@@ -94,6 +94,18 @@ class Post {
   /// blog object who published this post
   Blog postBlog;
 
+// ================= getters ===================
+  String get id => this._id;
+  int get likesCount => this._likesCount;
+  int get commentsCount => this._commentsCount;
+  int get reblogsCount => this._reblogsCount;
+  List get tags => this._tags;
+  List get content => this._content;
+  String get blogTitle => this._blogTitle;
+  String get blogAvatar => this._blogAvatar;
+  String get reblogKey => this._reblogKey;
+  DateTime get publishedOn => _date;
+
   /// Constructs a new instance usin parsed json data
   Post.fromJson(Map<String, dynamic> parsedJson) {
     // ==================== post related data =========================
@@ -193,47 +205,41 @@ class Post {
       this._isAvatarCircle = blogData['isAvatarCircle'];
   }
 
-// ================= getters ===================
-  String get id => this._id;
-  int get likesCount => this._likesCount;
-  int get commentsCount => this._commentsCount;
-  int get reblogsCount => this._reblogsCount;
-  List get tags => this._tags;
-  List get content => this._content;
-  String get blogTitle => this._blogTitle;
-  String get blogAvatar => this._blogAvatar;
-  String get reblogKey => this._reblogKey;
-
   /// Construct the right block for each of the Post content
   /// Text, Audio, Video, Image, and Link
   void parsePostContent(List<Map<String, dynamic>> json) {
     List parsedConent = [];
     try {
       json.forEach((obj) {
-        print(obj['type'].toString().trim());
-        switch (obj['type'].toString().trim()) {
-          case 'text':
-            parsedConent.add(new TextBlock.fromJson(obj));
-            break;
-          case 'audio':
-            parsedConent.add(new AudioBlock.fromJson(obj));
-            break;
-          case 'video':
-            parsedConent.add(new VideoBlock.fromJson(obj));
-            break;
-          case 'image':
-            parsedConent.add(new ImageBlock.fromJson(obj));
-            break;
-          case 'link':
-            parsedConent.add(new LinkBlock.fromJson(obj));
-            break;
-          default:
-            throw Exception("invalid post type");
+        try {
+          switch (obj['type'].toString().trim()) {
+            case 'text':
+              parsedConent.add(new TextBlock.fromJson(obj));
+
+              break;
+            case 'audio':
+              //parsedConent.add(new AudioBlock.fromJson(obj));
+              break;
+            case 'video':
+              //parsedConent.add(new VideoBlock.fromJson(obj));
+              break;
+            case 'image':
+              parsedConent.add(new ImageBlock.fromJson(obj));
+              break;
+            case 'link':
+              //parsedConent.add(new LinkBlock.fromJson(obj));
+              break;
+            default:
+              print(obj);
+              throw Exception("invalid post type");
+          }
+        } catch (err) {
+          print('couldn\'t parse $obj');
         }
       });
       this._content.addAll(parsedConent);
     } catch (error) {
-      print('$error @ parseContent');
+      print('err @parseContent $error');
     }
   }
 
@@ -313,6 +319,8 @@ class Post {
       return false;
     }
   }
+
+  Future<bool> mutePushNotification() async {}
 
   /// API for post object to edit the post
   void editPost() async {

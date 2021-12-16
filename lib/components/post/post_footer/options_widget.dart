@@ -38,6 +38,7 @@ class OptionsWidget extends StatefulWidget {
 
 class _OptionsWidgetState extends State<OptionsWidget> {
   bool _liked = false;
+  bool _reblogged = false;
   final double _interactIocnSize = 18;
   OverlayEntry _blogsSelectorPopup;
 
@@ -143,8 +144,10 @@ class _OptionsWidgetState extends State<OptionsWidget> {
         GestureDetector(
           onLongPress: () {},
           onLongPressEnd: null,
-          child: _optionIcon(CustomIcons.reblog,
-              () => widget._post.reblogPost(), Colors.black),
+          child: _optionIcon(
+              CustomIcons.reblog,
+              () => widget._post.reblogPost(),
+              _reblogged ? Colors.green : Colors.black),
         ),
         // like icon
         _optionIcon(_liked ? CustomIcons.heartFilled : CustomIcons.heart,

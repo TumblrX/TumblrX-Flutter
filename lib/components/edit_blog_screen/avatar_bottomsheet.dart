@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:provider/provider.dart';
 import 'package:tumblrx/models/user/blog.dart';
 
 class EditAvatarBottomSheet extends StatelessWidget {
@@ -20,8 +19,6 @@ class EditAvatarBottomSheet extends StatelessWidget {
             title: Text('Choose a photo'),
             onTap: () {
               Blog.pickImage(1);
-
-             
             }),
         Padding(
           padding: EdgeInsets.only(left: 10, right: 10),
