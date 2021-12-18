@@ -4,12 +4,14 @@
   Description:
       A stateless widget to preview media blocks [image, GIF] in a post 
 */
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:flutter_file_dialog/flutter_file_dialog.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:tumblrx/utilities/constants.dart';
 
 //import 'package:cached_network_image/cached_network_image.dart';
@@ -44,9 +46,7 @@ class MediaWidget extends StatelessWidget {
         onTap: onTap,
         onLongPress: onLongPress,
         child: CachedNetworkImage(
-          imageUrl: this._url.contains('uploads')
-              ? 'http://tumblrx.me:3000/${this._url}'
-              : this._url,
+          imageUrl: this._url,
           width: this._width,
           height: this._height,
           placeholder: (cts, url) => Center(child: CircularProgressIndicator()),
@@ -92,14 +92,14 @@ class MediaWidget extends StatelessWidget {
                 ),
                 TextButton(
                   style: optionButtonStyle,
-                  onPressed: () {
+                  onPressed: () async {
                     try {
-                      _downloadPhoto();
+                      await _downloadPhoto();
                       showSnackBarMessage(context,
                           'File is Downloaded Successfully', Colors.green);
                     } catch (err) {
                       showSnackBarMessage(
-                          context, 'Coulcn\'t download the file', Colors.red);
+                          context, 'Couldn\'t download the file', Colors.red);
                     }
                   },
                   child: Text('Download photo'),
@@ -119,28 +119,26 @@ class MediaWidget extends StatelessWidget {
 
   void _sharePost() {}
   void _sharePhoto() {}
-  void _downloadPhoto() async {
+  Future<void> _downloadPhoto() async {
     try {
-      // // ask for permission to storage for downloading
-      final status = await Permission.storage.request();
-      // // if permission is granted, proceed with downloading process
-      if (status.isGranted) {
-        final externalStorageDirectory = await getExternalStorageDirectory();
+      if (Platform.isAndroid) {
+        // // ask for permission to storage for downloading
+        final status = await Permission.storage.request();
+        // // if permission is granted, proceed with downloading process
+        if (status.isGranted) {
+          final Directory directory = await getTemporaryDirectory();
 
-        if (externalStorageDirectory == null)
-          throw Exception('Couldn\'t access storage');
-        else {
-          print(externalStorageDirectory.path);
-          final String fileName = Uri.parse(this._url).path.split('/').last;
-          final String downloadPath = '$externalStorageDirectory/$fileName';
-          await Dio().download(this._url, downloadPath);
-          final downloadParams =
-              SaveFileDialogParams(sourceFilePath: downloadPath);
-          final String filePath =
-              await FlutterFileDialog.saveFile(params: downloadParams);
-          print(filePath);
-        }
-      }
+          if (!await directory.exists()) {
+            await directory.create(recursive: true);
+          }
+          if (await directory.exists()) {
+            final String fileName = Uri.parse(this._url).path.split('/').last;
+            final String downloadPath = '${directory.path}/$fileName';
+            final response = await Dio().download(this._url, downloadPath);
+            final result = await ImageGallerySaver.saveFile(downloadPath);
+          }
+        } else {}
+      } else {}
     } catch (err) {
       print(err);
       throw err;
