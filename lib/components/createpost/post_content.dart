@@ -57,7 +57,7 @@ class PostContent extends StatelessWidget {
         if (postContent[i]['content'] is Map &&
             postContent[i]['content']['data'].containsKey('url')) {
           content = Image.network(
-            ApiHttpRepository.api + postContent[i]['content']['data']['url'],
+            postContent[i]['content']['data']['url'],
             headers: {'accept': 'image/*'},
           );
         } else {
@@ -68,9 +68,8 @@ class PostContent extends StatelessWidget {
       } else if (postContent[i]['type'] == PostContentType.video) {
         if (postContent[i]['content'] is Map &&
             postContent[i]['content']['data'].containsKey('url')) {
-          content = VideoPlayerPreview(
-              url: ApiHttpRepository.api +
-                  postContent[i]['content']['data']['url']);
+          content =
+              VideoPlayerPreview(url: postContent[i]['content']['data']['url']);
         } else {
           content = VideoPlayerPreview(file: postContent[i]['content']);
         }
