@@ -44,6 +44,7 @@ class TextBlock {
   List<InlineFormatting> _formatting = [];
 
   String get formattedText => this._formattedText;
+  String get text => this._text;
 
   /// Constructs a new instance usin parsed json data
   TextBlock.fromJson(Map<String, dynamic> json) {

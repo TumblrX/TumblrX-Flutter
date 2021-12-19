@@ -49,7 +49,8 @@ class Content extends ChangeNotifier {
   Future<List<Post>> getMorePosts(
       String endPoint, int pageNum, Authentication auth) async {
     // if already a request is being processed,return
-    if (isLoading) return [];
+    if (isLoading || (posts.length == totalPosts && posts.isNotEmpty))
+      return [];
 
     // set loading flag
     _isLoading = true;

@@ -59,7 +59,10 @@ class PostWidget extends StatelessWidget {
               (block) {
                 switch (block.runtimeType) {
                   case TextBlock:
-                    return TextBlockWidget(text: block.formattedText);
+                    return TextBlockWidget(
+                      text: block.formattedText,
+                      sharableText: block.text,
+                    );
                     break;
                   case LinkBlock:
                     return LinkBlockWidget(

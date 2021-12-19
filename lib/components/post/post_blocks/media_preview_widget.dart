@@ -14,7 +14,6 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:tumblrx/utilities/constants.dart';
 
-//import 'package:cached_network_image/cached_network_image.dart';
 class MediaWidget extends StatelessWidget {
   /// URL of the media to embed
   final String _url;
@@ -97,6 +96,7 @@ class MediaWidget extends StatelessWidget {
                       await _downloadPhoto();
                       showSnackBarMessage(context,
                           'File is Downloaded Successfully', Colors.green);
+                      Navigator.of(context).pop();
                     } catch (err) {
                       showSnackBarMessage(
                           context, 'Couldn\'t download the file', Colors.red);

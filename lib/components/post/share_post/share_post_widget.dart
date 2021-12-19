@@ -1,17 +1,25 @@
+import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:tumblrx/components/post/share_post/blog_selector_widget.dart';
 import 'package:tumblrx/components/post/share_post/search_blog_result.dart';
 import 'package:tumblrx/components/post/share_post/search_widget.dart';
 import 'package:tumblrx/components/post/share_post/selected_blogs_widget.dart';
+import 'package:tumblrx/components/post/share_post/share_methods_widget.dart';
+import 'package:tumblrx/models/post.dart';
 import 'package:tumblrx/models/user/blog.dart';
+import 'package:tumblrx/utilities/constants.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SharePostWidget extends StatelessWidget {
   static final String id = "share_post";
   final bool enableSending = false;
+  final Post _post;
+  SharePostWidget(Post post) : _post = post;
 
   final ValueNotifier<List<Blog>> _selectedBlogsNotifier = ValueNotifier([]);
   final ValueNotifier<List<Blog>> _searchBlogResultsNotifier =
       ValueNotifier([]);
+
   Widget topDecoration() => Padding(
         padding: const EdgeInsets.all(8.0),
         child: Center(
@@ -34,6 +42,7 @@ class SharePostWidget extends StatelessWidget {
         children: [
           topDecoration(),
           BlogSelector(),
+          ShareMethods(postUrl: _post.postUrl),
           const Divider(
             thickness: 2.5,
           ),

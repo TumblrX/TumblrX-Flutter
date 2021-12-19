@@ -35,7 +35,7 @@ class ImageBlock {
     if (json.containsKey('media') && json['type'].toString().trim().isNotEmpty)
       this._media = json['media'];
     else
-      throw Exception('missing required paramter "media"');
+      this._media = "image/jpeg";
 
     if (json.containsKey('url') && json['url'].toString().trim().isNotEmpty)
       this._url = json['url'];

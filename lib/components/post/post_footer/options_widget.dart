@@ -49,23 +49,27 @@ class _OptionsWidgetState extends State<OptionsWidget> {
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      builder: (context) =>
-          FractionallySizedBox(heightFactor: 0.9, child: SharePostWidget()),
+      builder: (context) => FractionallySizedBox(
+          heightFactor: 0.9, child: SharePostWidget(widget._post)),
     );
   }
 
   /// callback on tap like icon
   void _likePost() {
-    Future<bool> success =
-        _liked ? widget._post.unlikePost() : widget._post.likePost();
+    Future<bool> success = _liked
+        ? widget._post.unlikePost(context)
+        : widget._post.likePost(context);
     success.then((value) {
       if (value)
         setState(() {
           _liked = !_liked;
         });
-      else
+      else {
+        print('false');
         showSnackBarMessage(context, errorMessage, Colors.red);
+      }
     }).catchError((e) {
+      print('error is ${e.toString()}');
       showSnackBarMessage(context, errorMessage, Colors.red);
     });
   }
@@ -133,8 +137,6 @@ class _OptionsWidgetState extends State<OptionsWidget> {
       ...[
         // share icon
         GestureDetector(
-          onLongPress: () => _showBlogsPicker(context),
-          onLongPressEnd: (details) => _blogsSelectorPopup.remove(),
           child: _optionIcon(
               CustomIcons.share, () => _showSharePage(context), Colors.black),
         ),
@@ -142,8 +144,8 @@ class _OptionsWidgetState extends State<OptionsWidget> {
         _optionIcon(CustomIcons.chat, widget._showNotesPage, Colors.black),
         // reblog icon
         GestureDetector(
-          onLongPress: () {},
-          onLongPressEnd: null,
+          onLongPress: () => _showBlogsPicker(context),
+          onLongPressEnd: (details) => _blogsSelectorPopup.remove(),
           child: _optionIcon(
               CustomIcons.reblog,
               () => widget._post.reblogPost(),
@@ -156,13 +158,14 @@ class _OptionsWidgetState extends State<OptionsWidget> {
       if (widget._post.blogTitle == widget._activeBlogTitle) ...[
         // remove icon
         _optionIcon(CustomIcons.remove, () {
-          widget._post.deletePost().then(
+          widget._post.deletePost(context).then(
             (value) {
               if (!value) {
                 showSnackBarMessage(context, errorMessage, Colors.red);
               }
             },
           ).catchError((error) {
+            print(error.toString());
             showSnackBarMessage(context, errorMessage, Colors.red);
           });
         }, Colors.black),

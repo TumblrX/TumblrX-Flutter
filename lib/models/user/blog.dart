@@ -156,8 +156,9 @@ class Blog extends ChangeNotifier {
       "size": 64
     };
     try {
-      final Response response =
-          await MockHttpRepository.sendGetRequest(endPoint, req: reqParameters);
+      final Response response = await MockHttpRepository.sendGetRequest(
+          endPoint,
+          queryParams: reqParameters);
       if (response.statusCode == 200) {
         final responseParsed = convert.jsonDecode(response.body);
 
@@ -178,8 +179,9 @@ class Blog extends ChangeNotifier {
     final Map<String, dynamic> reqParameters = {"blog-identifier": name};
 
     try {
-      final Response response =
-          await MockHttpRepository.sendGetRequest(endPoint, req: reqParameters);
+      final Response response = await MockHttpRepository.sendGetRequest(
+          endPoint,
+          queryParams: reqParameters);
       if (response.statusCode != 200) throw Exception(response.body.toString());
       final parsedResponse = convert.jsonDecode(response.body);
       return Blog.fromJson(parsedResponse['blog']);

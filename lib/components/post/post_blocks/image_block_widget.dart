@@ -10,7 +10,6 @@ class ImageBlockWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(_media.url);
     return _media != null
         ? MediaWidget(_media.url, _media.width, _media.height)
         : Container(

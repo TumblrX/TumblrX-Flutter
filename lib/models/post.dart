@@ -12,6 +12,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:provider/provider.dart';
 import 'package:tumblrx/models/posts/audio_block.dart';
 import 'package:tumblrx/models/posts/image_block.dart';
 import 'package:tumblrx/models/posts/link_block.dart';
@@ -21,6 +22,8 @@ import 'package:tumblrx/models/user/blog.dart';
 import 'package:intl/intl.dart';
 import 'package:tumblrx/services/api_provider.dart';
 import 'dart:convert' as convert;
+
+import 'package:tumblrx/services/authentication.dart';
 
 class Post {
   /// The short name used to uniquely identify a blog
@@ -99,12 +102,14 @@ class Post {
   int get likesCount => this._likesCount;
   int get commentsCount => this._commentsCount;
   int get reblogsCount => this._reblogsCount;
+  int get totalNotes => this._totalNotes;
   List get tags => this._tags;
   List get content => this._content;
   String get blogTitle => this._blogTitle;
   String get blogAvatar => this._blogAvatar;
   String get reblogKey => this._reblogKey;
   DateTime get publishedOn => _date;
+  String get postUrl => _postUrl;
 
   /// Constructs a new instance usin parsed json data
   Post.fromJson(Map<String, dynamic> parsedJson) {
@@ -140,6 +145,10 @@ class Post {
         parsedJson['reblog_key'].toString().trim().isNotEmpty)
       _reblogKey = parsedJson['reblog_key'];
 
+    if (parsedJson.containsKey('url'))
+      _postUrl = parsedJson['url'];
+    else
+      _postUrl = 'https://google.com';
     // post flag liked (true => user likes, false => user unlikes)
     // if (parsedJson.containsKey('liked'))
     //   liked = parsedJson['liked'];
@@ -160,10 +169,9 @@ class Post {
       this._reblogsCount = parsedJson['reblogsCount'];
 
     // calculating total number of notes for viewing purposes
-    this._totalNotes = this._commentsCount ??
-        0 + this._likesCount ??
-        0 + this._reblogsCount ??
-        0;
+    this._totalNotes = (this._commentsCount ?? 0) +
+        (this._likesCount ?? 0) +
+        (this._reblogsCount ?? 0);
 
     List<dynamic> parsedTags = List<dynamic>.from(parsedJson['tags']);
     // post tags
@@ -243,21 +251,24 @@ class Post {
     }
   }
 
-  /// API for post object to like the post
-  Future<bool> likePost() async {
-    final String endPoint = 'user/like';
-    final Map<String, dynamic> queryParameters = {
-      "id": this._id,
-      "reblog_key": this._reblogKey
-    };
-    try {
-      final response = await MockHttpRepository.sendPostRequest(
-          endPoint, convert.jsonEncode(queryParameters));
+  // ================= API ====================
 
-      if (response.statusCode != 200)
+  /// API for post object to like the post
+  Future<bool> likePost(BuildContext context) async {
+    final String endPoint = 'api/post/${this.id}/like';
+    try {
+      String token = Provider.of<Authentication>(context, listen: false).token;
+
+      Map<String, String> headers = {'Authorization': token};
+      final response =
+          await ApiHttpRepository.sendPostRequest(endPoint, headers: headers);
+
+      if (response.statusCode != 200) {
+        print('id is ${this.id}');
+        print(response.body);
         throw Exception('post ID or reblog_key was not found');
-      else {
-        this._liked = true;
+      } else {
+        this._liked = false;
         return true;
       }
     } catch (error) {
@@ -266,24 +277,49 @@ class Post {
   }
 
   /// API for post object to unlike the post
-  Future<bool> unlikePost() async {
-    final String endPoint = 'user/unlike';
-    final Map<String, dynamic> queryParameters = {
-      "id": this._id,
-      "reblog_key": this._reblogKey
-    };
+  Future<bool> unlikePost(BuildContext context) async {
+    final String endPoint = 'api/post/${this.id}/like';
     try {
-      final response = await MockHttpRepository.sendPostRequest(
-          endPoint, convert.jsonEncode(queryParameters));
+      String token = Provider.of<Authentication>(context, listen: false).token;
 
-      if (response.statusCode != 200)
+      Map<String, String> headers = {'Authorization': token};
+      final response =
+          await ApiHttpRepository.sendDeleteRequest(endPoint, headers);
+
+      if (response.statusCode != 200) {
+        print(response.body);
         throw Exception('post ID or reblog_key was not found');
-      else {
+      } else {
         this._liked = false;
         return true;
       }
     } catch (error) {
       throw Exception(error.message.toString());
+    }
+  }
+
+  /// API for post object to delete the post
+  Future<bool> deletePost(BuildContext context) async {
+    final String endPoint = 'api/post/${this.id}';
+    String token = Provider.of<Authentication>(context, listen: false).token;
+    final Map<String, String> headers = {
+      'Authorization':
+          '${Provider.of<Authentication>(context, listen: false).token}'
+    };
+
+    try {
+      final response =
+          await ApiHttpRepository.sendDeleteRequest(endPoint, headers);
+
+      if (response.statusCode != 200) {
+        print(response.body);
+        print('token is $token');
+        throw Exception('post ID or reblog_key was not found');
+      }
+      return true;
+    } catch (error) {
+      print(error);
+      return false;
     }
   }
 
@@ -301,25 +337,6 @@ class Post {
     try {} catch (error) {}
   }
 
-  /// API for post object to delete the post
-  Future<bool> deletePost() async {
-    final String endPoint = 'post/delete';
-    final Map<String, dynamic> queryParameters = {
-      "id": this._id,
-    };
-    try {
-      final response = await MockHttpRepository.sendPostRequest(
-          endPoint, convert.jsonEncode(queryParameters));
-
-      if (response.statusCode != 200)
-        throw Exception('post ID or reblog_key was not found');
-      return true;
-    } catch (error) {
-      print(error);
-      return false;
-    }
-  }
-
   Future<bool> mutePushNotification() async {}
 
   /// API for post object to edit the post
@@ -328,7 +345,8 @@ class Post {
     final Map<String, dynamic> queryParameters = {"id": this._id};
     try {
       final Response response = await MockHttpRepository.sendPostRequest(
-          endPoint, convert.jsonEncode(queryParameters));
+          endPoint,
+          reqBody: convert.jsonEncode(queryParameters));
       if (response.statusCode != 200)
         throw Exception('post ID or reblog_key was not found');
     } catch (error) {

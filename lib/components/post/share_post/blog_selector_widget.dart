@@ -31,9 +31,9 @@ class _BlogSelectorState extends State<BlogSelector> {
             padding: const EdgeInsets.all(5.0),
             child: CircleAvatar(
               radius: 20,
-              child: Image.network(
+              backgroundImage: NetworkImage(
                 selectedBlog.blogAvatar,
-                errorBuilder: (context, error, stackTrace) => Icon(Icons.error),
+                //errorBuilder: (context, error, stackTrace) => Icon(Icons.error),
               ),
             ),
           ),
