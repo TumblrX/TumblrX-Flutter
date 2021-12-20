@@ -55,7 +55,6 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<User>(
           create: (context) => User(),
         ),
-        
         ChangeNotifierProvider<Content>(
           create: (context) => Content(),
         ),

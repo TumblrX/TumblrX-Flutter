@@ -5,10 +5,7 @@ import 'post_blog_choice.dart';
 
 ///Shows the user of Creating post and allows you to choose the blog that post will be added into.
 class CreatePostUser extends StatelessWidget {
-  ///Avatar of current user
-  final String userAvatar;
-
-  CreatePostUser({this.userAvatar});
+  CreatePostUser();
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -55,6 +52,7 @@ class CreatePostUser extends StatelessWidget {
             Icon(
               Icons.keyboard_arrow_down,
               size: 25.0,
+              color: Colors.black,
             ),
           ],
         ),
