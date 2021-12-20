@@ -21,15 +21,11 @@ class BlogScreen extends StatefulWidget {
 }
 
 class _BlogScreenState extends State<BlogScreen>
-    with SingleTickerProviderStateMixin
-     {
+    with SingleTickerProviderStateMixin {
   TabController _tabController;
 
   @override
   void initState() {
-  
-    
-   
     ///this controller for Tabs bar
     ///function used for Tab bars
 
@@ -37,11 +33,12 @@ class _BlogScreenState extends State<BlogScreen>
 
     super.initState();
   }
+
   @override
-   void dispose() {
-   _tabController.dispose();
-   super.dispose();
- }
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,60 +72,68 @@ class _BlogScreenState extends State<BlogScreen>
                         ));
           },
         ),
-        body: SingleChildScrollView(
-            child: ConstrainedBox(
-                constraints: BoxConstraints(
-                    maxHeight:
-                        MediaQuery.of(context).size.height + (12 - 3) * 60),
+        body: Center(
+          child: SingleChildScrollView(
+              child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                      maxHeight:
+                          MediaQuery.of(context).size.height + (12 - 3) * 60),
 
-                /// i will chnge it and make it equal total no of following-3*40
+                  /// i will chnge it and make it equal total no of following-3*40
 
-                child: Container(color: Color(0xffb03fa8),
-                  constraints: !kIsWeb
-                      ? BoxConstraints()
-                      : BoxConstraints(
-                          maxWidth: 750.0,
-                          minWidth: MediaQuery.of(context).size.width < 750
-                              ? MediaQuery.of(context).size.width * 0.9
-                              : 750.0,
-                        ),
-                  child: Column(
-
-                      /// couloum have(the header image , avatar,title, description and tab bars )
-
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Stack(alignment: Alignment.center, children: <Widget>[
-                          Column(
-                            children: <Widget>[
-                              ///display header image with icons and drop down list
-
-                              HeaderImage(),
-
-                              ///display header image with icons and drop down list
-
-                              TextWriting(),
-                            ],
+                  child: Container(
+                    color: Color(0xffb03fa8),
+                    constraints: !kIsWeb
+                        ? BoxConstraints()
+                        : BoxConstraints(
+                            maxWidth: 750.0,
+                            minWidth: MediaQuery.of(context).size.width < 750
+                                ? MediaQuery.of(context).size.width * 0.9
+                                : 750.0,
                           ),
+                    child: Column(
 
-                          ///show an avatar in square
-                          Visibility(
-                              visible: true,
-                              child: Provider.of<User>(context, listen: false)
-                                      .getIsAvatarCircle()
-                                  ? AvatarImage()
-                                  : Square())
+                        /// couloum have(the header image , avatar,title, description and tab bars )
+
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Stack(alignment: Alignment.center, children: <Widget>[
+                            Column(
+                              children: <Widget>[
+                                ///display header image with icons and drop down list
+
+                                HeaderImage(),
+
+                                ///display header image with icons and drop down list
+
+                                TextWriting(),
+                              ],
+                            ),
+
+                            ///show an avatar in square
+                            Visibility(
+                                visible: true,
+                                child: Provider.of<User>(context, listen: false)
+                                        .getIsAvatarCircle()
+                                    ? AvatarImage()
+                                    : Square())
+                          ]),
+
+                          //{
+                          if (Provider.of<User>(context)
+                              .getActiveBlogIsPrimary())
+                            upperTabBar(_tabController, context),
+                          if (Provider.of<User>(context)
+                              .getActiveBlogIsPrimary())
+                            bottomTabBar(_tabController, context),
+                          //}
+                          if (!Provider.of<User>(context)
+                              .getActiveBlogIsPrimary())
+                            Container(
+                              child: Column(),
+                            )
                         ]),
-                      
-                        //{
-                         if( Provider.of<User>(context).getActiveBlogIsPrimary())
-                        upperTabBar(_tabController, context),
-                         if( Provider.of<User>(context).getActiveBlogIsPrimary()) 
-                        bottomTabBar(_tabController, context),
-                        //}
-                        if(!Provider.of<User>(context).getActiveBlogIsPrimary())
-                        Container(child: Column(),)
-                      ]),
-                ))));
+                  ))),
+        ));
   }
 }
