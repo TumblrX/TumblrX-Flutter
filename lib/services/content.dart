@@ -70,19 +70,20 @@ class Content extends ChangeNotifier {
       _isLoading = false;
       return [];
     }
-
     // decode reponse
     final resposeObject =
         convert.jsonDecode(response.body) as Map<String, dynamic>;
+    print('$route $resposeObject');
 
     // for pagination, set total number of posts
     if (pageNum == 1) {
-      _totalPosts = resposeObject['posts'].length ?? 0;
+      _totalPosts = resposeObject['for-youPosts'].length ?? 0;
     }
     List<Post> postsArray;
     try {
       // type casting to list of map objects
-      List postsList = List<Map<String, dynamic>>.from(resposeObject['posts']);
+      List postsList =
+          List<Map<String, dynamic>>.from(resposeObject['for-youPosts']);
       try {
         // construct list of posts object from the parsed json response
         postsArray = postsList.map((e) {
