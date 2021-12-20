@@ -10,9 +10,15 @@ Description:
 
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:provider/provider.dart';
+import 'package:tumblrx/components/createpost/create_post.dart';
+import 'package:tumblrx/components/post/post_footer/post_footer.dart';
+import 'package:tumblrx/components/post/post_header.dart';
+import 'package:tumblrx/components/post/reblogged_post_header.dart';
+import 'package:tumblrx/components/post/tags_widget.dart';
 import 'package:tumblrx/models/posts/audio_block.dart';
 import 'package:tumblrx/models/posts/image_block.dart';
 import 'package:tumblrx/models/posts/link_block.dart';
@@ -24,6 +30,7 @@ import 'package:tumblrx/services/api_provider.dart';
 import 'dart:convert' as convert;
 
 import 'package:tumblrx/services/authentication.dart';
+import 'package:tumblrx/services/creating_post.dart';
 
 class Post {
   /// The short name used to uniquely identify a blog
@@ -324,8 +331,29 @@ class Post {
   }
 
   /// API for post object to reblog the post
-  void reblogPost() async {
-    try {} catch (error) {}
+  void reblogPost(BuildContext context) async {
+    double topPadding = MediaQuery.of(context).padding.top;
+    Provider.of<CreatingPost>(context, listen: false)
+        .initializePostOptions(context, true, this);
+    !kIsWeb
+        ? showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            builder: (context) => SingleChildScrollView(
+              child: CreatePost(
+                topPadding: topPadding,
+                isReblog: true,
+              ),
+            ),
+          )
+        : showDialog(
+            context: context,
+            builder: (_) => AlertDialog(
+                  content: CreatePost(
+                    topPadding: topPadding,
+                    isReblog: true,
+                  ),
+                ));
   }
 
   /// API for post object to share the post
@@ -367,5 +395,55 @@ class Post {
     } catch (error) {
       throw Exception(error.message);
     }
+  }
+
+  void navigateToTag(String tag) {}
+
+  /// API for post object to render the post
+  Container showPost(int index) {
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          PostHeader(index: index),
+          Divider(),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children:
+                content.map<Widget>((block) => block.showBlock()).toList(),
+          ),
+          Divider(
+            color: Colors.transparent,
+          ),
+          TagsWidget(_tags),
+          Divider(
+            color: Colors.transparent,
+          ),
+          PostFooter(postIndex: index),
+        ],
+      ),
+    );
+  }
+
+  /// Shows a reblogged post view
+  Container showRebloggedPost() {
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          RebloggedPostHeader(blogAvatar: blogAvatar, blogTitle: blogTitle),
+          Divider(),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children:
+                content.map<Widget>((block) => block.showBlock()).toList(),
+          ),
+          Divider(
+            color: Colors.transparent,
+          ),
+          TagsWidget(_tags),
+        ],
+      ),
+    );
   }
 }

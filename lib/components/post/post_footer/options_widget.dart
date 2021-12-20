@@ -148,7 +148,7 @@ class _OptionsWidgetState extends State<OptionsWidget> {
           onLongPressEnd: (details) => _blogsSelectorPopup.remove(),
           child: _optionIcon(
               CustomIcons.reblog,
-              () => widget._post.reblogPost(),
+              () => widget._post.reblogPost(context),
               _reblogged ? Colors.green : Colors.black),
         ),
         // like icon
