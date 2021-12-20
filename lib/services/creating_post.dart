@@ -4,6 +4,7 @@ import 'package:giphy_get/giphy_get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/models/creatingpost/text_field_data.dart';
+import 'package:tumblrx/models/posts/inline_formatting.dart';
 import 'package:tumblrx/models/post.dart';
 import 'package:tumblrx/models/posts/text_block.dart';
 import 'package:tumblrx/models/user/user.dart';
@@ -497,14 +498,15 @@ class CreatingPost extends ChangeNotifier {
     formattings.add(formatting);
 
     TextBlock textBlock = TextBlock(
-        "text",
-        postContent[i]['content']['data']
-            .textStyleType
-            .toString()
-            .substring(14)
-            .toLowerCase(),
-        postContent[i]['content']['data'].textEditingController.value.text,
-        formattings);
+      type: "text",
+      subtype: postContent[i]['content']['data']
+          .textStyleType
+          .toString()
+          .substring(14)
+          .toLowerCase(),
+      text: postContent[i]['content']['data'].textEditingController.value.text,
+      formatting: formattings,
+    );
     Map block = textBlock.toJson();
     block = kMapTextStyleToBackend(block);
     List<InlineFormatting> formattingList = block['formatting'];

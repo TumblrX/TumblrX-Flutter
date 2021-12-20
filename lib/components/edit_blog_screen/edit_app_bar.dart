@@ -16,11 +16,10 @@ class EditAppBar {
                 onPressed: () {
                   showDialog(
                       context: context, builder: (context) => AlerDialgue());
-                         Navigator.pop(
-                    context,
-                    MaterialPageRoute(builder: (context) => BlogScreen()),
-                  );
-                
+// Navigator.pop(
+//                    context,
+//                    MaterialPageRoute(builder: (context) => BlogScreen()),
+//                  );
                 },
                 icon: Icon(Icons.arrow_back),
                 color: Colors.white),

@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:tumblrx/models/user/blog.dart';
+import 'package:tumblrx/services/api_provider.dart';
 
 class SearchWidget extends StatefulWidget {
+  ValueNotifier<List<Blog>> _searchBlogResultsNotifier;
+  SearchWidget(ValueNotifier<List<Blog>> searchResults)
+      : _searchBlogResultsNotifier = searchResults;
   @override
   _SearchWidgetState createState() => _SearchWidgetState();
 }
 
 class _SearchWidgetState extends State<SearchWidget> {
-  bool searching = true;
+  bool searching = false;
   final String hintText = "Send to...";
   @override
   Widget build(BuildContext context) {
@@ -24,6 +29,13 @@ class _SearchWidgetState extends State<SearchWidget> {
               height: 35,
               padding: const EdgeInsets.only(left: 10),
               child: TextField(
+                onChanged: (value) async {
+                  // send request to search for blogs with entered regex=value
+                  // update valuenotifier value with returned list
+                  String endPoint = "";
+                  await ApiHttpRepository.sendGetRequest(endPoint);
+                  widget._searchBlogResultsNotifier.value = [];
+                },
                 textAlignVertical: TextAlignVertical.bottom,
                 onTap: () => setState(() {
                   searching = true;

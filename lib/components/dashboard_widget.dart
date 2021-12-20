@@ -8,9 +8,10 @@ Description:
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tumblrx/components/post/post_widget.dart';
 import 'package:tumblrx/models/post.dart';
 import 'package:tumblrx/services/authentication.dart';
-
+// import 'package:gradient_widgets/gradient_widgets.dart';
 import 'package:tumblrx/services/content.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -67,13 +68,22 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   /// Builds the ListView widget to view posts
   Widget _buildListView() {
+    if (content.posts.isEmpty)
+      return Container(
+        width: 0,
+      );
     return Stack(
       children: [
-        ListView.builder(
+        ListView.separated(
           itemCount: content.totalPosts,
           controller: _controller,
-          itemBuilder: (BuildContext context, int index) =>
-              content.posts[index].showPost(index),
+          itemBuilder: (BuildContext context, int index) {
+            Post post = content.posts[index];
+            return PostWidget(
+                postContent: post.content, tags: post.tags, index: index);
+          },
+          separatorBuilder: (context, index) =>
+              const Divider(height: 20.0, color: Colors.transparent),
         ),
         content.isLoading
             ? LinearProgressIndicator()
@@ -89,7 +99,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     content = Provider.of<Content>(context, listen: false);
     auth = Provider.of<Authentication>(context, listen: false);
     return Container(
-      color: Colors.white,
+      color: Theme.of(context).primaryColor,
       child: FutureBuilder<List<Post>>(
         future: content.getMorePosts(widget._endpoint, _pageNum, auth),
         builder: (BuildContext ctx, AsyncSnapshot snapshot) {
@@ -105,12 +115,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
             case ConnectionState.none:
             case ConnectionState.active:
             case ConnectionState.waiting:
-              Container(
+              return Container(
                 child: Center(
-                  child: CircularProgressIndicator(),
+                  child: CircularProgressIndicator(
+                    color: Colors.green,
+                  ),
                 ),
               );
-              break;
             case ConnectionState.done:
               if (snapshot.data != null) {
                 return _buildListView();

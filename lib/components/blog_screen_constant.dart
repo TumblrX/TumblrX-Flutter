@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:tumblrx/components/blog_screen_initial_screen/show_image.dart';
-import 'blog_screen_initial_screen/create_new_tumblr.dart';
 import 'edit_blog_screen/edit.dart';
 
 ///all constant, variable , widget and function which use more than one
@@ -15,10 +14,8 @@ class BlogScreenConstant extends StatelessWidget {
         ListTile(
           title: Text('Change your avatar'),
           onTap: () {
-              Navigator.push(context,
-                MaterialPageRoute(builder: (context) =>Edit()));
-                     
-
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => Edit()));
           },
         ),
         ListTile(
@@ -39,9 +36,10 @@ class BlogScreenConstant extends StatelessWidget {
       children: <Widget>[
         ListTile(
           title: Text('Change your header image'),
-          onTap: () {  Navigator.push(context,
-                MaterialPageRoute(builder: (context) =>Edit()));
-                     },
+          onTap: () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => Edit()));
+          },
         ),
         ListTile(
           title: Text('View your header imge'),
@@ -56,7 +54,6 @@ class BlogScreenConstant extends StatelessWidget {
     );
   }
 
-  
   static String toLengthFifteen(String text) {
     if (text.length > 15) {
       {

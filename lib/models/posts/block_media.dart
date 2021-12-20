@@ -23,6 +23,15 @@ class Media {
   /// A poster media object to be displayed for low-bandwidth consumers
   Media poster;
 
+  /// get url of the media object
+  String get url => _url;
+
+  /// get width of the media object frame
+  double get width => _width;
+
+  /// get height of the media object frame
+  double get height => _height;
+
   Media(this._type, this._url,
       [this._width = 540, this._height = 405, this.poster]);
 
@@ -52,13 +61,4 @@ class Media {
     if (poster != null) data['poster'] = poster.toJson();
     return data;
   }
-
-  /// get url of the media object
-  String get url => _url;
-
-  /// get width of the media object frame
-  double get width => _width;
-
-  /// get height of the media object frame
-  double get height => _height;
 }

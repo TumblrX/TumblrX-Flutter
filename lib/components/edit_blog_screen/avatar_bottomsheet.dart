@@ -12,7 +12,6 @@ class EditAvatarBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
     selectShape = [
       !Provider.of<User>(context, listen: false).getIsAvatarCircle(),
       Provider.of<User>(context, listen: false).getIsAvatarCircle()
@@ -35,11 +34,7 @@ class EditAvatarBottomSheet extends StatelessWidget {
         ),
         ListTile(
             title: Text('Show avatar'),
-            trailing: Switch(
-                value:showAvatar ,
-                onChanged: (value) {
-                 
-                }),
+            trailing: Switch(value: showAvatar, onChanged: (value) {}),
             onTap: () {}),
         Padding(
           padding: EdgeInsets.only(left: 10, right: 10),

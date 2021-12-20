@@ -15,7 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/components/createpost/create_post.dart';
-import 'package:tumblrx/components/post/post_footer.dart';
+import 'package:tumblrx/components/post/post_footer/post_footer.dart';
 import 'package:tumblrx/components/post/post_header.dart';
 import 'package:tumblrx/components/post/reblogged_post_header.dart';
 import 'package:tumblrx/components/post/tags_widget.dart';
@@ -29,97 +29,113 @@ import 'package:intl/intl.dart';
 import 'package:tumblrx/services/api_provider.dart';
 import 'dart:convert' as convert;
 
+import 'package:tumblrx/services/authentication.dart';
 import 'package:tumblrx/services/creating_post.dart';
 
 class Post {
   /// The short name used to uniquely identify a blog
-  String blogTitle;
+  String _blogTitle;
 
-  String blogHandle;
+  String _blogHandle;
 
-  String blogAvatar;
+  String _blogAvatar;
 
-  bool isAvatarCircle;
+  bool _isAvatarCircle;
 
   /// Post's unique id
-  String id;
+  String _id;
 
-  String blogId;
+  String _blogId;
 
   /// post's unique "genesis" ID† as a String
-  String gensisPostId;
+  String _gensisPostId;
 
   /// The location of the post
-  String postUrl;
+  String _postUrl;
 
   /// The GMT date and time of the post
-  DateTime date;
+  DateTime _date;
 
   /// The key used to reblog this post
-  String reblogKey;
+  String _reblogKey;
 
   /// Tags applied to the post
   List<String> _tags = [];
 
   /// The URL for the source of the content (for quotes, reblogs, etc)
-  String sourceUrl;
+  String _sourceUrl;
 
   /// The title of the source site
-  String sourceTitle;
+  String _sourceTitle;
 
   /// Flag for like/unlike
-  bool liked;
+  bool _liked;
 
   ///  the current state of the post
-  String state;
+  String _state;
 
-  String postType;
+  String _postType;
 
   /// The content of the post
-  List content = [];
+  List _content = [];
 
   /// The layout of the post content.
-  List layout = [];
+  List _layout = [];
 
   /// The reblog trail items, if any.
-  List trail = [];
+  List _trail = [];
 
   /// total number of notes
-  int totalNotes = 0;
+  int _totalNotes = 0;
 
   /// number of comments on the post
-  int commentsCount = 0;
+  int _commentsCount = 0;
 
   /// number of likes on the post
-  int likesCount = 0;
+  int _likesCount = 0;
 
   /// number of reblogs on the post
-  int reblogsCount = 0;
+  int _reblogsCount = 0;
 
-  Post({this.liked, this.content});
+  Post({@required bool liked, @required List content})
+      : _liked = liked,
+        _content = content;
 
   /// blog object who published this post
   Blog postBlog;
 
+// ================= getters ===================
+  String get id => this._id;
+  int get likesCount => this._likesCount;
+  int get commentsCount => this._commentsCount;
+  int get reblogsCount => this._reblogsCount;
+  int get totalNotes => this._totalNotes;
+  List get tags => this._tags;
+  List get content => this._content;
+  String get blogTitle => this._blogTitle;
+  String get blogAvatar => this._blogAvatar;
+  String get reblogKey => this._reblogKey;
+  DateTime get publishedOn => _date;
+  String get postUrl => _postUrl;
+
   /// Constructs a new instance usin parsed json data
   Post.fromJson(Map<String, dynamic> parsedJson) {
     // ==================== post related data =========================
-
     // post identifier '_id'
     if (parsedJson.containsKey('_id'))
-      id = parsedJson['_id'];
+      this._id = parsedJson['_id'];
     else
       throw Exception('missing required paramter "_id"');
 
     // post type
     if (parsedJson.containsKey('postType'))
-      postType = parsedJson['postType'];
+      this._postType = parsedJson['postType'];
     else
       throw Exception('missing required parameter "postType"');
 
     // post state ('published, draft, queued)
     if (parsedJson.containsKey('state'))
-      state = parsedJson['state'];
+      this._state = parsedJson['state'];
     else
       throw Exception('missing required paramter "state"');
 
@@ -127,42 +143,48 @@ class Post {
     if (parsedJson.containsKey('publishedOn')) {
       DateTime dateTime =
           DateTime.fromMillisecondsSinceEpoch(parsedJson['publishedOn'] * 1000);
-      date = DateFormat('yyyy-MM-dd hh:mm').parse(dateTime.toString());
-    } else
+      this._date = DateFormat('yyyy-MM-dd hh:mm').parse(dateTime.toString());
+    } else if (this._state != 'draft')
       throw Exception('missing required paramter "publishedOn"');
 
     // post reblog key
-    // if (parsedJson.containsKey('reblog_key'))
-    //   reblogKey = parsedJson['reblog_key'];
-    // else
-    //   throw Exception("missing required paramter reblog_key");
+    if (parsedJson.containsKey('reblog_key') &&
+        parsedJson['reblog_key'].toString().trim().isNotEmpty)
+      _reblogKey = parsedJson['reblog_key'];
+
+    if (parsedJson.containsKey('url'))
+      _postUrl = parsedJson['url'];
+    else
+      _postUrl = 'https://google.com';
     // post flag liked (true => user likes, false => user unlikes)
     // if (parsedJson.containsKey('liked'))
     //   liked = parsedJson['liked'];
     // else
     //   throw Exception("missing required paramter liked");
-    liked = true;
+    this._liked = true;
 
     // number of comments on the post
     if (parsedJson.containsKey('commentsCount'))
-      commentsCount = parsedJson['commentsCount'];
+      this._commentsCount = parsedJson['commentsCount'];
 
     // number of likes on the post
     if (parsedJson.containsKey('likesCount'))
-      likesCount = parsedJson['likesCount'];
+      this._likesCount = parsedJson['likesCount'];
 
     // number of reblogs on the post
     if (parsedJson.containsKey('reblogsCount'))
-      reblogsCount = parsedJson['reblogsCount'];
+      this._reblogsCount = parsedJson['reblogsCount'];
 
     // calculating total number of notes for viewing purposes
-    totalNotes = commentsCount ?? 0 + likesCount ?? 0 + reblogsCount ?? 0;
+    this._totalNotes = (this._commentsCount ?? 0) +
+        (this._likesCount ?? 0) +
+        (this._reblogsCount ?? 0);
 
     List<dynamic> parsedTags = List<dynamic>.from(parsedJson['tags']);
     // post tags
     if (parsedJson.containsKey('tags')) {
       for (var i = 0; i < parsedTags.length; i++)
-        _tags.add(parsedJson['tags'][i].toString());
+        this._tags.add(parsedJson['tags'][i].toString());
     }
 
     // post content
@@ -180,22 +202,22 @@ class Post {
 
     // blog identifier '_id'
     if (blogData.containsKey('_id'))
-      blogId = blogData['_id'];
+      this._blogId = blogData['_id'];
     else
       throw Exception('missing required paramter "_id" in blogAttribution');
 
     // blog title
-    if (blogData.containsKey('title')) blogTitle = blogData['title'];
+    if (blogData.containsKey('title')) this._blogTitle = blogData['title'];
     // blog handle
-    if (blogData.containsKey('handle')) blogHandle = blogData['handle'];
+    if (blogData.containsKey('handle')) this._blogHandle = blogData['handle'];
     // blog avatar url
     if (blogData.containsKey('avatar'))
-      blogAvatar = blogData['avatar'] == 'none'
+      this._blogAvatar = blogData['avatar'] == 'none'
           ? "https://64.media.tumblr.com/9f9b498bf798ef43dddeaa78cec7b027/tumblr_o51oavbMDx1ugpbmuo7_500.png"
           : blogData['avatar'];
     // blog avatar shape flag (true => circular, false => rectangular)
     if (blogData.containsKey('isAvatarCircle'))
-      isAvatarCircle = blogData['isAvatarCircle'];
+      this._isAvatarCircle = blogData['isAvatarCircle'];
   }
 
   /// Construct the right block for each of the Post content
@@ -204,48 +226,56 @@ class Post {
     List parsedConent = [];
     try {
       json.forEach((obj) {
-        print(obj['type'].toString().trim());
-        switch (obj['type'].toString().trim()) {
-          case 'text':
-            parsedConent.add(new TextBlock.fromJson(obj));
-            break;
-          case 'audio':
-            parsedConent.add(new AudioBlock.fromJson(obj));
-            break;
-          case 'video':
-            //parsedConent.add(new VideoBlock.fromJson(obj));
-            break;
-          case 'image':
-            //parsedConent.add(new ImageBlock.fromJson(obj));
-            break;
-          case 'link':
-            parsedConent.add(new LinkBlock.fromJson(obj));
-            break;
-          default:
-            throw Exception("invalid post type");
+        try {
+          switch (obj['type'].toString().trim()) {
+            case 'text':
+              parsedConent.add(new TextBlock.fromJson(obj));
+
+              break;
+            case 'audio':
+              //parsedConent.add(new AudioBlock.fromJson(obj));
+              break;
+            case 'video':
+              //parsedConent.add(new VideoBlock.fromJson(obj));
+              break;
+            case 'image':
+              parsedConent.add(new ImageBlock.fromJson(obj));
+              break;
+            case 'link':
+              //parsedConent.add(new LinkBlock.fromJson(obj));
+              break;
+            default:
+              print(obj);
+              throw Exception("invalid post type");
+          }
+        } catch (err) {
+          print('couldn\'t parse $obj');
         }
       });
-      content.addAll(parsedConent);
+      this._content.addAll(parsedConent);
     } catch (error) {
-      print('$error @ parseContent');
+      print('err @parseContent $error');
     }
   }
 
-  /// API for post object to like the post
-  Future<bool> likePost() async {
-    final String endPoint = 'user/like';
-    final Map<String, dynamic> queryParameters = {
-      "id": id,
-      "reblog_key": reblogKey
-    };
-    try {
-      final response = await MockHttpRepository.sendPostRequest(
-          endPoint, convert.jsonEncode(queryParameters));
+  // ================= API ====================
 
-      if (response.statusCode != 200)
+  /// API for post object to like the post
+  Future<bool> likePost(BuildContext context) async {
+    final String endPoint = 'api/post/${this.id}/like';
+    try {
+      String token = Provider.of<Authentication>(context, listen: false).token;
+
+      Map<String, String> headers = {'Authorization': token};
+      final response =
+          await ApiHttpRepository.sendPostRequest(endPoint, headers: headers);
+
+      if (response.statusCode != 200) {
+        print('id is ${this.id}');
+        print(response.body);
         throw Exception('post ID or reblog_key was not found');
-      else {
-        liked = true;
+      } else {
+        this._liked = false;
         return true;
       }
     } catch (error) {
@@ -254,20 +284,20 @@ class Post {
   }
 
   /// API for post object to unlike the post
-  Future<bool> unlikePost() async {
-    final String endPoint = 'user/unlike';
-    final Map<String, dynamic> queryParameters = {
-      "id": id,
-      "reblog_key": reblogKey
-    };
+  Future<bool> unlikePost(BuildContext context) async {
+    final String endPoint = 'api/post/${this.id}/like';
     try {
-      final response = await MockHttpRepository.sendPostRequest(
-          endPoint, convert.jsonEncode(queryParameters));
+      String token = Provider.of<Authentication>(context, listen: false).token;
 
-      if (response.statusCode != 200)
+      Map<String, String> headers = {'Authorization': token};
+      final response =
+          await ApiHttpRepository.sendDeleteRequest(endPoint, headers);
+
+      if (response.statusCode != 200) {
+        print(response.body);
         throw Exception('post ID or reblog_key was not found');
-      else {
-        liked = false;
+      } else {
+        this._liked = false;
         return true;
       }
     } catch (error) {
@@ -275,9 +305,29 @@ class Post {
     }
   }
 
-  /// API for post object to comment on the post
-  void commentOnPost() async {
-    try {} catch (error) {}
+  /// API for post object to delete the post
+  Future<bool> deletePost(BuildContext context) async {
+    final String endPoint = 'api/post/${this.id}';
+    String token = Provider.of<Authentication>(context, listen: false).token;
+    final Map<String, String> headers = {
+      'Authorization':
+          '${Provider.of<Authentication>(context, listen: false).token}'
+    };
+
+    try {
+      final response =
+          await ApiHttpRepository.sendDeleteRequest(endPoint, headers);
+
+      if (response.statusCode != 200) {
+        print(response.body);
+        print('token is $token');
+        throw Exception('post ID or reblog_key was not found');
+      }
+      return true;
+    } catch (error) {
+      print(error);
+      return false;
+    }
   }
 
   /// API for post object to reblog the post
@@ -311,36 +361,22 @@ class Post {
     try {} catch (error) {}
   }
 
-  /// API for post object to delete the post
-  Future<bool> deletePost() async {
-    final String endPoint = 'post/delete';
-    final Map<String, dynamic> queryParameters = {
-      "id": id,
-    };
-    try {
-      final response = await MockHttpRepository.sendPostRequest(
-          endPoint, convert.jsonEncode(queryParameters));
-
-      if (response.statusCode != 200)
-        throw Exception('post ID or reblog_key was not found');
-      return true;
-    } catch (error) {
-      print(error);
-      return false;
-    }
+  void followBlog() async {
+    try {} catch (error) {}
   }
+
+  Future<bool> mutePushNotification() async {}
 
   /// API for post object to edit the post
   void editPost() async {
     final String endPoint = 'posts';
-    final Map<String, dynamic> queryParameters = {"id": id};
+    final Map<String, dynamic> queryParameters = {"id": this._id};
     try {
       final Response response = await MockHttpRepository.sendPostRequest(
-          endPoint, convert.jsonEncode(queryParameters));
+          endPoint,
+          reqBody: convert.jsonEncode(queryParameters));
       if (response.statusCode != 200)
         throw Exception('post ID or reblog_key was not found');
-
-      // TODO: Please update class attributes which were requested to update
     } catch (error) {
       print(error.message);
     }
@@ -369,7 +405,7 @@ class Post {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          PostHeader(index),
+          PostHeader(index: index),
           Divider(),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -383,7 +419,7 @@ class Post {
           Divider(
             color: Colors.transparent,
           ),
-          PostFooter(index),
+          PostFooter(postIndex: index),
         ],
       ),
     );
