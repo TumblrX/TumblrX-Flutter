@@ -1,19 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:tumblrx/screens/blog_screen.dart';
 
 class AlerDialgue extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return CupertinoAlertDialog(
-      content: Text('Save changes?'),
+    return AlertDialog(
+      title: Text('Save changes?'),
       actions: [
-        CupertinoDialogAction(
-          child: Text('Discard'),
-          onPressed: () {},
-        ),
-        CupertinoDialogAction(
-          child: Text('Save',style: TextStyle(color: Colors.blue),),
-          onPressed: () {},
+        TextButton(onPressed: () { }, child: Text('Discard')),
+        TextButton(
+          onPressed: () { },child: Text('save'),
         )
       ],
     );

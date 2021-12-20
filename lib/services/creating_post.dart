@@ -12,7 +12,6 @@ import 'package:http/http.dart' as http;
 import 'package:tumblrx/utilities/hex_color_value.dart';
 import 'dart:convert' as convert;
 import 'package:http_parser/http_parser.dart';
-
 import 'authentication.dart';
 
 ///A Class that manages all creating post functionalities and prepare data for back end
