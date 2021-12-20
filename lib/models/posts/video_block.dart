@@ -5,7 +5,7 @@ Description:
 */
 
 import 'package:flutter/material.dart';
-import 'package:tumblrx/components/post/video_player_widget.dart';
+import 'package:tumblrx/components/post/post_blocks/video_player_widget.dart';
 import 'package:tumblrx/models/posts/block_media.dart';
 import 'package:tumblrx/models/posts/block_poster.dart';
 

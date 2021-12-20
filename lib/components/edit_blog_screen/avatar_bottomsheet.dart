@@ -2,13 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/models/user/blog.dart';
+import 'package:tumblrx/models/user/user.dart';
 
 class EditAvatarBottomSheet extends StatelessWidget {
   bool showAvatar;
 
+  List<bool> selectShape;
   XFile a; //test
+
   @override
   Widget build(BuildContext context) {
+    selectShape = [
+      !Provider.of<User>(context, listen: false).getIsAvatarCircle(),
+      Provider.of<User>(context, listen: false).getIsAvatarCircle()
+    ];
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
@@ -20,8 +27,6 @@ class EditAvatarBottomSheet extends StatelessWidget {
             title: Text('Choose a photo'),
             onTap: () {
               Blog.pickImage(1);
-
-             
             }),
         Padding(
           padding: EdgeInsets.only(left: 10, right: 10),
@@ -37,6 +42,30 @@ class EditAvatarBottomSheet extends StatelessWidget {
         ),
         ListTile(
           title: Text('Shape'),
+          trailing: ToggleButtons(
+            renderBorder: false,
+            isSelected: selectShape,
+            onPressed: (index) {
+              Provider.of<User>(context, listen: false)
+                  .setActiveBlogIsCircle(index == 0 ? false : true);
+            },
+            children: [
+              Container(
+                height: 25,
+                width: 25,
+                decoration: BoxDecoration(
+                  border: Border.all(width: 2, color: Colors.black26),
+                ),
+              ),
+              CircleAvatar(
+                  radius: 13,
+                  backgroundColor: Colors.black26,
+                  child: CircleAvatar(
+                    radius: 11,
+                    backgroundColor: Colors.white,
+                  )),
+            ],
+          ),
         ),
       ],
     );

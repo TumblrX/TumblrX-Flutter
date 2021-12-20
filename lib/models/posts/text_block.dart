@@ -8,17 +8,16 @@ Description:
 
 import 'dart:collection';
 
-import 'package:flutter/widgets.dart';
-import 'package:styled_text/styled_text.dart';
-import 'package:tumblrx/models/posts/post_block.dart';
-import 'package:tumblrx/utilities/text_format.dart';
+import 'package:tumblrx/models/posts/inline_formatting.dart';
 
 import 'dart:math';
 
-class TextBlock extends PostBlock {
+class TextBlock {
   /// Subtype of the text: 'heading1', 'quote', 'heading2', 'chat',
   /// 'ordered-list-item', 'unordered-list-item'
   String _subtype;
+
+  String _type;
 
   /// Text Block content
   String _text;
@@ -28,8 +27,15 @@ class TextBlock extends PostBlock {
   List<InlineFormatting> _renderingFormatting = [];
 
   ///Text block constructor that takes the [_subtype], [_text] and [_formatting]
-  TextBlock(String type, this._subtype, this._text, this._formatting)
-      : super.withType(type);
+  TextBlock(
+      {String type,
+      String subtype,
+      String text,
+      List<InlineFormatting> formatting})
+      : _type = type,
+        _subtype = subtype,
+        _text = text,
+        _formatting = formatting;
 
   /// Integer to nest the block
   //int _indentLevel = 0;
@@ -37,10 +43,13 @@ class TextBlock extends PostBlock {
   /// List of Inline formatting applied on the text
   List<InlineFormatting> _formatting = [];
 
+  String get formattedText => this._formattedText;
+  String get text => this._text;
+
   /// Constructs a new instance usin parsed json data
   TextBlock.fromJson(Map<String, dynamic> json) {
     if (json.containsKey('type') && json['type'].toString().trim().isNotEmpty)
-      super.type = json['type'];
+      this._type = json['type'];
     else
       throw Exception('missing required parameter "type"');
 
@@ -77,10 +86,9 @@ class TextBlock extends PostBlock {
   }
 
   /// Returns a JSON version of the object
-  @override
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {};
-    data['type'] = 'text';
+    data['type'] = _type;
     data['subtype'] = _subtype;
     data['text'] = _text;
     data['formatting'] = _formatting;
@@ -111,11 +119,15 @@ class TextBlock extends PostBlock {
       rightPadding = result[2];
       prevFormat = format;
     }
+    if (_subtype != null && _subtype.isNotEmpty) {
+      _formattedText = '<$_subtype>$_formattedText</$_subtype>';
+    }
     return _formattedText;
   }
 
   List<InlineFormatting> prepareFormattingList(
       List<InlineFormatting> parsedFormats) {
+    if (parsedFormats.isEmpty) return parsedFormats;
     // variable to store the final result
     List<InlineFormatting> processedFormattingList = [];
 
@@ -184,139 +196,5 @@ class TextBlock extends PostBlock {
 
     // return final list of formattings
     return processedFormattingList;
-  }
-
-  /// API for text block object to render it
-  @override
-  Widget showBlock() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: StyledText(
-        text: _formattedText,
-        tags: formattingTags(),
-      ),
-    );
-  }
-}
-
-class InlineFormatting implements Comparable<InlineFormatting> {
-  int start;
-  int end;
-  String type;
-  String url;
-  String hex;
-  String blogUrl;
-
-  InlineFormatting(
-      {this.start, this.end, this.type, this.url, this.blogUrl, this.hex});
-
-  @override
-  String toString() {
-    return 'start: $start, end: $end, type: $type';
-  }
-
-  void setHexColor(String hexValue) {
-    hex = hexValue;
-  }
-
-  InlineFormatting.fromJson(Map<String, dynamic> parsedJson) {
-    if (parsedJson.containsKey('start'))
-      this.start = parsedJson['start'];
-    else
-      throw Exception('missing required parameter "start"');
-    if (parsedJson.containsKey('end'))
-      this.end = parsedJson['end'];
-    else
-      throw Exception('missing required parameter "end"');
-    if (parsedJson.containsKey('type'))
-      this.type = parsedJson['type'];
-    else
-      throw Exception('missing required parameter "type"');
-
-    if (parsedJson.containsKey('url')) this.url = parsedJson['url'];
-    if (parsedJson.containsKey('hex')) this.hex = parsedJson['hex'];
-
-    if (parsedJson.containsKey('blog_url'))
-      this.blogUrl = parsedJson['blog_url'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = {};
-    data['start'] = start;
-    data['end'] = end;
-    data['type'] = type;
-    if (hex != null) data['hex'] = hex;
-    if (url != null) data['url'] = url;
-    if (blogUrl != null) data['blog_url'] = blogUrl;
-
-    return data;
-  }
-
-  List applyFormat(String text) {
-    int start = this.start;
-    int end = this.end + 1;
-
-    int leftPadding, rightPadding = 0;
-    String originalText = text.substring(start, end);
-    String formattedText;
-    switch (type) {
-      case 'bold':
-        formattedText = "<bold>$originalText</bold>";
-        leftPadding = 6;
-        rightPadding = 7;
-        break;
-      case 'italic':
-        formattedText = "<italic>$originalText</italic>";
-        leftPadding = 8;
-        rightPadding = 9;
-        break;
-      case 'strikethrough':
-        formattedText = "<strikethrough>$originalText</strikethrough>";
-        leftPadding = 15;
-        rightPadding = 16;
-        break;
-      case 'link':
-        formattedText = "<link href=${this.url}>$originalText</link>";
-        leftPadding = 11 + this.url.length;
-        rightPadding = 7;
-        break;
-      case 'color':
-        formattedText = '<color text="${this.hex}">$originalText</color>';
-        leftPadding = 12 + this.hex.length;
-        rightPadding = 8;
-        break;
-      case 'mention': // "uuid": , "name": , "url":
-        formattedText = "<mention href=${this.blogUrl}>$originalText</mention>";
-        leftPadding = 14 + this.blogUrl.length;
-        rightPadding = 10;
-        break;
-      default:
-        formattedText = originalText;
-    }
-    return [
-      text.replaceAll(originalText, formattedText),
-      leftPadding,
-      rightPadding
-    ];
-  }
-
-  @override
-  int compareTo(InlineFormatting other) {
-// case 0: both are applied on the same substring
-    if (this.start == other.start &&
-        this.end == other.end &&
-        this.type == other.type) return 0;
-    // case 1: a is applied on a substring that is after b's
-    if (this.start < other.start) return -1;
-    if (this.start > other.start) return 1;
-
-    if (this.start == other.start) {
-      // case 2: a should be the inner format [e.g [<b><a>text</a>restOfText</b>]
-      if (this.end > other.end) return 1;
-
-      // case 3: b should be the inner format [e.g [<a><b>text</b>restOfText</a>]
-      return -1;
-    }
-    return 0;
   }
 }

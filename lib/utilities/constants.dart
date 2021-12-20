@@ -103,18 +103,6 @@ const KPickTagsInfoText = TextStyle(
     color: Colors.grey,
     fontWeight: FontWeight.bold);
 
-final List<String> reactionIcons = [
-  "assets/icon/notes.png",
-  "assets/icon/reblogs.png",
-  "assets/icon/heart.png"
-];
-
-const String likeIcon = "assets/icon/like.png";
-const String commentIcon = "assets/icon/chat.png";
-const String editIcon = "assets/icon/edit.png";
-const String reblogIcon = "assets/icon/reblog.png";
-const String shareIcon = "assets/icon/share.png";
-const String deleteIcon = "assets/icon/remove.png";
 //small text info
 const KTextInfo = TextStyle(
   fontFamily: 'Pacifico',
@@ -137,3 +125,10 @@ Map<String, dynamic> kMapTextStyleToBackend(Map<String, dynamic> textBlock) {
   }
   return textBlock;
 }
+
+void Function(BuildContext context, String message, Color color)
+    showSnackBarMessage = (BuildContext context, String message, Color color) =>
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(message),
+          backgroundColor: color,
+        ));

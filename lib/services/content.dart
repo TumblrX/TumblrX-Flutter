@@ -49,7 +49,8 @@ class Content extends ChangeNotifier {
   Future<List<Post>> getMorePosts(
       String endPoint, int pageNum, Authentication auth) async {
     // if already a request is being processed,return
-    if (isLoading) return [];
+    if (isLoading || (posts.length == totalPosts && posts.isNotEmpty))
+      return [];
 
     // set loading flag
     _isLoading = true;
@@ -69,23 +70,28 @@ class Content extends ChangeNotifier {
       _isLoading = false;
       return [];
     }
-
     // decode reponse
     final resposeObject =
         convert.jsonDecode(response.body) as Map<String, dynamic>;
+    print('$route $resposeObject');
 
     // for pagination, set total number of posts
     if (pageNum == 1) {
-      _totalPosts = resposeObject['posts'].length ?? 0;
+      _totalPosts = resposeObject['for-youPosts'].length ?? 0;
     }
     List<Post> postsArray;
     try {
       // type casting to list of map objects
-      List postsList = List<Map<String, dynamic>>.from(resposeObject['posts']);
-
-      // construct list of posts object from the parsed json response
-      postsArray = postsList.map((e) => new Post.fromJson(e)).toList();
-
+      List postsList =
+          List<Map<String, dynamic>>.from(resposeObject['for-youPosts']);
+      try {
+        // construct list of posts object from the parsed json response
+        postsArray = postsList.map((e) {
+          try {
+            return new Post.fromJson(e);
+          } catch (err) {}
+        }).toList();
+      } catch (err) {}
       // insert newely fetched data to the list
       _posts.addAll(postsArray);
     } catch (err) {

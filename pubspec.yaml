@@ -3,7 +3,7 @@ description: An Application that mimics some of Tumblr functionalities
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -23,7 +23,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -49,9 +48,12 @@ dependencies:
   cached_network_image: ^3.2.0
   path_provider: ^2.0.8
   permission_handler: ^7.2.0
+  gradient_widgets: ^0.6.0
+  image_gallery_saver: ^1.7.1
+  clipboard: ^0.1.3
+  share: ^2.0.4
   #flutter_link_previewer: ^2.6.0
   #youtube_player_flutter: ^8.0.0
-  
 
 dev_dependencies:
   flutter_test:
@@ -69,7 +71,6 @@ flutter_icons:
 
 # The following section is specific to Flutter.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
@@ -84,29 +85,25 @@ flutter:
     - family: SourceCodePro
       fonts:
         - asset: assets/fonts/SourceCodePro-Regular.ttf
+    - family: CustomIcons
+      fonts:
+        - asset: assets/fonts/CustomIcons.ttf
+
   # To add assets to your application, add an assets section, like this:
   assets:
     - images/header.png
     - images/avatar.png
     - assets/icon/avatar2.png
-    - assets/icon/chat.png
     - assets/icon/default_avatar.png
-    - assets/icon/edit.png
     - assets/icon/heart.png
-    - assets/icon/like.png
     - assets/icon/notes.png
-    - assets/icon/reblog.png
     - assets/icon/reblogs.png
-    - assets/icon/remove.png
-    - assets/icon/share.png
     - assets/icon/Tumblr_Logo_t_Icon_White.png
     - assets/icon/unlike.png
     - images/
     - .env.development
     - .env.production
 
-
-    
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

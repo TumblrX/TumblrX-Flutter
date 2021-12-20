@@ -11,12 +11,12 @@ class MockHttpRepository {
   /// @endPoint : the end point to which send the request
   /// @req : request query parameters as map<String, dynamic>
   static Future sendGetRequest(String endPoint,
-      {Map<String, dynamic> req}) async {
+      {Map<String, dynamic> queryParams}) async {
     String fullUrl = "$api/$endPoint?";
 
     // adding query parameters if any
-    if (req != null)
-      for (var reqParam in req.entries) {
+    if (queryParams != null)
+      for (var reqParam in queryParams.entries) {
         if (reqParam.value is String)
           fullUrl += '${reqParam.key}="${reqParam.value}"';
         else
@@ -31,8 +31,8 @@ class MockHttpRepository {
   /// API to send post requests
   /// @endPoint : the end point to which send the request
   /// @req : request body as map<String, dynamic>
-  static Future<Response> sendPostRequest(String endPoint, String reqBody,
-      {Map<String, String> headers}) async {
+  static Future<Response> sendPostRequest(String endPoint,
+      {String reqBody, Map<String, String> headers}) async {
     String fullUrl = "$api/$endPoint";
 
     // // constructin the request body from passed map
@@ -44,10 +44,11 @@ class MockHttpRepository {
     //     reqBody += '${reqParam.key}=${reqParam.value}';
     // }
     final Uri uri = Uri.parse(fullUrl);
-    if (headers != null)
+    if (headers != null && reqBody != null)
       return post(uri, body: reqBody, headers: headers);
-    else
-      return post(uri, body: reqBody);
+    if (reqBody != null) return post(uri, body: reqBody);
+    if (headers != null) return post(uri, headers: headers);
+    return post(uri);
   }
 }
 
@@ -59,9 +60,17 @@ class ApiHttpRepository {
   /// API to send get requests
   /// @endPoint : the end point to which send the request
   /// @req : request query parameters as map<String, dynamic>
-  Future sendPostRequest(String endPoint, Map<String, dynamic> req) async {
-    await Future.delayed(const Duration(seconds: 2));
-    return;
+  static Future sendPostRequest(String endPoint,
+      {Map<String, dynamic> reqBody, Map<String, dynamic> headers}) async {
+    String fullUrl = '$api$endPoint';
+    // if (reqBody != null) {
+    //   reqBody.forEach((key, value) {
+    //     fullUrl += '/${value.toString()}';
+    //   });
+    // }
+    final Uri uri = Uri.parse(fullUrl);
+    if (headers != null) return post(uri, body: reqBody, headers: headers);
+    return post(uri, body: reqBody);
   }
 
   /// API to send post requests
@@ -80,4 +89,17 @@ class ApiHttpRepository {
     if (headers != null) return await get(uri, headers: headers);
     return await get(uri);
   }
+
+  static Future sendDeleteRequest(String endPoint, Map<String, String> headers,
+      {Map<String, dynamic> reqBody}) {
+    String url = '$api$endPoint';
+    final Uri uri = Uri.parse(url);
+    if (headers != null && reqBody != null)
+      return delete(uri, headers: headers, body: reqBody);
+    if (reqBody != null) return delete(uri, body: reqBody);
+    if (headers != null) return delete(uri, headers: headers);
+    return delete(uri);
+  }
+//put re
+
 }
