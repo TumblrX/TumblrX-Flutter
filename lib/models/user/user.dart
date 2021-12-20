@@ -36,6 +36,9 @@ class User extends ChangeNotifier {
   /// index of the active blog in [_blogs] list
   int _activeBlogIndex;
 
+  /// description of the currently active/used blog
+  String _activeDescriptionTitle;
+
   User();
 
   /// constructor of the class using decoded json
@@ -170,4 +173,36 @@ class User extends ChangeNotifier {
   String getActiveBlogId() {
     return _blogs[_activeBlogIndex].id;
   }
+   bool  getActiveBlogIsPrimary() {
+     return _blogs[_activeBlogIndex].isPrimary;
+  }
+
+  bool getIsAvatarCircle() {
+    return _blogs[_activeBlogIndex].isCircleAvatar;
+  }
+
+  void setActiveBlogTitle(String title) {
+    _blogs[_activeBlogIndex].setBlogtitle(title);
+    notifyListeners();
+  }
+
+  void setActiveBlogDescription(String description) {
+    _blogs[_activeBlogIndex].setBlogDescription(description);
+    notifyListeners();
+  }
+
+  void setActiveBlogIsCircle(bool isCircle) {
+    _blogs[_activeBlogIndex].setIsCircleAvatar(isCircle);
+    notifyListeners();
+  }
+
+  bool getActiveBlogShowAvatar() {
+    return _blogs[_activeBlogIndex].blogTheme.showAvatar;
+  }
+
+  void setActiveBlogShowAvatar(bool showAvatar) {
+    _blogs[_activeBlogIndex].blogTheme.showAvatar = showAvatar;
+  }
+
+ 
 }

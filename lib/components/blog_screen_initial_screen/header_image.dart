@@ -13,8 +13,7 @@ class HeaderImage extends StatefulWidget {
 }
 
 class _HeaderImageState extends State<HeaderImage> {
-  String selectItem =
-      BlogScreenConstant.toLengthFifteen(BlogScreenConstant.tumblrsBlog[0]);
+ 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -33,97 +32,71 @@ class _HeaderImageState extends State<HeaderImage> {
                           color: Colors.white,
                         )),
                     PopupMenuButton<dynamic>(
-                      icon: Icon(
-                        Icons.arrow_drop_down,
-                        color: Colors.white,
-                      ),
-                      onSelected: (value) {
-                        setState(() {
-                          ///every time we select item from drop down list
-                          Provider.of<User>(context, listen: false)
-                              .setActiveBlog(value);
-                          Provider.of<User>(context, listen: false)
-                              .updateActiveBlog();
-
-                          if (value == 'create') {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => CreateNewTumblrPage()),
-                            );
+                        icon: Icon(
+                          Icons.arrow_drop_down,
+                          color: Colors.white,
+                        ),
+                        onSelected: (value) {
+                          if (value != 'create') {
+                            Provider.of<User>(context, listen: false)
+                                .setActiveBlog(value);
+                            Provider.of<User>(context, listen: false)
+                                .updateActiveBlog();
                           }
+                          else if(value=='create')
+                          {
+                       Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => CreateNewTumblrPage()),
+                          );
 
-                          ///////////////////////////////////////////////////////////////
-                          // selectItem = BlogScreenConstant.toLengthFifteen(
-                          //     value.toString());
-                          //  Provider.of<User>(context, listen: false)
-                          //    .setActiveBlog(value);
-                          //Provider.of<User>(context, listen: false)
-                          //  .updateActiveBlog();
-
-                          ////////////////////////////////////////////////////////////////////////////////
-
-                          ///function if numbers of character more than 15 make it 15
-                        });
-                      },
-                      itemBuilder: (BuildContext context) {
-                        return [
-                          for (var i = 0;
-                              i <
-                                  Provider.of<User>(context, listen: false)
-                                      .userBlogs
-                                      .length;
-                              i++)
-
-                            ///loop  to display all blogs
-
-                            PopupMenuItem(
-                              child: Row(
-                                children: [
-                                  Container(
-                                    child: Image(
-                                      height: 30,
-                                      width: 30,
-                                      image: NetworkImage(Provider.of<User>(
-                                              context,
-                                              listen: false)
+                          }
+                        },
+                        itemBuilder: (BuildContext context) {
+                          return [
+                            for (int i = 0;
+                                i <
+                                    Provider.of<User>(context, listen: false)
+                                        .userBlogs
+                                        .length;
+                                i++)
+                              PopupMenuItem(
+                                  value:
+                                      Provider.of<User>(context, listen: false)
                                           .userBlogs[i]
-                                          .blogAvatar),
+                                          .handle,
+                                  child:Container( decoration:BoxDecoration(border:Border(bottom: BorderSide(color: Colors.black12))) ,child: ListTile(
+                                    title: Text(Provider.of<User>(context,
+                                            listen: false)
+                                        .userBlogs[i]
+                                        .handle),
+                                    leading: Container(
+                                      width: 50,
+                                      height: 50,
+                                      child: Image(
+                                        image: NetworkImage(Provider.of<User>(
+                                                context,
+                                                listen: false)
+                                            .userBlogs[i]
+                                            .blogAvatar,
+                                           ),
+                                      ),
                                     ),
+                                  ))),
+                            
+                            PopupMenuItem(
+                                value: 'create',
+                                child: ListTile(
+                                  leading: Icon(
+                                    Icons.add_circle_outline,
+                                    size: 30,
+                                    color: Color(0xffa8a7a7),
                                   ),
-                                  SizedBox(
-                                    width: 5,
-                                  ),
-                                  Text(Provider.of<User>(context, listen: false)
-                                      .userBlogs[i]
-                                      .handle)
-                                ],
-                              ),
-                              value: Provider.of<User>(context, listen: false)
-                                  .userBlogs[i]
-                                  .handle,
-                            ),
-                          PopupMenuDivider(),
-                          PopupMenuItem(
-                            child: Row(
-                              children: <Widget>[
-                                Icon(
-                                  Icons.add_circle_outline,
-                                  color: Color(0xffa8a7a7),
-                                ),
-                                SizedBox(
-                                  width: 5,
-                                ),
-                                Text('Create a new Tumblr')
-                              ],
-                            ),
-                            value: 'create',
-                          )
-
-                          ///create new blogs
-                        ];
-                      },
-                    )
+                                  title: Text('Create a new Tumblr'),
+                                ))
+                          ];
+                        }),
                   ],
                 ),
                 Row(

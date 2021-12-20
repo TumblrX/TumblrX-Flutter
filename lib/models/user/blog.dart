@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
 import 'package:tumblrx/models/post.dart';
 import 'dart:convert' as convert;
@@ -6,7 +5,7 @@ import 'package:tumblrx/services/api_provider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'blog_theme.dart';
 
-class Blog extends ChangeNotifier {
+class Blog {
   /// The user's tumblr short name
   String _handle;
 
@@ -38,7 +37,7 @@ class Blog extends ChangeNotifier {
   bool _isPrivate = false;
 
   /// indicates whether a blog is primary or not
-  bool _isPrimary = false;
+  bool _isPrimary ;
 
   /// url for avatar
   String _blogAvatar;
@@ -58,6 +57,7 @@ class Blog extends ChangeNotifier {
 
   /// list of posts of this blog
   List<Post> _posts;
+  bool isCircleAvatar;
 
   /// themes of Blog
   BlogTheme blogTheme;
@@ -98,6 +98,8 @@ class Blog extends ChangeNotifier {
     }
     // blog isPrivate flag
     if (json.containsKey('isPrivate')) _isPrivate = json['isPrivate'];
+    if (json.containsKey('isAvatarCircle'))
+      isCircleAvatar = json['isAvatarCircle'];
 
     // blog isPrimary flag
     if (json.containsKey('isPrimary')) _isPrimary = json['isPrimary'];
@@ -148,6 +150,7 @@ class Blog extends ChangeNotifier {
   String get handle => _handle;
   String get title => _title;
   String get id => _id;
+  bool  get isPrimary => _isPrimary;
 
   Future<String> getBlogAvatar() async {
     final String endPoint = 'blog/';
@@ -201,22 +204,26 @@ class Blog extends ChangeNotifier {
 
   void setBlogAvatar(String avatar) {
     _blogAvatar = avatar;
-    notifyListeners();
+  }
+
+  void setBlogtitle(String title) {
+    _title = title;
+  }
+
+  void setBlogDescription(String description) {
+    _description = description;
   }
 
   void setBlogBackGroundColor(String color) {
     blogTheme.backgroundColor = color;
-    notifyListeners();
   }
 
   void setHeaderImage(String image) {
     blogTheme.headerImage = image;
-    notifyListeners();
   }
 
   void setAvatarShape(String shape) {
     blogTheme.avatarShape = shape;
-    notifyListeners();
   }
 
   String getAvatarShape() {
@@ -229,6 +236,17 @@ class Blog extends ChangeNotifier {
 
   String getBlogDescription() {
     return _description;
+  }
+
+  void setIsCircleAvatar(bool isCircle) {
+    isCircleAvatar = isCircle;
+  }
+
+
+  bool getIsPrimary()
+  {
+
+    return _isPrimary;
   }
 
   static Future pickImage(int indicator) async {
