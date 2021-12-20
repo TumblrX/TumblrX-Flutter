@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:tumblrx/components/createpost/post_text_field.dart';
 import 'package:tumblrx/components/createpost/video_player_preview.dart';
+import 'package:tumblrx/services/api_provider.dart';
 import 'dart:io';
 import 'package:tumblrx/utilities/constants.dart';
 import 'package:provider/provider.dart';
@@ -53,11 +54,25 @@ class PostContent extends StatelessWidget {
           ),
         );
       } else if (postContent[i]['type'] == PostContentType.image) {
-        content = kIsWeb
-            ? Image.network(postContent[i]['content'].path)
-            : Image.file(File(postContent[i]['content'].path));
+        if (postContent[i]['content'] is Map &&
+            postContent[i]['content']['data'].containsKey('url')) {
+          content = Image.network(
+            postContent[i]['content']['data']['url'],
+            headers: {'accept': 'image/*'},
+          );
+        } else {
+          content = kIsWeb
+              ? Image.network(postContent[i]['content'].path)
+              : Image.file(File(postContent[i]['content'].path));
+        }
       } else if (postContent[i]['type'] == PostContentType.video) {
-        content = VideoPlayerPreview(file: postContent[i]['content']);
+        if (postContent[i]['content'] is Map &&
+            postContent[i]['content']['data'].containsKey('url')) {
+          content =
+              VideoPlayerPreview(url: postContent[i]['content']['data']['url']);
+        } else {
+          content = VideoPlayerPreview(file: postContent[i]['content']);
+        }
       } else if (postContent[i]['type'] == 'PostReblog') {
         content = Container(
             decoration: BoxDecoration(

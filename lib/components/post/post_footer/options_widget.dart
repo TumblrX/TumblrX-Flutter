@@ -170,8 +170,8 @@ class _OptionsWidgetState extends State<OptionsWidget> {
           });
         }, Colors.black),
         // edit icon
-        _optionIcon(
-            Icons.edit_outlined, () => widget._post.editPost(), Colors.black),
+        _optionIcon(Icons.edit_outlined, () => widget._post.editPost(context),
+            Colors.black),
       ]
     ]);
   }

@@ -10,7 +10,9 @@ import 'dart:io';
 class VideoPlayerPreview extends StatefulWidget {
   ///The video data to be shown.
   final XFile file;
-  VideoPlayerPreview({this.file});
+
+  final String url;
+  VideoPlayerPreview({this.file, this.url});
   @override
   _VideoPlayerPreviewState createState() => _VideoPlayerPreviewState();
 }
@@ -22,8 +24,9 @@ class _VideoPlayerPreviewState extends State<VideoPlayerPreview> {
   @override
   void initState() {
     super.initState();
-    print(widget.file);
-    _playVideo(widget.file);
+    widget.url == null
+        ? _playVideo(file: widget.file)
+        : _playVideo(url: widget.url);
   }
 
   @override
@@ -52,21 +55,27 @@ class _VideoPlayerPreviewState extends State<VideoPlayerPreview> {
     _controller = null;
   }
 
-  Future<void> _playVideo(XFile file) async {
-    if (file == null &&
+  Future<void> _playVideo({XFile file, String url}) async {
+    if (url == null &&
+        file == null &&
         !kIsWeb &&
         defaultTargetPlatform == TargetPlatform.android) {
       file = await Provider.of<CreatingPost>(context, listen: false)
           .retrieveLostData();
     }
-    if (file != null && mounted) {
+    if (mounted) {
       await _disposeVideoController();
       VideoPlayerController controller;
-      if (kIsWeb) {
-        controller = VideoPlayerController.network(file.path);
+      if (url == null) {
+        if (kIsWeb) {
+          controller = VideoPlayerController.network(file.path);
+        } else {
+          controller = VideoPlayerController.file(File(file.path));
+        }
       } else {
-        controller = VideoPlayerController.file(File(file.path));
+        controller = VideoPlayerController.network(url);
       }
+
       _controller = controller;
       // In web, most browsers won't honor a programmatic call to .play
       // if the video has a sound track (and is not muted).
