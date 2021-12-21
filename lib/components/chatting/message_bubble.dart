@@ -1,12 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:tumblrx/components/chatting/square_avatar.dart';
-import 'package:tumblrx/components/createpost/font_style_list.dart';
 
+///shows the message widget
 class MessageBubble extends StatelessWidget {
+  ///content of the message
   final String text;
+
+  ///username of message sender
   final String sender;
+
+  ///avatar url of message sender
   final String senderAvatar;
+
+  ///if the user is the message sender
   final bool isMe;
+
+  ///if the sender of the previous message is the same
   final bool isPreviousSame;
   MessageBubble(
       {this.text,
