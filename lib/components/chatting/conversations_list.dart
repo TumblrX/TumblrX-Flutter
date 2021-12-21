@@ -1,5 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:tumblrx/models/chatting/conversation.dart';
 import 'package:tumblrx/services/api_provider.dart';
+import 'package:tumblrx/services/messaging.dart';
 
 import 'conversation_item.dart';
 
@@ -11,14 +16,21 @@ class ConversationsList extends StatelessWidget {
       children: ListTile.divideTiles(
         context: context,
         color: Colors.grey,
-        tiles: [
-          ConversationItem(
-            avatarUrl: ApiHttpRepository.api +
-                "uploads/post/image/post-1639258474966-61b28a610a654cdd7b39171c.jpeg",
-            username: 'ammmmmmmaaaarov',
-          ),
-        ],
+        tiles: getConversationList(context),
       ).toList(),
     );
+  }
+
+  List<ConversationItem> getConversationList(BuildContext context) {
+    List<ConversationItem> conversationList = [];
+    for (Conversation conversation
+        in Provider.of<Messaging>(context).conversations) {
+      conversationList.add(ConversationItem(
+        id: conversation.id,
+        avatarUrl: conversation.avatarUrl,
+        username: conversation.username,
+      ));
+    }
+    return conversationList;
   }
 }

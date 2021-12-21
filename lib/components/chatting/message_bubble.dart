@@ -27,6 +27,7 @@ class MessageBubble extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         !isMe
             ? !isPreviousSame
@@ -42,7 +43,7 @@ class MessageBubble extends StatelessWidget {
           padding: const EdgeInsets.all(5.0),
           child: Padding(
             padding: EdgeInsets.only(
-              top: isPreviousSame ? 0.0 : 10.0,
+              top: isPreviousSame ? 0.0 : 5.0,
             ),
             child: Material(
               elevation: 5.0,

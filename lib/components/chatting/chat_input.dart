@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:tumblrx/services/messaging.dart';
 
 ///Widget that inputs chat messages
 class ChatInput extends StatelessWidget {
+  ///Conversation id
+  final String id;
+
+  ChatInput({this.id});
+
+  TextEditingController _textEditingController = TextEditingController();
+  FocusNode _focusNode = FocusNode();
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -25,7 +34,11 @@ class ChatInput extends StatelessWidget {
                 size: 30.0,
                 color: Colors.lightBlue,
               ),
-              onTap: () {},
+              onTap: () {
+                Provider.of<Messaging>(context, listen: false)
+                    .receiveMessage(id, _textEditingController.text);
+                _textEditingController.text = '';
+              },
             ),
           ],
         ),
@@ -33,17 +46,24 @@ class ChatInput extends StatelessWidget {
           children: [
             Expanded(
               child: TextField(
+                focusNode: _focusNode,
+                controller: _textEditingController,
                 minLines: 1,
                 maxLines: 6,
                 decoration: InputDecoration(
                   border: InputBorder.none,
                   hintText: 'Say your thing',
                 ),
-                onChanged: (value) {},
               ),
             ),
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                if (_textEditingController.text.trim().length > 0)
+                  Provider.of<Messaging>(context, listen: false)
+                      .sendMessage(id, _textEditingController.text);
+                _textEditingController.text = '';
+                _focusNode.requestFocus();
+              },
               icon: Icon(
                 Icons.send,
                 color: Colors.lightBlue,

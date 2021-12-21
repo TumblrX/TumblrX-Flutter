@@ -12,7 +12,10 @@ class ConversationItem extends StatelessWidget {
   ///username for the conversation user
   final String username;
 
-  ConversationItem({this.avatarUrl, this.username});
+  ///Conversation id
+  final String id;
+
+  ConversationItem({this.id, this.avatarUrl, this.username});
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +25,7 @@ class ConversationItem extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) => ChatScreen(
+              id: id,
               receiverUsername: username,
               receiverAvatarUrl: avatarUrl,
               myAvatarUrl: Provider.of<User>(context).getActiveBlogAvatar(),

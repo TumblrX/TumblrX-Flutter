@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tumblrx/components/chatting/message_bubble.dart';
+import 'package:tumblrx/models/chatting/chat_message.dart';
+import 'package:tumblrx/services/messaging.dart';
 
 ///Widget that shows the content of the chat
 class ChatContent extends StatelessWidget {
   ChatContent(
-      {this.myAvatarUrl,
+      {this.id,
+      this.myAvatarUrl,
       this.myUsername,
       this.receiverAvatarUrl,
       this.receiverUsername});
@@ -21,10 +25,13 @@ class ChatContent extends StatelessWidget {
   ///sender blog Username
   final String myUsername;
 
+  ///Conversation id
+  final String id;
+
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: ListView(
+      child: Column(
         children: [
           CircleAvatar(
             radius: 18.0,
@@ -44,50 +51,42 @@ class ChatContent extends StatelessWidget {
               ),
             ),
           ),
-          MessageBubble(
-            text: 'hellooo',
-            senderAvatar: receiverAvatarUrl,
-            isMe: false,
-            sender: receiverUsername,
-            isPreviousSame: false,
+          Divider(
+            thickness: 1.5,
           ),
-          MessageBubble(
-            text: 'hellooo',
-            senderAvatar: receiverAvatarUrl,
-            isMe: false,
-            sender: receiverUsername,
-            isPreviousSame: true,
-          ),
-          MessageBubble(
-            text: 'heyyyyyyyyyyy how are you',
-            senderAvatar: myAvatarUrl,
-            isMe: true,
-            sender: myUsername,
-            isPreviousSame: false,
-          ),
-          MessageBubble(
-            text: 'heyyyyyyyyyyy how are you',
-            senderAvatar: myAvatarUrl,
-            isMe: true,
-            sender: myUsername,
-            isPreviousSame: true,
-          ),
-          MessageBubble(
-            text: 'hellooo',
-            senderAvatar: receiverAvatarUrl,
-            isMe: false,
-            sender: receiverUsername,
-            isPreviousSame: false,
-          ),
-          MessageBubble(
-            text: 'heyyyyyyyyyyy how are you',
-            senderAvatar: myAvatarUrl,
-            isMe: true,
-            sender: myUsername,
-            isPreviousSame: false,
+          Expanded(
+            child: ListView(
+              reverse: true,
+              children: getMessages(context),
+            ),
           ),
         ],
       ),
     );
+  }
+
+  List<Widget> getMessages(BuildContext context) {
+    List<Widget> messagesList = [];
+
+    for (int i = 0;
+        i < Provider.of<Messaging>(context).getChatMessages(id).length;
+        i++) {
+      ChatMessage chatMessage =
+          Provider.of<Messaging>(context).getChatMessages(id)[i];
+      bool isPreviousSame = false;
+      if (i != 0 &&
+          Provider.of<Messaging>(context).getChatMessages(id)[i - 1].isMe ==
+              Provider.of<Messaging>(context).getChatMessages(id)[i].isMe) {
+        isPreviousSame = true;
+      }
+      messagesList.add(MessageBubble(
+        text: chatMessage.text,
+        senderAvatar: chatMessage.isMe ? myAvatarUrl : receiverAvatarUrl,
+        isMe: chatMessage.isMe,
+        sender: chatMessage.isMe ? myUsername : receiverUsername,
+        isPreviousSame: isPreviousSame,
+      ));
+    }
+    return messagesList.reversed.toList();
   }
 }
