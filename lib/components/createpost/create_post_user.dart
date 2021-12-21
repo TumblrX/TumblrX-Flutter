@@ -36,7 +36,6 @@ class CreatePostUser extends StatelessWidget {
               backgroundImage: NetworkImage(
                 Provider.of<User>(context, listen: false).getActiveBlogAvatar(),
               ),
-              //will be later to changed to NetworkImage
             ),
             SizedBox(
               width: 10.0,

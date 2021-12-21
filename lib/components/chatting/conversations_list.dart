@@ -15,7 +15,7 @@ class ConversationsList extends StatelessWidget {
           ConversationItem(
             avatarUrl: ApiHttpRepository.api +
                 "uploads/post/image/post-1639258474966-61b28a610a654cdd7b39171c.jpeg",
-            username: 'ammmmmmmmmmmmmmmmaaaarov',
+            username: 'ammmmmmmaaaarov',
           ),
         ],
       ).toList(),

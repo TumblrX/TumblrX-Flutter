@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:tumblrx/components/chatting/square_avatar.dart';
+import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/screens/chat_screen.dart';
 
 ///Conversation Item in the conversations list
@@ -21,19 +24,13 @@ class ConversationItem extends StatelessWidget {
             builder: (context) => ChatScreen(
               receiverUsername: username,
               receiverAvatarUrl: avatarUrl,
+              myAvatarUrl: Provider.of<User>(context).getActiveBlogAvatar(),
+              myUsername: Provider.of<User>(context).getActiveBlogName(),
             ),
           ),
         );
       },
-      leading: ClipRRect(
-        borderRadius: BorderRadius.circular(8.0),
-        child: Image.network(
-          avatarUrl,
-          height: 40.0,
-          width: 40.0,
-          fit: BoxFit.fill,
-        ),
-      ),
+      leading: SquareAvatar(avatarUrl: avatarUrl),
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

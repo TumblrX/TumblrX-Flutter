@@ -1,18 +1,30 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:tumblrx/models/user/user.dart';
+import 'package:tumblrx/components/chatting/chat_content.dart';
+import 'package:tumblrx/components/chatting/chat_input.dart';
 import 'package:tumblrx/utilities/constants.dart';
 
 ///Chatting Screen Widget
 class ChatScreen extends StatelessWidget {
+  ChatScreen(
+      {this.myAvatarUrl,
+      this.myUsername,
+      this.receiverAvatarUrl,
+      this.receiverUsername});
+
   ///receiver blog Username
   final String receiverUsername;
 
   ///receiver avatar Url
   final String receiverAvatarUrl;
 
-  ChatScreen({this.receiverUsername, this.receiverAvatarUrl});
+  ///sender avatar Url
+  final String myAvatarUrl;
+
+  ///sender blog Username
+  final String myUsername;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,7 +42,7 @@ class ChatScreen extends StatelessWidget {
           child: Scaffold(
             appBar: AppBar(
               title: Text(
-                '${Provider.of<User>(context).getActiveBlogName()} + $receiverUsername',
+                '$receiverUsername + $myUsername',
                 overflow: TextOverflow.fade,
               ),
               actions: [
@@ -51,6 +63,22 @@ class ChatScreen extends StatelessWidget {
                         ],
                     onSelected: (choice) {}),
               ],
+            ),
+            body: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  ChatContent(
+                    receiverAvatarUrl: receiverAvatarUrl,
+                    receiverUsername: receiverUsername,
+                    myUsername: myUsername,
+                    myAvatarUrl: myAvatarUrl,
+                  ),
+                  Divider(),
+                  ChatInput(),
+                ],
+              ),
             ),
           ),
         ),
