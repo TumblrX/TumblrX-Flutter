@@ -11,6 +11,8 @@ class Messaging extends ChangeNotifier {
   ///List of conversations of the user
   List<Conversation> conversations;
 
+  ///Sends a message to the database to the user with [userId]
+  ///[text] is the message content
   void sendMessage(String userId, String text, BuildContext context) async {
     // int i = conversations.indexWhere((element) => element.userId == userId);
     // conversations[i].addMessage(text, true);
@@ -36,18 +38,22 @@ class Messaging extends ChangeNotifier {
     notifyListeners();
   }
 
+  ///returns chat Id from the other [userId]
+  ///returns null if the conversation doesn't exist
   String getChatId(String userId) {
     int i = conversations.indexWhere((element) => element.userId == userId);
     if (i == -1) return null;
     return conversations[i].chatId;
   }
 
+  ///returns the whole chat messages of a conversation with [chatId]
   List<ChatMessage> getChatMessages(String chatId) {
     int i = conversations.indexWhere((element) => element.chatId == chatId);
     if (i == -1) return [];
     return conversations[i].chatMessages;
   }
 
+  ///returns list of conversations of the current user
   Future<void> getConversationsList(BuildContext context) async {
     conversations = [];
 
@@ -72,6 +78,7 @@ class Messaging extends ChangeNotifier {
     return;
   }
 
+  ///retrieves chat messages from the database from a conversation with [chatId] with user of [userId]
   Future<void> getChatContent(
       BuildContext context, String chatId, String userId) async {
     int i = conversations.indexWhere((element) => element.chatId == chatId);

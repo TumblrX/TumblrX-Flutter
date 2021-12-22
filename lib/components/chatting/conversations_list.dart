@@ -34,6 +34,7 @@ class ConversationsList extends StatelessWidget {
     );
   }
 
+  ///returns list of conversations
   List<ConversationItem> getConversationList(BuildContext context) {
     List<ConversationItem> conversationList = [];
     for (Conversation conversation

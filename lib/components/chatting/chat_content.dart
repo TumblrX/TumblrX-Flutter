@@ -85,6 +85,7 @@ class ChatContent extends StatelessWidget {
     );
   }
 
+  ///returns the list of chat messages
   List<Widget> getMessages(BuildContext context) {
     List<Widget> messagesList = [];
 
