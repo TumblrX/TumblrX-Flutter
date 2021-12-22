@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:tumblrx/components/chatting/square_avatar.dart';
 import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/screens/chat_screen.dart';
-import 'package:tumblrx/services/messaging.dart';
 
 ///Conversation Item in the conversations list
 class ConversationItem extends StatelessWidget {
@@ -19,7 +18,19 @@ class ConversationItem extends StatelessWidget {
   ///user id
   final String userId;
 
-  ConversationItem({this.chatId, this.userId, this.avatarUrl, this.username});
+  ///last sent message
+  final String lastMessage;
+
+  ///if the sender pf the last message is me
+  final bool lastMessageIsMe;
+
+  ConversationItem(
+      {this.chatId,
+      this.userId,
+      this.avatarUrl,
+      this.username,
+      this.lastMessage,
+      this.lastMessageIsMe});
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +61,7 @@ class ConversationItem extends StatelessWidget {
             ),
           ),
           Text(
-            Provider.of<Messaging>(context).getLastMessage(chatId, context),
+            '${lastMessageIsMe ? Provider.of<User>(context, listen: false).username : username}: $lastMessage',
             maxLines: 2,
             overflow: TextOverflow.fade,
             softWrap: false,

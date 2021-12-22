@@ -11,8 +11,8 @@ class ConversationsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future:
-          Provider.of<Messaging>(context, listen: false).getConversationsList(),
+      future: Provider.of<Messaging>(context, listen: false)
+          .getConversationsList(context),
       builder: (BuildContext context, AsyncSnapshot snap) {
         if (snap.connectionState == ConnectionState.done) {
           return ListView(
@@ -43,6 +43,8 @@ class ConversationsList extends StatelessWidget {
         chatId: conversation.chatId,
         avatarUrl: conversation.avatarUrl,
         username: conversation.username,
+        lastMessage: conversation.lastMessage,
+        lastMessageIsMe: conversation.lastMessageIsMe,
       ));
     }
     return conversationList;

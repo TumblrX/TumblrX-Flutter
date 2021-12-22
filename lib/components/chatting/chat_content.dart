@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/components/chatting/message_bubble.dart';
 import 'package:tumblrx/models/chatting/chat_message.dart';
@@ -59,9 +60,24 @@ class ChatContent extends StatelessWidget {
             thickness: 1.5,
           ),
           Expanded(
-            child: ListView(
-              reverse: true,
-              children: getMessages(context),
+            child: FutureBuilder(
+              future: Provider.of<Messaging>(context, listen: false)
+                  .getChatContent(context, chatId, userId),
+              builder: (BuildContext context, AsyncSnapshot snap) {
+                if (snap.connectionState == ConnectionState.done) {
+                  return ListView(
+                    reverse: true,
+                    children: getMessages(context),
+                  );
+                } else {
+                  return Center(
+                    child: SpinKitDoubleBounce(
+                      color: Colors.lightBlue,
+                      size: 50.0,
+                    ),
+                  );
+                }
+              },
             ),
           ),
         ],
