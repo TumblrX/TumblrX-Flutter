@@ -7,7 +7,8 @@ import 'package:tumblrx/services/messaging.dart';
 ///Widget that shows the content of the chat
 class ChatContent extends StatelessWidget {
   ChatContent(
-      {this.id,
+      {this.userId,
+      this.chatId,
       this.myAvatarUrl,
       this.myUsername,
       this.receiverAvatarUrl,
@@ -26,7 +27,10 @@ class ChatContent extends StatelessWidget {
   final String myUsername;
 
   ///Conversation id
-  final String id;
+  final String chatId;
+
+  ///user Id
+  final String userId;
 
   @override
   Widget build(BuildContext context) {
@@ -69,14 +73,14 @@ class ChatContent extends StatelessWidget {
     List<Widget> messagesList = [];
 
     for (int i = 0;
-        i < Provider.of<Messaging>(context).getChatMessages(id).length;
+        i < Provider.of<Messaging>(context).getChatMessages(chatId).length;
         i++) {
       ChatMessage chatMessage =
-          Provider.of<Messaging>(context).getChatMessages(id)[i];
+          Provider.of<Messaging>(context).getChatMessages(chatId)[i];
       bool isPreviousSame = false;
       if (i != 0 &&
-          Provider.of<Messaging>(context).getChatMessages(id)[i - 1].isMe ==
-              Provider.of<Messaging>(context).getChatMessages(id)[i].isMe) {
+          Provider.of<Messaging>(context).getChatMessages(chatId)[i - 1].isMe ==
+              Provider.of<Messaging>(context).getChatMessages(chatId)[i].isMe) {
         isPreviousSame = true;
       }
       messagesList.add(MessageBubble(

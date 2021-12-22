@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:tumblrx/components/chatting/square_avatar.dart';
 import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/screens/chat_screen.dart';
+import 'package:tumblrx/services/messaging.dart';
 
 ///Conversation Item in the conversations list
 class ConversationItem extends StatelessWidget {
@@ -13,9 +14,12 @@ class ConversationItem extends StatelessWidget {
   final String username;
 
   ///Conversation id
-  final String id;
+  final String chatId;
 
-  ConversationItem({this.id, this.avatarUrl, this.username});
+  ///user id
+  final String userId;
+
+  ConversationItem({this.chatId, this.userId, this.avatarUrl, this.username});
 
   @override
   Widget build(BuildContext context) {
@@ -25,11 +29,12 @@ class ConversationItem extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) => ChatScreen(
-              id: id,
+              userId: userId,
+              chatId: chatId,
               receiverUsername: username,
               receiverAvatarUrl: avatarUrl,
-              myAvatarUrl: Provider.of<User>(context).getActiveBlogAvatar(),
-              myUsername: Provider.of<User>(context).getActiveBlogName(),
+              myAvatarUrl: Provider.of<User>(context).getPrimaryBlogAvatar(),
+              myUsername: Provider.of<User>(context).username,
             ),
           ),
         );
@@ -44,7 +49,12 @@ class ConversationItem extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          Text('ammar: heyyyy'),
+          Text(
+            Provider.of<Messaging>(context).getLastMessage(chatId, context),
+            maxLines: 2,
+            overflow: TextOverflow.fade,
+            softWrap: false,
+          ),
         ],
       ),
       subtitle: Padding(

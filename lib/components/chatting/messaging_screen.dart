@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tumblrx/screens/new_conversation_screen.dart';
 import 'conversations_list.dart';
 
 ///Messaging Screen view
@@ -7,6 +8,9 @@ class MessagingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
+        onPressed: (){
+          Navigator.pushNamed(context, NewConversationScreen.id);
+        },
         child: Icon(Icons.maps_ugc),
       ),
       body: ConversationsList(),

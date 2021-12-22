@@ -8,14 +8,18 @@ import 'package:tumblrx/utilities/constants.dart';
 ///Chatting Screen Widget
 class ChatScreen extends StatelessWidget {
   ChatScreen(
-      {this.id,
+      {this.chatId,
+      this.userId,
       this.myAvatarUrl,
       this.myUsername,
       this.receiverAvatarUrl,
       this.receiverUsername});
 
   ///Conversation id
-  final String id;
+  final String chatId;
+
+  ///User Id
+  final String userId;
 
   ///receiver blog Username
   final String receiverUsername;
@@ -74,14 +78,15 @@ class ChatScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   ChatContent(
-                    id: id,
+                    userId: userId,
+                    chatId: chatId,
                     receiverAvatarUrl: receiverAvatarUrl,
                     receiverUsername: receiverUsername,
                     myUsername: myUsername,
                     myAvatarUrl: myAvatarUrl,
                   ),
                   Divider(),
-                  ChatInput(id: id),
+                  ChatInput(userId: userId),
                 ],
               ),
             ),

@@ -1,9 +1,7 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/models/chatting/conversation.dart';
-import 'package:tumblrx/services/api_provider.dart';
 import 'package:tumblrx/services/messaging.dart';
 
 import 'conversation_item.dart';
@@ -12,12 +10,27 @@ import 'conversation_item.dart';
 class ConversationsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: ListTile.divideTiles(
-        context: context,
-        color: Colors.grey,
-        tiles: getConversationList(context),
-      ).toList(),
+    return FutureBuilder(
+      future:
+          Provider.of<Messaging>(context, listen: false).getConversationsList(),
+      builder: (BuildContext context, AsyncSnapshot snap) {
+        if (snap.connectionState == ConnectionState.done) {
+          return ListView(
+            children: ListTile.divideTiles(
+              context: context,
+              color: Colors.grey,
+              tiles: getConversationList(context),
+            ).toList(),
+          );
+        } else {
+          return Center(
+            child: SpinKitDoubleBounce(
+              color: Colors.lightBlue,
+              size: 50.0,
+            ),
+          );
+        }
+      },
     );
   }
 
@@ -26,7 +39,8 @@ class ConversationsList extends StatelessWidget {
     for (Conversation conversation
         in Provider.of<Messaging>(context).conversations) {
       conversationList.add(ConversationItem(
-        id: conversation.id,
+        userId: conversation.userId,
+        chatId: conversation.chatId,
         avatarUrl: conversation.avatarUrl,
         username: conversation.username,
       ));

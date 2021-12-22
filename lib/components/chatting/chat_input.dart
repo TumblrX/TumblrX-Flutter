@@ -4,13 +4,13 @@ import 'package:tumblrx/services/messaging.dart';
 
 ///Widget that inputs chat messages
 class ChatInput extends StatelessWidget {
-  ///Conversation id
-  final String id;
+  ///user id
+  final String userId;
 
-  ChatInput({this.id});
+  ChatInput({this.userId});
 
-  TextEditingController _textEditingController = TextEditingController();
-  FocusNode _focusNode = FocusNode();
+  final TextEditingController _textEditingController = TextEditingController();
+  final FocusNode _focusNode = FocusNode();
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -35,9 +35,9 @@ class ChatInput extends StatelessWidget {
                 color: Colors.lightBlue,
               ),
               onTap: () {
-                Provider.of<Messaging>(context, listen: false)
-                    .receiveMessage(id, _textEditingController.text);
-                _textEditingController.text = '';
+                // Provider.of<Messaging>(context, listen: false)
+                //     .receiveMessage(id, _textEditingController.text);
+                // _textEditingController.text = '';
               },
             ),
           ],
@@ -60,7 +60,7 @@ class ChatInput extends StatelessWidget {
               onPressed: () {
                 if (_textEditingController.text.trim().length > 0)
                   Provider.of<Messaging>(context, listen: false)
-                      .sendMessage(id, _textEditingController.text);
+                      .sendMessage(userId, _textEditingController.text, context);
                 _textEditingController.text = '';
                 _focusNode.requestFocus();
               },

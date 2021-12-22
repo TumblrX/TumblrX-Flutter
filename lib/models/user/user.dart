@@ -149,6 +149,9 @@ class User extends ChangeNotifier {
   /// getter for active user blogs list
   List<Blog> get userBlogs => _blogs;
 
+  ///getter for username
+  String get username => _username;
+
   ///Returns the link to the current active blog avatar
   String getActiveBlogAvatar() {
     return _blogs[_activeBlogIndex].blogAvatar;
@@ -173,8 +176,9 @@ class User extends ChangeNotifier {
   String getActiveBlogId() {
     return _blogs[_activeBlogIndex].id;
   }
-   bool  getActiveBlogIsPrimary() {
-     return _blogs[_activeBlogIndex].isPrimary;
+
+  bool getActiveBlogIsPrimary() {
+    return _blogs[_activeBlogIndex].isPrimary;
   }
 
   bool getIsAvatarCircle() {
@@ -204,5 +208,10 @@ class User extends ChangeNotifier {
     _blogs[_activeBlogIndex].blogTheme.showAvatar = showAvatar;
   }
 
- 
+  String getPrimaryBlogAvatar() {
+    for (Blog blog in _blogs) {
+      if (blog.isPrimary) return blog.blogAvatar;
+    }
+    return null;
+  }
 }
