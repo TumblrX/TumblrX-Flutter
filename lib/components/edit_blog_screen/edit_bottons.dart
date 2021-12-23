@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/services/blog_screen.dart';
+import 'package:tumblrx/utilities/hex_color_value.dart';
 import '../blog_screen_constant.dart';
 
 class EditButtons extends StatefulWidget {
@@ -10,9 +13,8 @@ class EditButtons extends StatefulWidget {
 
 class _EditButtonsState extends State<EditButtons> {
   @override
-
   Widget build(BuildContext context) {
-     final blogProvider = Provider.of<BlogScreenConstantProvider>(context);
+    final blogProvider = Provider.of<BlogScreenConstantProvider>(context);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -21,12 +23,28 @@ class _EditButtonsState extends State<EditButtons> {
         SizedBox(
             width: 120,
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                          content: MaterialColorPicker(
+                            selectedColor: hexToColor(
+                                Provider.of<User>(context, listen: false)
+                                    .getActiveBlogBackColor()),
+                            onColorChange: (Color color) {
+                              
+                              Provider.of<User>(context, listen: false)
+                                  .setActiveBlogBackColor(
+                                      colorToHexString(color));
+                            },
+                          ),
+                        ));
+              },
               child: Text('Background',
                   style: TextStyle(color: Color(0xffc7c1c1))),
               style: ButtonStyle(
-                backgroundColor:
-                    MaterialStateProperty.all<Color>(blogProvider.getBottomColor()),
+                backgroundColor: MaterialStateProperty.all<Color>(
+                   hexToColor( Provider.of<User>(context,listen: false).getActiveBlogBackColor())??Colors.blue,),
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
                         side: BorderSide(color: Color(0xffc7c1c1)),

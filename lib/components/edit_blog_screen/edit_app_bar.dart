@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tumblrx/components/edit_blog_screen/alert_dialgue.dart';
+import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/screens/blog_screen.dart';
 
 class EditAppBar {
@@ -14,12 +16,16 @@ class EditAppBar {
           children: <Widget>[
             IconButton(
                 onPressed: () {
-                  showDialog(
-                      context: context, builder: (context) => AlerDialgue());
-// Navigator.pop(
-//                    context,
-//                    MaterialPageRoute(builder: (context) => BlogScreen()),
-//                  );
+                  print(Provider.of<User>(context, listen: false)
+                      .getActiveBlogTitle());
+                  Provider.of<User>(context, listen: false)
+                      .updateActiveBlogInfo(context);
+                  // showDialog(
+                  //   context: context, builder: (context) => AlerDialgue());
+                  Navigator.pop(
+                    context,
+                    MaterialPageRoute(builder: (context) => BlogScreen()),
+                  );
                 },
                 icon: Icon(Icons.arrow_back),
                 color: Colors.white),

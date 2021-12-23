@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:tumblrx/services/blog_screen.dart';
 import 'package:tumblrx/components/blog_screen_constant.dart';
 import 'package:tumblrx/models/user/user.dart';
+import 'package:tumblrx/utilities/hex_color_value.dart';
 
 ///this to get the shape of circle avatar
 /// for avatar image
@@ -19,8 +20,8 @@ class _AvatarImageState extends State<AvatarImage> {
         child: GestureDetector(
           child: CircleAvatar(
               radius: 42,
-              backgroundColor: Provider.of<BlogScreenConstantProvider>(context)
-                  .bottomCoverColor,
+              backgroundColor:hexToColor( Provider.of<User>(context,listen: false).getActiveBlogBackColor())??Colors.blue,
+                  
               child: CircleAvatar(
                 radius: 38,
                 backgroundImage: NetworkImage(

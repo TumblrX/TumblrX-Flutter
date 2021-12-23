@@ -18,11 +18,6 @@ void main() {
       expect(image, 'images/avatar.dart');
     });
     
-    test('set and get cover color ', () {
-      final blogScreen = BlogScreenConstantProvider();
-
-      blogScreen.setBottomColor(Colors.blue);
-      expect(blogScreen.getBottomColor(), Colors.blue);
-    });
+    
   });
 }

@@ -1,7 +1,13 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:provider/provider.dart';
 import 'package:tumblrx/models/post.dart';
 import 'package:tumblrx/models/tag.dart';
 import 'package:tumblrx/models/user/blog.dart';
+import 'package:tumblrx/services/api_provider.dart';
+import 'package:tumblrx/services/authentication.dart';
+import 'dart:convert' as convert;
+import 'package:http/http.dart' as http;
 
 /// A class that manages all user functionalities and
 ///  used for contacting with API
@@ -111,6 +117,7 @@ class User extends ChangeNotifier {
         json['blogs'].forEach((v) {
           _blogs.add(new Blog.fromJson(v));
         });
+
         setActiveBlog(json['blogs'][0]['handle']);
       } catch (err) {
         print('error in creating blogs $err');
@@ -173,16 +180,20 @@ class User extends ChangeNotifier {
   String getActiveBlogId() {
     return _blogs[_activeBlogIndex].id;
   }
-   bool  getActiveBlogIsPrimary() {
-     return _blogs[_activeBlogIndex].isPrimary;
+
+  bool getActiveBlogIsPrimary() {
+    return _blogs[_activeBlogIndex].isPrimary;
   }
 
   bool getIsAvatarCircle() {
     return _blogs[_activeBlogIndex].isCircleAvatar;
   }
 
+//i will modify it
+
   void setActiveBlogTitle(String title) {
     _blogs[_activeBlogIndex].setBlogtitle(title);
+
     notifyListeners();
   }
 
@@ -193,7 +204,12 @@ class User extends ChangeNotifier {
 
   void setActiveBlogIsCircle(bool isCircle) {
     _blogs[_activeBlogIndex].setIsCircleAvatar(isCircle);
+
     notifyListeners();
+  }
+
+  List<Post> getActiveBlogPosts() {
+    return _blogs[_activeBlogIndex].posts;
   }
 
   bool getActiveBlogShowAvatar() {
@@ -202,7 +218,61 @@ class User extends ChangeNotifier {
 
   void setActiveBlogShowAvatar(bool showAvatar) {
     _blogs[_activeBlogIndex].blogTheme.showAvatar = showAvatar;
+    notifyListeners();
   }
 
- 
+  String getActiveBlogBackColor() {
+    return _blogs[_activeBlogIndex].backGroundColor;
+  }
+
+  void setActiveBlogBackColor(String color) {
+
+    _blogs[_activeBlogIndex].setBlogBackGroundColor(color) ;
+
+    notifyListeners();
+  }
+
+  Blog getActiveBlog() {
+    return _blogs[_activeBlogIndex];
+  }
+
+  void updateActiveBlogInfo(BuildContext context) {
+    _blogs[_activeBlogIndex].updateBlog(context);
+  }
+
+  void createNewlog(String name, BuildContext context) async {
+    final endPoint = 'api/blog/dfsfdfsfsd';
+    Map<String, dynamic> blogInfo = {
+      "title": "Untitled",
+      "handle": name,
+      "private": false.toString()
+    };
+
+    final Map<String, String> headers = {
+      'Authorization':
+          '${Provider.of<Authentication>(context, listen: false).token}'
+    };
+
+    final response = await http.post(
+        Uri.parse('${ApiHttpRepository.api}/blog/dfsfdfsfsd'),
+        body: convert.jsonEncode(blogInfo),
+        headers: <String, String>{
+          'Authorization':
+              Provider.of<Authentication>(context, listen: false).token
+        });
+
+    if (response.statusCode == 200) {
+      print(response.body);
+    } else {
+      print('unseccful');
+      print(response.statusCode);
+    }
+  }
+
+  void setBlogsInfo(BuildContext context) {
+    _blogs.forEach((element) {
+      element.blogRetrive(context);
+    });
+    notifyListeners();
+  }
 }

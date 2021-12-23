@@ -12,6 +12,7 @@ import 'package:tumblrx/components/following/following_card.dart';
 import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/services/blog_screen.dart';
 import 'package:tumblrx/services/creating_post.dart';
+import 'package:tumblrx/utilities/hex_color_value.dart';
 
 ///This a initial screen you see when press on profile from navigation bar
 class BlogScreen extends StatefulWidget {
@@ -21,27 +22,26 @@ class BlogScreen extends StatefulWidget {
 }
 
 class _BlogScreenState extends State<BlogScreen>
-    with SingleTickerProviderStateMixin
-     {
+    with SingleTickerProviderStateMixin {
   TabController _tabController;
 
   @override
   void initState() {
-  
-    
-   
     ///this controller for Tabs bar
     ///function used for Tab bars
 
     _tabController = new TabController(length: 3, vsync: this);
 
     super.initState();
+ Provider.of<User>(context, listen: false).setBlogsInfo(context);
+   
   }
+
   @override
-   void dispose() {
-   _tabController.dispose();
-   super.dispose();
- }
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +83,8 @@ class _BlogScreenState extends State<BlogScreen>
 
                 /// i will chnge it and make it equal total no of following-3*40
 
-                child: Container(color: Color(0xffb03fa8),
+                child: Container(
+                  color: hexToColor( Provider.of<User>(context,listen: false).getActiveBlogBackColor())??Colors.blue,
                   constraints: !kIsWeb
                       ? BoxConstraints()
                       : BoxConstraints(
@@ -119,15 +120,18 @@ class _BlogScreenState extends State<BlogScreen>
                                   ? AvatarImage()
                                   : Square())
                         ]),
-                      
+
                         //{
-                         if( Provider.of<User>(context).getActiveBlogIsPrimary())
-                        upperTabBar(_tabController, context),
-                         if( Provider.of<User>(context).getActiveBlogIsPrimary()) 
-                        bottomTabBar(_tabController, context),
+                        if (Provider.of<User>(context).getActiveBlogIsPrimary())
+                          upperTabBar(_tabController, context),
+                        if (Provider.of<User>(context).getActiveBlogIsPrimary())
+                          bottomTabBar(_tabController, context),
                         //}
-                        if(!Provider.of<User>(context).getActiveBlogIsPrimary())
-                        Container(child: Column(),)
+                        if (!Provider.of<User>(context)
+                            .getActiveBlogIsPrimary())
+                          Container(
+                            child: Column(),
+                          )
                       ]),
                 ))));
   }

@@ -1,8 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
+import 'package:provider/provider.dart';
 import 'package:tumblrx/models/post.dart';
 import 'dart:convert' as convert;
 import 'package:tumblrx/services/api_provider.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:tumblrx/services/authentication.dart';
 import 'blog_theme.dart';
 
 class Blog {
@@ -37,7 +40,7 @@ class Blog {
   bool _isPrivate = false;
 
   /// indicates whether a blog is primary or not
-  bool _isPrimary ;
+  bool _isPrimary;
 
   /// url for avatar
   String _blogAvatar;
@@ -58,6 +61,7 @@ class Blog {
   /// list of posts of this blog
   List<Post> _posts;
   bool isCircleAvatar;
+  String _backGroundColor;
 
   /// themes of Blog
   BlogTheme blogTheme;
@@ -140,9 +144,11 @@ class Blog {
 
     data['handle'] = this._handle;
     data['title'] = this._title;
-    data['isPrimary'] = this._isPrimary;
-    data['followedBy'] = convert.jsonEncode(this._followedBy);
-    data['isPrivate'] = this._isPrivate;
+    data['isPrimary'] = this._isPrimary.toString();
+    //data['followedBy'] = convert.jsonEncode(this._followedBy);
+    data['isPrivate'] = this._isPrivate.toString();
+    data['isAvatarCircle'] = this.isCircleAvatar.toString();
+    //data['customApperance']['globalParameters']['backgroundColor'] = this._backGroundColor;
     return data;
   }
 
@@ -150,8 +156,9 @@ class Blog {
   String get handle => _handle;
   String get title => _title;
   String get id => _id;
-  bool  get isPrimary => _isPrimary;
-
+  bool get isPrimary => _isPrimary;
+  List<Post> get posts => _posts;
+  String get backGroundColor => _backGroundColor;
   Future<String> getBlogAvatar() async {
     final String endPoint = 'blog/';
     final Map<String, dynamic> reqParameters = {
@@ -217,7 +224,7 @@ class Blog {
   }
 
   void setBlogBackGroundColor(String color) {
-    blogTheme.backgroundColor = color;
+    this._backGroundColor = color;
   }
 
   void setHeaderImage(String image) {
@@ -244,10 +251,7 @@ class Blog {
     isCircleAvatar = isCircle;
   }
 
-
-  bool getIsPrimary()
-  {
-
+  bool getIsPrimary() {
     return _isPrimary;
   }
 
@@ -257,5 +261,75 @@ class Blog {
     if (image == null) return;
     if (indicator == 1) Blog().setBlogAvatar(image.path);
     if (indicator == 2) Blog().setHeaderImage(image.path);
+  }
+
+  ///Get Blog Posts
+  Future<bool> blogPosts(BuildContext context) async {
+    final String endPoint = 'blog/${this._id}/posts';
+
+    print(endPoint);
+    final Map<String, String> headers = {
+      'Authorization':
+          '${Provider.of<Authentication>(context, listen: false).token}'
+    };
+
+    final response =
+        await ApiHttpRepository.sendGetRequest(endPoint, headers: headers);
+
+    if (response.statusCode == 200) {
+      final resposeObject =
+          convert.jsonDecode(response.body) as Map<String, dynamic>;
+
+      print(resposeObject);
+    } else {
+      print('no');
+    }
+
+    return true;
+  }
+
+  //convert hexcolor to Color
+
+  void updateBlog(BuildContext context) async {
+    final String endPoint = 'api/blog/${this._id}';
+    final Map<String, dynamic> body = toJson();
+
+    final Map<String, String> headers = {
+      'Authorization':
+          '${Provider.of<Authentication>(context, listen: false).token}'
+    };
+    final response =
+        await ApiHttpRepository.sendPutRequest(endPoint, headers, body);
+    Map<String, dynamic> responseObject =
+        convert.jsonDecode(response.body) as Map<String, dynamic>;
+    if (response.statusCode == 200) {
+      print(responseObject);
+    }
+  }
+
+  void blogRetrive(BuildContext context) async {
+    final String endPoint = 'blog/${this._handle}';
+
+    final Map<String, String> headers = {
+      'Authorization':
+          '${Provider.of<Authentication>(context, listen: false).token}'
+    };
+    final response =
+        await ApiHttpRepository.sendGetRequest(endPoint, headers: headers);
+
+    Map<String, dynamic> responseObject =
+        convert.jsonDecode(response.body) as Map<String, dynamic>;
+    if (response.statusCode == 200) {
+      if (responseObject.containsKey('globalParameters')) {
+        if (responseObject['globalParameters'].containsKey('backgroundColor')) {
+          this._backGroundColor =
+              responseObject['globalParameters']['backgroundColor'];
+        }
+      }
+
+      print(responseObject);
+    } else {
+      print(response.statusCode);
+    }
   }
 }

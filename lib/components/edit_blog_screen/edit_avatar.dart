@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/services/blog_screen.dart';
+import 'package:tumblrx/utilities/hex_color_value.dart';
 import '../blog_screen_constant.dart';
 import 'avatar_bottomsheet.dart';
 
@@ -17,8 +18,7 @@ class EditAvatar {
         children: <Widget>[
           CircleAvatar(
               radius: 42,
-              backgroundColor: Provider.of<BlogScreenConstantProvider>(context)
-                  .bottomCoverColor,
+              backgroundColor:  hexToColor( Provider.of<User>(context,listen: false).getActiveBlogBackColor())??Colors.blue,
               child: CircleAvatar(
                 radius: 38,
                 backgroundImage: NetworkImage(
@@ -60,9 +60,10 @@ class EditAvatar {
                 ),
             ),
           
+          
             decoration: BoxDecoration(
-              color: blogProvider.getBottomColor(),
-              border: Border.all(width: 3, color:   blogProvider.getBottomColor()),
+              color:  hexToColor( Provider.of<User>(context,listen: false).getActiveBlogBackColor())??Colors.blue,
+              border: Border.all(width: 3, color:  hexToColor( Provider.of<User>(context,listen: false).getActiveBlogBackColor())??Colors.blue,),
               borderRadius: BorderRadius.circular(3),
             ),
           ),

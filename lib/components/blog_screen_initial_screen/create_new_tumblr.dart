@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:tumblrx/models/user/user.dart';
 
 class CreateNewTumblrPage extends StatelessWidget {
   @override
@@ -16,9 +18,10 @@ class CreateNewTumblrPage extends StatelessWidget {
           child: Padding(
               padding: EdgeInsets.only(left: 20, right: 50),
               child: TextFormField(
-
                   controller: _controller,
-                
+                  onFieldSubmitted: (value) {
+                    Provider.of<User>(context,listen: false).createNewlog(value,context);
+                  },
                   cursorColor: Colors.white,
                   style: TextStyle(color: Colors.white),
                   decoration: InputDecoration(

@@ -8,6 +8,7 @@ import '../blog_screen_constant.dart';
 import 'cover_image_bottomsheet.dart';
 import 'edit_avatar.dart';
 import 'edit_bottons.dart';
+import 'package:tumblrx/utilities/hex_color_value.dart';
 
 class Edit extends StatefulWidget {
   @override
@@ -39,7 +40,7 @@ class _EditState extends State<Edit> with SingleTickerProviderStateMixin {
     final blogProvider = Provider.of<BlogScreenConstantProvider>(context);
     return Scaffold(
         body: Container(
-            color: blogProvider.getBottomColor(),
+            color:hexToColor( Provider.of<User>(context,listen: false).getActiveBlogBackColor())??Colors.blue,
             child: Stack(
               children: [
                 Column(
@@ -62,9 +63,9 @@ class _EditState extends State<Edit> with SingleTickerProviderStateMixin {
                               )),
                           onTap: () {
                             ///bottom sheet for cover image
-                            //showModalBottomSheet(
-                              //  context: context,
-                                //builder: CoverImageBottomSheet().build);
+                            showModalBottomSheet(
+                                context: context,
+                                builder: CoverImageBottomSheet().build);
                           },
                         ),
                       EditAppBar().defaultAppBar(context),
@@ -119,14 +120,14 @@ class _EditState extends State<Edit> with SingleTickerProviderStateMixin {
                               decoration: TextDecoration.none)),
                     ),
                     EditButtons(),
-                    if (Provider.of<User>(context).getActiveBlogIsPrimary())
-                      upperTabBar(_tabController, context),
-                    if (Provider.of<User>(context).getActiveBlogIsPrimary())
-                      bottomTabBar(_tabController, context),
-                    if (!Provider.of<User>(context).getActiveBlogIsPrimary())
-                      Container(
-                        child: Column(),
-                      )
+                    //if (Provider.of<User>(context).getActiveBlogIsPrimary())
+                      //upperTabBar(_tabController, context),
+                    //if (Provider.of<User>(context).getActiveBlogIsPrimary())
+                      //bottomTabBar(_tabController, context),
+                    //if (!Provider.of<User>(context).getActiveBlogIsPrimary())
+                      //Container(
+                        //child: Column(),
+                      //)
                   ],
                 ),
                 Provider.of<User>(context).getIsAvatarCircle() == true
