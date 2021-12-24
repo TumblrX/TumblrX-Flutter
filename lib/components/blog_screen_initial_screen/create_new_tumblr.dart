@@ -20,7 +20,10 @@ class CreateNewTumblrPage extends StatelessWidget {
               child: TextFormField(
                   controller: _controller,
                   onFieldSubmitted: (value) {
-                    Provider.of<User>(context,listen: false).createNewlog(value,context);
+                    Provider.of<User>(context, listen: false)
+                        .createNewlog(value, context);
+
+                   
                   },
                   cursorColor: Colors.white,
                   style: TextStyle(color: Colors.white),

@@ -1,6 +1,7 @@
 import 'package:http/http.dart';
 import 'package:tumblrx/utilities/environment.dart';
-
+import 'dart:convert' as convert;
+import 'package:http/http.dart' as http;
 /// MockAPI class to use for testing
 class MockHttpRepository {
   /// API key for mock server
@@ -106,11 +107,15 @@ class ApiHttpRepository {
 //send PUT Request
 
   static Future sendPutRequest(String endPoint, Map<String, String> headers,
-      Map<String, dynamic> reqBody) async {
+      Map<dynamic, dynamic> reqBody) async {
     String url = '$api$endPoint';
     final Uri uri = Uri.parse(url);
-    print(uri.toString());
-    if (reqBody != null) return put(uri, headers: headers, body: reqBody);
+
+    print(endPoint);
+    print(headers);
+    print(reqBody);
+
+    if (reqBody != null) return http. put( uri, headers: headers, body:  reqBody);
     return put(uri);
   }
 }

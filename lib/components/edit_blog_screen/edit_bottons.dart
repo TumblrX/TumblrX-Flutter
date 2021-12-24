@@ -24,6 +24,8 @@ class _EditButtonsState extends State<EditButtons> {
             width: 120,
             child: ElevatedButton(
               onPressed: () {
+          
+              
                 showDialog(
                     context: context,
                     builder: (context) => AlertDialog(
@@ -57,7 +59,21 @@ class _EditButtonsState extends State<EditButtons> {
         SizedBox(
           width: 110,
           child: ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+                showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                          content: MaterialColorPicker(
+                            selectedColor: Colors.yellow,
+                            onColorChange: (Color color) {
+                              
+                             
+                            },
+                          ),
+                        ));
+
+
+            },
             child: Text('Accent', style: TextStyle(color: Color(0xffc7c1c1))),
             style: ButtonStyle(
               backgroundColor:

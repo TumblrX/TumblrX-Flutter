@@ -16,8 +16,7 @@ class EditAppBar {
           children: <Widget>[
             IconButton(
                 onPressed: () {
-                  print(Provider.of<User>(context, listen: false)
-                      .getActiveBlogTitle());
+               
                   Provider.of<User>(context, listen: false)
                       .updateActiveBlogInfo(context);
                   // showDialog(

@@ -53,7 +53,7 @@ class _EditState extends State<Edit> with SingleTickerProviderStateMixin {
                               decoration: BoxDecoration(
                                   image: DecorationImage(
                                       image: AssetImage('images/header.png'),
-                                      fit: BoxFit.fill)),
+                                      fit: Provider.of<User>(context).getActiveBlogStretchHeaderImage()??true? BoxFit.fill:BoxFit.contain)),
                               child: Align(
                                 alignment: Alignment.bottomRight,
                                 child: Icon(

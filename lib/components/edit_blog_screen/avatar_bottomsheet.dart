@@ -34,7 +34,13 @@ class EditAvatarBottomSheet extends StatelessWidget {
         ),
         ListTile(
             title: Text('Show avatar'),
-            trailing: Switch(value: showAvatar, onChanged: (value) {}),
+            trailing: Switch(
+                value: Provider.of<User>(context)
+                      .getActiveBlogShowAvatar(),
+                onChanged: (value) {
+                  Provider.of<User>(context, listen: false)
+                      .setActiveBlogShowAvatar(value);
+                }),
             onTap: () {}),
         Padding(
           padding: EdgeInsets.only(left: 10, right: 10),

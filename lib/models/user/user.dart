@@ -100,7 +100,7 @@ class User extends ChangeNotifier {
   }
 
   ///set user data after login
-  void setLoginUserData(Map<String, dynamic> json) {
+  void setLoginUserData(Map<String, dynamic> json, BuildContext context) {
     if (json.containsKey('following')) _following = json['following'];
     if (json.containsKey('default_post_format'))
       _defaultPostFormat = json['default_post_format'];
@@ -117,6 +117,8 @@ class User extends ChangeNotifier {
         json['blogs'].forEach((v) {
           _blogs.add(new Blog.fromJson(v));
         });
+        Provider.of<User>(context, listen: false)
+            .setBlogsInfo(context); //esraa added
 
         setActiveBlog(json['blogs'][0]['handle']);
       } catch (err) {
@@ -213,11 +215,11 @@ class User extends ChangeNotifier {
   }
 
   bool getActiveBlogShowAvatar() {
-    return _blogs[_activeBlogIndex].blogTheme.showAvatar;
+    return _blogs[_activeBlogIndex].showAvatar;
   }
 
   void setActiveBlogShowAvatar(bool showAvatar) {
-    _blogs[_activeBlogIndex].blogTheme.showAvatar = showAvatar;
+    _blogs[_activeBlogIndex].setShowAvatar(showAvatar);
     notifyListeners();
   }
 
@@ -225,9 +227,12 @@ class User extends ChangeNotifier {
     return _blogs[_activeBlogIndex].backGroundColor;
   }
 
-  void setActiveBlogBackColor(String color) {
+  bool getActiveShowHeaderImage() {
+    return _blogs[_activeBlogIndex].showHeadeImage;
+  }
 
-    _blogs[_activeBlogIndex].setBlogBackGroundColor(color) ;
+  void setActiveBlogBackColor(String color) {
+    _blogs[_activeBlogIndex].setBlogBackGroundColor(color);
 
     notifyListeners();
   }
@@ -240,9 +245,19 @@ class User extends ChangeNotifier {
     _blogs[_activeBlogIndex].updateBlog(context);
   }
 
+  void setActiveBlogStretchHeaderImage(bool stretch) {
+    _blogs[_activeBlogIndex].setStrtchHeaderImage(stretch);
+    notifyListeners();
+  }
+
+  bool getActiveBlogStretchHeaderImage() {
+    return _blogs[_activeBlogIndex].stretchHeaderImage;
+  }
+
   void createNewlog(String name, BuildContext context) async {
     final endPoint = 'api/blog/dfsfdfsfsd';
-    Map<String, dynamic> blogInfo = {
+
+    final Map<String, dynamic> blogInfo = {
       "title": "Untitled",
       "handle": name,
       "private": false.toString()
@@ -253,17 +268,23 @@ class User extends ChangeNotifier {
           '${Provider.of<Authentication>(context, listen: false).token}'
     };
 
-    final response = await http.post(
-        Uri.parse('${ApiHttpRepository.api}/blog/dfsfdfsfsd'),
-        body: convert.jsonEncode(blogInfo),
-        headers: <String, String>{
-          'Authorization':
-              Provider.of<Authentication>(context, listen: false).token
-        });
+    final response =
 
-    if (response.statusCode == 200) {
+        //await http.post(
+        //     Uri.parse('${ApiHttpRepository.api}api/blog/dfsfdfsfsd'),
+
+        //   body: convert.jsonEncode(blogInfo),
+        // headers:headers);
+        //print("${ApiHttpRepository.api}api/blog/dfsfdfsfsd");
+
+        await ApiHttpRepository.sendPostRequest(endPoint,
+            reqBody: blogInfo, headers: headers);
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
       print(response.body);
     } else {
+      print(response.body);
+
       print('unseccful');
       print(response.statusCode);
     }
@@ -274,5 +295,33 @@ class User extends ChangeNotifier {
       element.blogRetrive(context);
     });
     notifyListeners();
+  }
+
+  void getUserInfo(BuildContext context) async {
+    final endPoint = 'user/info';
+
+    final Map<String, String> headers = {
+      'Authorization':
+          '${Provider.of<Authentication>(context, listen: false).token}'
+    };
+    final response = await http.get(
+        Uri.parse('${ApiHttpRepository.api}api/user/info'),
+        headers: headers);
+    Map<String, dynamic> responseObject =
+        convert.jsonDecode(response.body) as Map<String, dynamic>;
+    if (response.statusCode == 200) {
+      // print(responseObject);
+      if (responseObject.containsKey('blogs')) {
+        print(responseObject['blogs']);
+
+        responseObject['blogs']
+            .forEach((blog) {
+         
+          //print(blog.values.runtimeType);
+          this._blogs = [];
+        this._blogs.add(new Blog.fromJson(blog));
+        });
+      }
+    }
   }
 }

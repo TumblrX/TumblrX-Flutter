@@ -33,8 +33,12 @@ class _BlogScreenState extends State<BlogScreen>
     _tabController = new TabController(length: 3, vsync: this);
 
     super.initState();
- Provider.of<User>(context, listen: false).setBlogsInfo(context);
-   
+   // Provider.of<User>(context, listen: false)
+     //   .getActiveBlog()
+       // .blogPosts(context);
+
+
+        /// Provider.of<User>(context, listen: false). getUserInfo(context);
   }
 
   @override
@@ -84,7 +88,9 @@ class _BlogScreenState extends State<BlogScreen>
                 /// i will chnge it and make it equal total no of following-3*40
 
                 child: Container(
-                  color: hexToColor( Provider.of<User>(context,listen: false).getActiveBlogBackColor())??Colors.blue,
+                  color: hexToColor(Provider.of<User>(context, listen: false)
+                          .getActiveBlogBackColor()) ??
+                      Colors.blue,
                   constraints: !kIsWeb
                       ? BoxConstraints()
                       : BoxConstraints(
@@ -114,7 +120,8 @@ class _BlogScreenState extends State<BlogScreen>
 
                           ///show an avatar in square
                           Visibility(
-                              visible: true,
+                              visible: Provider.of<User>(context, listen: false)
+                                  .getActiveBlogShowAvatar(),
                               child: Provider.of<User>(context, listen: false)
                                       .getIsAvatarCircle()
                                   ? AvatarImage()
