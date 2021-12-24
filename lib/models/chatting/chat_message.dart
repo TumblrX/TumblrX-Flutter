@@ -5,5 +5,9 @@ class ChatMessage {
 
   ///boolean value that determines if the message is sent by the user or the other user
   bool isMe;
-  ChatMessage({this.isMe, this.text});
+
+  ///time of the message
+  String messageTime;
+
+  ChatMessage({this.isMe, this.text, this.messageTime});
 }

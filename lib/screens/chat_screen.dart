@@ -86,7 +86,9 @@ class ChatScreen extends StatelessWidget {
                     myAvatarUrl: myAvatarUrl,
                   ),
                   Divider(),
-                  ChatInput(userId: userId),
+                  ChatInput(
+                    userId: userId,
+                  ),
                 ],
               ),
             ),

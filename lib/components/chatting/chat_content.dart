@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:tumblrx/components/chatting/message_bubble.dart';
 import 'package:tumblrx/models/chatting/chat_message.dart';
 import 'package:tumblrx/services/messaging.dart';
+import 'package:tumblrx/utilities/time_format_to_view.dart';
 
 ///Widget that shows the content of the chat
 class ChatContent extends StatelessWidget {
@@ -95,17 +96,30 @@ class ChatContent extends StatelessWidget {
       ChatMessage chatMessage =
           Provider.of<Messaging>(context).getChatMessages(chatId)[i];
       bool isPreviousSame = false;
-      if (i != 0 &&
-          Provider.of<Messaging>(context).getChatMessages(chatId)[i - 1].isMe ==
-              Provider.of<Messaging>(context).getChatMessages(chatId)[i].isMe) {
-        isPreviousSame = true;
+      bool isPreviousTimeBig = true;
+      if (i != 0) {
+        if (Provider.of<Messaging>(context)
+                .getChatMessages(chatId)[i - 1]
+                .isMe ==
+            Provider.of<Messaging>(context).getChatMessages(chatId)[i].isMe)
+          isPreviousSame = true;
+        isPreviousTimeBig = isDifferenceBiggerThanHalfAnHour(
+            Provider.of<Messaging>(context)
+                .getChatMessages(chatId)[i - 1]
+                .messageTime,
+            Provider.of<Messaging>(context)
+                .getChatMessages(chatId)[i]
+                .messageTime);
       }
+
       messagesList.add(MessageBubble(
         text: chatMessage.text,
         senderAvatar: chatMessage.isMe ? myAvatarUrl : receiverAvatarUrl,
         isMe: chatMessage.isMe,
         sender: chatMessage.isMe ? myUsername : receiverUsername,
         isPreviousSame: isPreviousSame,
+        messageTime: chatMessage.messageTime,
+        isPreviousTimeBig: isPreviousTimeBig,
       ));
     }
     return messagesList.reversed.toList();

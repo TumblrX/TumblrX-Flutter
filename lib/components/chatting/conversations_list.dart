@@ -46,6 +46,7 @@ class ConversationsList extends StatelessWidget {
         username: conversation.username,
         lastMessage: conversation.lastMessage,
         lastMessageIsMe: conversation.lastMessageIsMe,
+        lastMessageTime: conversation.lastMessageTime,
       ));
     }
     return conversationList;

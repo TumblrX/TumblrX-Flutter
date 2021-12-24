@@ -15,6 +15,9 @@ class User extends ChangeNotifier {
   /// user name
   String _username;
 
+  /// user id
+  String _id;
+
   /// number of user likes
   int _likes;
 
@@ -44,6 +47,12 @@ class User extends ChangeNotifier {
   /// constructor of the class using decoded json
   User.fromJson(Map<String, dynamic> json) {
     // =====
+    // id
+    if (json.containsKey('id'))
+      _id = json['id'];
+    else
+      throw Exception('missing required parameter "id"');
+
     // username
     if (json.containsKey('name'))
       _username = json['name'];
@@ -96,6 +105,10 @@ class User extends ChangeNotifier {
   ///set user data after login
   void setLoginUserData(Map<String, dynamic> json) {
     if (json.containsKey('following')) _following = json['following'];
+    if (json.containsKey('id'))
+      _id = json['id'];
+    else
+      throw Exception('missing required parameter "id"');
     if (json.containsKey('default_post_format'))
       _defaultPostFormat = json['default_post_format'];
     if (json.containsKey('name'))
@@ -151,6 +164,9 @@ class User extends ChangeNotifier {
 
   ///getter for username
   String get username => _username;
+
+  ///getter for userid
+  String get userId => _id;
 
   ///Returns the link to the current active blog avatar
   String getActiveBlogAvatar() {

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/screens/main_screen.dart';
 import 'package:tumblrx/services/authentication.dart';
+import 'package:tumblrx/services/messaging.dart';
 import 'package:tumblrx/utilities/constants.dart';
 
 class LogInUserData extends StatelessWidget {
@@ -51,6 +52,12 @@ class LogInUserData extends StatelessWidget {
                                     .loginGetUserInfo();
                             Provider.of<User>(context, listen: false)
                                 .setLoginUserData(response);
+                            Provider.of<Messaging>(context, listen: false)
+                                .connectToServer(
+                                    response['id'],
+                                    Provider.of<Authentication>(context,
+                                            listen: false)
+                                        .token);
                             while (Navigator.canPop(context)) {
                               Navigator.pop(context);
                             }

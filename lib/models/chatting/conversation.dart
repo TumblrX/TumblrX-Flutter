@@ -21,6 +21,9 @@ class Conversation {
   ///boolean value if the last message is sent by the user
   bool lastMessageIsMe;
 
+  ///Time of the last sent message
+  String lastMessageTime;
+
   ///List of chat Messages Objects in the conversation
   List<ChatMessage> chatMessages = [];
 
@@ -34,6 +37,10 @@ class Conversation {
       userId = jsonData['textedUser'];
     } else
       throw Exception('missing required parameter "textedUser"');
+    if (jsonData.containsKey('messageDate')) {
+      lastMessageTime = jsonData['messageDate'];
+    } else
+      throw Exception('missing required parameter "messageDate"');
     if (jsonData.containsKey('blogHandle'))
       username = jsonData['blogHandle'];
     else
@@ -55,7 +62,10 @@ class Conversation {
     else
       throw Exception('missing required parameter "isMe"');
   }
-  void addMessage(String text, bool isMe) {
-    chatMessages.add(ChatMessage(text: text, isMe: isMe));
+
+  ///Adds messages to to the list of chat messages
+  void addMessage(String text, bool isMe, String messageTime) {
+    chatMessages
+        .add(ChatMessage(text: text, isMe: isMe, messageTime: messageTime));
   }
 }

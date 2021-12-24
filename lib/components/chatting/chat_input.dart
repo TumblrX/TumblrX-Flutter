@@ -7,6 +7,9 @@ class ChatInput extends StatelessWidget {
   ///user id
   final String userId;
 
+  ///chat id
+  //final String chatId;
+
   ChatInput({this.userId});
 
   final TextEditingController _textEditingController = TextEditingController();
@@ -59,8 +62,10 @@ class ChatInput extends StatelessWidget {
             IconButton(
               onPressed: () {
                 if (_textEditingController.text.trim().length > 0)
-                  Provider.of<Messaging>(context, listen: false)
-                      .sendMessage(userId, _textEditingController.text, context);
+                  Provider.of<Messaging>(context, listen: false).sendMessage(
+                    userId,
+                    _textEditingController.text,
+                  );
                 _textEditingController.text = '';
                 _focusNode.requestFocus();
               },

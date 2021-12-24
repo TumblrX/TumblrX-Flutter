@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:tumblrx/components/chatting/square_avatar.dart';
 import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/screens/chat_screen.dart';
+import 'package:tumblrx/utilities/time_format_to_view.dart';
 
 ///Conversation Item in the conversations list
 class ConversationItem extends StatelessWidget {
@@ -24,13 +25,17 @@ class ConversationItem extends StatelessWidget {
   ///if the sender pf the last message is me
   final bool lastMessageIsMe;
 
+  ///Time of the last sent message
+  final String lastMessageTime;
+
   ConversationItem(
       {this.chatId,
       this.userId,
       this.avatarUrl,
       this.username,
       this.lastMessage,
-      this.lastMessageIsMe});
+      this.lastMessageIsMe,
+      this.lastMessageTime});
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +75,7 @@ class ConversationItem extends StatelessWidget {
       ),
       subtitle: Padding(
         padding: const EdgeInsets.symmetric(vertical: 2.0),
-        child: Text('Active in the last 3 hours'),
+        child: Text(changeTimeFormat(lastMessageTime)),
       ),
     );
   }

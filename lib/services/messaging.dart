@@ -1,40 +1,58 @@
 import 'dart:io';
 import 'dart:convert' as convert;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/models/chatting/chat_message.dart';
 import 'package:tumblrx/models/chatting/conversation.dart';
 import 'package:tumblrx/services/api_provider.dart';
 import 'package:tumblrx/services/authentication.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
+///Class that manages all chat services
 class Messaging extends ChangeNotifier {
   ///List of conversations of the user
   List<Conversation> conversations;
 
+  ///Socket object
+  IO.Socket socket;
+
+  ///User ID
+  String userId;
+
   ///Sends a message to the database to the user with [userId]
   ///[text] is the message content
-  void sendMessage(String userId, String text, BuildContext context) async {
+  void sendMessage(String receiverId, String text) {
     // int i = conversations.indexWhere((element) => element.userId == userId);
     // conversations[i].addMessage(text, true);
-    String endPoint = 'api/user/chat/send-message';
-    Map<String, String> body = {'textMessage': text, 'user2Id': userId};
-    Map<String, String> header = {
-      HttpHeaders.authorizationHeader:
-          Provider.of<Authentication>(context, listen: false).token
-    };
+    // String endPoint = 'api/user/chat/send-message';
+    // Map<String, String> body = {'textMessage': text, 'user2Id': userId};
+    // Map<String, String> header = {
+    //   HttpHeaders.authorizationHeader:
+    //       Provider.of<Authentication>(context, listen: false).token
+    // };
     try {
-      final response = await ApiHttpRepository.sendPostRequest(endPoint,
-          reqBody: body, headers: header);
-      print(response.statusCode);
+      // final response = await ApiHttpRepository.sendPostRequest(endPoint,
+      //         reqBody: body, headers: header)
+      //     .then((value) => sendMessageToSocket(myId, userId, text));
+      if (socket.connected) {
+        Map<String, String> data = {'content': text, 'receiverId': receiverId};
+        socket.emit('private message', data);
+      }
     } catch (e) {
       print(e);
     }
-    notifyListeners();
+    //getChatContent(context, chatId, userId);
   }
 
-  void receiveMessage(String chatId, String text) {
-    int i = conversations.indexWhere((element) => element.chatId == chatId);
-    conversations[i].addMessage(text, false);
+  ///Receives message from data sent by socket io
+  void receiveMessage(String text, String senderId, String receiverId) {
+    bool isMe = senderId == userId;
+    String otherUser = isMe ? receiverId : senderId;
+    int i = conversations.indexWhere((element) => element.userId == otherUser);
+
+    conversations[i].addMessage(text, isMe,
+        DateTime.now().add(Duration(hours: -2)).toIso8601String() + 'z');
     notifyListeners();
   }
 
@@ -65,8 +83,8 @@ class Messaging extends ChangeNotifier {
     try {
       final response =
           await ApiHttpRepository.sendGetRequest(endPoint, headers: header);
-      print(response.statusCode);
-      print(response.body);
+      // print(response.statusCode);
+      // print(response.body);
       Map<String, dynamic> responseObject =
           convert.jsonDecode(response.body) as Map<String, dynamic>;
       for (Map<String, dynamic> conversation in responseObject['data']) {
@@ -96,8 +114,8 @@ class Messaging extends ChangeNotifier {
       Map<String, dynamic> responseObject =
           convert.jsonDecode(response.body) as Map<String, dynamic>;
       for (Map<String, dynamic> chatMessage in responseObject['messages']) {
-        conversations[i]
-            .addMessage(chatMessage['text'], chatMessage['senderId'] != userId);
+        conversations[i].addMessage(chatMessage['text'],
+            chatMessage['senderId'] != userId, chatMessage['createdAt']);
       }
       conversations[i].chatMessages =
           conversations[i].chatMessages.reversed.toList();
@@ -105,5 +123,40 @@ class Messaging extends ChangeNotifier {
       print(e);
     }
     return;
+  }
+
+  void connectToServer(String userId, String token) {
+    this.userId = userId;
+    socket = IO.io(
+        'http://tumblrx.me:6600',
+        !kIsWeb
+            ? IO.OptionBuilder()
+                .setTransports(['websocket']) // for Flutter or Dart VM
+                .setExtraHeaders({'authorization': token})
+                .disableAutoConnect() // disable auto-connection
+                .build()
+            : IO.OptionBuilder()
+                //.setTransports(['websocket']) // for Flutter or Dart VM
+                .setExtraHeaders({'authorization': token})
+                .disableAutoConnect() // disable auto-connection
+                .build());
+    socket = socket.connect();
+    print('connection id: ' + userId);
+    socket.onConnect((_) {
+      print('connect');
+      //socket.emit('userid', userId);
+    });
+    socket.on('privateMessage', (data) {
+      print('message recieved');
+      receiveMessage(data['content'], data['senderId'], data['receiverId']);
+      print(data);
+    });
+
+    socket.onDisconnect((_) => {print('disconnect')});
+  }
+
+  void disconnect() {
+    socket.off('privateMessage');
+    socket.disconnect();
   }
 }
