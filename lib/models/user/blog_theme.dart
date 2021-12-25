@@ -9,7 +9,7 @@ class BlogTheme {
   String titleColor;
   String titleFont;
   String titleFontWeight;
-  bool showAvatar=true;
+  bool showAvatar;
   bool showDescription;
   bool showHeaderImage;
   bool showTitle;

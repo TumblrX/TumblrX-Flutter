@@ -13,7 +13,6 @@ class HeaderImage extends StatefulWidget {
 }
 
 class _HeaderImageState extends State<HeaderImage> {
- 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -42,15 +41,12 @@ class _HeaderImageState extends State<HeaderImage> {
                                 .setActiveBlog(value);
                             Provider.of<User>(context, listen: false)
                                 .updateActiveBlog();
-                          }
-                          else if(value=='create')
-                          {
-                       Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => CreateNewTumblrPage()),
-                          );
-
+                          } else if (value == 'create') {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => CreateNewTumblrPage()),
+                            );
                           }
                         },
                         itemBuilder: (BuildContext context) {
@@ -66,25 +62,29 @@ class _HeaderImageState extends State<HeaderImage> {
                                       Provider.of<User>(context, listen: false)
                                           .userBlogs[i]
                                           .handle,
-                                  child:Container( decoration:BoxDecoration(border:Border(bottom: BorderSide(color: Colors.black12))) ,child: ListTile(
-                                    title: Text(Provider.of<User>(context,
-                                            listen: false)
-                                        .userBlogs[i]
-                                        .handle),
-                                    leading: Container(
-                                      width: 50,
-                                      height: 50,
-                                      child: Image(
-                                        image: NetworkImage(Provider.of<User>(
-                                                context,
+                                  child: Container(
+                                      decoration: BoxDecoration(
+                                          border: Border(
+                                              bottom: BorderSide(
+                                                  color: Colors.black12))),
+                                      child: ListTile(
+                                        title: Text(Provider.of<User>(context,
                                                 listen: false)
                                             .userBlogs[i]
-                                            .blogAvatar,
-                                           ),
-                                      ),
-                                    ),
-                                  ))),
-                            
+                                            .handle),
+                                        leading: Container(
+                                          width: 50,
+                                          height: 50,
+                                          child: Image(
+                                            image: NetworkImage(
+                                              Provider.of<User>(context,
+                                                      listen: false)
+                                                  .userBlogs[i]
+                                                  .blogAvatar,
+                                            ),
+                                          ),
+                                        ),
+                                      ))),
                             PopupMenuItem(
                                 value: 'create',
                                 child: ListTile(
@@ -153,7 +153,7 @@ class _HeaderImageState extends State<HeaderImage> {
         decoration: BoxDecoration(
             image: DecorationImage(
                 image: AssetImage(BlogScreenConstant.headerImgPath),
-                fit: BoxFit.fill)), //dummy image
+                fit:Provider.of<User>(context).getActiveBlogStretchHeaderImage()??true? BoxFit.fill:BoxFit.contain)), //dummy image
         height: MediaQuery.of(context).size.height / 3.6, //(200)
       ),
       onTap: () {

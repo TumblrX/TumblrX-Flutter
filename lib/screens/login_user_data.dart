@@ -11,6 +11,8 @@ class LogInUserData extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
+   
     return Scaffold(
       backgroundColor: Color(0xff001935),
       body: Padding(
@@ -50,7 +52,7 @@ class LogInUserData extends StatelessWidget {
                                         listen: false)
                                     .loginGetUserInfo();
                             Provider.of<User>(context, listen: false)
-                                .setLoginUserData(response);
+                                .setLoginUserData(response,context);
                             while (Navigator.canPop(context)) {
                               Navigator.pop(context);
                             }
