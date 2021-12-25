@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:tumblrx/components/edit_blog_screen/alert_dialgue.dart';
-import 'package:tumblrx/screens/blog_screen.dart';
 
 class EditAppBar {
   bool isswitched = true;
@@ -15,11 +14,15 @@ class EditAppBar {
             IconButton(
                 onPressed: () {
                   showDialog(
-                      context: context, builder: (context) => AlerDialgue());
-// Navigator.pop(
-//                    context,
-//                    MaterialPageRoute(builder: (context) => BlogScreen()),
-//                  );
+                    useRootNavigator: false,
+                    context: context,
+                    builder: (context) => AlerDialgue(),
+                  );
+
+                  // await Navigator.pop(
+                  //    context,
+                  //  MaterialPageRoute(builder: (context) => BlogScreen()),
+                  //);
                 },
                 icon: Icon(Icons.arrow_back),
                 color: Colors.white),
@@ -74,7 +77,7 @@ class EditAppBar {
           Padding(
             padding: EdgeInsets.only(top: 10, left: 10),
             child: TextButton(
-                onPressed: () {},
+                onPressed: null,
                 child: Text('Font', style: TextStyle(fontSize: 18))),
           ),
           Padding(

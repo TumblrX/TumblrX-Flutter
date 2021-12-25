@@ -43,5 +43,8 @@ dynamic formattingTags({color = Colors.black, mentionCallback}) {
       },
     ),
     'mention': StyledTextActionTag((_, attrs) => mentionCallback()),
+    //'unordered-list-item':,
+    //'ordered-list-item':,
+    //'indented':,
   };
 }

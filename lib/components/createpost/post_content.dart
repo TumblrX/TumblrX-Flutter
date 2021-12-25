@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:tumblrx/components/createpost/post_text_field.dart';
 import 'package:tumblrx/components/createpost/video_player_preview.dart';
-import 'package:tumblrx/services/api_provider.dart';
 import 'dart:io';
 import 'package:tumblrx/utilities/constants.dart';
 import 'package:provider/provider.dart';

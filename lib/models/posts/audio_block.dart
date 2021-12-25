@@ -50,19 +50,20 @@ class AudioBlock {
 
   /// Constructs a new instance usin parsed json data
   AudioBlock.fromJson(Map<String, dynamic> json) {
-    type = json['type'];
-    provider = json['provider'];
-    title = json['title'];
-    artist = json['artist'];
-    url = json['url'];
-    embedHtml = json['embed_html'];
-    embedUrl = json['embed_url'];
-    media = json['media'] != null ? new Media.fromJson(json['media']) : null;
-    if (json['poster'] != null) {
-      json['poster'].forEach((v) {
-        poster.add(new Poster.fromJson(v));
-      });
-    }
+    if (json.containsKey('type')) type = json['type'];
+    if (json.containsKey('provider')) provider = json['provider'];
+    if (json.containsKey('title')) title = json['title'];
+    if (json.containsKey('artist')) artist = json['artist'];
+    if (json.containsKey('url')) url = json['url'];
+    if (json.containsKey('embed_html')) embedHtml = json['embed_html'];
+    if (json.containsKey('embed_url')) embedUrl = json['embed_url'];
+
+    // media = json['media'] != null ? new Media.fromJson(json['media']) : null;
+    // if (json['poster'] != null) {
+    //   json['poster'].forEach((v) {
+    //     poster.add(new Poster.fromJson(v));
+    //   });
+    // }
   }
 
   /// Returns a JSON version of the object
@@ -82,10 +83,5 @@ class AudioBlock {
       data['poster'] = this.poster.map((v) => v.toJson()).toList();
     }
     return data;
-  }
-
-  /// API for audio block object to render it
-  Widget showBlock() {
-    return SizedBox();
   }
 }

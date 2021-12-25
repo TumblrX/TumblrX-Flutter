@@ -51,13 +51,14 @@ class LogInUserData extends StatelessWidget {
                                         listen: false)
                                     .loginGetUserInfo();
                             Provider.of<User>(context, listen: false)
-                                .setLoginUserData(response);
+                                .setLoginUserData(response, context);
                             Provider.of<Messaging>(context, listen: false)
                                 .connectToServer(
                                     response['id'],
                                     Provider.of<Authentication>(context,
                                             listen: false)
                                         .token);
+
                             while (Navigator.canPop(context)) {
                               Navigator.pop(context);
                             }

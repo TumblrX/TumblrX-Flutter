@@ -1,7 +1,14 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:provider/provider.dart';
+import 'package:tumblrx/components/createpost/post_tags.dart';
 import 'package:tumblrx/models/post.dart';
 import 'package:tumblrx/models/tag.dart';
 import 'package:tumblrx/models/user/blog.dart';
+import 'package:tumblrx/services/api_provider.dart';
+import 'package:tumblrx/services/authentication.dart';
+import 'dart:convert' as convert;
+import 'package:http/http.dart' as http;
 
 /// A class that manages all user functionalities and
 ///  used for contacting with API
@@ -103,7 +110,7 @@ class User extends ChangeNotifier {
   }
 
   ///set user data after login
-  void setLoginUserData(Map<String, dynamic> json) {
+  void setLoginUserData(Map<String, dynamic> json, BuildContext context) {
     if (json.containsKey('following')) _following = json['following'];
     if (json.containsKey('id'))
       _id = json['id'];
@@ -124,6 +131,11 @@ class User extends ChangeNotifier {
         json['blogs'].forEach((v) {
           _blogs.add(new Blog.fromJson(v));
         });
+        Provider.of<User>(context, listen: false)
+            .setBlogsInfo(context); //esraa added
+        Provider.of<User>(context, listen: false)
+            .getUserPosts(context); //esraa added
+
         setActiveBlog(json['blogs'][0]['handle']);
       } catch (err) {
         print('error in creating blogs $err');
@@ -178,6 +190,42 @@ class User extends ChangeNotifier {
     return _blogs[_activeBlogIndex].title;
   }
 
+  String getActiveBlogTitleBeforeEdit() {
+    return _blogs[_activeBlogIndex].titleBeforEdit;
+  }
+
+  void settActiveBlogTitleBeforeEdit(String title) {
+    _blogs[_activeBlogIndex].setTitleBeforeEdit(title);
+    notifyListeners();
+  }
+
+  String getActiveBlogBackGroundColoreBeforeEdit() {
+    return _blogs[_activeBlogIndex].backGroundColorBeforEdit;
+  }
+
+  void settActiveBlogBackGroundColorBeforeEdit(String color) {
+    _blogs[_activeBlogIndex].setBackGroundColorBeforEditing(color);
+    notifyListeners();
+  }
+
+  String getActiveBlogDescriptionBeforeEdit() {
+    return _blogs[_activeBlogIndex].descriptionBeforEdit;
+  }
+
+  void setActiveBlogDescriptionBeforeEdit(String description) {
+    _blogs[_activeBlogIndex].setDescriptionBeforEdit(description);
+    notifyListeners();
+  }
+
+  bool getActiveBlogIsCircleBeforeEdit() {
+    return _blogs[_activeBlogIndex].isCircleBeforEdit;
+  }
+
+  void setActiveBlogIsCircleBeforeEdit(bool isCircle) {
+    _blogs[_activeBlogIndex].setIsCircleBeforEditing(isCircle);
+    notifyListeners();
+  }
+
   ///Returns the description of the current active blog
   String getActiveBlogDescription() {
     return _blogs[_activeBlogIndex].getBlogDescription();
@@ -201,8 +249,11 @@ class User extends ChangeNotifier {
     return _blogs[_activeBlogIndex].isCircleAvatar;
   }
 
+//i will modify it
+
   void setActiveBlogTitle(String title) {
     _blogs[_activeBlogIndex].setBlogtitle(title);
+
     notifyListeners();
   }
 
@@ -213,15 +264,25 @@ class User extends ChangeNotifier {
 
   void setActiveBlogIsCircle(bool isCircle) {
     _blogs[_activeBlogIndex].setIsCircleAvatar(isCircle);
+
     notifyListeners();
   }
 
+  List<Post> getActiveBlogPosts() {
+    return _blogs[_activeBlogIndex].posts;
+  }
+
   bool getActiveBlogShowAvatar() {
-    return _blogs[_activeBlogIndex].blogTheme.showAvatar;
+    return _blogs[_activeBlogIndex].showAvatar;
   }
 
   void setActiveBlogShowAvatar(bool showAvatar) {
-    _blogs[_activeBlogIndex].blogTheme.showAvatar = showAvatar;
+    _blogs[_activeBlogIndex].setShowAvatar(showAvatar);
+    notifyListeners();
+  }
+
+  String getActiveBlogBackColor() {
+    return _blogs[_activeBlogIndex].backGroundColor;
   }
 
   String getPrimaryBlogAvatar() {
@@ -229,5 +290,107 @@ class User extends ChangeNotifier {
       if (blog.isPrimary) return blog.blogAvatar;
     }
     return null;
+  }
+
+  bool getActiveShowHeaderImage() {
+    return _blogs[_activeBlogIndex].showHeadeImage;
+  }
+
+  void setActiveBlogBackColor(String color) {
+    _blogs[_activeBlogIndex].setBlogBackGroundColor(color);
+
+    notifyListeners();
+  }
+
+  Blog getActiveBlog() {
+    return _blogs[_activeBlogIndex];
+  }
+
+  void updateActiveBlogInfo(BuildContext context) {
+    _blogs[_activeBlogIndex].updateBlog(context);
+  }
+
+  void setActiveBlogStretchHeaderImage(bool stretch) {
+    _blogs[_activeBlogIndex].setStrtchHeaderImage(stretch);
+    notifyListeners();
+  }
+
+  bool getActiveBlogStretchHeaderImage() {
+    return _blogs[_activeBlogIndex].stretchHeaderImage;
+  }
+
+  void getUserPosts(BuildContext context) {
+    this._blogs.forEach((element) {
+      element.blogPosts(context);
+    });
+  }
+
+  void createNewlog(String name, BuildContext context) async {
+    final endPoint = 'api/blog/dfsfdfsfsd';
+
+    final Map<String, dynamic> blogInfo = {
+      "title": "Untitled",
+      "handle": name,
+      "private": false.toString()
+    };
+
+    final Map<String, String> headers = {
+      'Authorization':
+          '${Provider.of<Authentication>(context, listen: false).token}'
+    };
+
+    final response =
+
+        //await http.post(
+        //     Uri.parse('${ApiHttpRepository.api}api/blog/dfsfdfsfsd'),
+
+        //   body: convert.jsonEncode(blogInfo),
+        // headers:headers);
+        //print("${ApiHttpRepository.api}api/blog/dfsfdfsfsd");
+
+        await ApiHttpRepository.sendPostRequest(endPoint,
+            reqBody: blogInfo, headers: headers);
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      print(response.body);
+    } else {
+      print(response.body);
+
+      print('unseccful');
+      print(response.statusCode);
+    }
+  }
+
+  void setBlogsInfo(BuildContext context) {
+    _blogs.forEach((element) {
+      element.blogRetrive(context);
+    });
+    notifyListeners();
+  }
+
+  void getUserInfo(BuildContext context) async {
+    final endPoint = 'user/info';
+
+    final Map<String, String> headers = {
+      'Authorization':
+          '${Provider.of<Authentication>(context, listen: false).token}'
+    };
+    final response = await http.get(
+        Uri.parse('${ApiHttpRepository.api}api/user/info'),
+        headers: headers);
+    Map<String, dynamic> responseObject =
+        convert.jsonDecode(response.body) as Map<String, dynamic>;
+    if (response.statusCode == 200) {
+      // print(responseObject);
+      if (responseObject.containsKey('blogs')) {
+        print(responseObject['blogs']);
+
+        responseObject['blogs'].forEach((blog) {
+          //print(blog.values.runtimeType);
+          this._blogs = [];
+          this._blogs.add(new Blog.fromJson(blog));
+        });
+      }
+    }
   }
 }

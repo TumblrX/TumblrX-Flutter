@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:tumblrx/models/user/blog.dart';
+import 'package:tumblrx/models/user/user.dart';
 
 ///this bootom sheet for header image in editing
 class CoverImageBottomSheet extends StatelessWidget {
@@ -30,7 +32,7 @@ class CoverImageBottomSheet extends StatelessWidget {
             ),
             title: Text('Choose a photo'),
             onTap: () {
-              Blog.pickImage(2);
+              //Blog.pickImage(2);
             }),
         Padding(
           padding: EdgeInsets.only(left: 10, right: 10),
@@ -38,7 +40,14 @@ class CoverImageBottomSheet extends StatelessWidget {
         ),
         ListTile(
             title: Text('Stretch header'),
-            trailing: Switch(value: isswitched, onChanged: (value) {}),
+            trailing: Switch(
+                value: Provider.of<User>(context)
+                        .getActiveBlogStretchHeaderImage() ??
+                    true,
+                onChanged: (value) {
+                  Provider.of<User>(context, listen: false)
+                      .setActiveBlogStretchHeaderImage(value);
+                }),
             onTap: () {}),
         Padding(
           padding: EdgeInsets.only(left: 10, right: 10),
