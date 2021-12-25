@@ -35,11 +35,8 @@ class _BlogScreenState extends State<BlogScreen>
     super.initState();
 
     //intialize befor edit
-        
 
-    
-
-  // print(Provider.of<User>(context, listen: false).getActiveBlogPosts()[0].blogTitle);
+    // print(Provider.of<User>(context, listen: false).getActiveBlogPosts()[0].blogTitle);
   }
 
   @override
@@ -53,106 +50,100 @@ class _BlogScreenState extends State<BlogScreen>
     //final blogProvider = Provider.of<BlogScreenConstantProvider>(context);
 
     return Scaffold(
-        backgroundColor: Color(0xFF001935),
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: Colors.blue,
-          child: Icon(Icons.edit),
-          onPressed: () {
-            double topPadding = MediaQuery.of(context).padding.top;
-            Provider.of<CreatingPost>(context, listen: false)
-                .initializePostOptions(context);
-            !kIsWeb
-                ? showModalBottomSheet(
-                    context: context,
-                    isScrollControlled: true,
-                    builder: (context) => SingleChildScrollView(
-                      child: CreatePost(
-                        topPadding: topPadding,
-                      ),
+      backgroundColor: Color(0xFF001935),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.blue,
+        child: Icon(Icons.edit),
+        onPressed: () {
+          double topPadding = MediaQuery.of(context).padding.top;
+          Provider.of<CreatingPost>(context, listen: false)
+              .initializePostOptions(context);
+          !kIsWeb
+              ? showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  builder: (context) => SingleChildScrollView(
+                    child: CreatePost(
+                      topPadding: topPadding,
                     ),
-                  )
-                : showDialog(
-                    context: context,
-                    builder: (_) => AlertDialog(
-                          content: CreatePost(
-                            topPadding: topPadding,
-                          ),
-                        ));
-          },
-        ),
+                  ),
+                )
+              : showDialog(
+                  context: context,
+                  builder: (_) => AlertDialog(
+                        content: CreatePost(
+                          topPadding: topPadding,
+                        ),
+                      ));
+        },
+      ),
+      body: Center(
+        child: SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+                maxHeight: MediaQuery.of(context).size.height + (12 - 3) * 60),
 
-        body: Center(
-          child: SingleChildScrollView(
-              child: ConstrainedBox(
-                  constraints: BoxConstraints(
-                      maxHeight:
-                          MediaQuery.of(context).size.height + (12 - 3) * 60),
+            /// i will chnge it and make it equal total no of following-3*40
 
-                  /// i will chnge it and make it equal total no of following-3*40
+            child: Container(
+              color:  hexToColor(Provider.of<User>(context, listen: false)
+                          .getActiveBlogBackColor()) ??
+                      Colors.blue,
+              constraints: !kIsWeb
+                  ? BoxConstraints()
+                  : BoxConstraints(
+                      maxWidth: 750.0,
+                      minWidth: MediaQuery.of(context).size.width < 750
+                          ? MediaQuery.of(context).size.width * 0.9
+                          : 750.0,
+                    ),
+              child: Column(
 
-                  child: Container(
-                    color: Color(0xffb03fa8),
-                    constraints: !kIsWeb
-                        ? BoxConstraints()
-                        : BoxConstraints(
-                            maxWidth: 750.0,
-                            minWidth: MediaQuery.of(context).size.width < 750
-                                ? MediaQuery.of(context).size.width * 0.9
-                                : 750.0,
+                  /// couloum have(the header image , avatar,title, description and tab bars )
 
-                          ),
-                    child: Column(
-
-                        /// couloum have(the header image , avatar,title, description and tab bars )
-
-                        crossAxisAlignment: CrossAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Stack(alignment: Alignment.center, children: <Widget>[
+                      Column(
                         children: <Widget>[
-                          Stack(alignment: Alignment.center, children: <Widget>[
-                            Column(
-                              children: <Widget>[
-                                ///display header image with icons and drop down list
+                          ///display header image with icons and drop down list
 
-                                HeaderImage(),
+                          HeaderImage(),
 
-                                ///display header image with icons and drop down list
+                          ///display header image with icons and drop down list
 
-                                TextWriting(),
-                              ],
-                            ),
+                          TextWriting(),
+                        ],
+                      ),
 
-                            ///show an avatar in square
-                            Visibility(
-                                visible: true,
-                                child: Provider.of<User>(context, listen: false)
-                                        .getIsAvatarCircle()
-                                    ? AvatarImage()
-                                    : Square())
-                          ]),
+                      ///show an avatar in square
 
+                      ///show an avatar in square
+                      Visibility(
+                          visible: Provider.of<User>(context, listen: false)
+                                  .getActiveBlogShowAvatar() ??
+                              true,
+                          child: Provider.of<User>(context, listen: false)
+                                  .getIsAvatarCircle()
+                              ? AvatarImage()
+                              : Square())
+                    ]),
 
-                          ///show an avatar in square
-                          Visibility(
-                              visible: Provider.of<User>(context, listen: false)
-                                  .getActiveBlogShowAvatar()?? true,
-                              child: Provider.of<User>(context, listen: false)
-                                      .getIsAvatarCircle()
-                                  ? AvatarImage()
-                                  : Square())
-                        ]),
-
-                        //{
-                        if (Provider.of<User>(context).getActiveBlogIsPrimary())
-                          upperTabBar(_tabController, context),
-                        if (Provider.of<User>(context).getActiveBlogIsPrimary())
-                          bottomTabBar(_tabController, context),
-                        //}
-                        if (!Provider.of<User>(context)
-                            .getActiveBlogIsPrimary())
-                          Container(
-                            child: Column(),
-                          )
-                      ]),
-                ))));
-
+                    //{
+                    if (Provider.of<User>(context).getActiveBlogIsPrimary())
+                      upperTabBar(_tabController, context),
+                    if (Provider.of<User>(context).getActiveBlogIsPrimary())
+                      bottomTabBar(_tabController, context),
+                    //}
+                    if (!Provider.of<User>(context).getActiveBlogIsPrimary())
+                      Container(
+                        child: Column(),
+                      )
+                  ]),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
