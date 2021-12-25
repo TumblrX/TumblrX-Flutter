@@ -17,14 +17,24 @@ class EditAppBar {
             IconButton(
                 onPressed: () {
                
-                  Provider.of<User>(context, listen: false)
-                      .updateActiveBlogInfo(context);
-                  // showDialog(
-                  //   context: context, builder: (context) => AlerDialgue());
-                  Navigator.pop(
-                    context,
-                    MaterialPageRoute(builder: (context) => BlogScreen()),
-                  );
+                 
+                   showDialog(useRootNavigator: false,
+                   
+                   
+
+                      
+                     context: context, builder: (context) => AlerDialgue(),
+                    
+                
+                     
+                     );
+                     
+
+
+              // await Navigator.pop(
+                //    context,
+                  //  MaterialPageRoute(builder: (context) => BlogScreen()),
+                  //);
                 },
                 icon: Icon(Icons.arrow_back),
                 color: Colors.white),

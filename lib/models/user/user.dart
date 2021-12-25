@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
+import 'package:tumblrx/components/createpost/post_tags.dart';
 import 'package:tumblrx/models/post.dart';
 import 'package:tumblrx/models/tag.dart';
 import 'package:tumblrx/models/user/blog.dart';
@@ -119,6 +120,8 @@ class User extends ChangeNotifier {
         });
         Provider.of<User>(context, listen: false)
             .setBlogsInfo(context); //esraa added
+        Provider.of<User>(context, listen: false)
+            .getUserPosts(context); //esraa added
 
         setActiveBlog(json['blogs'][0]['handle']);
       } catch (err) {
@@ -166,6 +169,40 @@ class User extends ChangeNotifier {
   ///Returns the title of the current active blog
   String getActiveBlogTitle() {
     return _blogs[_activeBlogIndex].title;
+  }
+
+  String getActiveBlogTitleBeforeEdit() {
+    return _blogs[_activeBlogIndex].titleBeforEdit;
+  }
+
+  void settActiveBlogTitleBeforeEdit(String title) {
+    _blogs[_activeBlogIndex].setTitleBeforeEdit(title);
+    notifyListeners();
+  }
+  String getActiveBlogBackGroundColoreBeforeEdit() {
+    return _blogs[_activeBlogIndex].backGroundColorBeforEdit;
+  }
+
+  void settActiveBlogBackGroundColorBeforeEdit(String color) {
+    _blogs[_activeBlogIndex].setBackGroundColorBeforEditing(color);
+    notifyListeners();
+  }
+
+  String getActiveBlogDescriptionBeforeEdit() {
+    return _blogs[_activeBlogIndex].descriptionBeforEdit;
+  }
+
+  void setActiveBlogDescriptionBeforeEdit(String description) {
+    _blogs[_activeBlogIndex].setDescriptionBeforEdit(description);
+    notifyListeners();
+  }
+ bool getActiveBlogIsCircleBeforeEdit() {
+    return _blogs[_activeBlogIndex].isCircleBeforEdit;
+  }
+
+  void setActiveBlogIsCircleBeforeEdit(bool isCircle) {
+    _blogs[_activeBlogIndex].setIsCircleBeforEditing(isCircle);
+    notifyListeners();
   }
 
   ///Returns the description of the current active blog
@@ -254,6 +291,12 @@ class User extends ChangeNotifier {
     return _blogs[_activeBlogIndex].stretchHeaderImage;
   }
 
+  void getUserPosts(BuildContext context) {
+    this._blogs.forEach((element) {
+      element.blogPosts(context);
+    });
+  }
+
   void createNewlog(String name, BuildContext context) async {
     final endPoint = 'api/blog/dfsfdfsfsd';
 
@@ -314,12 +357,10 @@ class User extends ChangeNotifier {
       if (responseObject.containsKey('blogs')) {
         print(responseObject['blogs']);
 
-        responseObject['blogs']
-            .forEach((blog) {
-         
+        responseObject['blogs'].forEach((blog) {
           //print(blog.values.runtimeType);
           this._blogs = [];
-        this._blogs.add(new Blog.fromJson(blog));
+          this._blogs.add(new Blog.fromJson(blog));
         });
       }
     }

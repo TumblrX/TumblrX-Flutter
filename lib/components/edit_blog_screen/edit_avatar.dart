@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/models/user/user.dart';
@@ -21,8 +23,11 @@ class EditAvatar {
               backgroundColor:  hexToColor( Provider.of<User>(context,listen: false).getActiveBlogBackColor())??Colors.blue,
               child: CircleAvatar(
                 radius: 38,
-                backgroundImage: NetworkImage(
-                  Provider.of<User>(context).getActiveBlogAvatar(),
+              
+                backgroundImage:
+                 NetworkImage(
+                          Provider.of<User>(context).getActiveBlogAvatar().toString(),scale: 1.0
+                          
                 ),
               )),
           IconButton(

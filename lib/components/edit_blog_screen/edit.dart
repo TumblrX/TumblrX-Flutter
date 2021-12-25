@@ -20,7 +20,6 @@ class _EditState extends State<Edit> with SingleTickerProviderStateMixin {
   TextEditingController titleController;
   TextEditingController descriptionController;
   @override
-  
   void initState() {
     titleController = new TextEditingController(
         text: Provider.of<User>(context, listen: false)
@@ -40,7 +39,9 @@ class _EditState extends State<Edit> with SingleTickerProviderStateMixin {
     final blogProvider = Provider.of<BlogScreenConstantProvider>(context);
     return Scaffold(
         body: Container(
-            color:hexToColor( Provider.of<User>(context,listen: false).getActiveBlogBackColor())??Colors.blue,
+            color: hexToColor(Provider.of<User>(context, listen: false)
+                    .getActiveBlogBackColor()) ??
+                Colors.blue,
             child: Stack(
               children: [
                 Column(
@@ -53,7 +54,11 @@ class _EditState extends State<Edit> with SingleTickerProviderStateMixin {
                               decoration: BoxDecoration(
                                   image: DecorationImage(
                                       image: AssetImage('images/header.png'),
-                                      fit: Provider.of<User>(context).getActiveBlogStretchHeaderImage()??true? BoxFit.fill:BoxFit.contain)),
+                                      fit: Provider.of<User>(context)
+                                                  .getActiveBlogStretchHeaderImage() ??
+                                              true
+                                          ? BoxFit.fill
+                                          : BoxFit.contain)),
                               child: Align(
                                 alignment: Alignment.bottomRight,
                                 child: Icon(
@@ -68,14 +73,14 @@ class _EditState extends State<Edit> with SingleTickerProviderStateMixin {
                                 builder: CoverImageBottomSheet().build);
                           },
                         ),
-                      EditAppBar().defaultAppBar(context),
+                        EditAppBar().defaultAppBar(context),
                       ],
                     ),
                     Container(
                       padding: EdgeInsets.only(top: 20),
                       child: TextField(
                         textAlign: TextAlign.center,
-                        textInputAction: TextInputAction.newline,
+                        textInputAction: TextInputAction.done,
                         style: TextStyle(
                           fontSize: 35,
                           decoration: TextDecoration.underline,
@@ -91,7 +96,13 @@ class _EditState extends State<Edit> with SingleTickerProviderStateMixin {
                               decoration: TextDecoration.none),
                         ),
                         controller: titleController,
-                        onChanged: (value) {
+                        onSubmitted: (value) {
+                          
+                                    
+                          Provider.of<User>(context, listen: false)
+                              .settActiveBlogTitleBeforeEdit(
+                                  Provider.of<User>(context, listen: false)
+                                      .getActiveBlogTitle());
                           Provider.of<User>(context, listen: false)
                               .setActiveBlogTitle(value);
                         },
@@ -100,11 +111,17 @@ class _EditState extends State<Edit> with SingleTickerProviderStateMixin {
                     TextField(
                       textAlign: TextAlign.center,
                       controller: descriptionController,
-                      onChanged: (value) {
+                      onSubmitted: (value) {
+                         Provider.of<User>(context, listen: false)
+                            .setActiveBlogDescriptionBeforeEdit(
+                                  Provider.of<User>(context, listen: false)
+                                      .getActiveBlogDescription());
+
+
                         Provider.of<User>(context, listen: false)
                             .setActiveBlogDescription(value);
                       },
-                      textInputAction: TextInputAction.newline,
+                      textInputAction: TextInputAction.done,
                       style: TextStyle(
                         fontSize: 15,
                         decoration: TextDecoration.underline,
@@ -121,13 +138,13 @@ class _EditState extends State<Edit> with SingleTickerProviderStateMixin {
                     ),
                     EditButtons(),
                     //if (Provider.of<User>(context).getActiveBlogIsPrimary())
-                      //upperTabBar(_tabController, context),
+                    //upperTabBar(_tabController, context),
                     //if (Provider.of<User>(context).getActiveBlogIsPrimary())
-                      //bottomTabBar(_tabController, context),
+                    //bottomTabBar(_tabController, context),
                     //if (!Provider.of<User>(context).getActiveBlogIsPrimary())
-                      //Container(
-                        //child: Column(),
-                      //)
+                    //Container(
+                    //child: Column(),
+                    //)
                   ],
                 ),
                 Provider.of<User>(context).getIsAvatarCircle() == true

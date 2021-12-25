@@ -33,12 +33,13 @@ class _BlogScreenState extends State<BlogScreen>
     _tabController = new TabController(length: 3, vsync: this);
 
     super.initState();
-   // Provider.of<User>(context, listen: false)
-     //   .getActiveBlog()
-       // .blogPosts(context);
 
+    //intialize befor edit
+        
 
-        /// Provider.of<User>(context, listen: false). getUserInfo(context);
+    
+
+  // print(Provider.of<User>(context, listen: false).getActiveBlogPosts()[0].blogTitle);
   }
 
   @override
@@ -121,7 +122,7 @@ class _BlogScreenState extends State<BlogScreen>
                           ///show an avatar in square
                           Visibility(
                               visible: Provider.of<User>(context, listen: false)
-                                  .getActiveBlogShowAvatar(),
+                                  .getActiveBlogShowAvatar()?? true,
                               child: Provider.of<User>(context, listen: false)
                                       .getIsAvatarCircle()
                                   ? AvatarImage()

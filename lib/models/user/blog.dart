@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartdoc/dartdoc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
@@ -71,6 +73,14 @@ class Blog {
   bool _showHeadeImage;
 //strech header imae
   bool _stretchHeaderImage;
+  //title befor Edit
+  String _titleBeforeEdit;
+//decription before Edit
+  String _descriptionBeforEdit;
+  //isCircleAvatar
+  bool _isCircleBeforEdit;
+  String _headerImage;
+  String _backGroundColorBeforEdit;
 
   /// themes of Blog
   BlogTheme blogTheme;
@@ -98,10 +108,19 @@ class Blog {
       throw Exception('missing required parameter "handle"');
 
     // blog title
-    if (json.containsKey('title'))
+    if (json.containsKey('title')) {
       _title = json['title'];
-    else
+      _titleBeforeEdit = json['title'];
+    } else
       throw Exception('missing required parameter "title"');
+    //blog description
+    if (json.containsKey('description')) {
+      _description = json['description'];
+      _descriptionBeforEdit = json['description'];
+      
+    }
+    // else
+    // throw Exception('missing required parameter "description"');
 
     if (json.containsKey('avatar')) {
       _blogAvatar = json['avatar'] == 'none'
@@ -111,8 +130,10 @@ class Blog {
     }
     // blog isPrivate flag
     if (json.containsKey('isPrivate')) _isPrivate = json['isPrivate'];
-    if (json.containsKey('isAvatarCircle'))
+    if (json.containsKey('isAvatarCircle')) {
       isCircleAvatar = json['isAvatarCircle'];
+      _isCircleBeforEdit = json['isAvatarCircle'];
+    }
 
     // blog isPrimary flag
     if (json.containsKey('isPrimary')) _isPrimary = json['isPrimary'];
@@ -157,14 +178,15 @@ class Blog {
       //data['customappearance']['globalparameters']['backgroundcolor'] =
       //  this._backGroundColor;
     }
-    data['description'] = this._description;
+    if (this._description != null) data['description'] = this._description;
 
-    data['handle'] = this._handle;
-    data['title'] = this._title;
-    data['isPrimary'] = this._isPrimary.toString();
+    if (this._handle != null) data['handle'] = this._handle;
+    if (this._title != null) data['title'] = this._title;
+    if (this._isPrimary != null) data['isPrimary'] = this._isPrimary.toString();
     //data['followedBy'] = convert.jsonEncode(this._followedBy);
-    data['isPrivate'] = this._isPrivate.toString();
-    data['isAvatarCircle'] = this.isCircleAvatar.toString();
+    if (this._isPrivate != null) data['isPrivate'] = this._isPrivate.toString();
+    if (this.isCircleAvatar != null)
+      data['isAvatarCircle'] = this.isCircleAvatar.toString();
 
     return data;
   }
@@ -179,7 +201,10 @@ class Blog {
   bool get showAvatar => _showAvatar;
   bool get showHeadeImage => _showHeadeImage;
   bool get stretchHeaderImage => _stretchHeaderImage;
-
+  String get titleBeforEdit => _titleBeforeEdit;
+  String get descriptionBeforEdit => _descriptionBeforEdit;
+  bool get isCircleBeforEdit => _isCircleBeforEdit;
+  String get backGroundColorBeforEdit => _backGroundColorBeforEdit;
   Future<String> getBlogAvatar() async {
     final String endPoint = 'blog/';
     final Map<String, dynamic> reqParameters = {
@@ -220,6 +245,22 @@ class Blog {
       print(error.toString());
       return null;
     }
+  }
+
+  void setTitleBeforeEdit(String title) {
+    this._titleBeforeEdit = title;
+  }
+
+  void setDescriptionBeforEdit(String description) {
+    this._descriptionBeforEdit = description;
+  }
+
+  void setIsCircleBeforEditing(bool isCircle) {
+    this._isCircleBeforEdit = isCircle;
+  }
+
+  void setBackGroundColorBeforEditing(String color) {
+    this._backGroundColorBeforEdit = color;
   }
 
   void getPosts() async {
@@ -284,12 +325,12 @@ class Blog {
     this._stretchHeaderImage = stretch;
   }
 
-  static Future pickImage(int indicator) async {
+  Future pickImage(int indicator) async {
     final image = await ImagePicker().pickImage(source: ImageSource.gallery);
     print(image.path);
     if (image == null) return;
-    if (indicator == 1) Blog().setBlogAvatar(image.path);
-    if (indicator == 2) Blog().setHeaderImage(image.path);
+    if (indicator == 1) this._blogAvatar = File(image.path).toString();
+    if (indicator == 2) this._headerImage = File(image.path).toString();
   }
 
   ///Get Blog Posts
@@ -306,8 +347,20 @@ class Blog {
         await ApiHttpRepository.sendGetRequest(endPoint, headers: headers);
 
     if (response.statusCode == 200) {
+      print(response.statusCode);
       final resposeObject =
           convert.jsonDecode(response.body) as Map<String, dynamic>;
+
+      if (resposeObject['data'] != {}) {
+        List<Map<String, dynamic>>.from(resposeObject['data']).map((postData) {
+          try {
+            print(postData);
+            this._posts.add(Post.fromJson(postData));
+          } catch (e) {
+            print(e);
+          }
+        });
+      }
 
       print(resposeObject);
     } else {
@@ -370,7 +423,7 @@ class Blog {
         }
       }
 
-      print(responseObject);
+      //print(responseObject);
     } else {
       print(response.statusCode);
     }

@@ -14,7 +14,7 @@ class EditButtons extends StatefulWidget {
 class _EditButtonsState extends State<EditButtons> {
   @override
   Widget build(BuildContext context) {
-    final blogProvider = Provider.of<BlogScreenConstantProvider>(context);
+   // final blogProvider = Provider.of<BlogScreenConstantProvider>(context);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -34,6 +34,10 @@ class _EditButtonsState extends State<EditButtons> {
                                 Provider.of<User>(context, listen: false)
                                     .getActiveBlogBackColor()),
                             onColorChange: (Color color) {
+
+                               Provider.of<User>(context, listen: false)
+                                  .settActiveBlogBackGroundColorBeforeEdit(Provider.of<User>(context, listen: false).getActiveBlogBackColor()
+                                      );
                               
                               Provider.of<User>(context, listen: false)
                                   .setActiveBlogBackColor(
@@ -46,6 +50,7 @@ class _EditButtonsState extends State<EditButtons> {
                   style: TextStyle(color: Color(0xffc7c1c1))),
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all<Color>(
+
                    hexToColor( Provider.of<User>(context,listen: false).getActiveBlogBackColor())??Colors.blue,),
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
