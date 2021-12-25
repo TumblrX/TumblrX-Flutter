@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:tumblrx/components/chatting/square_avatar.dart';
 import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/screens/chat_screen.dart';
-import 'package:tumblrx/services/messaging.dart';
 
 ///Widget that appears in new conversation for each user
 class NewConversationTile extends StatelessWidget {
@@ -27,8 +26,6 @@ class NewConversationTile extends StatelessWidget {
         style: TextStyle(fontWeight: FontWeight.bold),
       ),
       onTap: () {
-        String chatId =
-            Provider.of<Messaging>(context, listen: false).getChatId(userId);
         Navigator.pop(context);
         Navigator.push(
           context,

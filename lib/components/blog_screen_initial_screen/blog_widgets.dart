@@ -12,7 +12,9 @@ Widget upperTabBar(TabController _tabController, BuildContext context) {
   return Container(
 
       /// start of Tab Bars
-      color: hexToColor( Provider.of<User>(context,listen: false).getActiveBlogBackColor())??Colors.blue,
+      color: hexToColor(Provider.of<User>(context, listen: false)
+              .getActiveBlogBackColor()) ??
+          Colors.blue,
       child: TabBar(
         unselectedLabelColor: Color(0xffc7c1c1),
         labelColor: BlogScreenConstant.accent,
@@ -48,14 +50,14 @@ Widget upperTabBar(TabController _tabController, BuildContext context) {
 }
 
 Widget bottomTabBar(TabController _tabController, BuildContext context) {
-  
-  final blogProvider = Provider.of<BlogScreenConstantProvider>(context);
+  //final blogProvider = Provider.of<BlogScreenConstantProvider>(context);
   return Expanded(
-    
 
       /// pages which display content of each tab bar
       child: Container(
-    color: hexToColor( Provider.of<User>(context,listen: false).getActiveBlogBackColor())??Colors.blue,
+    color: hexToColor(Provider.of<User>(context, listen: false)
+            .getActiveBlogBackColor()) ??
+        Colors.blue,
     child: TabBarView(
       children: [Text('Posts'), Text('Likes'), FollowingCard()],
       controller: _tabController,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:tumblrx/models/user/blog.dart';
+
 import 'package:tumblrx/models/user/user.dart';
 
 class EditAvatarBottomSheet extends StatelessWidget {
@@ -26,7 +26,7 @@ class EditAvatarBottomSheet extends StatelessWidget {
             ),
             title: Text('Choose a photo'),
             onTap: () {
-             print(Provider.of<User>(context, listen: false)
+              print(Provider.of<User>(context, listen: false)
                   .getActiveBlogAvatar());
               Provider.of<User>(context, listen: false)
                   .getActiveBlog()

@@ -15,11 +15,11 @@ void main() {
               (e) => e.message == 'missing reuiqred parameter "type"')));
     });
 
-    test("missing parameter media", () {
-      expect(
-          () => ImageBlock.fromJson({'type': "image"}),
-          throwsA(predicate(
-              (e) => e.message == 'missing required paramter "media"')));
-    });
+    // test("missing parameter media", () {
+    //   expect(
+    //       () => ImageBlock.fromJson({'type': "image"}),
+    //       throwsA(predicate(
+    //           (e) => e.message == 'missing required paramter "media"')));
+    // });
   });
 }
