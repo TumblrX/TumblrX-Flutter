@@ -80,44 +80,55 @@ class _BlogScreenState extends State<BlogScreen>
                         ));
           },
         ),
-        body: SingleChildScrollView(
-            child: ConstrainedBox(
-                constraints: BoxConstraints(
-                    maxHeight:
-                        MediaQuery.of(context).size.height + (12 - 3) * 60),
 
-                /// i will chnge it and make it equal total no of following-3*40
+        body: Center(
+          child: SingleChildScrollView(
+              child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                      maxHeight:
+                          MediaQuery.of(context).size.height + (12 - 3) * 60),
 
-                child: Container(
-                  color: hexToColor(Provider.of<User>(context, listen: false)
-                          .getActiveBlogBackColor()) ??
-                      Colors.blue,
-                  constraints: !kIsWeb
-                      ? BoxConstraints()
-                      : BoxConstraints(
-                          maxWidth: 750.0,
-                          minWidth: MediaQuery.of(context).size.width < 750
-                              ? MediaQuery.of(context).size.width * 0.9
-                              : 750.0,
-                        ),
-                  child: Column(
+                  /// i will chnge it and make it equal total no of following-3*40
 
-                      /// couloum have(the header image , avatar,title, description and tab bars )
+                  child: Container(
+                    color: Color(0xffb03fa8),
+                    constraints: !kIsWeb
+                        ? BoxConstraints()
+                        : BoxConstraints(
+                            maxWidth: 750.0,
+                            minWidth: MediaQuery.of(context).size.width < 750
+                                ? MediaQuery.of(context).size.width * 0.9
+                                : 750.0,
 
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Stack(alignment: Alignment.center, children: <Widget>[
-                          Column(
-                            children: <Widget>[
-                              ///display header image with icons and drop down list
-
-                              HeaderImage(),
-
-                              ///display header image with icons and drop down list
-
-                              TextWriting(),
-                            ],
                           ),
+                    child: Column(
+
+                        /// couloum have(the header image , avatar,title, description and tab bars )
+
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Stack(alignment: Alignment.center, children: <Widget>[
+                            Column(
+                              children: <Widget>[
+                                ///display header image with icons and drop down list
+
+                                HeaderImage(),
+
+                                ///display header image with icons and drop down list
+
+                                TextWriting(),
+                              ],
+                            ),
+
+                            ///show an avatar in square
+                            Visibility(
+                                visible: true,
+                                child: Provider.of<User>(context, listen: false)
+                                        .getIsAvatarCircle()
+                                    ? AvatarImage()
+                                    : Square())
+                          ]),
+
 
                           ///show an avatar in square
                           Visibility(
@@ -142,5 +153,6 @@ class _BlogScreenState extends State<BlogScreen>
                           )
                       ]),
                 ))));
+
   }
 }
