@@ -5,20 +5,21 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:share/share.dart';
 
 class ShareMethods extends StatelessWidget {
-  final String _postUrl;
-  const ShareMethods({Key key, @required String postUrl})
-      : _postUrl = postUrl,
+  final String _postId;
+  const ShareMethods({Key key, @required String postId})
+      : _postId = postId,
         super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final String postUrl = 'tumblrx.me:5000/post/$_postId';
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         // copy method
         InkWell(
           onTap: () async {
-            await FlutterClipboard.copy(_postUrl);
+            await FlutterClipboard.copy(postUrl);
             Navigator.of(context).pop();
 
             showSnackBarMessage(context, 'Copied to clipboard', Colors.green);
@@ -38,7 +39,7 @@ class ShareMethods extends StatelessWidget {
         InkWell(
           onTap: () async {
             String url =
-                'https://t.me/share/url?url=$_postUrl&text=Check this out!';
+                'https://t.me/share/url?url=$postUrl&text=Check this out!';
             bool success = false;
             if (await canLaunch(url)) success = await launch(url);
             Navigator.of(context).pop();
@@ -73,7 +74,7 @@ class ShareMethods extends StatelessWidget {
         InkWell(
           onTap: () async {
             try {
-              await Share.share(_postUrl);
+              await Share.share(postUrl);
               showSnackBarMessage(
                   context, 'Shared successfully!', Colors.green);
             } catch (err) {

@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:tumblrx/services/api_provider.dart';
+import 'package:provider/provider.dart';
+import 'package:tumblrx/models/notes.dart';
+import 'package:tumblrx/services/authentication.dart';
 
 class CommentsPage extends StatefulWidget {
-  CommentsPage({Key key}) : super(key: key);
+  final String _postId;
+  CommentsPage({Key key, @required String postId})
+      : _postId = postId,
+        super(key: key);
 
   @override
   _CommentsPageState createState() => _CommentsPageState();
@@ -11,9 +16,9 @@ class CommentsPage extends StatefulWidget {
 class _CommentsPageState extends State<CommentsPage> {
   @override
   Widget build(BuildContext context) {
-    Future future = ApiHttpRepository.sendGetRequest('');
     return FutureBuilder(
-      future: future,
+      future: Notes.getNotes('comment',
+          Provider.of<Authentication>(context).token, widget._postId),
       builder: (context, snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.active:
@@ -27,7 +32,9 @@ class _CommentsPageState extends State<CommentsPage> {
               return Center(
                 child: Icon(Icons.error_outline),
               );
-            return Container();
+            return Container(
+              child: Text('Comments To be fetched'),
+            );
         }
         return Container();
       },

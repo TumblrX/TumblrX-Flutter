@@ -11,7 +11,6 @@ import 'package:provider/provider.dart';
 import 'package:tumblrx/components/post/post_widget.dart';
 import 'package:tumblrx/models/post.dart';
 import 'package:tumblrx/services/authentication.dart';
-// import 'package:gradient_widgets/gradient_widgets.dart';
 import 'package:tumblrx/services/content.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -70,7 +69,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget _buildListView() {
     if (content.posts.isEmpty)
       return Container(
-        width: 0,
+        child: Center(
+          child: Image.asset('assets/images/empty_content.jpg'),
+        ),
       );
     return Stack(
       children: [

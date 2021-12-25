@@ -1,4 +1,3 @@
-import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:tumblrx/components/post/share_post/blog_selector_widget.dart';
 import 'package:tumblrx/components/post/share_post/search_blog_result.dart';
@@ -7,7 +6,6 @@ import 'package:tumblrx/components/post/share_post/selected_blogs_widget.dart';
 import 'package:tumblrx/components/post/share_post/share_methods_widget.dart';
 import 'package:tumblrx/models/post.dart';
 import 'package:tumblrx/models/user/blog.dart';
-import 'package:tumblrx/utilities/constants.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SharePostWidget extends StatelessWidget {
@@ -42,7 +40,7 @@ class SharePostWidget extends StatelessWidget {
         children: [
           topDecoration(),
           BlogSelector(),
-          ShareMethods(postUrl: _post.postUrl),
+          ShareMethods(postId: _post.id),
           const Divider(
             thickness: 2.5,
           ),

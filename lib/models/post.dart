@@ -99,6 +99,7 @@ class Post {
 
 // ================= getters ===================
   String get id => this._id;
+  bool get liked => this._liked;
   int get likesCount => this._likesCount;
   int get commentsCount => this._commentsCount;
   int get reblogsCount => this._reblogsCount;
@@ -111,6 +112,10 @@ class Post {
   DateTime get publishedOn => _date;
   String get postUrl => _postUrl;
 
+  set liked(bool liked) {
+    this._liked = liked;
+  }
+
   /// Constructs a new instance usin parsed json data
   Post.fromJson(Map<String, dynamic> parsedJson) {
     // ==================== post related data =========================
@@ -119,6 +124,8 @@ class Post {
       this._id = parsedJson['_id'];
     else
       throw Exception('missing required paramter "_id"');
+
+    _postUrl = 'http://www.tumblrx.me:5000/post/$id';
 
     // post type
     if (parsedJson.containsKey('postType'))
@@ -145,16 +152,11 @@ class Post {
         parsedJson['reblog_key'].toString().trim().isNotEmpty)
       _reblogKey = parsedJson['reblog_key'];
 
-    if (parsedJson.containsKey('url'))
-      _postUrl = parsedJson['url'];
-    else
-      _postUrl = 'https://google.com';
     // post flag liked (true => user likes, false => user unlikes)
-    // if (parsedJson.containsKey('liked'))
-    //   liked = parsedJson['liked'];
-    // else
-    //   throw Exception("missing required paramter liked");
-    this._liked = true;
+    if (parsedJson.containsKey('liked'))
+      _liked = parsedJson['liked'];
+    else
+      _liked = false;
 
     // number of comments on the post
     if (parsedJson.containsKey('commentsCount'))
@@ -223,19 +225,21 @@ class Post {
           switch (obj['type'].toString().trim()) {
             case 'text':
               parsedConent.add(new TextBlock.fromJson(obj));
-
               break;
             case 'audio':
               //parsedConent.add(new AudioBlock.fromJson(obj));
               break;
             case 'video':
-              //parsedConent.add(new VideoBlock.fromJson(obj));
+              parsedConent.add(new VideoBlock.fromJson(
+                  {'type': 'video', 'provider': 'youtube'}));
               break;
             case 'image':
               parsedConent.add(new ImageBlock.fromJson(obj));
               break;
             case 'link':
-              //parsedConent.add(new LinkBlock.fromJson(obj));
+              print('link is:');
+              print(obj);
+              parsedConent.add(new LinkBlock.fromJson(obj));
               break;
             default:
               print(obj);
@@ -245,6 +249,20 @@ class Post {
           print('couldn\'t parse $obj');
         }
       });
+      parsedConent.add(
+          new VideoBlock.fromJson({'type': 'video', 'provider': 'youtube'}));
+      parsedConent.add(new AudioBlock.fromJson({
+        'type': 'audio',
+        'provider': 'soundcloud',
+        'url':
+            'https://soundcloud.com/youssefelsahaby/01-1?in=youssefelsahaby/sets/asmaa-allah&si=00bdbc4788484a8e81609dc404e0d240&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing'
+      }));
+      // parsedConent.add(new VideoBlock.fromJson({
+      //   'type': 'video',
+      //   'provider': 'vimeo',
+      //   "url": "https://vimeo.com/142624091"
+      // }));
+
       this._content.addAll(parsedConent);
     } catch (error) {
       print('err @parseContent $error');
@@ -268,7 +286,9 @@ class Post {
         print(response.body);
         throw Exception('post ID or reblog_key was not found');
       } else {
-        this._liked = false;
+        this._liked = true;
+        this._likesCount++;
+        this._totalNotes++;
         return true;
       }
     } catch (error) {
@@ -291,6 +311,9 @@ class Post {
         throw Exception('post ID or reblog_key was not found');
       } else {
         this._liked = false;
+        this._likesCount--;
+
+        this._totalNotes--;
         return true;
       }
     } catch (error) {
