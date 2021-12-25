@@ -65,7 +65,7 @@ class _BottomNavBarWidgetState extends State<BottomNavBarWidget> {
           label: 'Explore',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.notifications),
+          icon: Icon(Icons.emoji_emotions_outlined),
           label: 'Notifications',
         ),
         BottomNavigationBarItem(

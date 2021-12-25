@@ -10,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/components/post/post_widget.dart';
 import 'package:tumblrx/models/post.dart';
-import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/services/authentication.dart';
 import 'package:tumblrx/services/content.dart';
 
@@ -40,9 +39,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
     // as a callback function
     _controller = ScrollController()..addListener(_scrollListner);
     super.initState();
-
-    
-   
   }
 
   @override
@@ -101,7 +97,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    
     content = Provider.of<Content>(context, listen: false);
     auth = Provider.of<Authentication>(context, listen: false);
     return Container(

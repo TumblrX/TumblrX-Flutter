@@ -91,6 +91,7 @@ class Content extends ChangeNotifier {
     print(resposeObject);
 
     // for pagination, set total number of posts
+
     if (resposeObject.containsKey('posts'))
       _totalPosts += resposeObject['posts'].length ?? 0;
     if (resposeObject.containsKey('for-youPosts'))

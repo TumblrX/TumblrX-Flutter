@@ -109,6 +109,7 @@ class Authentication extends ChangeNotifier {
         throw Exception('error in the connection');
       } else {
         var responseObject = convert.jsonDecode(response.body);
+        print(responseObject);
         token = responseObject['token'];
         emailExist = true;
         notifyListeners();
@@ -143,7 +144,7 @@ class Authentication extends ChangeNotifier {
         Map<String, dynamic> responseObject =
             convert.jsonDecode(response.body) as Map<String, dynamic>;
         print(response.statusCode);
-        //print(responseObject);
+
         try {
           final blogsResponse = await http.get(
             Uri.parse(ApiHttpRepository.api + 'api/user/get-blogs'),

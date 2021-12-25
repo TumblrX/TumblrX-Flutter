@@ -22,6 +22,9 @@ class User extends ChangeNotifier {
   /// user name
   String _username;
 
+  /// user id
+  String _id;
+
   /// number of user likes
   int _likes;
 
@@ -51,6 +54,12 @@ class User extends ChangeNotifier {
   /// constructor of the class using decoded json
   User.fromJson(Map<String, dynamic> json) {
     // =====
+    // id
+    if (json.containsKey('id'))
+      _id = json['id'];
+    else
+      throw Exception('missing required parameter "id"');
+
     // username
     if (json.containsKey('name'))
       _username = json['name'];
@@ -103,6 +112,10 @@ class User extends ChangeNotifier {
   ///set user data after login
   void setLoginUserData(Map<String, dynamic> json, BuildContext context) {
     if (json.containsKey('following')) _following = json['following'];
+    if (json.containsKey('id'))
+      _id = json['id'];
+    else
+      throw Exception('missing required parameter "id"');
     if (json.containsKey('default_post_format'))
       _defaultPostFormat = json['default_post_format'];
     if (json.containsKey('name'))
@@ -161,6 +174,12 @@ class User extends ChangeNotifier {
   /// getter for active user blogs list
   List<Blog> get userBlogs => _blogs;
 
+  ///getter for username
+  String get username => _username;
+
+  ///getter for userid
+  String get userId => _id;
+
   ///Returns the link to the current active blog avatar
   String getActiveBlogAvatar() {
     return _blogs[_activeBlogIndex].blogAvatar;
@@ -179,6 +198,7 @@ class User extends ChangeNotifier {
     _blogs[_activeBlogIndex].setTitleBeforeEdit(title);
     notifyListeners();
   }
+
   String getActiveBlogBackGroundColoreBeforeEdit() {
     return _blogs[_activeBlogIndex].backGroundColorBeforEdit;
   }
@@ -196,7 +216,8 @@ class User extends ChangeNotifier {
     _blogs[_activeBlogIndex].setDescriptionBeforEdit(description);
     notifyListeners();
   }
- bool getActiveBlogIsCircleBeforeEdit() {
+
+  bool getActiveBlogIsCircleBeforeEdit() {
     return _blogs[_activeBlogIndex].isCircleBeforEdit;
   }
 
@@ -262,6 +283,13 @@ class User extends ChangeNotifier {
 
   String getActiveBlogBackColor() {
     return _blogs[_activeBlogIndex].backGroundColor;
+  }
+
+  String getPrimaryBlogAvatar() {
+    for (Blog blog in _blogs) {
+      if (blog.isPrimary) return blog.blogAvatar;
+    }
+    return null;
   }
 
   bool getActiveShowHeaderImage() {

@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/screens/blog_screen.dart';
 import 'package:tumblrx/screens/main_screen.dart';
+import 'package:tumblrx/screens/new_conversation_screen.dart';
 import 'package:tumblrx/screens/page_not_found.dart';
 import 'package:tumblrx/screens/post_screen.dart';
 import 'package:tumblrx/screens/signup_agecheck.dart';
@@ -146,7 +147,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         ChangeNotifierProvider<User>(
           create: (context) => User(),
         ),
-        
         ChangeNotifierProvider<Content>(
           create: (context) => Content(),
         ),
@@ -202,6 +202,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           SignUpPickTags.id: (context) => SignUpPickTags(),
           SignUpUserData.id: (context) => SignUpUserData(),
           LogInUserData.id: (context) => LogInUserData(),
+          NewConversationScreen.id: (context) => NewConversationScreen(),
         },
       ),
     );
