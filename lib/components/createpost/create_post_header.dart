@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/components/modal_bottom_sheet.dart';
+import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/services/creating_post.dart';
 import 'package:tumblrx/utilities/constants.dart';
 
@@ -9,6 +10,8 @@ import 'create_post_options.dart';
 
 ///The Top header of the creating post container shows posting options button and Post button
 class CreatePostHeader extends StatelessWidget {
+  final bool isReblog;
+  CreatePostHeader({this.isReblog = false});
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -47,7 +50,9 @@ class CreatePostHeader extends StatelessWidget {
                   Provider.of<CreatingPost>(context).postOption ==
                           PostOption.draft
                       ? 'Save draft'
-                      : 'Post',
+                      : isReblog
+                          ? 'Reblog'
+                          : 'Post',
                   style: TextStyle(
                     fontSize: 16.0,
                     color: Provider.of<CreatingPost>(context).isPostEnabled
@@ -69,10 +74,28 @@ class CreatePostHeader extends StatelessWidget {
             ),
           ),
           onPressed: Provider.of<CreatingPost>(context).isPostEnabled
-              ? () {
-                  Provider.of<CreatingPost>(context, listen: false)
-                      .postData(context);
+              ? () async {
+                  final bool result =
+                      await Provider.of<CreatingPost>(context, listen: false)
+                          .postData(context);
                   Navigator.pop(context);
+                  if (result)
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        backgroundColor: Colors.green,
+                        content: Text('Posted to ' +
+                            Provider.of<User>(context, listen: false)
+                                .getActiveBlogName()),
+                      ),
+                    );
+                  else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        backgroundColor: Colors.red,
+                        content: Text('Posting failed :('),
+                      ),
+                    );
+                  }
                 }
               : null,
         ),

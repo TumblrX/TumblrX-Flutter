@@ -42,6 +42,17 @@ const Map<TextStyleType, TextStyle> kTextStyleMap = {
   TextStyleType.Lucille: kLucilleTextStyle
 };
 
+///Mapping Style Types from back-end from to creating post form
+const Map<String, TextStyleType> kTextSubtypeMap = {
+  'heading1': TextStyleType.Bigger,
+  'heading2': TextStyleType.Biggest,
+  'quote': TextStyleType.Quote,
+  'chat': TextStyleType.Chat,
+  'quirky': TextStyleType.Lucille
+};
+
+const kPrimaryColor = Color(0xFF001935);
+
 //welcome screen title tumblrx
 const KWelcomeScreenTitle = TextStyle(
   fontFamily: 'Pacifico',

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/services/blog_screen.dart';
 import '../blog_screen_constant.dart';
 import 'avatar_bottomsheet.dart';
@@ -20,7 +21,9 @@ class EditAvatar {
                   .bottomCoverColor,
               child: CircleAvatar(
                 radius: 38,
-                backgroundImage: AssetImage(BlogScreenConstant.avatarPath),
+                backgroundImage: NetworkImage(
+                  Provider.of<User>(context).getActiveBlogAvatar(),
+                ),
               )),
           IconButton(
               onPressed: () {
@@ -51,7 +54,10 @@ class EditAvatar {
             height: MediaQuery.of(context).size.height / 8.8,
             child:   ClipRRect(
               borderRadius: BorderRadius.circular(3),
-              child: Image.asset('images/avatar.png'),
+              child: Image.network(
+                  Provider.of<User>(context).getActiveBlogAvatar(),
+                   fit: BoxFit.cover,
+                ),
             ),
           
             decoration: BoxDecoration(
@@ -63,6 +69,7 @@ class EditAvatar {
           
           IconButton(
               onPressed: () {
+                
                  showModalBottomSheet( context: context,
                 builder:EditAvatarBottomSheet().build);
 

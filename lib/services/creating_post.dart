@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/models/creatingpost/text_field_data.dart';
 import 'package:tumblrx/models/posts/inline_formatting.dart';
+import 'package:tumblrx/models/post.dart';
 import 'package:tumblrx/models/posts/text_block.dart';
 import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/services/api_provider.dart';
@@ -13,11 +14,16 @@ import 'package:http/http.dart' as http;
 import 'package:tumblrx/utilities/hex_color_value.dart';
 import 'dart:convert' as convert;
 import 'package:http_parser/http_parser.dart';
-
 import 'authentication.dart';
 
 ///A Class that manages all creating post functionalities and prepare data for back end
 class CreatingPost extends ChangeNotifier {
+  ///boolean value if the post is reblog
+  bool isReblog;
+
+  ///boolean value if the post is edit
+  bool isEdit;
+
   ///followed tags of the current user
   List<String> followedHashtags;
 
@@ -51,9 +57,21 @@ class CreatingPost extends ChangeNotifier {
   ///The Image Picker class that uploads/takes pictures or videos.
   ImagePicker _picker;
 
+  ///postID if it is editing post
+  String _editPostId;
+
   ///Initializes all post options and variables.
-  void initializePostOptions(BuildContext context) {
-    lastFocusedIndex = 0;
+  void initializePostOptions(BuildContext context,
+      {bool reblog = false,
+      bool edit = false,
+      Post rebloggedPost,
+      List<Map<String, dynamic>> editPostContent,
+      String editPostId,
+      List<String> editPostTags}) {
+    isReblog = reblog;
+    isEdit = edit;
+    _editPostId = editPostId;
+    lastFocusedIndex = reblog ? 1 : 0;
     isPostEnabled = false;
     shareToTwitter = false;
     postOption = PostOption.published;
@@ -77,17 +95,84 @@ class CreatingPost extends ChangeNotifier {
       'poetry'
     ];
     chosenTextStyle = TextStyleType.Normal;
-    postContent = [
-      {
+    postContent = [];
+    if (!isEdit)
+      postContent.add({
         'type': PostContentType.text,
         'content': {
           'data': TextFieldData(chosenTextStyle),
         }
-      },
-    ];
-    _changeFocus(0);
+      });
+
+    if (isReblog) {
+      postContent.insert(
+        0,
+        {
+          'type': 'PostReblog',
+          'content': {
+            'data': rebloggedPost,
+          }
+        },
+      );
+      setIsEnabled();
+    }
+    if (!isEdit) _changeFocus(isReblog ? 1 : 0);
     _picker = ImagePicker();
+    if (isEdit) {
+      _mapEditPostContent(editPostContent);
+      if (editPostTags != null) chosenHashtags = editPostTags;
+      addTextField(postContent.length - 1);
+    }
     notifyListeners();
+  }
+
+  ///Maps the json data in the back-end of a post to the used form in creating post
+  void _mapEditPostContent(List<Map<String, dynamic>> editedPostContent) {
+    for (Map<String, dynamic> contentBlock in editedPostContent) {
+      if (contentBlock['type'] == 'text') {
+        TextStyleType textType = TextStyleType.Normal;
+        if (contentBlock.containsKey('subtype')) {
+          textType = kTextSubtypeMap[contentBlock['subtype']];
+        }
+        TextFieldData textFieldData = TextFieldData(textType);
+        textFieldData.addText(contentBlock['text']);
+        postContent.add({
+          'type': PostContentType.text,
+          'content': {
+            'data': textFieldData,
+          }
+        });
+      } else if (contentBlock['type'] == 'link') {
+        postContent.add({
+          'type': PostContentType.link,
+          'content': {
+            'link': contentBlock['url'],
+          }
+        });
+      } else if (contentBlock['type'] == 'image' &&
+          contentBlock['media'] == 'image/gif') {
+        postContent.add({
+          'type': PostContentType.gif,
+          'content': {
+            'link': contentBlock['url'],
+          }
+        });
+      } else if (contentBlock['type'] == 'image') {
+        postContent.add({
+          'type': PostContentType.image,
+          'content': {
+            'data': {'url': contentBlock['url']},
+          }
+        });
+      } else if (contentBlock['type'] == 'video') {
+        postContent.add({
+          'type': PostContentType.video,
+          'content': {
+            'data': {'url': contentBlock['url']},
+          }
+        });
+      }
+    }
   }
 
   ///sets the [option] of the post whether it's (Post Now(Published), Private, Draft)
@@ -155,7 +240,9 @@ class CreatingPost extends ChangeNotifier {
   ///deletes the text field of the sent [index]
   ///It doesn't delete it if it has index 0
   void removeTextField(int index) {
-    if (index != 0 && postContent[index - 1]['type'] == PostContentType.text) {
+    int firstTextFieldIndex = isReblog ? 1 : 0;
+    if (index != firstTextFieldIndex &&
+        postContent[index - 1]['type'] == PostContentType.text) {
       postContent.removeAt(index);
       _changeFocus(index - 1);
       notifyListeners();
@@ -347,22 +434,21 @@ class CreatingPost extends ChangeNotifier {
   }
 
   ///It maps the collected data about the post to the final form and send it in a post request.
-  void postData(BuildContext context) async {
-    String url = 'https://1b0da51d-62c7-4172-b0c5-c290339c6fb6.mock.pstmn.io';
-    //     'https://54bd9e92-6a19-4377-840f-23886631e1a8.mock.pstmn.io/createpost'; //TODO: edit it
-    // var req = http.MultipartRequest('POST', Uri.parse(url));
+  Future<bool> postData(BuildContext context) async {
     List<Map> files = [];
-    Map<String, dynamic> requestBody = {
-      'blog': Provider.of<User>(context, listen: false).getActiveBlogId(),
-      'postType': 'text',
-      'tags': chosenHashtags,
-      'state': postOption.toString().substring(11),
-      'send_to_twitter': shareToTwitter,
-      'blogAttribution': {
-        'blogTitle':
-            Provider.of<User>(context, listen: false).getActiveBlogTitle(),
-      }
-    };
+    Map<String, dynamic> requestBody = isEdit
+        ? {}
+        : {
+            'blog': Provider.of<User>(context, listen: false).getActiveBlogId(),
+            'postType': 'text',
+            'tags': chosenHashtags,
+            'state': postOption.toString().substring(11),
+            'send_to_twitter': shareToTwitter,
+            'blogAttribution': {
+              'blogTitle': Provider.of<User>(context, listen: false)
+                  .getActiveBlogTitle(),
+            }
+          };
 
     List<Map> postContentList = [];
     for (int i = 0; i < postContent.length; i++) {
@@ -373,37 +459,44 @@ class CreatingPost extends ChangeNotifier {
             .text
             .length;
         if (textLength > 0) postContentList.add(_getTextBlockMap(i));
+      } else if (postContent[i]['type'] == 'PostReblog') {
+        requestBody =
+            _addReblogBody(requestBody, postContent[i]['content']['data'].id);
       } else if (postContent[i]['type'] == PostContentType.gif) {
         postContentList.add(_getGifBlockMap(i));
       } else if (postContent[i]['type'] == PostContentType.link) {
         postContentList.add(_getLinkBlockMap(i));
       } else if (postContent[i]['type'] == PostContentType.image) {
         Map map = _getImageBlockMap(i);
-        files.add({
-          'identifier': map['identifier'],
-          'path': postContent[i]['content'].path,
-          'filename': postContent[i]['content'].name,
-          'contentType': MediaType("image", "jpeg")
-        });
-        requestBody[map['identifier']] = await MultipartFile.fromFile(
-          postContent[i]['content'].path,
-          filename: postContent[i]['content'].name,
-          contentType: MediaType("image", "jpeg"),
-        ); //postContent[i]['content'].name;
+        if (map.containsKey('identifier')) {
+          files.add({
+            'identifier': map['identifier'],
+            'path': postContent[i]['content'].path,
+            'filename': postContent[i]['content'].name,
+            'contentType': MediaType("image", "jpeg")
+          });
+          requestBody[map['identifier']] = await MultipartFile.fromFile(
+            postContent[i]['content'].path,
+            filename: postContent[i]['content'].name,
+            contentType: MediaType("image", "jpeg"),
+          );
+        }
         postContentList.add(map);
       } else if (postContent[i]['type'] == PostContentType.video) {
         Map map = _getVideoBlockMap(i);
-        files.add({
-          'identifier': map['identifier'],
-          'path': postContent[i]['content'].path,
-          'filename': postContent[i]['content'].name,
-          'contentType': MediaType("video", "mp4")
-        });
-        requestBody[map['identifier']] = await MultipartFile.fromFile(
-          postContent[i]['content'].path,
-          filename: postContent[i]['content'].name,
-          contentType: MediaType("video", "mp4"),
-        );
+        if (map.containsKey('identifier')) {
+          files.add({
+            'identifier': map['identifier'],
+            'path': postContent[i]['content'].path,
+            'filename': postContent[i]['content'].name,
+            'contentType': MediaType("video", "mp4")
+          });
+          requestBody[map['identifier']] = await MultipartFile.fromFile(
+            postContent[i]['content'].path,
+            filename: postContent[i]['content'].name,
+            contentType: MediaType("video", "mp4"),
+          );
+        }
         postContentList.add(map);
       }
     }
@@ -415,26 +508,46 @@ class CreatingPost extends ChangeNotifier {
       //dio.options.headers['content-Type'] = 'application/json';
       dio.options.headers["authorization"] =
           Provider.of<Authentication>(context, listen: false).token;
-      print(convert.jsonEncode(requestBody));
-      print(Provider.of<User>(context, listen: false).getActiveBlogId());
-      var response = await dio.post(
-        ApiHttpRepository.api +
-            'api/blog/' +
-            Provider.of<User>(context, listen: false).getActiveBlogId() +
-            '/posts',
-        data: body,
-        onSendProgress: (int sent, int total) {
-          print('$sent $total');
-        },
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: kPrimaryColor,
+          content: Text('Processing the media for your post...'),
+        ),
       );
 
+      String createPostEndPoint = 'api/blog/' +
+          Provider.of<User>(context, listen: false).getActiveBlogId() +
+          '/posts';
+      String editPostEndPoint = 'api/post/' + _editPostId;
+      var response;
+      if (isEdit) {
+        response = await dio.put(
+          ApiHttpRepository.api + editPostEndPoint,
+          data: body,
+          onSendProgress: (int sent, int total) {
+            print('$sent $total');
+          },
+        );
+      } else {
+        response = await dio.post(
+          ApiHttpRepository.api + createPostEndPoint,
+          data: body,
+          onSendProgress: (int sent, int total) {
+            print('$sent $total');
+          },
+        );
+      }
+
       print('Response status: ${response.statusCode}');
+      if (response.statusCode == 201 || response.statusCode == 200)
+        return true;
+      else
+        return false;
     } catch (e) {
       print(e);
+      return false;
     }
-
-    // req.fields.addAll(requestBody);
-    //final response = await req.send();
   }
 
   ///Converts text data of index [i] to final map block format
@@ -512,11 +625,33 @@ class CreatingPost extends ChangeNotifier {
 
   ///Converts image of index [i] to final map block format
   Map _getImageBlockMap(int i) {
+    if (postContent[i]['content'] is Map &&
+        postContent[i]['content']['data'].containsKey('url'))
+      return {
+        'type': 'image',
+        'media': 'image/jpeg',
+        'url': postContent[i]['content']['data']['url']
+      };
     return {'type': 'image', 'media': 'image/jpeg', 'identifier': i.toString()};
   }
 
   ///Converts video of index [i] to final map block format
   Map _getVideoBlockMap(int i) {
+    if (postContent[i]['content'] is Map &&
+        postContent[i]['content']['data'].containsKey('url')) {
+      return {
+        'type': 'video',
+        'media': 'video/mp4',
+        'url': postContent[i]['content']['data']['url']
+      };
+    }
     return {'type': 'video', 'media': 'video/mp4', 'identifier': i.toString()};
+  }
+
+  ///Adds reblog data to the request body
+  Map<String, dynamic> _addReblogBody(Map<String, dynamic> body, String id) {
+    body['reblogData'] = {};
+    body['reblogData']['parentPostId'] = id;
+    return body;
   }
 }

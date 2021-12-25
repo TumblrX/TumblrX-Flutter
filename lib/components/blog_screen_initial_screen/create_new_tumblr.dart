@@ -16,7 +16,6 @@ class CreateNewTumblrPage extends StatelessWidget {
           child: Padding(
               padding: EdgeInsets.only(left: 20, right: 50),
               child: TextFormField(
-                
 
                   controller: _controller,
                 

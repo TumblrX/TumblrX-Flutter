@@ -146,9 +146,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         ChangeNotifierProvider<User>(
           create: (context) => User(),
         ),
-        ChangeNotifierProvider<Blog>(
-          create: (context) => Blog(),
-        ),
+        
         ChangeNotifierProvider<Content>(
           create: (context) => Content(),
         ),

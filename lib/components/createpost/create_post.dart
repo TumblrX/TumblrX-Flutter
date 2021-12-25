@@ -10,10 +10,11 @@ import 'create_post_user.dart';
 
 ///Creating Post Container shows the Text Editor and all Post creating options
 class CreatePost extends StatelessWidget {
-  CreatePost({this.topPadding});
+  CreatePost({this.topPadding, this.isReblog = false});
 
   ///top padding sent to the widget to show it below status bar
   final double topPadding;
+  final bool isReblog;
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +49,9 @@ class CreatePost extends StatelessWidget {
             Flexible(
               child: Column(
                 children: [
-                  CreatePostHeader(),
+                  CreatePostHeader(
+                    isReblog: isReblog,
+                  ),
                   SizedBox(
                     height: 10.0,
                   ),
