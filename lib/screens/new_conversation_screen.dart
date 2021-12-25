@@ -4,6 +4,7 @@ import 'package:tumblrx/components/chatting/new_conversation_tile.dart';
 import 'package:tumblrx/services/api_provider.dart';
 import 'package:tumblrx/utilities/constants.dart';
 
+///Shows suggested users for new conversation
 class NewConversationScreen extends StatelessWidget {
   static String id = 'new_conversation_screen';
   @override
@@ -48,7 +49,7 @@ class NewConversationScreen extends StatelessWidget {
                   ),
                   NewConversationTile(
                     username: 'Example',
-                    userId: '61b21ee80b8aaec60c5af159',
+                    userId: '61b72b2fcf6c2aaab9a1e406',
                     userAvatar: ApiHttpRepository.api +
                         "uploads/post/image/post-1639258474966-61b28a610a654cdd7b39171c.jpeg",
                   ),

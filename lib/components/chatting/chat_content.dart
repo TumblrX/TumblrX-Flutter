@@ -63,7 +63,7 @@ class ChatContent extends StatelessWidget {
           Expanded(
             child: FutureBuilder(
               future: Provider.of<Messaging>(context, listen: false)
-                  .getChatContent(context, chatId, userId),
+                  .getChatContent(userId),
               builder: (BuildContext context, AsyncSnapshot snap) {
                 if (snap.connectionState == ConnectionState.done) {
                   return ListView(
@@ -91,24 +91,24 @@ class ChatContent extends StatelessWidget {
     List<Widget> messagesList = [];
 
     for (int i = 0;
-        i < Provider.of<Messaging>(context).getChatMessages(chatId).length;
+        i < Provider.of<Messaging>(context).getChatMessages(userId).length;
         i++) {
       ChatMessage chatMessage =
-          Provider.of<Messaging>(context).getChatMessages(chatId)[i];
+          Provider.of<Messaging>(context).getChatMessages(userId)[i];
       bool isPreviousSame = false;
       bool isPreviousTimeBig = true;
       if (i != 0) {
         if (Provider.of<Messaging>(context)
-                .getChatMessages(chatId)[i - 1]
+                .getChatMessages(userId)[i - 1]
                 .isMe ==
-            Provider.of<Messaging>(context).getChatMessages(chatId)[i].isMe)
+            Provider.of<Messaging>(context).getChatMessages(userId)[i].isMe)
           isPreviousSame = true;
         isPreviousTimeBig = isDifferenceBiggerThanHalfAnHour(
             Provider.of<Messaging>(context)
-                .getChatMessages(chatId)[i - 1]
+                .getChatMessages(userId)[i - 1]
                 .messageTime,
             Provider.of<Messaging>(context)
-                .getChatMessages(chatId)[i]
+                .getChatMessages(userId)[i]
                 .messageTime);
       }
 

@@ -46,9 +46,11 @@ class Conversation {
     else
       throw Exception('missing required parameter "blogHandle"');
     if (jsonData.containsKey('avatar')) {
-      if (jsonData['avatar'] != 'none')
-        avatarUrl = ApiHttpRepository.api + jsonData['avatar'];
-      else
+      if (jsonData['avatar'] != 'none') {
+        avatarUrl = jsonData['avatar'];
+        if (avatarUrl.startsWith('uploads'))
+          avatarUrl = ApiHttpRepository.api + avatarUrl;
+      } else
         avatarUrl = ApiHttpRepository.api +
             "uploads/post/image/post-1639258474966-61b28a610a654cdd7b39171c.jpeg";
     } else

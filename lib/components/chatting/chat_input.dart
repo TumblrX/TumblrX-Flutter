@@ -7,13 +7,14 @@ class ChatInput extends StatelessWidget {
   ///user id
   final String userId;
 
-  ///chat id
-  //final String chatId;
+  ///Text Field controller to keep track of entered text
+  final TextEditingController _textEditingController = TextEditingController();
+
+  ///to keep track of focus on text field
+  final FocusNode _focusNode = FocusNode();
 
   ChatInput({this.userId});
 
-  final TextEditingController _textEditingController = TextEditingController();
-  final FocusNode _focusNode = FocusNode();
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -37,11 +38,7 @@ class ChatInput extends StatelessWidget {
                 size: 30.0,
                 color: Colors.lightBlue,
               ),
-              onTap: () {
-                // Provider.of<Messaging>(context, listen: false)
-                //     .receiveMessage(id, _textEditingController.text);
-                // _textEditingController.text = '';
-              },
+              onTap: () {},
             ),
           ],
         ),
@@ -63,9 +60,7 @@ class ChatInput extends StatelessWidget {
               onPressed: () {
                 if (_textEditingController.text.trim().length > 0)
                   Provider.of<Messaging>(context, listen: false).sendMessage(
-                    userId,
-                    _textEditingController.text,
-                  );
+                      userId, _textEditingController.text, context);
                 _textEditingController.text = '';
                 _focusNode.requestFocus();
               },

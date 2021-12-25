@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:tumblrx/services/api_provider.dart';
 
+///Square avatar shape for chatting users
 class SquareAvatar extends StatelessWidget {
   SquareAvatar({
     this.avatarUrl,
   });
 
+  ///avatar url
   final String avatarUrl;
 
   @override

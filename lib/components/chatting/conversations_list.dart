@@ -11,8 +11,8 @@ class ConversationsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: Provider.of<Messaging>(context, listen: false)
-          .getConversationsList(context),
+      future:
+          Provider.of<Messaging>(context, listen: false).getConversationsList(),
       builder: (BuildContext context, AsyncSnapshot snap) {
         if (snap.connectionState == ConnectionState.done) {
           return ListView(

@@ -2,11 +2,9 @@ import 'dart:io';
 import 'dart:convert' as convert;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:tumblrx/models/chatting/chat_message.dart';
 import 'package:tumblrx/models/chatting/conversation.dart';
 import 'package:tumblrx/services/api_provider.dart';
-import 'package:tumblrx/services/authentication.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 ///Class that manages all chat services
@@ -18,39 +16,40 @@ class Messaging extends ChangeNotifier {
   IO.Socket socket;
 
   ///User ID
-  String userId;
+  String myId;
+
+  ///Token
+  String token; //to be removed probably
 
   ///Sends a message to the database to the user with [userId]
-  ///[text] is the message content
-  void sendMessage(String receiverId, String text) {
-    // int i = conversations.indexWhere((element) => element.userId == userId);
-    // conversations[i].addMessage(text, true);
-    // String endPoint = 'api/user/chat/send-message';
-    // Map<String, String> body = {'textMessage': text, 'user2Id': userId};
-    // Map<String, String> header = {
-    //   HttpHeaders.authorizationHeader:
-    //       Provider.of<Authentication>(context, listen: false).token
-    // };
+  ///[text] is the message content, and [context] is used to show error message
+  void sendMessage(String receiverId, String text, BuildContext context) {
+    final SnackBar errorSnackBar = SnackBar(
+      backgroundColor: Colors.red,
+      content: Text('Something went wrong :( .. Check internet connection...'),
+    );
     try {
-      // final response = await ApiHttpRepository.sendPostRequest(endPoint,
-      //         reqBody: body, headers: header)
-      //     .then((value) => sendMessageToSocket(myId, userId, text));
       if (socket.connected) {
         Map<String, String> data = {'content': text, 'receiverId': receiverId};
         socket.emit('private message', data);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(errorSnackBar);
       }
     } catch (e) {
       print(e);
+      ScaffoldMessenger.of(context).showSnackBar(errorSnackBar);
     }
-    //getChatContent(context, chatId, userId);
   }
 
   ///Receives message from data sent by socket io
   void receiveMessage(String text, String senderId, String receiverId) {
-    bool isMe = senderId == userId;
+    bool isMe = senderId == myId;
     String otherUser = isMe ? receiverId : senderId;
     int i = conversations.indexWhere((element) => element.userId == otherUser);
-
+    if (i == -1) {
+      getConversationsList(true, otherUser); //first time message
+      return;
+    }
     conversations[i].addMessage(text, isMe,
         DateTime.now().add(Duration(hours: -2)).toIso8601String() + 'z');
     notifyListeners();
@@ -65,21 +64,19 @@ class Messaging extends ChangeNotifier {
   }
 
   ///returns the whole chat messages of a conversation with [chatId]
-  List<ChatMessage> getChatMessages(String chatId) {
-    int i = conversations.indexWhere((element) => element.chatId == chatId);
+  List<ChatMessage> getChatMessages(String userId) {
+    int i = conversations.indexWhere((element) => element.userId == userId);
     if (i == -1) return [];
     return conversations[i].chatMessages;
   }
 
   ///returns list of conversations of the current user
-  Future<void> getConversationsList(BuildContext context) async {
+  Future<void> getConversationsList(
+      [bool retrieveChatFirstTime = false, String userId]) async {
     conversations = [];
 
     String endPoint = 'user/chat/reterive-conversations';
-    Map<String, String> header = {
-      HttpHeaders.authorizationHeader:
-          Provider.of<Authentication>(context, listen: false).token
-    };
+    Map<String, String> header = {HttpHeaders.authorizationHeader: token};
     try {
       final response =
           await ApiHttpRepository.sendGetRequest(endPoint, headers: header);
@@ -90,6 +87,9 @@ class Messaging extends ChangeNotifier {
       for (Map<String, dynamic> conversation in responseObject['data']) {
         conversations.add(Conversation.fromJson(conversation));
       }
+      if (retrieveChatFirstTime) {
+        getChatContent(userId);
+      }
     } catch (e) {
       print(e);
     }
@@ -97,15 +97,11 @@ class Messaging extends ChangeNotifier {
   }
 
   ///retrieves chat messages from the database from a conversation with [chatId] with user of [userId]
-  Future<void> getChatContent(
-      BuildContext context, String chatId, String userId) async {
-    int i = conversations.indexWhere((element) => element.chatId == chatId);
+  Future<void> getChatContent(String userId) async {
+    int i = conversations.indexWhere((element) => element.userId == userId);
     if (i == -1) return;
-    String endPoint = 'user/chat/reterive-chat/' + chatId;
-    Map<String, String> header = {
-      HttpHeaders.authorizationHeader:
-          Provider.of<Authentication>(context, listen: false).token
-    };
+    String endPoint = 'user/chat/reterive-chat/' + userId;
+    Map<String, String> header = {HttpHeaders.authorizationHeader: token};
     try {
       final response =
           await ApiHttpRepository.sendGetRequest(endPoint, headers: header);
@@ -122,11 +118,14 @@ class Messaging extends ChangeNotifier {
     } catch (e) {
       print(e);
     }
+    notifyListeners();
     return;
   }
 
+  ///Connects to socket server upon login and saves [userId] and [token] to be used in requests
   void connectToServer(String userId, String token) {
-    this.userId = userId;
+    this.myId = userId;
+    this.token = token;
     socket = IO.io(
         'http://tumblrx.me:6600',
         !kIsWeb
@@ -136,7 +135,6 @@ class Messaging extends ChangeNotifier {
                 .disableAutoConnect() // disable auto-connection
                 .build()
             : IO.OptionBuilder()
-                //.setTransports(['websocket']) // for Flutter or Dart VM
                 .setExtraHeaders({'authorization': token})
                 .disableAutoConnect() // disable auto-connection
                 .build());
@@ -144,7 +142,6 @@ class Messaging extends ChangeNotifier {
     print('connection id: ' + userId);
     socket.onConnect((_) {
       print('connect');
-      //socket.emit('userid', userId);
     });
     socket.on('privateMessage', (data) {
       print('message recieved');
@@ -155,6 +152,7 @@ class Messaging extends ChangeNotifier {
     socket.onDisconnect((_) => {print('disconnect')});
   }
 
+  ///called on logout to disconnect from socket server
   void disconnect() {
     socket.off('privateMessage');
     socket.disconnect();

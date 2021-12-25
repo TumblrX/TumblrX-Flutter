@@ -5,9 +5,15 @@ import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/screens/chat_screen.dart';
 import 'package:tumblrx/services/messaging.dart';
 
+///Widget that appears in new conversation for each user
 class NewConversationTile extends StatelessWidget {
+  ///The user id of the conversation
   final String userId;
+
+  ///username of the target conversation
   final String username;
+
+  ///Avatar url of the target user conversation
   final String userAvatar;
 
   NewConversationTile({this.userId, this.username, this.userAvatar});
@@ -29,7 +35,6 @@ class NewConversationTile extends StatelessWidget {
           MaterialPageRoute(
             builder: (context) => ChatScreen(
               userId: userId,
-              chatId: chatId,
               receiverUsername: username,
               receiverAvatarUrl: userAvatar,
               myAvatarUrl: Provider.of<User>(context).getPrimaryBlogAvatar(),
