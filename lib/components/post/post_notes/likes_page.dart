@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:tumblrx/services/api_provider.dart';
+import 'package:provider/provider.dart';
+import 'package:tumblrx/models/notes.dart';
+import 'package:tumblrx/services/authentication.dart';
 
 class LikesPage extends StatelessWidget {
   final String _postId;
-  LikesPage({Key key, String postId})
+  LikesPage({Key key, @required String postId})
       : _postId = postId,
         super(key: key);
   @override
   Widget build(BuildContext context) {
-    Future future = ApiHttpRepository.sendGetRequest('');
-    List<dynamic> blogs = [];
-
     return FutureBuilder(
-        future: future,
+        future: Notes.getNotes(
+            'like', Provider.of<Authentication>(context).token, _postId),
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.active:
@@ -26,22 +26,25 @@ class LikesPage extends StatelessWidget {
                 return Center(
                   child: Icon(Icons.error_outline),
                 );
-              blogs = snapshot.data;
-              return ListView.builder(
-                  itemCount: blogs.length,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                        leading: CircleAvatar(
-                          backgroundImage:
-                              NetworkImage(blogs[index].blogAvatar),
-                        ),
-                        title: blogs[index].title,
-                        subtitle: blogs[index].name,
-                        trailing: TextButton(
-                          onPressed: null,
-                          child: Text('Follow'),
-                        ));
-                  });
+              if (snapshot.hasData) {
+                return Container(
+                  child: ListView.builder(
+                      itemCount: snapshot.data.length,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          leading: CircleAvatar(
+                            backgroundColor: Colors.green,
+                          ),
+                          title: Text("Blog Title"),
+                          subtitle: Text("Blog handle"),
+                          trailing: TextButton(
+                            onPressed: null,
+                            child: Text('Follow'),
+                          ),
+                        );
+                      }),
+                );
+              }
           }
           return Center(
             child: Icon(Icons.error_outline),

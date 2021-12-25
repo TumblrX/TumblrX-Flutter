@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:tumblrx/components/createpost/post_content.dart';
 import 'package:tumblrx/components/post/post_blocks/audio_block_widget.dart';
 import 'package:tumblrx/components/post/post_blocks/image_block_widget.dart';
 import 'package:tumblrx/components/post/post_blocks/link_block_widget.dart';
 import 'package:tumblrx/components/post/post_blocks/text_block_widget.dart';
 import 'package:tumblrx/components/post/post_blocks/video_block_widget.dart';
+import 'package:tumblrx/components/post/post_content.dart';
 import 'package:tumblrx/components/post/post_footer/post_footer.dart';
 import 'package:tumblrx/components/post/post_header.dart';
 import 'package:tumblrx/components/post/tags_widget.dart';
@@ -43,52 +45,52 @@ class PostWidget extends StatelessWidget {
           Divider(),
           /*
           len > 0? 
-          
           for(int i = 1; i < len; i++){
-
           }
           post.trail.map((rebloged){
-            
-
           }).toList(),: Container(width:0, height:0),
-          ,
           */
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: _postContent.map<Widget>(
-              (block) {
-                switch (block.runtimeType) {
-                  case TextBlock:
-                    return TextBlockWidget(
-                      text: block.formattedText,
-                      sharableText: block.text,
-                    );
-                    break;
-                  case LinkBlock:
-                    return LinkBlockWidget(
-                        url: block.url, description: block.description);
-                    break;
-                  case ImageBlock:
-                    return ImageBlockWidget(
-                      media: block,
-                    );
-                    break;
-                  case VideoBlock:
-                    return VideoBlockWidget();
-                    break;
-                  case AudioBlock:
-                    return AudioBlockWidget();
-                    break;
-                  default:
-                    return Container(width: 0, height: 0);
-                }
-              },
-            ).toList(),
-          ),
-          Divider(
-            color: Colors.transparent,
-          ),
-          TagsWidget(_tags),
+          // Column(
+          //   crossAxisAlignment: CrossAxisAlignment.start,
+          //   children: _postContent.map<Widget>(
+          //     (block) {
+          //       switch (block.runtimeType) {
+          //         case TextBlock:
+          //           return TextBlockWidget(
+          //             text: block.formattedText,
+          //             sharableText: block.text,
+          //           );
+          //           break;
+          //         case LinkBlock:
+          //           return LinkBlockWidget(
+          //               url: block.url, description: block.description);
+          //           break;
+          //         case ImageBlock:
+          //           return ImageBlockWidget(
+          //             media: block,
+          //           );
+          //           break;
+          //         case VideoBlock:
+          //           return VideoBlockWidget(
+          //               url: block.url, provider: block.provider);
+          //           break;
+          //         case AudioBlock:
+          //           return AudioBlockWidget(
+          //             url: block.url,
+          //             provider: block.provider,
+          //           );
+          //           break;
+          //         default:
+          //           return Container(width: 0, height: 0);
+          //       }
+          //     },
+          //   ).toList(),
+          // ),
+          // Divider(
+          //   color: Colors.transparent,
+          // ),
+          // TagsWidget(_tags),
+          PostContentView(postContent: _postContent, tags: _tags),
           Divider(
             color: Colors.transparent,
           ),

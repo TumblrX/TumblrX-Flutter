@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:tumblrx/components/edit_blog_screen/alert_dialgue.dart';
-import 'package:tumblrx/screens/blog_screen.dart';
 
 class EditAppBar {
   bool isswitched = true;

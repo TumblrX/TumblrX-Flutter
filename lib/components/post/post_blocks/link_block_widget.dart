@@ -30,7 +30,12 @@ class LinkBlockWidget extends StatelessWidget {
             ),
           ),
         ),
-        this._description == null ? Container() : Text(this._description),
+        this._description == null
+            ? Container()
+            : Container(
+                alignment: Alignment.centerLeft,
+                padding: EdgeInsets.all(8.0),
+                child: Text(this._description)),
       ],
     );
   }

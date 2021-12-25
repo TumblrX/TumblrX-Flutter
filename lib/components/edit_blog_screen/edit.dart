@@ -5,7 +5,6 @@ import 'package:tumblrx/components/edit_blog_screen/edit_app_bar.dart';
 import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/services/blog_screen.dart';
 import '../blog_screen_constant.dart';
-import 'cover_image_bottomsheet.dart';
 import 'edit_avatar.dart';
 import 'edit_bottons.dart';
 
@@ -19,7 +18,6 @@ class _EditState extends State<Edit> with SingleTickerProviderStateMixin {
   TextEditingController titleController;
   TextEditingController descriptionController;
   @override
-  
   void initState() {
     titleController = new TextEditingController(
         text: Provider.of<User>(context, listen: false)
@@ -63,11 +61,11 @@ class _EditState extends State<Edit> with SingleTickerProviderStateMixin {
                           onTap: () {
                             ///bottom sheet for cover image
                             //showModalBottomSheet(
-                              //  context: context,
-                                //builder: CoverImageBottomSheet().build);
+                            //  context: context,
+                            //builder: CoverImageBottomSheet().build);
                           },
                         ),
-                      EditAppBar().defaultAppBar(context),
+                        EditAppBar().defaultAppBar(context),
                       ],
                     ),
                     Container(

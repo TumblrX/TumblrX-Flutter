@@ -105,6 +105,7 @@ class Authentication extends ChangeNotifier {
         return false;
       } else if (response.statusCode != 200) {
         print('!200');
+        print(response.body);
         throw Exception('error in the connection');
       } else {
         var responseObject = convert.jsonDecode(response.body);
