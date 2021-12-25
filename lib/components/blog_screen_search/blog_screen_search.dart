@@ -3,8 +3,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/components/blog_screen_constant.dart';
+import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/screens/blog_screen.dart';
 import 'package:tumblrx/services/blog_screen.dart';
+import 'package:tumblrx/utilities/hex_color_value.dart';
 
 class Search extends StatefulWidget {
   ///search of avatar
@@ -74,7 +76,7 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
             ),
           ),
           Container(
-              color: blogProvider.getBottomColor(),
+              color: hexToColor( Provider.of<User>(context,listen: false).getActiveBlogBackColor())??Colors.blue,
               child: TabBar(
                 unselectedLabelColor: Color(0xffc7c1c1),
                 labelColor:blogProvider.geaccentColor(),

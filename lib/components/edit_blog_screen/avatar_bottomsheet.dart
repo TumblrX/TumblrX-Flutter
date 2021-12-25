@@ -26,7 +26,13 @@ class EditAvatarBottomSheet extends StatelessWidget {
             ),
             title: Text('Choose a photo'),
             onTap: () {
-              Blog.pickImage(1);
+             print(Provider.of<User>(context, listen: false)
+                  .getActiveBlogAvatar());
+              Provider.of<User>(context, listen: false)
+                  .getActiveBlog()
+                  .pickImage(1);
+              print(Provider.of<User>(context, listen: false)
+                  .getActiveBlogAvatar());
             }),
         Padding(
           padding: EdgeInsets.only(left: 10, right: 10),
@@ -34,7 +40,12 @@ class EditAvatarBottomSheet extends StatelessWidget {
         ),
         ListTile(
             title: Text('Show avatar'),
-            trailing: Switch(value: showAvatar, onChanged: (value) {}),
+            trailing: Switch(
+                value: Provider.of<User>(context).getActiveBlogShowAvatar(),
+                onChanged: (value) {
+                  Provider.of<User>(context, listen: false)
+                      .setActiveBlogShowAvatar(value);
+                }),
             onTap: () {}),
         Padding(
           padding: EdgeInsets.only(left: 10, right: 10),
@@ -46,6 +57,11 @@ class EditAvatarBottomSheet extends StatelessWidget {
             renderBorder: false,
             isSelected: selectShape,
             onPressed: (index) {
+              Provider.of<User>(context, listen: false)
+                  .setActiveBlogIsCircleBeforeEdit(
+                      Provider.of<User>(context, listen: false)
+                          .getIsAvatarCircle());
+
               Provider.of<User>(context, listen: false)
                   .setActiveBlogIsCircle(index == 0 ? false : true);
             },

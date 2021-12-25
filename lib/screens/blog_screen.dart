@@ -12,6 +12,7 @@ import 'package:tumblrx/components/following/following_card.dart';
 import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/services/blog_screen.dart';
 import 'package:tumblrx/services/creating_post.dart';
+import 'package:tumblrx/utilities/hex_color_value.dart';
 
 ///This a initial screen you see when press on profile from navigation bar
 class BlogScreen extends StatefulWidget {
@@ -32,6 +33,13 @@ class _BlogScreenState extends State<BlogScreen>
     _tabController = new TabController(length: 3, vsync: this);
 
     super.initState();
+
+    //intialize befor edit
+        
+
+    
+
+  // print(Provider.of<User>(context, listen: false).getActiveBlogPosts()[0].blogTitle);
   }
 
   @override
@@ -72,6 +80,7 @@ class _BlogScreenState extends State<BlogScreen>
                         ));
           },
         ),
+
         body: Center(
           child: SingleChildScrollView(
               child: ConstrainedBox(
@@ -90,6 +99,7 @@ class _BlogScreenState extends State<BlogScreen>
                             minWidth: MediaQuery.of(context).size.width < 750
                                 ? MediaQuery.of(context).size.width * 0.9
                                 : 750.0,
+
                           ),
                     child: Column(
 
@@ -119,21 +129,30 @@ class _BlogScreenState extends State<BlogScreen>
                                     : Square())
                           ]),
 
-                          //{
-                          if (Provider.of<User>(context)
-                              .getActiveBlogIsPrimary())
-                            upperTabBar(_tabController, context),
-                          if (Provider.of<User>(context)
-                              .getActiveBlogIsPrimary())
-                            bottomTabBar(_tabController, context),
-                          //}
-                          if (!Provider.of<User>(context)
-                              .getActiveBlogIsPrimary())
-                            Container(
-                              child: Column(),
-                            )
+
+                          ///show an avatar in square
+                          Visibility(
+                              visible: Provider.of<User>(context, listen: false)
+                                  .getActiveBlogShowAvatar()?? true,
+                              child: Provider.of<User>(context, listen: false)
+                                      .getIsAvatarCircle()
+                                  ? AvatarImage()
+                                  : Square())
                         ]),
-                  ))),
-        ));
+
+                        //{
+                        if (Provider.of<User>(context).getActiveBlogIsPrimary())
+                          upperTabBar(_tabController, context),
+                        if (Provider.of<User>(context).getActiveBlogIsPrimary())
+                          bottomTabBar(_tabController, context),
+                        //}
+                        if (!Provider.of<User>(context)
+                            .getActiveBlogIsPrimary())
+                          Container(
+                            child: Column(),
+                          )
+                      ]),
+                ))));
+
   }
 }

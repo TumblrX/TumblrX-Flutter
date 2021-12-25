@@ -77,13 +77,13 @@ class Content extends ChangeNotifier {
 
     // for pagination, set total number of posts
     if (pageNum == 1) {
-      _totalPosts = resposeObject['for-youPosts'].length ?? 0;
+      _totalPosts = resposeObject['posts'].length ?? 0;
     }
     List<Post> postsArray;
     try {
       // type casting to list of map objects
       List postsList =
-          List<Map<String, dynamic>>.from(resposeObject['for-youPosts']);
+          List<Map<String, dynamic>>.from(resposeObject['posts']);
       try {
         // construct list of posts object from the parsed json response
         postsArray = postsList.map((e) {

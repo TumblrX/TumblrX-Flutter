@@ -8,6 +8,7 @@ import '../blog_screen_constant.dart';
 import 'cover_image_bottomsheet.dart';
 import 'edit_avatar.dart';
 import 'edit_bottons.dart';
+import 'package:tumblrx/utilities/hex_color_value.dart';
 
 class Edit extends StatefulWidget {
   @override
@@ -19,7 +20,6 @@ class _EditState extends State<Edit> with SingleTickerProviderStateMixin {
   TextEditingController titleController;
   TextEditingController descriptionController;
   @override
-  
   void initState() {
     titleController = new TextEditingController(
         text: Provider.of<User>(context, listen: false)
@@ -39,7 +39,9 @@ class _EditState extends State<Edit> with SingleTickerProviderStateMixin {
     final blogProvider = Provider.of<BlogScreenConstantProvider>(context);
     return Scaffold(
         body: Container(
-            color: blogProvider.getBottomColor(),
+            color: hexToColor(Provider.of<User>(context, listen: false)
+                    .getActiveBlogBackColor()) ??
+                Colors.blue,
             child: Stack(
               children: [
                 Column(
@@ -52,7 +54,11 @@ class _EditState extends State<Edit> with SingleTickerProviderStateMixin {
                               decoration: BoxDecoration(
                                   image: DecorationImage(
                                       image: AssetImage('images/header.png'),
-                                      fit: BoxFit.fill)),
+                                      fit: Provider.of<User>(context)
+                                                  .getActiveBlogStretchHeaderImage() ??
+                                              true
+                                          ? BoxFit.fill
+                                          : BoxFit.contain)),
                               child: Align(
                                 alignment: Alignment.bottomRight,
                                 child: Icon(
@@ -62,19 +68,19 @@ class _EditState extends State<Edit> with SingleTickerProviderStateMixin {
                               )),
                           onTap: () {
                             ///bottom sheet for cover image
-                            //showModalBottomSheet(
-                              //  context: context,
-                                //builder: CoverImageBottomSheet().build);
+                            showModalBottomSheet(
+                                context: context,
+                                builder: CoverImageBottomSheet().build);
                           },
                         ),
-                      EditAppBar().defaultAppBar(context),
+                        EditAppBar().defaultAppBar(context),
                       ],
                     ),
                     Container(
                       padding: EdgeInsets.only(top: 20),
                       child: TextField(
                         textAlign: TextAlign.center,
-                        textInputAction: TextInputAction.newline,
+                        textInputAction: TextInputAction.done,
                         style: TextStyle(
                           fontSize: 35,
                           decoration: TextDecoration.underline,
@@ -90,7 +96,13 @@ class _EditState extends State<Edit> with SingleTickerProviderStateMixin {
                               decoration: TextDecoration.none),
                         ),
                         controller: titleController,
-                        onChanged: (value) {
+                        onSubmitted: (value) {
+                          
+                                    
+                          Provider.of<User>(context, listen: false)
+                              .settActiveBlogTitleBeforeEdit(
+                                  Provider.of<User>(context, listen: false)
+                                      .getActiveBlogTitle());
                           Provider.of<User>(context, listen: false)
                               .setActiveBlogTitle(value);
                         },
@@ -99,11 +111,17 @@ class _EditState extends State<Edit> with SingleTickerProviderStateMixin {
                     TextField(
                       textAlign: TextAlign.center,
                       controller: descriptionController,
-                      onChanged: (value) {
+                      onSubmitted: (value) {
+                         Provider.of<User>(context, listen: false)
+                            .setActiveBlogDescriptionBeforeEdit(
+                                  Provider.of<User>(context, listen: false)
+                                      .getActiveBlogDescription());
+
+
                         Provider.of<User>(context, listen: false)
                             .setActiveBlogDescription(value);
                       },
-                      textInputAction: TextInputAction.newline,
+                      textInputAction: TextInputAction.done,
                       style: TextStyle(
                         fontSize: 15,
                         decoration: TextDecoration.underline,
@@ -119,14 +137,14 @@ class _EditState extends State<Edit> with SingleTickerProviderStateMixin {
                               decoration: TextDecoration.none)),
                     ),
                     EditButtons(),
-                    if (Provider.of<User>(context).getActiveBlogIsPrimary())
-                      upperTabBar(_tabController, context),
-                    if (Provider.of<User>(context).getActiveBlogIsPrimary())
-                      bottomTabBar(_tabController, context),
-                    if (!Provider.of<User>(context).getActiveBlogIsPrimary())
-                      Container(
-                        child: Column(),
-                      )
+                    //if (Provider.of<User>(context).getActiveBlogIsPrimary())
+                    //upperTabBar(_tabController, context),
+                    //if (Provider.of<User>(context).getActiveBlogIsPrimary())
+                    //bottomTabBar(_tabController, context),
+                    //if (!Provider.of<User>(context).getActiveBlogIsPrimary())
+                    //Container(
+                    //child: Column(),
+                    //)
                   ],
                 ),
                 Provider.of<User>(context).getIsAvatarCircle() == true
