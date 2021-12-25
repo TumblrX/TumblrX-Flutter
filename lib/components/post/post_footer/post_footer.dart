@@ -86,7 +86,7 @@ class _PostFooterState extends State<PostFooter> {
           onLongPressEnd: (details) => _blogsSelectorPopup.remove(),
           child: _optionIcon(
               icon: CustomIcons.reblog,
-              callback: () => _post.reblogPost(),
+              callback: () => _post.reblogPost(context),
               color: _reblogged ? Colors.green : Colors.black),
         ),
         // like icon
@@ -121,7 +121,7 @@ class _PostFooterState extends State<PostFooter> {
       // edit icon
       _optionIcon(
           icon: Icons.edit_outlined,
-          callback: () => _post.editPost(),
+          callback: () => _post.editPost(context),
           color: Colors.black),
     ];
   }

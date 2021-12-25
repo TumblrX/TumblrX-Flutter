@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tumblrx/screens/blog_screen.dart';
 
 class AlerDialgue extends StatelessWidget {
   @override
@@ -8,9 +7,10 @@ class AlerDialgue extends StatelessWidget {
     return AlertDialog(
       title: Text('Save changes?'),
       actions: [
-        TextButton(onPressed: () { }, child: Text('Discard')),
+        TextButton(onPressed: () {}, child: Text('Discard')),
         TextButton(
-          onPressed: () { },child: Text('save'),
+          onPressed: () {},
+          child: Text('save'),
         )
       ],
     );

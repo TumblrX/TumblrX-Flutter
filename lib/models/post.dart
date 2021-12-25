@@ -15,7 +15,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/components/createpost/create_post.dart';
-import 'package:tumblrx/components/post/post_blocks/audio_block_widget.dart';
 import 'package:tumblrx/components/post/post_blocks/image_block_widget.dart';
 import 'package:tumblrx/components/post/post_blocks/link_block_widget.dart';
 import 'package:tumblrx/components/post/post_blocks/text_block_widget.dart';
@@ -503,10 +502,14 @@ class Post {
                     );
                     break;
                   case VideoBlock:
-                    return VideoBlockWidget();
+                    return VideoBlockWidget(
+                      url: block.url,
+                      provider: block.provider,
+                    );
                     break;
                   case AudioBlock:
-                    return AudioBlockWidget();
+//                    return AudioBlockWidget();
+                    return Container();
                     break;
                   default:
                     return Container(width: 0, height: 0);
