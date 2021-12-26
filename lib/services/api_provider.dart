@@ -2,6 +2,7 @@ import 'package:http/http.dart';
 import 'package:tumblrx/utilities/environment.dart';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
+
 /// MockAPI class to use for testing
 class MockHttpRepository {
   /// API key for mock server
@@ -115,7 +116,7 @@ class ApiHttpRepository {
     print(headers);
     print(reqBody);
 
-    if (reqBody != null) return http. put( uri, headers: headers, body:  reqBody);
+    if (reqBody != null) return http.put(uri, headers: headers, body: reqBody);
     return put(uri);
   }
 }

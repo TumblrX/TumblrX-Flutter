@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tumblrx/components/chatting/chat_content.dart';
 import 'package:tumblrx/components/chatting/chat_input.dart';
+import 'package:tumblrx/services/messaging.dart';
 import 'package:tumblrx/utilities/constants.dart';
 
 ///Chatting Screen Widget
@@ -69,7 +71,12 @@ class ChatScreen extends StatelessWidget {
                             value: 'block',
                           ),
                         ],
-                    onSelected: (choice) {}),
+                    onSelected: (choice) {
+                      if (choice == 'delete') {
+                        Provider.of<Messaging>(context, listen: false)
+                            .deleteConversation(context, userId);
+                      } else {}
+                    }),
               ],
             ),
             body: Padding(

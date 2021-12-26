@@ -101,6 +101,7 @@ class Messaging extends ChangeNotifier {
     int i = conversations.indexWhere((element) => element.userId == userId);
     if (i == -1) return;
     String endPoint = 'user/chat/reterive-chat/' + userId;
+    print(endPoint);
     Map<String, String> header = {HttpHeaders.authorizationHeader: token};
     try {
       final response =
@@ -150,6 +151,35 @@ class Messaging extends ChangeNotifier {
     });
 
     socket.onDisconnect((_) => {print('disconnect')});
+  }
+
+  ///Delete conversation with [userId]
+  void deleteConversation(BuildContext context, String userId) async {
+    int i = conversations.indexWhere((element) => element.userId == userId);
+    if (i == -1) return;
+    String endPoint = 'api/user/chat/delete-chat/' + userId;
+    print(endPoint);
+    Map<String, String> header = {'Authorization': token};
+    final SnackBar errorSnackBar = SnackBar(
+      backgroundColor: Colors.red,
+      content: Text('Something went wrong :( .. Check internet connection...'),
+    );
+    try {
+      final response =
+          await ApiHttpRepository.sendDeleteRequest(endPoint, header);
+      print(response.body);
+      if (response.statusCode == 200) {
+        Navigator.pop(context);
+        conversations.removeAt(i);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(errorSnackBar);
+      }
+    } catch (e) {
+      print(e);
+      ScaffoldMessenger.of(context).showSnackBar(errorSnackBar);
+    }
+    notifyListeners();
+    return;
   }
 
   ///called on logout to disconnect from socket server

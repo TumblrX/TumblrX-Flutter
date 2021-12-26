@@ -60,13 +60,13 @@ class NotificationsScreen extends StatelessWidget {
                   tabs: [
                     Tab(
                       child: Text(
-                        'Activity',
+                        'Messages',
                         style: TextStyle(color: Colors.black),
                       ),
                     ),
                     Tab(
                       child: Text(
-                        'Messages',
+                        'Activity',
                         style: TextStyle(color: Colors.black),
                       ),
                     ),
@@ -74,8 +74,8 @@ class NotificationsScreen extends StatelessWidget {
                 ),
                 body: TabBarView(
                   children: [
-                    Text('Activity'), //to be changed
                     MessagingScreen(),
+                    Text('Activity'), //to be changed
                   ],
                 ),
               ),
