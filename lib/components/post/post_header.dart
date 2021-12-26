@@ -6,9 +6,10 @@ Description:
 */
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tumblrx/models/post.dart';
+import 'package:tumblrx/models/posts/post.dart';
 import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/services/content.dart';
 import 'package:tumblrx/utilities/constants.dart';
@@ -45,7 +46,8 @@ class PostHeader extends StatelessWidget {
           : Padding(
               padding: EdgeInsets.only(left: 15.0),
               child: InkWell(
-                onTap: () => _showBlogProfile(context),
+                onTap: () => _showBlogProfile(
+                    context: context, blogHandle: post.blogHandle),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
@@ -63,7 +65,12 @@ class PostHeader extends StatelessWidget {
                                             .colorScheme
                                             .secondary),
                                   ),
-                                  onPressed: () => post.followBlog(),
+                                  onPressed: () {
+                                    final User user = Provider.of<User>(context,
+                                        listen: false);
+                                    user.userBlogs[user.activeBlogIndex]
+                                        .followBlog(post.postBlog.id, context);
+                                  },
                                   child: Text('Follow'),
                                 )
                               : _emptyContainer(),
@@ -72,8 +79,9 @@ class PostHeader extends StatelessWidget {
                     ),
                     _showOptionsIcon
                         ? IconButton(
-                            onPressed: () =>
-                                _showBlogOptions(post.publishedOn, context),
+                            onPressed: () => _showBlogOptions(
+                                post.publishedOn, context,
+                                otherBlog: false, postId: post.id),
                             icon: Icon(Icons.more_horiz),
                           )
                         : _emptyContainer(),
@@ -85,36 +93,69 @@ class PostHeader extends StatelessWidget {
   }
 
   /// navigate to the blog screen to view blog info
-  void _showBlogProfile(BuildContext context) {
-    Navigator.of(context).pushNamed('blog_screen');
+  void _showBlogProfile({BuildContext context, @required String blogHandle}) {
+    Navigator.of(context)
+        .pushNamed('blog_screen', arguments: {'blogHandle': blogHandle});
   }
 
   /// callback to open a dialog with blog options
-  void _showBlogOptions(DateTime publishedOn, BuildContext context) {
-    final String pinOptionMessage =
-        'This will appear at the top of your blog and replace any previous pinned post.Are you sure?';
+  void _showBlogOptions(DateTime publishedOn, BuildContext context,
+      {bool otherBlog = false, @required String postId}) {
     final String muteNotificationMessage =
         'Would you like to mute push notifications for this particular post?';
     showModalBottomSheet(
       context: context,
-      builder: (context) => ListView(
-        children: [
-          ListTile(
-            title: Text('Pin post'),
-            onTap: () => _showAlert(pinOptionMessage, context, null, 'Pin'),
-          ),
-          ListTile(
-            title: Text('Mute notifications'),
-            onTap: () => _showAlert(muteNotificationMessage, context,
-                () => _muteNotifications, 'Mute'),
-          ),
-          ListTile(
-            title: Text('Copy link'),
-            onTap: null,
-          ),
-        ],
+      builder: (context) => FractionallySizedBox(
+        heightFactor: 0.3,
+        child: otherBlog
+            ? ListView(
+                children: [
+                  ListTile(
+                    title: Text('Copy link'),
+                    onTap: () {
+                      copyLink(postId)
+                          .then((value) => showSnackBarMessage(
+                              context, 'Copied to clipboard!', Colors.green))
+                          .catchError((error) {
+                        showSnackBarMessage(
+                            context, 'Something wrong happened!', Colors.green);
+                      });
+                    },
+                  )
+                ],
+              )
+            : ListView(
+                children: [
+                  ListTile(
+                    title: Text('Mute notifications'),
+                    onTap: () => _showAlert(muteNotificationMessage, context,
+                        () => _muteNotifications, 'Mute'),
+                  ),
+                  ListTile(
+                    title: Text('Copy link'),
+                    onTap: () {
+                      copyLink(postId)
+                          .then((value) => showSnackBarMessage(
+                              context, 'Copied to clipboard!', Colors.green))
+                          .catchError((error) {
+                        showSnackBarMessage(
+                            context, 'Something wrong happened!', Colors.green);
+                      });
+                    },
+                  ),
+                ],
+              ),
       ),
     );
+  }
+
+  Future<bool> copyLink(String postId) async {
+    try {
+      await FlutterClipboard.copy('https://tumblrx.me:5000/post/$postId');
+      return true;
+    } catch (err) {
+      return false;
+    }
   }
 
   void _muteNotifications(BuildContext context) {
@@ -207,3 +248,10 @@ class PostHeader extends StatelessWidget {
         errorWidget: (context, url, error) => _errorAvatar(),
       );
 }
+
+/*
+
+TODOs:
+  1. Mute notifications
+  2. Pin post  
+*/ 

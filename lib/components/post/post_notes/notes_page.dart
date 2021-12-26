@@ -38,13 +38,9 @@ class NotesPage extends StatelessWidget {
           ),
           body: TabBarView(
             children: [
-              CommentsPage(
-                postId: _postId,
-              ),
+              CommentsPage(postId: _postId),
               ReblogsPage(postId: _postId),
-              LikesPage(
-                postId: _postId,
-              ),
+              LikesPage(postId: _postId),
             ],
           ),
         ),

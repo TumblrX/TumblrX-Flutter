@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/components/post/post_notes/notes_page.dart';
 import 'package:tumblrx/components/post/share_post/share_post_widget.dart';
-import 'package:tumblrx/models/post.dart';
+import 'package:tumblrx/models/posts/post.dart';
 import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/services/content.dart';
 import 'package:tumblrx/utilities/constants.dart';

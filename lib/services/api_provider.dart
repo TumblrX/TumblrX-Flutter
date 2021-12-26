@@ -60,8 +60,8 @@ class ApiHttpRepository {
   /// API to send get requests
   /// @endPoint : the end point to which send the request
   /// @req : request query parameters as map<String, dynamic>
-  static Future sendPostRequest(String endPoint,
-      {Map<String, dynamic> reqBody, Map<String, dynamic> headers}) async {
+  static Future<Response> sendPostRequest(String endPoint,
+      {Map<String, dynamic> reqBody, Map<String, String> headers}) async {
     String fullUrl = '$api$endPoint';
     // if (reqBody != null) {
     //   reqBody.forEach((key, value) {

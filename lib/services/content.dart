@@ -7,7 +7,7 @@ Description:
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-import 'package:tumblrx/models/post.dart';
+import 'package:tumblrx/models/posts/post.dart';
 import 'package:tumblrx/services/api_provider.dart';
 import 'dart:convert' as convert;
 

@@ -3,7 +3,7 @@ import 'package:tumblrx/models/user/blog.dart';
 import 'package:tumblrx/services/api_provider.dart';
 
 class SearchWidget extends StatefulWidget {
-  ValueNotifier<List<Blog>> _searchBlogResultsNotifier;
+  final ValueNotifier<List<Blog>> _searchBlogResultsNotifier;
   SearchWidget(ValueNotifier<List<Blog>> searchResults)
       : _searchBlogResultsNotifier = searchResults;
   @override

@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:tumblrx/models/post.dart';
+import 'package:tumblrx/models/posts/post.dart';
 import 'package:tumblrx/models/tag.dart';
 import 'package:tumblrx/models/user/blog.dart';
 
@@ -143,7 +143,7 @@ class User extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// getter for active blog name
+  /// getter for active blog index
   int get activeBlogIndex => _activeBlogIndex;
 
   /// getter for active user blogs list
@@ -173,8 +173,9 @@ class User extends ChangeNotifier {
   String getActiveBlogId() {
     return _blogs[_activeBlogIndex].id;
   }
-   bool  getActiveBlogIsPrimary() {
-     return _blogs[_activeBlogIndex].isPrimary;
+
+  bool getActiveBlogIsPrimary() {
+    return _blogs[_activeBlogIndex].isPrimary;
   }
 
   bool getIsAvatarCircle() {
@@ -203,6 +204,4 @@ class User extends ChangeNotifier {
   void setActiveBlogShowAvatar(bool showAvatar) {
     _blogs[_activeBlogIndex].blogTheme.showAvatar = showAvatar;
   }
-
- 
 }

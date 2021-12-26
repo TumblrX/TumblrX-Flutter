@@ -109,7 +109,7 @@ class Post {
         _content = content;
 
   /// blog object who published this post
-  Blog postBlog;
+  Blog _postBlog;
 
 // ================= getters ===================
   String get id => this._id;
@@ -121,10 +121,12 @@ class Post {
   List get tags => this._tags;
   List get content => this._content;
   String get blogTitle => this._blogTitle;
+  String get blogHandle => this._blogHandle;
   String get blogAvatar => this._blogAvatar;
   String get reblogKey => this._reblogKey;
   DateTime get publishedOn => _date;
   String get postUrl => _postUrl;
+  Blog get postBlog => _postBlog;
 
   set liked(bool liked) {
     this._liked = liked;
@@ -394,11 +396,26 @@ class Post {
     try {} catch (error) {}
   }
 
-  void followBlog() async {
-    try {} catch (error) {}
+  Future<bool> followBlog(BuildContext context, String blogHandle) async {
+    try {
+      Response response =
+          await ApiHttpRepository.sendPostRequest('api/user/follow', headers: {
+        'Authorization': Provider.of<Authentication>(context).token
+      }, reqBody: {
+        'blogHandel': blogHandle
+      });
+      if (response.statusCode != 200)
+        throw (convert.json.decode(response.body)['error']);
+      return true;
+    } catch (error) {
+      print('couldn\'t follow blog $error');
+      return false;
+    }
   }
 
-  Future<bool> mutePushNotification() async {}
+  Future<bool> mutePushNotification() async {
+    return false;
+  }
 
   /// API for post object to edit the post
 

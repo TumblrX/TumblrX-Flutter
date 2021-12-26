@@ -13,15 +13,18 @@ class Notes {
   String _postId;
   String _type;
   Blog _blogData;
+  String _commentText;
 
   String get postId => _postId;
   String get type => _type;
   Blog get blogData => _blogData;
+  String get commentText => _commentText;
 
   Notes.fromJson(Map<String, dynamic> json) {
     if (json.containsKey('rebloggedPostId')) _postId = json['rebloggedPostId'];
     if (json.containsKey('type')) _type = json['type'];
     if (json.containsKey('blogId')) _blogData = Blog.fromJson(json['blogId']);
+    if (json.containsKey('commentText')) _commentText = json['commentText'];
   }
 
   static Future<List<Notes>> getNotes(
@@ -29,7 +32,7 @@ class Notes {
     List<Notes> notesResponse = [];
     Response response = await ApiHttpRepository.sendGetRequest(
         'post/$postId/notes',
-        query: {'mode': 'reblog'},
+        query: {'mode': mode},
         headers: {'Authorization': token});
     try {
       notesResponse = Notes._parseResponseJsonNotes(response);

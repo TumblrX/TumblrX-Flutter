@@ -4,9 +4,8 @@ import 'package:tumblrx/components/post/share_post/search_blog_result.dart';
 import 'package:tumblrx/components/post/share_post/search_widget.dart';
 import 'package:tumblrx/components/post/share_post/selected_blogs_widget.dart';
 import 'package:tumblrx/components/post/share_post/share_methods_widget.dart';
-import 'package:tumblrx/models/post.dart';
+import 'package:tumblrx/models/posts/post.dart';
 import 'package:tumblrx/models/user/blog.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class SharePostWidget extends StatelessWidget {
   static final String id = "share_post";
@@ -44,8 +43,8 @@ class SharePostWidget extends StatelessWidget {
           const Divider(
             thickness: 2.5,
           ),
-          SearchWidget(_searchBlogResultsNotifier),
-          SearchResult(
+          //SearchWidget(_searchBlogResultsNotifier),
+          /*SearchResult(
             searchResultsNotifier: _searchBlogResultsNotifier,
             selectedBlogsNotifier: _searchBlogResultsNotifier,
           ),
@@ -87,9 +86,13 @@ class SharePostWidget extends StatelessWidget {
                 ),
               )
             ],
-          ),
+          ),*/
         ],
       ),
     );
   }
 }
+/*
+TODOs:
+1. send post as a message
+*/ 

@@ -1,8 +1,11 @@
+import 'package:flutter/widgets.dart';
 import 'package:http/http.dart';
-import 'package:tumblrx/models/post.dart';
+import 'package:provider/provider.dart';
+import 'package:tumblrx/models/posts/post.dart';
 import 'dart:convert' as convert;
 import 'package:tumblrx/services/api_provider.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:tumblrx/services/authentication.dart';
 import 'blog_theme.dart';
 
 class Blog {
@@ -37,7 +40,7 @@ class Blog {
   bool _isPrivate = false;
 
   /// indicates whether a blog is primary or not
-  bool _isPrimary ;
+  bool _isPrimary;
 
   /// url for avatar
   String _blogAvatar;
@@ -150,7 +153,7 @@ class Blog {
   String get handle => _handle;
   String get title => _title;
   String get id => _id;
-  bool  get isPrimary => _isPrimary;
+  bool get isPrimary => _isPrimary;
 
   Future<String> getBlogAvatar() async {
     final String endPoint = 'blog/';
@@ -192,6 +195,21 @@ class Blog {
       print(error.toString());
       return null;
     }
+  }
+
+  Future<bool> followBlog(String blogId, BuildContext context) async {
+    final String endPoint = "user/follow";
+    Response response =
+        await ApiHttpRepository.sendPostRequest(endPoint, headers: {
+      'Authorization': Provider.of<Authentication>(context).token,
+    }, reqBody: {
+      '_id': blogId
+    });
+    if (response.statusCode != 200) {
+      print('error at comment ${convert.json.decode(response.body)}');
+      return false;
+    }
+    return true;
   }
 
   void getPosts() async {
@@ -244,10 +262,7 @@ class Blog {
     isCircleAvatar = isCircle;
   }
 
-
-  bool getIsPrimary()
-  {
-
+  bool getIsPrimary() {
     return _isPrimary;
   }
 
