@@ -21,6 +21,9 @@ class Messaging extends ChangeNotifier {
   ///Token
   String token; //to be removed probably
 
+  ///Number of unseen messages
+  int totalUnseenMessage = 0;
+
   ///Sends a message to the database to the user with [userId]
   ///[text] is the message content, and [context] is used to show error message
   void sendMessage(String receiverId, String text, BuildContext context) {
@@ -50,6 +53,10 @@ class Messaging extends ChangeNotifier {
       getConversationsList(true, otherUser); //first time message
       return;
     }
+    if (senderId != myId) {
+      totalUnseenMessage += 1;
+    }
+    print(totalUnseenMessage);
     conversations[i].addMessage(text, isMe,
         DateTime.now().add(Duration(hours: -2)).toIso8601String() + 'z');
     notifyListeners();
@@ -74,18 +81,19 @@ class Messaging extends ChangeNotifier {
   Future<void> getConversationsList(
       [bool retrieveChatFirstTime = false, String userId]) async {
     conversations = [];
-
+    totalUnseenMessage = 0;
     String endPoint = 'user/chat/reterive-conversations';
     Map<String, String> header = {HttpHeaders.authorizationHeader: token};
     try {
       final response =
           await ApiHttpRepository.sendGetRequest(endPoint, headers: header);
-      // print(response.statusCode);
-      // print(response.body);
       Map<String, dynamic> responseObject =
           convert.jsonDecode(response.body) as Map<String, dynamic>;
-      for (Map<String, dynamic> conversation in responseObject['data']) {
-        conversations.add(Conversation.fromJson(conversation));
+      print(responseObject);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        for (Map<String, dynamic> conversation in responseObject['data']) {
+          conversations.add(Conversation.fromJson(conversation));
+        }
       }
       if (retrieveChatFirstTime) {
         getChatContent(userId);
@@ -93,6 +101,7 @@ class Messaging extends ChangeNotifier {
     } catch (e) {
       print(e);
     }
+    notifyListeners();
     return;
   }
 
@@ -110,9 +119,11 @@ class Messaging extends ChangeNotifier {
       conversations[i].chatMessages = [];
       Map<String, dynamic> responseObject =
           convert.jsonDecode(response.body) as Map<String, dynamic>;
-      for (Map<String, dynamic> chatMessage in responseObject['messages']) {
-        conversations[i].addMessage(chatMessage['text'],
-            chatMessage['senderId'] != userId, chatMessage['createdAt']);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        for (Map<String, dynamic> chatMessage in responseObject['messages']) {
+          conversations[i].addMessage(chatMessage['text'],
+              chatMessage['senderId'] != userId, chatMessage['createdAt']);
+        }
       }
       conversations[i].chatMessages =
           conversations[i].chatMessages.reversed.toList();
@@ -169,6 +180,7 @@ class Messaging extends ChangeNotifier {
           await ApiHttpRepository.sendDeleteRequest(endPoint, header);
       print(response.body);
       if (response.statusCode == 200) {
+        Navigator.pop(context);
         Navigator.pop(context);
         conversations.removeAt(i);
       } else {

@@ -53,6 +53,12 @@ class NewConversationScreen extends StatelessWidget {
                     userAvatar: ApiHttpRepository.api +
                         "uploads/post/image/post-1639258474966-61b28a610a654cdd7b39171c.jpeg",
                   ),
+                  NewConversationTile(
+                    username: 'Bishoy',
+                    userId: '61ca14deb6ee95ef1f690e44',
+                    userAvatar: ApiHttpRepository.api +
+                        "uploads/post/image/post-1639258474966-61b28a610a654cdd7b39171c.jpeg",
+                  ),
                 ],
               ).toList(),
             ),

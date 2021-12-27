@@ -38,6 +38,12 @@ void main() {
       messaging.receiveMessage('third message', '321', '111');
       expect(messaging.getChatMessages('321').length, 3);
     });
+
+    test('Number of unseen messages should be 2', () {
+      messaging.receiveMessage('third message', '321', '111');
+      expect(messaging.totalUnseenMessage, 2);
+    });
+
     test('chat messages list should be empty list for non existing user chat',
         () {
       expect(messaging.getChatMessages('414141'), []);

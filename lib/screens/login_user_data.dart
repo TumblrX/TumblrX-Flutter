@@ -58,6 +58,8 @@ class LogInUserData extends StatelessWidget {
                                     Provider.of<Authentication>(context,
                                             listen: false)
                                         .token);
+                            Provider.of<Messaging>(context, listen: false)
+                                .getConversationsList();
 
                             while (Navigator.canPop(context)) {
                               Navigator.pop(context);
