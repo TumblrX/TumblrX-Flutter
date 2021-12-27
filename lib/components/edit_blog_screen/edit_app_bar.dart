@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tumblrx/components/edit_blog_screen/alert_dialgue.dart';
+import 'package:tumblrx/models/user/user.dart';
+import 'package:tumblrx/screens/blog_screen.dart';
 
 class EditAppBar {
   bool isswitched = true;
@@ -32,7 +35,14 @@ class EditAppBar {
                   fontSize: 18,
                 )),
             TextButton(
-                onPressed: () {},
+                onPressed: () { Provider.of<User>(context, listen: false)
+                .updateActiveBlogInfo(context);
+           
+
+            Navigator.pop(
+              context,
+              MaterialPageRoute(builder: (context) => BlogScreen()),
+            );},
                 child: Text(
                   'Save',
                   style: TextStyle(color: Colors.white, fontSize: 17),

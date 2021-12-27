@@ -45,7 +45,7 @@ class _EditState extends State<Edit> with SingleTickerProviderStateMixin {
                     .getActiveBlogBackColor()) ??
                 Colors.blue,
             child:SingleChildScrollView( child: ConstrainedBox(
-          constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height+ MediaQuery.of(context).size.height/2.5), child: Stack(
+          constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height+ MediaQuery.of(context).size.height/2), child: Stack(
               children: [
                 Column(
                   children: <Widget>[
@@ -148,9 +148,25 @@ class _EditState extends State<Edit> with SingleTickerProviderStateMixin {
                         future: Provider.of<User>(context).getActiveBlogPosts(),
                         builder: (context, snapshot) {
                           if (snapshot.hasData&&snapshot.data!=null && snapshot.data.length!=0) {
-                            return PostWidget(
-                                postContent: snapshot.data[0].content,
-                                index: 0);
+                            return Expanded(
+                              child: ListView.separated(
+                                itemCount: snapshot.data.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  Post post = snapshot.data[index];
+                                  return PostWidget(
+                                    postContent: post.content,
+                                    tags: post.tags,
+                                    index: 0,
+                                    post: snapshot.data[index],
+                                    isLikes: false,
+                                  );
+                                },
+                                separatorBuilder: (context, index) =>
+                                    const Divider(
+                                        height: 20.0,
+                                        color: Colors.transparent),
+                              ),
+                            );
                           } else if (snapshot.hasError) {
                             return Text('no');
                           } else if (snapshot.data == null ||

@@ -46,6 +46,12 @@ class User extends ChangeNotifier {
   /// index of the active blog in [_blogs] list
   int _activeBlogIndex;
 
+  ///hide Likes
+  bool _hideLikes;
+
+  ///hide Following
+  bool _hideFollowings;
+
   /// description of the currently active/used blog
   String _activeDescriptionTitle;
 
@@ -417,26 +423,23 @@ class User extends ChangeNotifier {
           convert.jsonDecode(response.body) as Map<String, dynamic>;
       print(response.statusCode);
       print(resposeObject);
-      if(resposeObject.containsKey('likePosts'))
-      {
-         if (resposeObject['likePosts'] != null) {
-       
-        List<Map<String, dynamic>>.from(resposeObject['likePosts']).forEach((data) {
-          try {
-            print('kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk');
-            print(data);
-            //print(_posts.length);
-            print(data);
-            this. _likedPosts.add(new Post.fromJson(data));
-            print(_likedPosts.length);
-            print('the end');
-          } catch (e) {
-            print(e);
-          }
-        });
-      }
-
-
+      if (resposeObject.containsKey('likePosts')) {
+        if (resposeObject['likePosts'] != null) {
+          List<Map<String, dynamic>>.from(resposeObject['likePosts'])
+              .forEach((data) {
+            try {
+              print('kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk');
+              print(data);
+              //print(_posts.length);
+              print(data);
+              this._likedPosts.add(new Post.fromJson(data));
+              print(_likedPosts.length);
+              print('the end');
+            } catch (e) {
+              print(e);
+            }
+          });
+        }
       }
     }
     return _likedPosts;

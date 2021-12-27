@@ -98,7 +98,20 @@ Widget bottomTabBar(TabController _tabController, BuildContext context) {
               if (snapshot.hasData &&
                   snapshot.data != null &&
                   snapshot.data.length != 0) {
-                return   ListView.separated(
+                return  Column(children: <Widget>[  Container(color: Colors.white,child:  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Padding(
+                            padding: EdgeInsets.only(left: 10),
+                            child: Text('Everyone can see this page')),
+                        TextButton(
+                          onPressed: () {},
+                          child: Text('change',
+                              style:
+                                  TextStyle(color: BlogScreenConstant.accent )),
+                        )
+                      ],
+                    ),),Expanded(child:  ListView.separated(
                   itemCount: snapshot.data.length,
                   itemBuilder: (BuildContext context, int index) {
                     Post post = snapshot.data[index];
@@ -112,7 +125,7 @@ Widget bottomTabBar(TabController _tabController, BuildContext context) {
                   },
                   separatorBuilder: (context, index) =>
                       const Divider(height: 20.0, color: Colors.transparent),
-                );
+                ))]);
               } else if (snapshot.hasError) {
                 Center(
                   child: Text('Turbulent connection.Try again'),
@@ -122,36 +135,12 @@ Widget bottomTabBar(TabController _tabController, BuildContext context) {
                 return CircularProgressIndicator();
               
             }),
-        Container(
-            color: Colors.grey,
-            child: Column(
-              children: <Widget>[
-                Column(
-                  children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Padding(
-                            padding: EdgeInsets.only(left: 10),
-                            child: Text('Everyone can see this page')),
-                        TextButton(
-                          onPressed: () {},
-                          child: Text('change',
-                              style:
-                                  TextStyle(color: BlogScreenConstant.accent)),
-                        )
-                      ],
-                    ),
-                    Text(Provider.of<User>(context)
-                            .getUserFollowing()
-                            .toString() +
-                        ' Tumblrs'),
-                  ],
-                )
-              ],
-            ))
+            //followings
+           
 
-        // FollowingCard()
+           
+        
+         FollowingCard()
       ],
       controller: _tabController,
     ),
