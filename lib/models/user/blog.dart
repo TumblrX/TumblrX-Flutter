@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:dartdoc/dartdoc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
@@ -63,7 +62,7 @@ class Blog {
   int _postsCount;
 
   /// list of posts of this blog
-  List<Post> _posts;
+  List<Post> _posts = [];
   bool isCircleAvatar;
   //background color
   String _backGroundColor;
@@ -117,7 +116,6 @@ class Blog {
     if (json.containsKey('description')) {
       _description = json['description'];
       _descriptionBeforEdit = json['description'];
-      
     }
     // else
     // throw Exception('missing required parameter "description"');
@@ -137,16 +135,17 @@ class Blog {
 
     // blog isPrimary flag
     if (json.containsKey('isPrimary')) _isPrimary = json['isPrimary'];
+   
 
     // blog list of posts
-    if (json.containsKey('posts')) {
+    /*  if (json.containsKey('posts')) {
       List<Map<String, dynamic>> parsedPosts =
           List<Map<String, dynamic>>.from(json['posts']);
       parsedPosts.forEach((post) {
         _posts.add(new Post.fromJson(post));
       });
       _postsCount = _posts.length;
-    }
+    }*/
     //else
     //   throw Exception('missing required parameter "posts"');
     //if (json.containsKey('description')) description = json['description'];
@@ -205,6 +204,7 @@ class Blog {
   String get descriptionBeforEdit => _descriptionBeforEdit;
   bool get isCircleBeforEdit => _isCircleBeforEdit;
   String get backGroundColorBeforEdit => _backGroundColorBeforEdit;
+  
   Future<String> getBlogAvatar() async {
     final String endPoint = 'blog/';
     final Map<String, dynamic> reqParameters = {
@@ -334,10 +334,10 @@ class Blog {
   }
 
   ///Get Blog Posts
-  Future<bool> blogPosts(BuildContext context) async {
+  Future<List<Post>> blogPosts(BuildContext context) async {
+    this._posts = [];
     final String endPoint = 'blog/${this._id}/posts';
 
-    print(endPoint);
     final Map<String, String> headers = {
       'Authorization':
           '${Provider.of<Authentication>(context, listen: false).token}'
@@ -347,27 +347,31 @@ class Blog {
         await ApiHttpRepository.sendGetRequest(endPoint, headers: headers);
 
     if (response.statusCode == 200) {
-      print(response.statusCode);
       final resposeObject =
           convert.jsonDecode(response.body) as Map<String, dynamic>;
+      print(response.statusCode);
+      print(resposeObject);
+      if (resposeObject['data'] != null) {
+        List<Map<String, dynamic>> arr =
+            List<Map<String, dynamic>>.from(resposeObject['data']);
 
-      if (resposeObject['data'] != {}) {
-        List<Map<String, dynamic>>.from(resposeObject['data']).map((postData) {
+        arr.forEach((data) {
           try {
-            print(postData);
-            this._posts.add(Post.fromJson(postData));
+            print('kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk');
+            print(data);
+            //print(_posts.length);
+            print(data);
+            this._posts.add(new Post.fromJson(data));
+            print(_posts.length);
+            print('the end');
           } catch (e) {
             print(e);
           }
         });
       }
-
-      print(resposeObject);
-    } else {
-      print('no');
     }
 
-    return true;
+    return [];
   }
 
   //convert hexcolor to Color

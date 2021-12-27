@@ -131,8 +131,10 @@ class User extends ChangeNotifier {
         json['blogs'].forEach((v) {
           _blogs.add(new Blog.fromJson(v));
         });
+
         Provider.of<User>(context, listen: false)
             .setBlogsInfo(context); //esraa added
+
         Provider.of<User>(context, listen: false)
             .getUserPosts(context); //esraa added
 
@@ -155,6 +157,13 @@ class User extends ChangeNotifier {
       data['blogs'] = this._blogs.map((v) => v.toJson()).toList();
     }
     return data;
+  }
+
+  void getUserPosts(BuildContext context) {
+    _blogs.forEach((element) {
+      element.blogPosts(context);
+    });
+    notifyListeners();
   }
 
   /// API to set active/used blog name
@@ -268,7 +277,7 @@ class User extends ChangeNotifier {
     notifyListeners();
   }
 
-  List<Post> getActiveBlogPosts() {
+  Future<List<Post>> getActiveBlogPosts() async {
     return _blogs[_activeBlogIndex].posts;
   }
 
@@ -319,12 +328,6 @@ class User extends ChangeNotifier {
     return _blogs[_activeBlogIndex].stretchHeaderImage;
   }
 
-  void getUserPosts(BuildContext context) {
-    this._blogs.forEach((element) {
-      element.blogPosts(context);
-    });
-  }
-
   void createNewlog(String name, BuildContext context) async {
     final endPoint = 'api/blog/dfsfdfsfsd';
 
@@ -368,6 +371,10 @@ class User extends ChangeNotifier {
     notifyListeners();
   }
 
+  int getUserFollowing() {
+    return _following;
+  }
+
   void getUserInfo(BuildContext context) async {
     final endPoint = 'user/info';
 
@@ -392,5 +399,46 @@ class User extends ChangeNotifier {
         });
       }
     }
+  }
+
+  Future<List<Post>> getUserLikes(BuildContext context) async {
+    final String endPoint = 'user/likes';
+
+    final Map<String, String> headers = {
+      'Authorization':
+          '${Provider.of<Authentication>(context, listen: false).token}'
+    };
+
+    _likedPosts = [];
+    final response =
+        await ApiHttpRepository.sendGetRequest(endPoint, headers: headers);
+    if (response.statusCode == 200) {
+      final resposeObject =
+          convert.jsonDecode(response.body) as Map<String, dynamic>;
+      print(response.statusCode);
+      print(resposeObject);
+      if(resposeObject.containsKey('likePosts'))
+      {
+         if (resposeObject['likePosts'] != null) {
+       
+        List<Map<String, dynamic>>.from(resposeObject['likePosts']).forEach((data) {
+          try {
+            print('kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk');
+            print(data);
+            //print(_posts.length);
+            print(data);
+            this. _likedPosts.add(new Post.fromJson(data));
+            print(_likedPosts.length);
+            print('the end');
+          } catch (e) {
+            print(e);
+          }
+        });
+      }
+
+
+      }
+    }
+    return _likedPosts;
   }
 }

@@ -134,6 +134,7 @@ class Post {
   Post.fromJson(Map<String, dynamic> parsedJson) {
     // ==================== post related data =========================
     // post identifier '_id'
+
     if (parsedJson.containsKey('_id'))
       this._id = parsedJson['_id'];
     else
@@ -230,6 +231,7 @@ class Post {
     // blog avatar shape flag (true => circular, false => rectangular)
     if (blogData.containsKey('isAvatarCircle'))
       this._isAvatarCircle = blogData['isAvatarCircle'];
+   
   }
 
   /// Construct the right block for each of the Post content

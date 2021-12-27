@@ -9,6 +9,8 @@ import 'package:tumblrx/components/blog_screen_initial_screen/blog_screen_header
 import 'package:tumblrx/components/avatar_shape/avatar_image.dart';
 import 'package:tumblrx/components/createpost/create_post.dart';
 import 'package:tumblrx/components/following/following_card.dart';
+import 'package:tumblrx/components/post/post_widget.dart';
+import 'package:tumblrx/models/post.dart';
 import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/services/blog_screen.dart';
 import 'package:tumblrx/services/creating_post.dart';
@@ -23,20 +25,26 @@ class BlogScreen extends StatefulWidget {
 
 class _BlogScreenState extends State<BlogScreen>
     with SingleTickerProviderStateMixin {
+  Future<Post> blogpost;
   TabController _tabController;
-
+ ScrollController _controller;
   @override
   void initState() {
     ///this controller for Tabs bar
     ///function used for Tab bars
 
     _tabController = new TabController(length: 3, vsync: this);
+   
 
     super.initState();
+    // Provider.of<User>(context, listen: false)
+    //   .getUserPosts(context); //esraa added
 
     //intialize befor edit
 
-    // print(Provider.of<User>(context, listen: false).getActiveBlogPosts()[0].blogTitle);
+    // print(
+    //   Provider.of<User>(context, listen: false).getActiveBlogPosts() == null);
+    
   }
 
   @override
@@ -79,16 +87,17 @@ class _BlogScreenState extends State<BlogScreen>
       ),
       body: Center(
         child: SingleChildScrollView(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-                maxHeight: MediaQuery.of(context).size.height + (12 - 3) * 60),
+            child: ConstrainedBox(
+          constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(context).size.height +
+                  MediaQuery.of(context).size.height / 3),
 
-            /// i will chnge it and make it equal total no of following-3*40
+          /// i will chnge it and make it equal total no of following-3*40
 
-            child: Container(
-              color:  hexToColor(Provider.of<User>(context, listen: false)
-                          .getActiveBlogBackColor()) ??
-                      Colors.blue,
+          child: Container(
+              color: hexToColor(Provider.of<User>(context, listen: false)
+                      .getActiveBlogBackColor()) ??
+                  Colors.blue,
               constraints: !kIsWeb
                   ? BoxConstraints()
                   : BoxConstraints(
@@ -130,19 +139,47 @@ class _BlogScreenState extends State<BlogScreen>
                     ]),
 
                     //{
+
                     if (Provider.of<User>(context).getActiveBlogIsPrimary())
                       upperTabBar(_tabController, context),
                     if (Provider.of<User>(context).getActiveBlogIsPrimary())
                       bottomTabBar(_tabController, context),
                     //}
-                    if (!Provider.of<User>(context).getActiveBlogIsPrimary())
-                      Container(
-                        child: Column(),
-                      )
-                  ]),
-            ),
-          ),
-        ),
+                    if (Provider.of<User>(context).getActiveBlogIsPrimary() ==
+                        false)
+                      
+                        Container(
+                          child: FutureBuilder<List<Post>>(
+                            future:
+                                Provider.of<User>(context).getActiveBlogPosts(),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData &&
+                                  snapshot.data != null &&
+                                  snapshot.data.length != 0) {
+                                return PostWidget(
+                              postContent: snapshot.data[0].content,
+                              index: 0,
+                                post: snapshot.data[0],
+                                isLikes: false,
+                                );
+                                // PostWidget(
+                                //postContent: snapshot.data[0].content,
+                                //index: 0,
+                                //post: snapshot.data[0],
+                                //);
+                              } else if (snapshot.hasError) {
+                                return Text('no');
+                              } else if (snapshot.data == null ||
+                                  snapshot.data.length == 0) {
+                                return Column();
+                              }
+                              return CircularProgressIndicator();
+                            },
+                          ),
+                        )
+                      ]),
+                 ),
+        )),
       ),
     );
   }

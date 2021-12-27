@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/services/blog_screen.dart';
 import 'package:tumblrx/utilities/hex_color_value.dart';
-import '../blog_screen_constant.dart';
 import 'avatar_bottomsheet.dart';
 
 class EditAvatar {
@@ -43,7 +42,7 @@ class EditAvatar {
   }
 
   Widget editSquareAvatar(BuildContext context) {
-    final blogProvider = Provider.of<BlogScreenConstantProvider>(context);
+   // final blogProvider = Provider.of<BlogScreenConstantProvider>(context);
     return Positioned(
       left: 140,
       top: 160,

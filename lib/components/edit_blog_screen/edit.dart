@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tumblrx/components/blog_screen_initial_screen/blog_widgets.dart';
 import 'package:tumblrx/components/edit_blog_screen/cover_image_bottomsheet.dart';
 import 'package:tumblrx/components/edit_blog_screen/edit_app_bar.dart';
+import 'package:tumblrx/components/post/post_widget.dart';
+import 'package:tumblrx/models/post.dart';
 import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/services/blog_screen.dart';
 import '../blog_screen_constant.dart';
@@ -41,7 +44,8 @@ class _EditState extends State<Edit> with SingleTickerProviderStateMixin {
             color: hexToColor(Provider.of<User>(context, listen: false)
                     .getActiveBlogBackColor()) ??
                 Colors.blue,
-            child: Stack(
+            child:SingleChildScrollView( child: ConstrainedBox(
+          constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height+ MediaQuery.of(context).size.height/2.5), child: Stack(
               children: [
                 Column(
                   children: <Widget>[
@@ -134,14 +138,29 @@ class _EditState extends State<Edit> with SingleTickerProviderStateMixin {
                               decoration: TextDecoration.none)),
                     ),
                     EditButtons(),
-                    //if (Provider.of<User>(context).getActiveBlogIsPrimary())
-                    //upperTabBar(_tabController, context),
-                    //if (Provider.of<User>(context).getActiveBlogIsPrimary())
-                    //bottomTabBar(_tabController, context),
-                    //if (!Provider.of<User>(context).getActiveBlogIsPrimary())
-                    //Container(
-                    //child: Column(),
-                    //)
+                    if (Provider.of<User>(context).getActiveBlogIsPrimary())
+                    upperTabBar(_tabController, context),
+                    if (Provider.of<User>(context).getActiveBlogIsPrimary())
+                    bottomTabBar(_tabController, context),
+                    if (!Provider.of<User>(context).getActiveBlogIsPrimary())
+                   Container(
+                      child: FutureBuilder<List<Post>>(
+                        future: Provider.of<User>(context).getActiveBlogPosts(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData&&snapshot.data!=null && snapshot.data.length!=0) {
+                            return PostWidget(
+                                postContent: snapshot.data[0].content,
+                                index: 0);
+                          } else if (snapshot.hasError) {
+                            return Text('no');
+                          } else if (snapshot.data == null ||
+                              snapshot.data.length == 0) {
+                            return Column();
+                          }
+                          return CircularProgressIndicator();
+                        },
+                      ),
+                    )
                   ],
                 ),
                 Provider.of<User>(context).getIsAvatarCircle() == true
@@ -150,6 +169,10 @@ class _EditState extends State<Edit> with SingleTickerProviderStateMixin {
 
                 // EditAvatar().editSquareAvatar(context)
               ],
-            )));
+              ),
+            ),
+            ),
+            ),
+            );
   }
 }
