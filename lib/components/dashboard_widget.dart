@@ -80,8 +80,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
           controller: _controller,
           itemBuilder: (BuildContext context, int index) {
             Post post = content.posts[index];
-            return PostWidget(
-                postContent: post.content, tags: post.tags, index: index);
+            try {
+              return PostWidget(
+                  postContent: post.content, tags: post.tags, index: index);
+            } catch (err) {
+              print(err);
+              return Container(
+                child: Center(
+                  child: Icon(Icons.error),
+                ),
+              );
+            }
           },
           separatorBuilder: (context, index) =>
               const Divider(height: 20.0, color: Colors.transparent),

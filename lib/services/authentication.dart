@@ -84,8 +84,6 @@ class Authentication extends ChangeNotifier {
   ///checks if the user exist
   ///And sets the user token
   Future<bool> loginRequest() async {
-    final String endPoint = 'user/login';
-
     Map<String, dynamic> loginRequestBody = {
       "email": userEmail,
       "password": userPassword
@@ -112,10 +110,7 @@ class Authentication extends ChangeNotifier {
         token = responseObject['token'];
         emailExist = true;
         notifyListeners();
-        // print(response.statusCode);
-        // print(token);
-        // print(emailExist);
-        // return User.fromJson(resposeObject);
+
         return true;
       }
     } catch (error) {
@@ -128,8 +123,6 @@ class Authentication extends ChangeNotifier {
   ///
   ///gets the user info that the user is authorized to access
   Future<Map<String, dynamic>> loginGetUserInfo() async {
-    final String endPoint = 'user/info';
-
     try {
       final response = await http.get(
         Uri.parse(ApiHttpRepository.api + 'api/user/info'),

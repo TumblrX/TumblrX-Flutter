@@ -12,7 +12,6 @@ import 'package:tumblrx/services/api_provider.dart';
 import 'package:tumblrx/utilities/constants.dart';
 import 'package:http/http.dart' as http;
 import 'package:tumblrx/utilities/hex_color_value.dart';
-import 'dart:convert' as convert;
 import 'package:http_parser/http_parser.dart';
 import 'authentication.dart';
 

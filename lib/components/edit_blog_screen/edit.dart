@@ -30,6 +30,7 @@ class _EditState extends State<Edit> with SingleTickerProviderStateMixin {
     ///function used for Tab bars
 
     _tabController = new TabController(length: 3, vsync: this);
+    super.initState();
   }
 
   Widget build(BuildContext context) {

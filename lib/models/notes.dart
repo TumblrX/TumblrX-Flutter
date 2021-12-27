@@ -40,7 +40,7 @@ class Notes {
     } catch (error) {
       print('error while fetching notes with id $postId and mode $mode');
     }
-    ;
+
     return notesResponse;
   }
 

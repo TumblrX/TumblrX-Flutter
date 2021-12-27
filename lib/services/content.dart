@@ -79,16 +79,14 @@ class Content extends ChangeNotifier {
   List<Post> _handleResponse(Response response) {
     // if unsuccessful request return empty list
     if (response.statusCode != 200) {
-      // TODO: replace this with logging
-      print(response.body);
+//      print(response.body);
       return [];
     }
     // decode reponse
     final Map<String, dynamic> resposeObject =
         convert.jsonDecode(response.body) as Map<String, dynamic>;
 
-    // TODO: replace this with logging
-    print(resposeObject);
+    // print(resposeObject);
 
     // for pagination, set total number of posts
     if (resposeObject.containsKey('posts'))
@@ -102,7 +100,7 @@ class Content extends ChangeNotifier {
     _posts.addAll(postsArray);
 
     // parse returned recommended posts
-    postsArray = _parseResponseJsonPosts(resposeObject['for_youPosts']);
+    postsArray = _parseResponseJsonPosts(resposeObject['for-youPosts']);
     // add posts to content list
     _posts.addAll(postsArray);
 
@@ -115,6 +113,7 @@ class Content extends ChangeNotifier {
   /// private helper function to parse json-like array of posts
   /// and return list of Post objects
   List<Post> _parseResponseJsonPosts(dynamic posts) {
+    if (posts == null) return [];
     List<Post> postsArray = [];
     try {
       // type casting to list of map objects
@@ -126,13 +125,11 @@ class Content extends ChangeNotifier {
         try {
           return new Post.fromJson(post);
         } catch (err) {
-          // TODO: replace this with logging
-          print(err);
+          //print(err);
         }
       }).toList();
     } catch (err) {
-      // TODO: replace this with logging
-      print(err);
+      //print(err);
     }
     return postsArray;
   }

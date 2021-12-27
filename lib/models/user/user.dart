@@ -99,14 +99,12 @@ class User extends ChangeNotifier {
     if (json.containsKey('default_post_format'))
       _defaultPostFormat = json['default_post_format'];
     if (json.containsKey('name'))
-      // TODO : change this to handler
       _username = json['name'];
     else
       throw Exception('missing required parameter "username"');
     if (json.containsKey('likes')) _likes = json['likes'];
 
     if (json['blogs'] != null) {
-      // TODO : change this to handler
       try {
         json['blogs'].forEach((v) {
           _blogs.add(new Blog.fromJson(v));

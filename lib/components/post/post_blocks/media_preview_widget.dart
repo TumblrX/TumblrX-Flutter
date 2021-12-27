@@ -41,6 +41,7 @@ class MediaWidget extends StatelessWidget {
 
   Widget _buildImageView(void Function() onTap, void Function() onLongPress) {
     try {
+      print('image url is $_url');
       return GestureDetector(
         onTap: onTap,
         onLongPress: onLongPress,
@@ -134,8 +135,8 @@ class MediaWidget extends StatelessWidget {
           if (await directory.exists()) {
             final String fileName = Uri.parse(this._url).path.split('/').last;
             final String downloadPath = '${directory.path}/$fileName';
-            final response = await Dio().download(this._url, downloadPath);
-            final result = await ImageGallerySaver.saveFile(downloadPath);
+            await Dio().download(this._url, downloadPath);
+            await ImageGallerySaver.saveFile(downloadPath);
           }
         } else {}
       } else {}

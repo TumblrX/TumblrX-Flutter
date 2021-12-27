@@ -44,7 +44,7 @@ dependencies:
   intl: ^0.15.7
   dio: ^4.0.4
   flutter_dotenv: ^5.0.2
-  cached_network_image: ^3.2.0
+  cached_network_image: ^2.0.0-rc
   path_provider: ^2.0.8
   permission_handler: ^7.2.0
   image_gallery_saver: ^1.7.1

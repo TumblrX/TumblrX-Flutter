@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:tumblrx/components/post/share_post/blog_selector_widget.dart';
-import 'package:tumblrx/components/post/share_post/search_blog_result.dart';
-import 'package:tumblrx/components/post/share_post/search_widget.dart';
-import 'package:tumblrx/components/post/share_post/selected_blogs_widget.dart';
 import 'package:tumblrx/components/post/share_post/share_methods_widget.dart';
 import 'package:tumblrx/models/posts/post.dart';
 import 'package:tumblrx/models/user/blog.dart';
@@ -13,9 +10,9 @@ class SharePostWidget extends StatelessWidget {
   final Post _post;
   SharePostWidget(Post post) : _post = post;
 
-  final ValueNotifier<List<Blog>> _selectedBlogsNotifier = ValueNotifier([]);
-  final ValueNotifier<List<Blog>> _searchBlogResultsNotifier =
-      ValueNotifier([]);
+  // final ValueNotifier<List<Blog>> _selectedBlogsNotifier = ValueNotifier([]);
+//  final ValueNotifier<List<Blog>> _searchBlogResultsNotifier =
+//      ValueNotifier([]);
 
   Widget topDecoration() => Padding(
         padding: const EdgeInsets.all(8.0),

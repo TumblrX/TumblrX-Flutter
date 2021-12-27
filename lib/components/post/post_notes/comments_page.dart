@@ -1,10 +1,7 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/components/post/post_notes/comment_field_widget.dart';
 import 'package:tumblrx/models/notes.dart';
-import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/services/authentication.dart';
 import 'package:tumblrx/utilities/constants.dart';
 import 'package:tumblrx/utilities/custom_icons.dart';

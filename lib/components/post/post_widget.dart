@@ -1,20 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:tumblrx/components/createpost/post_content.dart';
-import 'package:tumblrx/components/post/post_blocks/audio_block_widget.dart';
-import 'package:tumblrx/components/post/post_blocks/image_block_widget.dart';
-import 'package:tumblrx/components/post/post_blocks/link_block_widget.dart';
-import 'package:tumblrx/components/post/post_blocks/text_block_widget.dart';
-import 'package:tumblrx/components/post/post_blocks/video_block_widget.dart';
 import 'package:tumblrx/components/post/post_content.dart';
 import 'package:tumblrx/components/post/post_footer/post_footer.dart';
 import 'package:tumblrx/components/post/post_header.dart';
-import 'package:tumblrx/components/post/tags_widget.dart';
 import 'package:tumblrx/models/posts/post.dart';
-import 'package:tumblrx/models/posts/audio_block.dart';
-import 'package:tumblrx/models/posts/image_block.dart';
-import 'package:tumblrx/models/posts/link_block.dart';
-import 'package:tumblrx/models/posts/text_block.dart';
-import 'package:tumblrx/models/posts/video_block.dart';
 
 class PostWidget extends StatelessWidget {
   final List _postContent;
@@ -37,6 +25,7 @@ class PostWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     //final int len = post.trail.length;
     return Container(
+      alignment: Alignment.topLeft,
       color: Colors.white,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

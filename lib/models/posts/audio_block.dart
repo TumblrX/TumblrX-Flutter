@@ -4,7 +4,6 @@ Description:
     This file creates a class as an API for audio block content
 */
 
-import 'package:flutter/material.dart';
 import 'package:tumblrx/models/posts/block_media.dart';
 import 'package:tumblrx/models/posts/block_poster.dart';
 

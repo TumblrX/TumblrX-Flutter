@@ -249,8 +249,7 @@ class Post {
               //parsedConent.add(new AudioBlock.fromJson(obj));
               break;
             case 'video':
-              parsedConent.add(new VideoBlock.fromJson(
-                  {'type': 'video', 'provider': 'youtube'}));
+              parsedConent.add(new VideoBlock.fromJson(obj));
               break;
             case 'image':
               parsedConent.add(new ImageBlock.fromJson(obj));
@@ -268,19 +267,6 @@ class Post {
           print('couldn\'t parse $obj');
         }
       });
-      parsedConent.add(
-          new VideoBlock.fromJson({'type': 'video', 'provider': 'youtube'}));
-      parsedConent.add(new AudioBlock.fromJson({
-        'type': 'audio',
-        'provider': 'soundcloud',
-        'url':
-            'https://soundcloud.com/youssefelsahaby/01-1?in=youssefelsahaby/sets/asmaa-allah&si=00bdbc4788484a8e81609dc404e0d240&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing'
-      }));
-      // parsedConent.add(new VideoBlock.fromJson({
-      //   'type': 'video',
-      //   'provider': 'vimeo',
-      //   "url": "https://vimeo.com/142624091"
-      // }));
 
       this._content.addAll(parsedConent);
     } catch (error) {
