@@ -83,7 +83,11 @@ class CreatingPost extends ChangeNotifier {
       'football',
       'health',
       'music',
-      'poetry'
+      'poetry',
+      'movies',
+      'entertainment',
+      'cats',
+      'memories'
     ];
     suggestedHashtags = [
       'art',
@@ -92,7 +96,11 @@ class CreatingPost extends ChangeNotifier {
       'football',
       'health',
       'music',
-      'poetry'
+      'poetry',
+      'movies',
+      'entertainment',
+      'cats',
+      'memories'
     ];
     chosenTextStyle = TextStyleType.Normal;
     postContent = [];

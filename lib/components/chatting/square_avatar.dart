@@ -20,8 +20,7 @@ class SquareAvatar extends StatelessWidget {
         width: 40.0,
         errorBuilder: (context, error, stackTrace) {
           return Image.network(
-              ApiHttpRepository.api +
-                  "uploads/post/image/post-1639258474966-61b28a610a654cdd7b39171c.jpeg",
+              'https://assets.tumblr.com/images/default_avatar/cube_open_128.png',
               height: 40.0,
               width: 40.0,
               fit: BoxFit.fill);

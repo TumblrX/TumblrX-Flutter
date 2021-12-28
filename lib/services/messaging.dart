@@ -24,6 +24,62 @@ class Messaging extends ChangeNotifier {
   ///Number of unseen messages
   int totalUnseenMessage = 0;
 
+  ///List of suggested conversations with users in new conversation screen
+  List<Map<String, String>> suggestedConversations = [
+    {
+      'username': 'Taher2Bahsa',
+      'userId': '61b26488c3616702bdca4d48',
+      'userAvatar':
+          'https://assets.tumblr.com/images/default_avatar/cube_open_128.png'
+    },
+    {
+      'username': 'Gamal',
+      'userId': '61b47bd2bd13dd22af73bd86',
+      'userAvatar':
+          'https://assets.tumblr.com/images/default_avatar/cube_open_128.png'
+    },
+    {
+      'username': 'Example',
+      'userId': '61b46c20bd13dd22af73bd01',
+      'userAvatar':
+          'https://assets.tumblr.com/images/default_avatar/cube_open_128.png'
+    },
+    {
+      'username': 'bishoytest123',
+      'userId': '61ca14deb6ee95ef1f690e44',
+      'userAvatar': ApiHttpRepository.api +
+          'uploads/blog/blog-1640644817494-61ca14deb6ee95ef1f690e47.jpeg'
+    }
+  ];
+
+  ///All conversations users to search from
+  List<Map<String, String>> allSuggestedConversations = [
+    {
+      'username': 'Taher2Bahsa',
+      'userId': '61b26488c3616702bdca4d48',
+      'userAvatar':
+          'https://assets.tumblr.com/images/default_avatar/cube_open_128.png'
+    },
+    {
+      'username': 'Gamal',
+      'userId': '61b47bd2bd13dd22af73bd86',
+      'userAvatar':
+          'https://assets.tumblr.com/images/default_avatar/cube_open_128.png'
+    },
+    {
+      'username': 'Example',
+      'userId': '61b46c20bd13dd22af73bd01',
+      'userAvatar':
+          'https://assets.tumblr.com/images/default_avatar/cube_open_128.png'
+    },
+    {
+      'username': 'bishoytest123',
+      'userId': '61ca14deb6ee95ef1f690e44',
+      'userAvatar': ApiHttpRepository.api +
+          'uploads/blog/blog-1640644817494-61ca14deb6ee95ef1f690e47.jpeg'
+    }
+  ];
+
   ///Sends a message to the database to the user with [userId]
   ///[text] is the message content, and [context] is used to show error message
   void sendMessage(String receiverId, String text, BuildContext context) {
@@ -49,14 +105,14 @@ class Messaging extends ChangeNotifier {
     bool isMe = senderId == myId;
     String otherUser = isMe ? receiverId : senderId;
     int i = conversations.indexWhere((element) => element.userId == otherUser);
-    if (i == -1) {
-      getConversationsList(true, otherUser); //first time message
-      return;
-    }
     if (senderId != myId) {
       totalUnseenMessage += 1;
     }
     print(totalUnseenMessage);
+    if (i == -1) {
+      getConversationsList(true, otherUser); //first time message
+      return;
+    }
     conversations[i].addMessage(text, isMe,
         DateTime.now().add(Duration(hours: -2)).toIso8601String() + 'z');
     notifyListeners();
@@ -192,6 +248,17 @@ class Messaging extends ChangeNotifier {
     }
     notifyListeners();
     return;
+  }
+
+  ///Takes user input [username] and searches in [allSuggestedConversations] to suggest all possible conversations.
+  void searchSuggestedConversations(String username) {
+    suggestedConversations = [];
+    for (Map<String, String> conversation in allSuggestedConversations) {
+      if (conversation['username']
+          .contains(RegExp(username, caseSensitive: false)))
+        suggestedConversations.add(conversation);
+    }
+    notifyListeners();
   }
 
   ///called on logout to disconnect from socket server

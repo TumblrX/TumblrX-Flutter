@@ -117,15 +117,13 @@ class Blog {
     if (json.containsKey('description')) {
       _description = json['description'];
       _descriptionBeforEdit = json['description'];
-      
     }
     // else
     // throw Exception('missing required parameter "description"');
 
     if (json.containsKey('avatar')) {
       _blogAvatar = json['avatar'] == 'none'
-          ? ApiHttpRepository.api +
-              "uploads/post/image/post-1639258474966-61b28a610a654cdd7b39171c.jpeg"
+          ? 'https://assets.tumblr.com/images/default_avatar/cube_open_128.png'
           : json['avatar'];
     }
     // blog isPrivate flag
