@@ -359,9 +359,15 @@ class User extends ChangeNotifier {
         reqBody: blogInfo, headers: headers);
 
     if (response.statusCode == 200 || response.statusCode == 201) {
-      final String endPoint = 'user/info';
+      Map<String, dynamic> responseObject =
+          convert.jsonDecode(response.body) as Map<String, dynamic>;
+      if (responseObject.containsKey('data')) {
+        _blogs.add(Blog.fromJson(responseObject['data']));
 
-      
+        ///set new blog as active blog
+        _activeBlogIndex = _blogs.length - 1;
+        notifyListeners();
+      }
     } else {
       print('unseccful');
       {}

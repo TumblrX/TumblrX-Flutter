@@ -133,7 +133,7 @@ class Blog {
 
     ///headerImage
     if (json.containsKey('headerImage')) {
-      print('from headerImage');
+     
       _headerImage = ApiHttpRepository.api + json['headerImage'] == 'none'
           ? ApiHttpRepository.api + "uploads/blog/defaultHeader.png"
           : json['headerImage'];
@@ -149,19 +149,7 @@ class Blog {
     // blog isPrimary flag
     if (json.containsKey('isPrimary')) _isPrimary = json['isPrimary'];
 
-    // blog list of posts
-    /*  if (json.containsKey('posts')) {
-      List<Map<String, dynamic>> parsedPosts =
-          List<Map<String, dynamic>>.from(json['posts']);
-      parsedPosts.forEach((post) {
-        _posts.add(new Post.fromJson(post));
-      });
-      _postsCount = _posts.length;
-    }*/
-    //else
-    //   throw Exception('missing required parameter "posts"');
-    //if (json.containsKey('description')) description = json['description'];
-
+   
     // followed by blogs
     if (json.containsKey('followedBy')) {
       List<Map<String, dynamic>> parsedBlogs =
@@ -170,7 +158,9 @@ class Blog {
       parsedBlogs.forEach((blogData) {
         _followedBy.add(new Blog.fromJson(blogData));
       });
-      _followersCount = _followedBy.length;
+      
+      if(_followedBy!=null)
+     _followersCount = _followedBy.length;
     }
     //  else
     //   throw Exception('missing required parameter "followedBy"');
@@ -370,7 +360,7 @@ class Blog {
     if (response.statusCode == 200) {
       final resposeObject =
           convert.jsonDecode(response.body) as Map<String, dynamic>;
-
+      
       if (resposeObject['data'] != null) {
         List<Map<String, dynamic>> arr =
             List<Map<String, dynamic>>.from(resposeObject['data']);
@@ -429,7 +419,6 @@ class Blog {
     print(response.statusCode);
 
     if (response.statusCode == 200) {
-      print('scusse');
       print(responseObject);
       //Blog.fromJson(responseObject);
 
@@ -459,7 +448,15 @@ class Blog {
                 "uploads/post/image/post-1639258474966-61b28a610a654cdd7b39171c.jpeg"
             : responseObject['avatar'];
       }
-
+      if (responseObject.containsKey('headerImage')) {
+        _headerImage = responseObject['headerImage'] == 'none'
+            ? "https://assets.tumblr.com/images/default_header/optica_pattern_11.png"
+            : responseObject['headerImage'];
+      }
+      if (responseObject.containsKey('isAvatarCircle')) {
+        
+        this.isCircleAvatar = responseObject['isAvatarCircle'];
+      }
       if (responseObject.containsKey('globalParameters')) {
         if (responseObject['globalParameters'].containsKey('backgroundColor')) {
           this._backGroundColor =

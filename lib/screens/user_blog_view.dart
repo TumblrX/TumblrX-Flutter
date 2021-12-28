@@ -144,7 +144,7 @@ class _UserBlogViewState extends State<UserBlogView>
                              Visibility(
                         visible: snapshot.data.showAvatar ??
                             true,
-                        child: true
+                        child: snapshot.data.isCircleAvatar
                             ? AvatarImage(myBlog: false,path: snapshot.data.blogAvatar,)
                             : Square())
                           ]),
