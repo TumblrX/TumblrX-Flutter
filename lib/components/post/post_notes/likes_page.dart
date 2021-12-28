@@ -99,9 +99,13 @@ class LikesPage extends StatelessWidget {
                           trailing: showFollowButton
                               ? TextButton(
                                   onPressed: () {
-                                    logger.i('blog id is ${blogData.id}');
+                                    logger.d('blog id is ${blogData.id}');
                                     user.userBlogs[user.activeBlogIndex]
-                                        .followBlog(blogData.id, context);
+                                        .followBlog(
+                                            blogData.id,
+                                            Provider.of<Authentication>(context,
+                                                    listen: false)
+                                                .token);
                                   },
                                   child: Text('Follow'))
                               : Container(width: 0, height: 0),

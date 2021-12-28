@@ -4,7 +4,6 @@
   Description:
       A stateless widget to preview media blocks [image, GIF] in a post 
 */
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';

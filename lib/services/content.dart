@@ -67,7 +67,7 @@ class Content extends ChangeNotifier {
     // send get request to 'user/dashboard' | 'user/foryou'
     final Map<String, dynamic> response = await apiClient.sendGetRequest(route,
         headers: headers, query: queryParams);
-    logger.i(response);
+    logger.d(response);
     return _handleResponse(response);
   }
 
@@ -76,11 +76,11 @@ class Content extends ChangeNotifier {
   List<Post> _handleResponse(Map<String, dynamic> response) {
     // if unsuccessful request return empty list
     if (response.containsKey('statuscode') && response['statuscode'] != 200) {
-//      logger.i(response.body);
+//      logger.d(response.body);
       return [];
     }
 
-    // logger.i(resposeObject);
+    // logger.d(resposeObject);
 
     // for pagination, set total number of posts
     if (response.containsKey('posts'))

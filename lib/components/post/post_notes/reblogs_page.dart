@@ -39,7 +39,9 @@ class _ReblogsPageState extends State<ReblogsPage> {
     List<Post> posts = Provider.of<Content>(context, listen: false).posts;
     return FutureBuilder(
       future: Notes.getNotes(
-          'reblog', Provider.of<Authentication>(context).token, widget._postId),
+          'reblog',
+          Provider.of<Authentication>(context, listen: false).token,
+          widget._postId),
       builder: (context, snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.waiting:

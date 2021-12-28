@@ -53,7 +53,7 @@ class FollowingCard extends StatelessWidget {
               ),
             ),
             onTap: () {
-              logger.i('Blog pressed');
+              logger.d('Blog pressed');
             },
           ),
           Padding(

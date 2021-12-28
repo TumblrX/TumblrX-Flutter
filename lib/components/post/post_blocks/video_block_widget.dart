@@ -34,7 +34,7 @@ class _VideoBlockWidgetState extends State<VideoBlockWidget> {
             initialVideoId: videoId,
             params: YoutubePlayerParams(autoPlay: false, mute: true));
       } else
-        logger.i('video id is $videoId');
+        logger.d('video id is $videoId');
     } else if (widget._provider != 'vimeo') {
       _videoController = VideoPlayerController.network(widget._url)
         ..initialize().then((value) => setState(() {}));
@@ -71,7 +71,7 @@ class _VideoBlockWidgetState extends State<VideoBlockWidget> {
       );
     // if (widget._provider == 'vimeo') {
     //   String videoId = widget._url.split('/').last;
-    //   logger.i('video id is $videoId');
+    //   logger.d('video id is $videoId');
     //   return Container(
     //     height: 250,
     //     child: Center(

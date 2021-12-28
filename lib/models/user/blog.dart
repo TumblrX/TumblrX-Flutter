@@ -1,13 +1,8 @@
-import 'dart:developer';
-
-import 'package:flutter/widgets.dart';
-import 'package:provider/provider.dart';
 import 'package:tumblrx/global.dart';
 import 'package:tumblrx/models/posts/post.dart';
 import 'dart:convert' as convert;
 import 'package:tumblrx/services/api_provider.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:tumblrx/services/authentication.dart';
 import 'blog_theme.dart';
 
 class Blog {
@@ -52,12 +47,22 @@ class Blog {
   int _postsCount;
 
   /// list of posts of this blog
-  List<Post> _posts;
-  bool isCircleAvatar;
+  List<Post> _posts = [];
+
+  /// flag to determine avatar shape
+  bool _isCircleAvatar;
 
   /// themes of Blog
-  BlogTheme blogTheme;
+  BlogTheme _blogTheme = BlogTheme();
 
+  String get blogAvatar => _blogAvatar;
+  String get handle => _handle;
+  String get title => _title;
+  String get id => _id;
+  bool get isPrimary => _isPrimary;
+  bool get isCircleAvatar => this._isCircleAvatar;
+
+  BlogTheme get blogTheme => this._blogTheme;
   Blog(
       [this._handle,
       this._title,
@@ -68,7 +73,7 @@ class Blog {
       this._blogAvatar]);
 
   Blog.fromJson(Map<String, dynamic> json) {
-    // blog handle
+    // blog id
     if (json.containsKey('_id'))
       _id = json['_id'];
     else
@@ -88,14 +93,23 @@ class Blog {
 
     if (json.containsKey('avatar')) {
       _blogAvatar = json['avatar'] == 'none'
-          ? ApiHttpRepository.api +
-              "uploads/post/image/post-1639258474966-61b28a610a654cdd7b39171c.jpeg"
+          ? "https://64.media.tumblr.com/9f9b498bf798ef43dddeaa78cec7b027/tumblr_o51oavbMDx1ugpbmuo7_500.png"
           : json['avatar'];
+    }
+    // blog avatar shape
+    if (json.containsKey('isAvatarCircle'))
+      _isCircleAvatar = json['isAvatarCircle'];
+    // avatar header image
+    if (json.containsKey('headerImage')) {
+      this._blogTheme.headerImage = json['headerImage'] == 'none'
+          ? "https://64.media.tumblr.com/9f9b498bf798ef43dddeaa78cec7b027/tumblr_o51oavbMDx1ugpbmuo7_500.png"
+          : json['headerImage'];
+      if (!this._blogTheme.headerImage.contains('http'))
+        this._blogTheme.headerImage =
+            '${ApiHttpRepository.api}' + this._blogTheme.headerImage;
     }
     // blog isPrivate flag
     if (json.containsKey('isPrivate')) _isPrivate = json['isPrivate'];
-    if (json.containsKey('isAvatarCircle'))
-      isCircleAvatar = json['isAvatarCircle'];
 
     // blog isPrimary flag
     if (json.containsKey('isPrimary')) _isPrimary = json['isPrimary'];
@@ -104,31 +118,38 @@ class Blog {
     if (json.containsKey('posts')) {
       List<Map<String, dynamic>> parsedPosts =
           List<Map<String, dynamic>>.from(json['posts']);
-      parsedPosts.forEach((post) {
+      parsedPosts.map((post) {
         _posts.add(new Post.fromJson(post));
       });
       _postsCount = _posts.length;
     }
-    //else
-    //   throw Exception('missing required parameter "posts"');
-    //if (json.containsKey('description')) description = json['description'];
+    // // followed by blogs
+    // if (json.containsKey('followedBy')) {
+    //   List<Map<String, dynamic>> parsedBlogs =
+    //       List<Map<String, dynamic>>.from(json['followedBy']);
 
-    // followed by blogs
-    if (json.containsKey('followedBy')) {
-      List<Map<String, dynamic>> parsedBlogs =
-          List<Map<String, dynamic>>.from(json['followedBy']);
-
-      parsedBlogs.forEach((blogData) {
-        _followedBy.add(new Blog.fromJson(blogData));
-      });
-      _followersCount = _followedBy.length;
-    }
+    //   parsedBlogs.forEach((blogData) {
+    //     _followedBy.add(new Blog.fromJson(blogData));
+    //   });
+    //   _followersCount = _followedBy.length;
+    // }
     //  else
     //   throw Exception('missing required parameter "followedBy"');
 
     if (json.containsKey('blockedTumblrs')) {}
-    // else
-    //   throw Exception('missing required parameter "blockedTumblrs"');
+
+// blog theme
+    if (json.containsKey('customApperance')) {
+      Map<String, dynamic> customApperance =
+          json['customApperance'] as Map<String, dynamic>;
+      if (customApperance.containsKey('globalParameters')) {
+        Map<String, dynamic> globalParameters =
+            customApperance['globalParameters'] as Map<String, dynamic>;
+        if (globalParameters.containsKey('backgroundColor')) {
+          this._blogTheme.backgroundColor = globalParameters['backgroundColor'];
+        }
+      }
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -140,34 +161,6 @@ class Blog {
     data['followedBy'] = convert.jsonEncode(this._followedBy);
     data['isPrivate'] = this._isPrivate;
     return data;
-  }
-
-  String get blogAvatar => _blogAvatar;
-  String get handle => _handle;
-  String get title => _title;
-  String get id => _id;
-  bool get isPrimary => _isPrimary;
-
-  Future<String> getBlogAvatar() async {
-    final String endPoint = 'blog/';
-    final Map<String, dynamic> reqParameters = {
-      "blog-identifier": _title,
-      "size": 64
-    };
-    try {
-      final Map<String, dynamic> response =
-          await apiClient.sendGetRequest(endPoint, query: reqParameters);
-      logger.i(response);
-      if (response['statuscode'] == 200) {
-        return response['body']['avatar_url'];
-      } else {
-        // handle failed request
-        logger.e('error happened ${response['body']['error']}');
-      }
-    } catch (error) {
-      // handle failed request
-      logger.e('error happened $error');
-    }
   }
 
   static Future<Blog> getInfo(String name) async {
@@ -189,14 +182,28 @@ class Blog {
     }
   }
 
-  Future<bool> followBlog(String blogId, BuildContext context) async {
+  Future<bool> followBlog(String blogId, String token) async {
     final String endPoint = "api/user/follow";
     Map<String, dynamic> response =
         await apiClient.sendPostRequest(endPoint, headers: {
-      'Authorization':
-          Provider.of<Authentication>(context, listen: false).token,
+      'Authorization': token,
     }, reqBody: {
       '_id': blogId
+    });
+    if (response['statuscode'] != 200) {
+      logger.e('error at comment ${response['body']}');
+      return false;
+    }
+    return true;
+  }
+
+  Future<bool> followTag(String tagName, String token) async {
+    final String endPoint = "api/user/follow-tag";
+    Map<String, dynamic> response =
+        await apiClient.sendPostRequest(endPoint, headers: {
+      'Authorization': token,
+    }, reqBody: {
+      'tag': tagName,
     });
     if (response['statuscode'] != 200) {
       logger.e('error at comment ${response['body']}');
@@ -252,7 +259,7 @@ class Blog {
   }
 
   void setIsCircleAvatar(bool isCircle) {
-    isCircleAvatar = isCircle;
+    _isCircleAvatar = isCircle;
   }
 
   bool getIsPrimary() {
@@ -261,7 +268,7 @@ class Blog {
 
   static Future pickImage(int indicator) async {
     final image = await ImagePicker().pickImage(source: ImageSource.gallery);
-    logger.i(image.path);
+    logger.d(image.path);
     if (image == null) return;
     if (indicator == 1) Blog().setBlogAvatar(image.path);
     if (indicator == 2) Blog().setHeaderImage(image.path);

@@ -526,7 +526,7 @@ class CreatingPost extends ChangeNotifier {
           ApiHttpRepository.api + editPostEndPoint,
           data: body,
           onSendProgress: (int sent, int total) {
-            logger.i('$sent $total');
+            logger.d('$sent $total');
           },
         );
       } else {
@@ -534,12 +534,12 @@ class CreatingPost extends ChangeNotifier {
           ApiHttpRepository.api + createPostEndPoint,
           data: body,
           onSendProgress: (int sent, int total) {
-            logger.i('$sent $total');
+            logger.d('$sent $total');
           },
         );
       }
 
-      logger.i('Response status: ${response.statuscode}');
+      logger.d('Response status: ${response.statuscode}');
       if (response.statuscode == 201 || response.statuscode == 200)
         return true;
       else

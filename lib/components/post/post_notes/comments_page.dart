@@ -41,8 +41,10 @@ class _CommentsPageState extends State<CommentsPage> {
     return Center(
       child: FutureBuilder(
         // fetch comments on the post
-        future: Notes.getNotes('comment',
-            Provider.of<Authentication>(context).token, widget._postId),
+        future: Notes.getNotes(
+            'comment',
+            Provider.of<Authentication>(context, listen: false).token,
+            widget._postId),
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             // if still processing the request, render a circular progress indicator

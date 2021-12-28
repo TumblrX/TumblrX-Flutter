@@ -124,7 +124,7 @@ class Post {
 
   /// Constructs a new instance usin parsed json data
   Post.fromJson(Map<String, dynamic> parsedJson) {
-    logger.i(parsedJson.toString());
+    logger.d(parsedJson.toString());
     // ==================== post related data =========================
     // post identifier '_id'
     if (parsedJson.containsKey('_id'))
@@ -328,7 +328,7 @@ class Post {
       final response = await apiClient.sendDeleteRequest(endPoint, headers);
 
       if (response['statuscode'] != 200) {
-        logger.i(response);
+        logger.d(response);
         throw Exception('post ID or reblog_key was not found');
       }
       return true;
@@ -377,7 +377,7 @@ class Post {
 
   void editPost(BuildContext context) async {
     double topPadding = MediaQuery.of(context).padding.top;
-    logger.i(unmappedPostContent);
+    logger.d(unmappedPostContent);
     Provider.of<CreatingPost>(context, listen: false).initializePostOptions(
         context,
         edit: true,

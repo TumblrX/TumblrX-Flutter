@@ -86,7 +86,7 @@ class _CommentFieldState extends State<CommentField> {
                           }, reqBody: {
                             'commentText': _textInputController.text
                           });
-                          logger.i(response);
+                          logger.d(response);
                           if (!response.containsKey('error')) {
                             widget._commentNotifier.value = true;
                             setState(() {});

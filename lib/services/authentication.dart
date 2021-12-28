@@ -98,13 +98,13 @@ class Authentication extends ChangeNotifier {
 
       //if i get a bad response then this user doesnot exist
       if (response.statusCode == 400) {
-        logger.i("400");
+        logger.d("400");
         loginErrorMessage = "wrong Email or password please try again";
         notifyListeners();
         return false;
       } else if (response.statusCode != 200) {
         logger.e('!200');
-        logger.i(response.body);
+        logger.d(response.body);
         throw Exception('error in the connection');
       } else {
         var responseObject = convert.jsonDecode(response.body);
@@ -114,8 +114,11 @@ class Authentication extends ChangeNotifier {
 
         return true;
       }
-    } catch (error) {
+    } on SocketException catch (error) {
       logger.e(error);
+      throw error;
+    } catch (err) {
+      logger.e(err);
       return false;
     }
   }
@@ -136,8 +139,8 @@ class Authentication extends ChangeNotifier {
       else {
         Map<String, dynamic> responseObject =
             convert.jsonDecode(response.body) as Map<String, dynamic>;
-        logger.i(response.statusCode);
-        //logger.i(responseObject);
+        logger.d(response.statusCode);
+        //logger.d(responseObject);
         try {
           final blogsResponse = await http.get(
             Uri.parse(ApiHttpRepository.api + 'api/user/get-blogs'),
@@ -151,7 +154,7 @@ class Authentication extends ChangeNotifier {
         } catch (error) {
           throw Exception(error.message.toString());
         }
-        logger.i(responseObject);
+        logger.d(responseObject);
         return responseObject;
       }
     } catch (error) {
@@ -161,7 +164,7 @@ class Authentication extends ChangeNotifier {
 
   ///Sets the user age
   void setUserAge(String age) {
-    // logger.i(age);
+    // logger.d(age);
     int temp = int.parse(age);
     userAge = temp;
     notifyListeners();

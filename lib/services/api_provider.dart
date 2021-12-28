@@ -138,6 +138,7 @@ class ApiHttpRepository implements API {
       endPoint = endPoint.substring(0, endPoint.length - 1);
     }
     final Uri uri = Uri.parse('${api}api/$endPoint');
+    print(uri.toString());
     final Response response =
         headers != null ? await get(uri, headers: headers) : await get(uri);
     if (response.statusCode != 200)

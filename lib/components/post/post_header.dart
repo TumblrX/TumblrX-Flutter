@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 import 'package:tumblrx/global.dart';
 import 'package:tumblrx/models/posts/post.dart';
 import 'package:tumblrx/models/user/user.dart';
+import 'package:tumblrx/services/authentication.dart';
 import 'package:tumblrx/services/content.dart';
 import 'package:tumblrx/utilities/constants.dart';
 
@@ -57,7 +58,10 @@ class PostHeader extends StatelessWidget {
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          _blogInfo(post.blogTitle, isRebloged, post.reblogKey),
+                          Flexible(
+                            child: _blogInfo(
+                                post.blogTitle, isRebloged, post.reblogKey),
+                          ),
                           showFollowButton
                               ? TextButton(
                                   style: ButtonStyle(
@@ -69,9 +73,13 @@ class PostHeader extends StatelessWidget {
                                   onPressed: () {
                                     final User user = Provider.of<User>(context,
                                         listen: false);
-                                    logger.i('blog id is ${post.blogId}');
+                                    logger.d('blog id is ${post.blogId}');
                                     user.userBlogs[user.activeBlogIndex]
-                                        .followBlog(post.blogId, context);
+                                        .followBlog(
+                                            post.blogId,
+                                            Provider.of<Authentication>(context,
+                                                    listen: false)
+                                                .token);
                                   },
                                   child: Text('Follow'),
                                 )
@@ -211,8 +219,11 @@ class PostHeader extends StatelessWidget {
                 children: [
                   Text(
                     blogTitle,
-                    style: TextStyle(color: Colors.black),
-                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: Colors.black,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    softWrap: true,
                   ),
                   Row(
                     children: [

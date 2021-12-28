@@ -160,7 +160,8 @@ class _OptionsWidgetState extends State<OptionsWidget> {
         // remove icon
         _optionIcon(CustomIcons.remove, () {
           widget._post
-              .deletePost(context, Provider.of<Authentication>(context).token)
+              .deletePost(context,
+                  Provider.of<Authentication>(context, listen: false).token)
               .then(
             (value) {
               if (!value) {

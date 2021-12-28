@@ -109,7 +109,8 @@ class _PostFooterState extends State<PostFooter> {
           icon: CustomIcons.remove,
           callback: () {
             _post
-                .deletePost(context, Provider.of<Authentication>(context).token)
+                .deletePost(context,
+                    Provider.of<Authentication>(context, listen: false).token)
                 .then(
               (value) {
                 if (!value) {
@@ -204,7 +205,7 @@ class _PostFooterState extends State<PostFooter> {
   ///  insert it in the overlay
   void _showBlogsPicker(context) {
     User user = Provider.of<User>(context, listen: false);
-    logger.i(user.userBlogs.length);
+    logger.d(user.userBlogs.length);
     final double avatarSize = 50;
     _blogsSelectorPopup = OverlayEntry(
       builder: (ctx) => Material(
@@ -245,13 +246,13 @@ class _PostFooterState extends State<PostFooter> {
   /// private helper function as a callback to be called on tap on like icon
   /// it handles like/unlike api requests and sets the state of the widget
   void _likePost() {
-    logger.i('like status is ${_post.liked.toString()}');
+    logger.d('like status is ${_post.liked.toString()}');
     Future<bool> success =
         _post.liked ? _post.unlikePost(context) : _post.likePost(context);
     success.then((value) {
       if (value)
         setState(() {
-          logger.i('like status is ${_post.liked.toString()}');
+          logger.d('like status is ${_post.liked.toString()}');
         });
       else {
         logger.e('couldn\'t like post');
