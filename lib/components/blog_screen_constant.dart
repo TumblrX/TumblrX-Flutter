@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tumblrx/components/blog_screen_initial_screen/show_image.dart';
+import 'package:tumblrx/models/user/user.dart';
 import 'edit_blog_screen/edit.dart';
 
 ///all constant, variable , widget and function which use more than one
@@ -22,7 +24,7 @@ class BlogScreenConstant extends StatelessWidget {
           title: Text('View your avatar'),
           onTap: () {
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => ShowImage(avatarPath)));
+                MaterialPageRoute(builder: (context) => ShowImage(  Provider.of<User>(context, listen: false).getActiveBlogAvatar())));
           },
         )
       ],

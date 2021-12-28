@@ -36,6 +36,7 @@ class _BlogScreenState extends State<BlogScreen>
     // Provider.of<User>(context, listen: false)
     //   .getUserPosts(context); //esraa added
 
+    Provider.of<User>(context,listen: false).getUserBlogFollowing(context);
     //intialize befor edit
 
     // print(
@@ -116,7 +117,12 @@ class _BlogScreenState extends State<BlogScreen>
 
                         ///display header image with icons and drop down list
 
-                        TextWriting(),
+                        TextWriting(
+                          title: Provider.of<User>(context, listen: false)
+                              .getActiveBlogTitle(),
+                          description: Provider.of<User>(context, listen: false)
+                              .getActiveBlogDescription(),
+                        ),
                       ],
                     ),
 
@@ -129,7 +135,7 @@ class _BlogScreenState extends State<BlogScreen>
                             true,
                         child: Provider.of<User>(context, listen: false)
                                 .getIsAvatarCircle()
-                            ? AvatarImage()
+                            ? AvatarImage(myBlog: true,)
                             : Square())
                   ]),
 
@@ -138,7 +144,7 @@ class _BlogScreenState extends State<BlogScreen>
                   if (Provider.of<User>(context).getActiveBlogIsPrimary())
                     upperTabBar(_tabController, context),
                   if (Provider.of<User>(context).getActiveBlogIsPrimary())
-                    bottomTabBar(_tabController, context),
+                    bottomTabBar(_tabController, context,Provider.of<User>(context, listen: false).getActiveBlog()),
                   //}
                   if (Provider.of<User>(context).getActiveBlogIsPrimary() ==
                       false)

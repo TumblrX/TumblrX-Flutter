@@ -3,6 +3,7 @@ import 'package:dartdoc/dartdoc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
 import 'package:provider/provider.dart';
+import 'package:test/expect.dart';
 import 'package:tumblrx/models/post.dart';
 import 'dart:convert' as convert;
 import 'package:tumblrx/services/api_provider.dart';
@@ -48,6 +49,9 @@ class Blog {
   /// url for avatar
   String _blogAvatar;
 
+  ///url for headerImage
+  String _headerImage;
+
   /// The blog's description
   String _description;
 
@@ -78,7 +82,7 @@ class Blog {
   String _descriptionBeforEdit;
   //isCircleAvatar
   bool _isCircleBeforEdit;
-  String _headerImage;
+
   String _backGroundColorBeforEdit;
 
   /// themes of Blog
@@ -126,6 +130,15 @@ class Blog {
               "uploads/post/image/post-1639258474966-61b28a610a654cdd7b39171c.jpeg"
           : json['avatar'];
     }
+
+    ///headerImage
+    if (json.containsKey('headerImage')) {
+      print('from headerImage');
+      _headerImage = ApiHttpRepository.api + json['headerImage'] == 'none'
+          ? ApiHttpRepository.api + "uploads/blog/defaultHeader.png"
+          : json['headerImage'];
+    }
+
     // blog isPrivate flag
     if (json.containsKey('isPrivate')) _isPrivate = json['isPrivate'];
     if (json.containsKey('isAvatarCircle')) {
@@ -135,7 +148,6 @@ class Blog {
 
     // blog isPrimary flag
     if (json.containsKey('isPrimary')) _isPrimary = json['isPrimary'];
-   
 
     // blog list of posts
     /*  if (json.containsKey('posts')) {
@@ -204,7 +216,8 @@ class Blog {
   String get descriptionBeforEdit => _descriptionBeforEdit;
   bool get isCircleBeforEdit => _isCircleBeforEdit;
   String get backGroundColorBeforEdit => _backGroundColorBeforEdit;
-  
+  String get headerImage => _headerImage;
+  String get description => _description;
   Future<String> getBlogAvatar() async {
     final String endPoint = 'blog/';
     final Map<String, dynamic> reqParameters = {
@@ -245,6 +258,10 @@ class Blog {
       print(error.toString());
       return null;
     }
+  }
+
+  void setBlogId(String id) {
+    this._id = id;
   }
 
   void setTitleBeforeEdit(String title) {
@@ -317,6 +334,10 @@ class Blog {
     return this._isPrimary;
   }
 
+  Future<List<Post>> getBlogPosts() async {
+    return _posts;
+  }
+
   void setShowAvatar(bool show) {
     this._showAvatar = show;
   }
@@ -349,26 +370,20 @@ class Blog {
     if (response.statusCode == 200) {
       final resposeObject =
           convert.jsonDecode(response.body) as Map<String, dynamic>;
-      print(response.statusCode);
-      print(resposeObject);
+
       if (resposeObject['data'] != null) {
         List<Map<String, dynamic>> arr =
             List<Map<String, dynamic>>.from(resposeObject['data']);
 
         arr.forEach((data) {
           try {
-            print('kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk');
-            print(data);
-            //print(_posts.length);
-            print(data);
             this._posts.add(new Post.fromJson(data));
-            print(_posts.length);
-            print('the end');
           } catch (e) {
             print(e);
           }
         });
       }
+      return this._posts;
     }
 
     return [];
@@ -395,9 +410,13 @@ class Blog {
     }
   }
 
-  void blogRetrive(BuildContext context) async {
-    final String endPoint = 'blog/${this._handle}';
+  Future<Blog> blogRetrive(BuildContext context) async {
+    String endPoint;
 
+    if (this._handle != null)
+      endPoint = 'blog/${this._handle}';
+    else
+      endPoint = 'blog/${this._id}';
     final Map<String, String> headers = {
       'Authorization':
           '${Provider.of<Authentication>(context, listen: false).token}'
@@ -407,7 +426,40 @@ class Blog {
 
     Map<String, dynamic> responseObject =
         convert.jsonDecode(response.body) as Map<String, dynamic>;
+    print(response.statusCode);
+
     if (response.statusCode == 200) {
+      print('scusse');
+      print(responseObject);
+      //Blog.fromJson(responseObject);
+
+      if (responseObject.containsKey('_id'))
+        this._id = responseObject['_id'];
+      else
+        throw Exception('missing required parameter "_id"');
+      // blog title
+      if (responseObject.containsKey('title')) {
+        _title = responseObject['title'];
+        _titleBeforeEdit = responseObject['title'];
+      }
+
+      if (responseObject.containsKey('handle')) {
+        this._handle = responseObject['handle'];
+      }
+      if (responseObject.containsKey('description')) {
+        _description = responseObject['description'];
+        _descriptionBeforEdit = responseObject['description'];
+      }
+      if (responseObject.containsKey('isPrimary'))
+        _isPrimary = responseObject['isPrimary'];
+
+      if (responseObject.containsKey('avatar')) {
+        _blogAvatar = responseObject['avatar'] == 'none'
+            ? ApiHttpRepository.api +
+                "uploads/post/image/post-1639258474966-61b28a610a654cdd7b39171c.jpeg"
+            : responseObject['avatar'];
+      }
+
       if (responseObject.containsKey('globalParameters')) {
         if (responseObject['globalParameters'].containsKey('backgroundColor')) {
           this._backGroundColor =
@@ -428,8 +480,10 @@ class Blog {
       }
 
       //print(responseObject);
+      return this;
     } else {
       print(response.statusCode);
+      return null;
     }
   }
 }

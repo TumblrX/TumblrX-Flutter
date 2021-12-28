@@ -141,7 +141,7 @@ class _EditState extends State<Edit> with SingleTickerProviderStateMixin {
                     if (Provider.of<User>(context).getActiveBlogIsPrimary())
                     upperTabBar(_tabController, context),
                     if (Provider.of<User>(context).getActiveBlogIsPrimary())
-                    bottomTabBar(_tabController, context),
+                    bottomTabBar(_tabController, context,Provider.of<User>(context, listen: false).getActiveBlog()),
                     if (!Provider.of<User>(context).getActiveBlogIsPrimary())
                    Container(
                       child: FutureBuilder<List<Post>>(

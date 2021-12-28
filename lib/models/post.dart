@@ -125,7 +125,7 @@ class Post {
   String get reblogKey => this._reblogKey;
   DateTime get publishedOn => _date;
   String get postUrl => _postUrl;
-
+  String get blogId => _blogId;
   set liked(bool liked) {
     this._liked = liked;
   }
@@ -231,7 +231,6 @@ class Post {
     // blog avatar shape flag (true => circular, false => rectangular)
     if (blogData.containsKey('isAvatarCircle'))
       this._isAvatarCircle = blogData['isAvatarCircle'];
-   
   }
 
   /// Construct the right block for each of the Post content

@@ -29,7 +29,7 @@ class  BlogPostHeader extends StatelessWidget {
           : Padding(
               padding: EdgeInsets.only(left: 15.0),
               child: InkWell(
-                onTap: () => PostHeader (index: 0,).showBlogProfile(context),
+                onTap: () => PostHeader (index: 0,).showBlogProfile(context,_post.blogId),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[

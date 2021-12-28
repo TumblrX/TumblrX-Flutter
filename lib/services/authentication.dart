@@ -1,6 +1,9 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
+import 'package:tumblrx/models/user/blog.dart';
+import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/services/api_provider.dart';
 import 'dart:convert' as convert;
 
@@ -146,6 +149,10 @@ class Authentication extends ChangeNotifier {
         print(response.statusCode);
 
         try {
+          // following blogs
+   
+     
+
           final blogsResponse = await http.get(
             Uri.parse(ApiHttpRepository.api + 'api/user/get-blogs'),
             // Send authorization headers to the backend.
@@ -158,7 +165,7 @@ class Authentication extends ChangeNotifier {
         } catch (error) {
           throw Exception(error.message.toString());
         }
-        print(responseObject);
+
         return responseObject;
       }
     } catch (error) {

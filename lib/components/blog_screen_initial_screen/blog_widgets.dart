@@ -5,6 +5,7 @@ import 'package:styled_text/styled_text.dart';
 import 'package:tumblrx/components/following/following_card.dart';
 import 'package:tumblrx/components/post/post_widget.dart';
 import 'package:tumblrx/models/post.dart';
+import 'package:tumblrx/models/user/blog.dart';
 import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/services/blog_screen.dart';
 import 'package:tumblrx/utilities/hex_color_value.dart';
@@ -53,7 +54,7 @@ Widget upperTabBar(TabController _tabController, BuildContext context) {
       ));
 }
 
-Widget bottomTabBar(TabController _tabController, BuildContext context) {
+Widget bottomTabBar(TabController _tabController, BuildContext context, Blog blog) {
   //final blogProvider = Provider.of<BlogScreenConstantProvider>(context);
   Future<Post> blogPost;
   return Expanded(
@@ -66,7 +67,7 @@ Widget bottomTabBar(TabController _tabController, BuildContext context) {
     child: TabBarView(
       children: [
         FutureBuilder<List<Post>>(
-          future: Provider.of<User>(context).getActiveBlogPosts(),
+          future: blog.blogPosts(context),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return ListView.separated(
@@ -95,10 +96,11 @@ Widget bottomTabBar(TabController _tabController, BuildContext context) {
         FutureBuilder<List<Post>>(
             future: Provider.of<User>(context).getUserLikes(context),
             builder: (context, snapshot) {
-              if (snapshot.hasData &&
-                  snapshot.data != null &&
-                  snapshot.data.length != 0) {
-                return  Column(children: <Widget>[  Container(color: Colors.white,child:  Row(
+              if (snapshot.hasData) {
+                return Column(children: <Widget>[
+                  Container(
+                    color: Colors.white,
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         Padding(
@@ -108,39 +110,93 @@ Widget bottomTabBar(TabController _tabController, BuildContext context) {
                           onPressed: () {},
                           child: Text('change',
                               style:
-                                  TextStyle(color: BlogScreenConstant.accent )),
+                                  TextStyle(color: BlogScreenConstant.accent)),
                         )
                       ],
-                    ),),Expanded(child:  ListView.separated(
-                  itemCount: snapshot.data.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    Post post = snapshot.data[index];
-                    return PostWidget(
-                      postContent: post.content,
-                      tags: post.tags,
-                      index: 0,
-                      post: snapshot.data[index],
-                      isLikes: true,
-                    );
-                  },
-                  separatorBuilder: (context, index) =>
-                      const Divider(height: 20.0, color: Colors.transparent),
-                ))]);
+                    ),
+                  ),
+                  Expanded(
+                      child: ListView.separated(
+                    itemCount: snapshot.data.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      Post post = snapshot.data[index];
+                      return PostWidget(
+                        postContent: post.content,
+                        tags: post.tags,
+                        index: 0,
+                        post: snapshot.data[index],
+                        isLikes: true,
+                      );
+                    },
+                    separatorBuilder: (context, index) =>
+                        const Divider(height: 20.0, color: Colors.transparent),
+                  ))
+                ]);
               } else if (snapshot.hasError) {
                 Center(
                   child: Text('Turbulent connection.Try again'),
                 );
-              } 
-             
-                return CircularProgressIndicator();
-              
-            }),
-            //followings
-           
+              }
 
-           
-        
-         FollowingCard()
+              return Center(child: CircularProgressIndicator());
+            }),
+        //followings
+
+        FutureBuilder<List<Blog>>(
+          future: Provider.of<User>(context).getFollowingBlogs(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return Column(
+                children: <Widget>[
+                  Container(
+                    color: Color(0xffe6e0df),
+                    child: Column(
+                      children: <Widget>[
+                        Column(
+                          children: <Widget>[
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Padding(
+                                    padding: EdgeInsets.only(left: 10),
+                                    child: Text('Everyone can see this page')),
+                                TextButton(
+                                  onPressed: () {},
+                                  child: Text('change',
+                                      style: TextStyle(
+                                          color: BlogScreenConstant.accent)),
+                                )
+                              ],
+                            ),
+                            Text(Provider.of<User>(context)
+                                    .getUserFollowing()
+                                    .toString() +
+                                ' Tumblrs'),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                      child: ListView.builder(
+                    itemCount: snapshot.data.length,
+                    itemBuilder: (context, index) {
+                      return
+                      FollowingCard(blog: snapshot.data[index]);
+                    },
+                  ))
+                ],
+              );
+            } else if (snapshot.hasData) {
+              Center(
+                child: Text('Turbulent connection.Try again'),
+              );
+            }
+            return Center(child: CircularProgressIndicator());
+          },
+        )
+
+        // FollowingCard()
       ],
       controller: _tabController,
     ),

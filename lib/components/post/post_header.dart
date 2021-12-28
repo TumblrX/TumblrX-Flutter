@@ -9,7 +9,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/models/post.dart';
+import 'package:tumblrx/models/user/blog.dart';
 import 'package:tumblrx/models/user/user.dart';
+import 'package:tumblrx/screens/user_blog_view.dart';
 import 'package:tumblrx/services/content.dart';
 import 'package:tumblrx/utilities/constants.dart';
 
@@ -45,7 +47,7 @@ class PostHeader extends StatelessWidget {
           : Padding(
               padding: EdgeInsets.only(left: 15.0),
               child: InkWell(
-                onTap: () => showBlogProfile(context),
+                onTap: () => showBlogProfile(context, post.blogId),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
@@ -63,7 +65,9 @@ class PostHeader extends StatelessWidget {
                                             .colorScheme
                                             .secondary),
                                   ),
-                                  onPressed: () => post.followBlog(),
+                                  onPressed: () =>
+                                      Provider.of<User>(context, listen: false)
+                                          .followUser(context, post.blogId),
                                   child: Text('Follow'),
                                 )
                               : emptyContainer(),
@@ -85,8 +89,19 @@ class PostHeader extends StatelessWidget {
   }
 
   /// navigate to the blog screen to view blog info
-  void showBlogProfile(BuildContext context) {
-    Navigator.of(context).pushNamed('blog_screen');
+  void showBlogProfile(BuildContext context, String blogId) {
+    if (Provider.of<User>(context, listen: false).isUserBlog(blogId))
+      Navigator.of(context).pushNamed('blog_screen');
+    else {
+   
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => UserBlogView(id: blogId,
+                
+                )),
+      );
+    }
   }
 
   /// callback to open a dialog with blog options
@@ -96,12 +111,10 @@ class PostHeader extends StatelessWidget {
     final String muteNotificationMessage =
         'Would you like to mute push notifications for this particular post?';
     showModalBottomSheet(
-       shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20.0)),
-      
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
       context: context,
-      builder: (context) =>Column(
-         mainAxisSize: MainAxisSize.min,
+      builder: (context) => Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           ListTile(
             title: Text('Pin post'),
