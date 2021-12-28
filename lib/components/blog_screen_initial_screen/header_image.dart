@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/components/blog_screen_constant.dart';
 import 'package:tumblrx/components/edit_blog_screen/edit.dart';
+import 'package:tumblrx/global.dart';
 import 'package:tumblrx/models/user/user.dart';
 import '../blog_screen_search/blog_screen_search.dart';
 import 'create_new_tumblr.dart';
@@ -13,7 +14,6 @@ class HeaderImage extends StatefulWidget {
 }
 
 class _HeaderImageState extends State<HeaderImage> {
- 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -42,15 +42,12 @@ class _HeaderImageState extends State<HeaderImage> {
                                 .setActiveBlog(value);
                             Provider.of<User>(context, listen: false)
                                 .updateActiveBlog();
-                          }
-                          else if(value=='create')
-                          {
-                       Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => CreateNewTumblrPage()),
-                          );
-
+                          } else if (value == 'create') {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => CreateNewTumblrPage()),
+                            );
                           }
                         },
                         itemBuilder: (BuildContext context) {
@@ -66,25 +63,29 @@ class _HeaderImageState extends State<HeaderImage> {
                                       Provider.of<User>(context, listen: false)
                                           .userBlogs[i]
                                           .handle,
-                                  child:Container( decoration:BoxDecoration(border:Border(bottom: BorderSide(color: Colors.black12))) ,child: ListTile(
-                                    title: Text(Provider.of<User>(context,
-                                            listen: false)
-                                        .userBlogs[i]
-                                        .handle),
-                                    leading: Container(
-                                      width: 50,
-                                      height: 50,
-                                      child: Image(
-                                        image: NetworkImage(Provider.of<User>(
-                                                context,
+                                  child: Container(
+                                      decoration: BoxDecoration(
+                                          border: Border(
+                                              bottom: BorderSide(
+                                                  color: Colors.black12))),
+                                      child: ListTile(
+                                        title: Text(Provider.of<User>(context,
                                                 listen: false)
                                             .userBlogs[i]
-                                            .blogAvatar,
-                                           ),
-                                      ),
-                                    ),
-                                  ))),
-                            
+                                            .handle),
+                                        leading: Container(
+                                          width: 50,
+                                          height: 50,
+                                          child: Image(
+                                            image: NetworkImage(
+                                              Provider.of<User>(context,
+                                                      listen: false)
+                                                  .userBlogs[i]
+                                                  .blogAvatar,
+                                            ),
+                                          ),
+                                        ),
+                                      ))),
                             PopupMenuItem(
                                 value: 'create',
                                 child: ListTile(
@@ -134,7 +135,7 @@ class _HeaderImageState extends State<HeaderImage> {
                       icon: Icon(Icons.share),
                       color: Colors.white,
                       onPressed: () {
-                        print('share is pressed');
+                        logger.e('share is pressed');
                       },
                     ),
                     IconButton(
@@ -142,7 +143,7 @@ class _HeaderImageState extends State<HeaderImage> {
                       icon: Icon(Icons.settings),
                       color: Colors.white,
                       onPressed: () {
-                        print('setting is pressed');
+                        logger.e('setting is pressed');
                       },
                     ),
                   ],

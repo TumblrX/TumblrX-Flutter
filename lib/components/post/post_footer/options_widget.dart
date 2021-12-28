@@ -10,26 +10,25 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/components/post/share_post/share_post_widget.dart';
+import 'package:tumblrx/global.dart';
 import 'package:tumblrx/models/posts/post.dart';
 import 'package:tumblrx/models/user/user.dart';
+import 'package:tumblrx/services/authentication.dart';
 import 'package:tumblrx/utilities/constants.dart';
 import 'package:tumblrx/utilities/custom_icons.dart';
 
 class OptionsWidget extends StatefulWidget {
   final String _activeBlogTitle;
   final Post _post;
-  final int _postIndex;
   final void Function() _showNotesPage;
 
   OptionsWidget(
       {Key key,
       String activeBlogTitle,
       @required Post post,
-      @required int postIndex,
       @required void Function() showNotesPage})
       : _activeBlogTitle = activeBlogTitle,
         _post = post,
-        _postIndex = postIndex,
         _showNotesPage = showNotesPage,
         super(key: key);
   @override
@@ -65,11 +64,11 @@ class _OptionsWidgetState extends State<OptionsWidget> {
           _liked = !_liked;
         });
       else {
-        print('false');
+        logger.e('like post failed');
         showSnackBarMessage(context, errorMessage, Colors.red);
       }
     }).catchError((e) {
-      print('error is ${e.toString()}');
+      logger.e('error is ${e.toString()}');
       showSnackBarMessage(context, errorMessage, Colors.red);
     });
   }
@@ -77,7 +76,6 @@ class _OptionsWidgetState extends State<OptionsWidget> {
   /// callback to insert an overlay entry to choose which blog to use in reblogging
   void _showBlogsPicker(context) {
     User user = Provider.of<User>(context, listen: false);
-    print(user.userBlogs.length);
     final double avatarSize = 50;
     _blogsSelectorPopup = OverlayEntry(
       builder: (ctx) => Material(
@@ -103,8 +101,11 @@ class _OptionsWidgetState extends State<OptionsWidget> {
                         errorWidget: (context, url, error) => CircleAvatar(
                           child: Icon(Icons.error),
                         ),
-                        placeholder: (context, url) =>
-                            CircularProgressIndicator(),
+                        progressIndicatorBuilder: (context, url, progress) =>
+                            LimitedBox(
+                                maxHeight: 40,
+                                maxWidth: 40,
+                                child: CircularProgressIndicator()),
                       ),
                     ),
                   ))
@@ -158,14 +159,16 @@ class _OptionsWidgetState extends State<OptionsWidget> {
       if (widget._post.blogTitle == widget._activeBlogTitle) ...[
         // remove icon
         _optionIcon(CustomIcons.remove, () {
-          widget._post.deletePost(context).then(
+          widget._post
+              .deletePost(context, Provider.of<Authentication>(context).token)
+              .then(
             (value) {
               if (!value) {
                 showSnackBarMessage(context, errorMessage, Colors.red);
               }
             },
           ).catchError((error) {
-            print(error.toString());
+            logger.e(error.toString());
             showSnackBarMessage(context, errorMessage, Colors.red);
           });
         }, Colors.black),

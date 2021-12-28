@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:tumblrx/global.dart';
 import 'package:tumblrx/models/posts/post.dart';
 import 'package:tumblrx/models/tag.dart';
 import 'package:tumblrx/models/user/blog.dart';
@@ -111,7 +112,7 @@ class User extends ChangeNotifier {
         });
         setActiveBlog(json['blogs'][0]['handle']);
       } catch (err) {
-        print('error in creating blogs $err');
+        logger.e('error in creating blogs $err');
       }
     }
   }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:tumblrx/global.dart';
 import 'package:tumblrx/models/user/blog.dart';
-import 'package:tumblrx/services/api_provider.dart';
 
 class SearchWidget extends StatefulWidget {
   final ValueNotifier<List<Blog>> _searchBlogResultsNotifier;
@@ -33,7 +33,7 @@ class _SearchWidgetState extends State<SearchWidget> {
                   // send request to search for blogs with entered regex=value
                   // update valuenotifier value with returned list
                   String endPoint = "";
-                  await ApiHttpRepository.sendGetRequest(endPoint);
+                  await apiClient.sendGetRequest(endPoint);
                   widget._searchBlogResultsNotifier.value = [];
                 },
                 textAlignVertical: TextAlignVertical.bottom,

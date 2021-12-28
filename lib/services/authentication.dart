@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:tumblrx/global.dart';
 import 'package:tumblrx/services/api_provider.dart';
 import 'dart:convert' as convert;
 
@@ -97,13 +98,13 @@ class Authentication extends ChangeNotifier {
 
       //if i get a bad response then this user doesnot exist
       if (response.statusCode == 400) {
-        print("400");
+        logger.i("400");
         loginErrorMessage = "wrong Email or password please try again";
         notifyListeners();
         return false;
       } else if (response.statusCode != 200) {
-        print('!200');
-        print(response.body);
+        logger.e('!200');
+        logger.i(response.body);
         throw Exception('error in the connection');
       } else {
         var responseObject = convert.jsonDecode(response.body);
@@ -114,7 +115,7 @@ class Authentication extends ChangeNotifier {
         return true;
       }
     } catch (error) {
-      print(error);
+      logger.e(error);
       return false;
     }
   }
@@ -135,8 +136,8 @@ class Authentication extends ChangeNotifier {
       else {
         Map<String, dynamic> responseObject =
             convert.jsonDecode(response.body) as Map<String, dynamic>;
-        print(response.statusCode);
-        //print(responseObject);
+        logger.i(response.statusCode);
+        //logger.i(responseObject);
         try {
           final blogsResponse = await http.get(
             Uri.parse(ApiHttpRepository.api + 'api/user/get-blogs'),
@@ -150,7 +151,7 @@ class Authentication extends ChangeNotifier {
         } catch (error) {
           throw Exception(error.message.toString());
         }
-        print(responseObject);
+        logger.i(responseObject);
         return responseObject;
       }
     } catch (error) {
@@ -160,7 +161,7 @@ class Authentication extends ChangeNotifier {
 
   ///Sets the user age
   void setUserAge(String age) {
-    // print(age);
+    // logger.i(age);
     int temp = int.parse(age);
     userAge = temp;
     notifyListeners();

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:tumblrx/components/post/share_post/blog_selector_widget.dart';
 import 'package:tumblrx/components/post/share_post/share_methods_widget.dart';
 import 'package:tumblrx/models/posts/post.dart';
-import 'package:tumblrx/models/user/blog.dart';
 
 class SharePostWidget extends StatelessWidget {
   static final String id = "share_post";

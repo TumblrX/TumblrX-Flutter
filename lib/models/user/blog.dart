@@ -1,6 +1,8 @@
+import 'dart:developer';
+
 import 'package:flutter/widgets.dart';
-import 'package:http/http.dart';
 import 'package:provider/provider.dart';
+import 'package:tumblrx/global.dart';
 import 'package:tumblrx/models/posts/post.dart';
 import 'dart:convert' as convert;
 import 'package:tumblrx/services/api_provider.dart';
@@ -17,15 +19,6 @@ class Blog {
 
   /// The id of the blog
   String _id;
-
-  /// the URL of the blog
-  String _url;
-
-  /// indicate if posts are tweeted auto, Y, N
-  String _tweet;
-
-  /// indicate if posts are sent to facebook Y, N
-  String _facebook;
 
   /// indicates if this is the user's primary blog, default=false
   bool _primary = false;
@@ -162,21 +155,18 @@ class Blog {
       "size": 64
     };
     try {
-      final Response response = await MockHttpRepository.sendGetRequest(
-          endPoint,
-          queryParams: reqParameters);
-      if (response.statusCode == 200) {
-        final responseParsed = convert.jsonDecode(response.body);
-
-        print(responseParsed['avatar_url']);
-        return responseParsed['avatar_url'];
+      final Map<String, dynamic> response =
+          await apiClient.sendGetRequest(endPoint, query: reqParameters);
+      logger.i(response);
+      if (response['statuscode'] == 200) {
+        return response['body']['avatar_url'];
       } else {
         // handle failed request
-        throw Exception(response.body.toString());
+        logger.e('error happened ${response['body']['error']}');
       }
     } catch (error) {
       // handle failed request
-      throw Exception(error.message.toString());
+      logger.e('error happened $error');
     }
   }
 
@@ -185,28 +175,31 @@ class Blog {
     final Map<String, dynamic> reqParameters = {"blog-identifier": name};
 
     try {
-      final Response response = await MockHttpRepository.sendGetRequest(
-          endPoint,
-          queryParams: reqParameters);
-      if (response.statusCode != 200) throw Exception(response.body.toString());
-      final parsedResponse = convert.jsonDecode(response.body);
-      return Blog.fromJson(parsedResponse['blog']);
+      final Map<String, dynamic> response =
+          await apiClient.sendGetRequest(endPoint, query: reqParameters);
+
+      if (response['statuscode'] != 200) {
+        logger.e('error happened ${response['body']['error']}');
+      }
+
+      return Blog.fromJson(response['body']['blog']);
     } catch (error) {
-      print(error.toString());
+      logger.e(error.toString());
       return null;
     }
   }
 
   Future<bool> followBlog(String blogId, BuildContext context) async {
-    final String endPoint = "user/follow";
-    Response response =
-        await ApiHttpRepository.sendPostRequest(endPoint, headers: {
-      'Authorization': Provider.of<Authentication>(context).token,
+    final String endPoint = "api/user/follow";
+    Map<String, dynamic> response =
+        await apiClient.sendPostRequest(endPoint, headers: {
+      'Authorization':
+          Provider.of<Authentication>(context, listen: false).token,
     }, reqBody: {
       '_id': blogId
     });
-    if (response.statusCode != 200) {
-      print('error at comment ${convert.json.decode(response.body)}');
+    if (response['statuscode'] != 200) {
+      logger.e('error at comment ${response['body']}');
       return false;
     }
     return true;
@@ -268,7 +261,7 @@ class Blog {
 
   static Future pickImage(int indicator) async {
     final image = await ImagePicker().pickImage(source: ImageSource.gallery);
-    print(image.path);
+    logger.i(image.path);
     if (image == null) return;
     if (indicator == 1) Blog().setBlogAvatar(image.path);
     if (indicator == 2) Blog().setHeaderImage(image.path);

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tumblrx/global.dart';
 import 'package:tumblrx/models/notes.dart';
 import 'package:tumblrx/models/user/blog.dart';
 import 'package:tumblrx/models/user/user.dart';
@@ -39,7 +40,6 @@ class LikesPage extends StatelessWidget {
                   child: Icon(Icons.error_outline),
                 );
               if (snapshot.hasData) {
-                print(snapshot.data.toString());
                 // if no likes yet, render a placeholder
                 if (snapshot.data.length == 0)
                   return Column(
@@ -75,6 +75,11 @@ class LikesPage extends StatelessWidget {
                                 blogData.blogAvatar == 'none')
                             ? "https://64.media.tumblr.com/9f9b498bf798ef43dddeaa78cec7b027/tumblr_o51oavbMDx1ugpbmuo7_500.png"
                             : blogData.blogAvatar;
+                        final User user =
+                            Provider.of<User>(context, listen: false);
+                        final bool showFollowButton =
+                            blogData.title != user.getActiveBlogTitle() &&
+                                user.getActiveBlogIsPrimary();
                         // build a list tile to view owner of the like
                         return ListTile(
                           leading: blogData.isCircleAvatar
@@ -89,13 +94,17 @@ class LikesPage extends StatelessWidget {
                                   )),
                           title: Text(blogData.title),
                           subtitle: Text(blogData.handle),
-                          // if different blog, view
-                          trailing: blogData.title ==
-                                  Provider.of<User>(context, listen: false)
-                                      .getActiveBlogTitle()
-                              ? Container(width: 0, height: 0)
-                              : TextButton(
-                                  onPressed: null, child: Text('Follow')),
+                          // if different blog, and active blog is primary
+                          // show follow button
+                          trailing: showFollowButton
+                              ? TextButton(
+                                  onPressed: () {
+                                    logger.i('blog id is ${blogData.id}');
+                                    user.userBlogs[user.activeBlogIndex]
+                                        .followBlog(blogData.id, context);
+                                  },
+                                  child: Text('Follow'))
+                              : Container(width: 0, height: 0),
                           onTap: () => Navigator.of(context).pushNamed(
                               'blog_screen',
                               arguments: {'blogHandle': blogData.handle}),

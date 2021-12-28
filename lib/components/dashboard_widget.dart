@@ -9,6 +9,7 @@ Description:
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/components/post/post_widget.dart';
+import 'package:tumblrx/global.dart';
 import 'package:tumblrx/models/posts/post.dart';
 import 'package:tumblrx/services/authentication.dart';
 import 'package:tumblrx/services/content.dart';
@@ -58,8 +59,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           _pageNum++;
         });
       }).catchError((err) {
-        print('error in dashboard widget while loading more posts $err');
-
+        logger.e('error in dashboard widget while loading more posts $err');
         setState(() {});
       });
     }
@@ -84,7 +84,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               return PostWidget(
                   postContent: post.content, tags: post.tags, index: index);
             } catch (err) {
-              print(err);
+              logger.e(err);
               return Container(
                 child: Center(
                   child: Icon(Icons.error),

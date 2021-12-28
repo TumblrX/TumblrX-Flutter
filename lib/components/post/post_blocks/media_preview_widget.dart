@@ -4,6 +4,7 @@
   Description:
       A stateless widget to preview media blocks [image, GIF] in a post 
 */
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -12,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:tumblrx/global.dart';
 import 'package:tumblrx/utilities/constants.dart';
 
 class MediaWidget extends StatelessWidget {
@@ -41,7 +43,6 @@ class MediaWidget extends StatelessWidget {
 
   Widget _buildImageView(void Function() onTap, void Function() onLongPress) {
     try {
-      print('image url is $_url');
       return GestureDetector(
         onTap: onTap,
         onLongPress: onLongPress,
@@ -49,7 +50,11 @@ class MediaWidget extends StatelessWidget {
           imageUrl: this._url,
           width: this._width,
           height: this._height,
-          placeholder: (cts, url) => Center(child: CircularProgressIndicator()),
+          progressIndicatorBuilder: (context, url, progress) => LimitedBox(
+            maxHeight: 40,
+            maxWidth: 40,
+            child: CircularProgressIndicator(),
+          ),
           errorWidget: (ctx, url, error) => noImage(),
         ),
       );
@@ -141,7 +146,7 @@ class MediaWidget extends StatelessWidget {
         } else {}
       } else {}
     } catch (err) {
-      print(err);
+      logger.e(err);
       throw err;
     }
   }

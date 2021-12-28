@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tumblrx/global.dart';
 
 class FollowingCard extends StatelessWidget {
   @override
@@ -44,13 +45,15 @@ class FollowingCard extends StatelessWidget {
                 ];
               },
               onSelected: (value) {
-                    // add action
-
+                // add action
               },
-              icon: Icon(Icons.person,color: Colors.black,),
+              icon: Icon(
+                Icons.person,
+                color: Colors.black,
+              ),
             ),
             onTap: () {
-              print('Blog pressed');
+              logger.i('Blog pressed');
             },
           ),
           Padding(

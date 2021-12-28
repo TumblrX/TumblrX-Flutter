@@ -12,14 +12,13 @@ import 'package:tumblrx/components/post/post_content.dart';
 import 'package:tumblrx/components/post/post_header.dart';
 import 'package:tumblrx/models/notes.dart';
 import 'package:tumblrx/models/posts/post.dart';
-import 'package:tumblrx/services/api_provider.dart';
 import 'package:tumblrx/services/authentication.dart';
 import 'package:tumblrx/services/content.dart';
 import 'package:tumblrx/utilities/constants.dart';
 import 'package:tumblrx/utilities/custom_icons.dart';
 
 class ReblogsPage extends StatefulWidget {
-  String _postId;
+  final String _postId;
   ReblogsPage({Key key, @required String postId})
       : _postId = postId,
         super(key: key);

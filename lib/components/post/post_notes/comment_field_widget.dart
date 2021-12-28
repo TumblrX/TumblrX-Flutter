@@ -1,10 +1,7 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import 'package:provider/provider.dart';
+import 'package:tumblrx/global.dart';
 import 'package:tumblrx/models/user/user.dart';
-import 'package:tumblrx/services/api_provider.dart';
 import 'package:tumblrx/services/authentication.dart';
 import 'package:tumblrx/utilities/constants.dart';
 
@@ -80,22 +77,20 @@ class _CommentFieldState extends State<CommentField> {
                       ? () async {
                           final String endPoint =
                               "api/post/${widget._postId}/comment";
-                          Response response =
-                              await ApiHttpRepository.sendPostRequest(endPoint,
-                                  headers: {
-                                'Authorization': Provider.of<Authentication>(
-                                        context,
-                                        listen: false)
-                                    .token
-                              },
-                                  reqBody: {
-                                'commentText': _textInputController.text
-                              });
-                          if (response.statusCode == 200) {
+                          Map<String, dynamic> response = await apiClient
+                              .sendPostRequest(endPoint, headers: {
+                            'Authorization': Provider.of<Authentication>(
+                                    context,
+                                    listen: false)
+                                .token
+                          }, reqBody: {
+                            'commentText': _textInputController.text
+                          });
+                          logger.i(response);
+                          if (!response.containsKey('error')) {
                             widget._commentNotifier.value = true;
                             setState(() {});
                           } else {
-                            print(json.decode(response.body).toString());
                             showSnackBarMessage(
                                 context, 'Something went wrong', Colors.red);
                           }

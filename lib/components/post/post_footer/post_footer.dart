@@ -10,8 +10,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/components/post/post_notes/notes_page.dart';
 import 'package:tumblrx/components/post/share_post/share_post_widget.dart';
+import 'package:tumblrx/global.dart';
 import 'package:tumblrx/models/posts/post.dart';
 import 'package:tumblrx/models/user/user.dart';
+import 'package:tumblrx/services/authentication.dart';
 import 'package:tumblrx/services/content.dart';
 import 'package:tumblrx/utilities/constants.dart';
 import 'package:tumblrx/utilities/custom_icons.dart';
@@ -106,14 +108,16 @@ class _PostFooterState extends State<PostFooter> {
       _optionIcon(
           icon: CustomIcons.remove,
           callback: () {
-            _post.deletePost(context).then(
+            _post
+                .deletePost(context, Provider.of<Authentication>(context).token)
+                .then(
               (value) {
                 if (!value) {
                   showSnackBarMessage(context, errorMessage, Colors.red);
                 }
               },
             ).catchError((error) {
-              print(error.toString());
+              logger.e(error.toString());
               showSnackBarMessage(context, errorMessage, Colors.red);
             });
           },
@@ -200,7 +204,7 @@ class _PostFooterState extends State<PostFooter> {
   ///  insert it in the overlay
   void _showBlogsPicker(context) {
     User user = Provider.of<User>(context, listen: false);
-    print(user.userBlogs.length);
+    logger.i(user.userBlogs.length);
     final double avatarSize = 50;
     _blogsSelectorPopup = OverlayEntry(
       builder: (ctx) => Material(
@@ -241,20 +245,20 @@ class _PostFooterState extends State<PostFooter> {
   /// private helper function as a callback to be called on tap on like icon
   /// it handles like/unlike api requests and sets the state of the widget
   void _likePost() {
-    print('like status is ${_post.liked.toString()}');
+    logger.i('like status is ${_post.liked.toString()}');
     Future<bool> success =
         _post.liked ? _post.unlikePost(context) : _post.likePost(context);
     success.then((value) {
       if (value)
         setState(() {
-          print('like status is ${_post.liked.toString()}');
+          logger.i('like status is ${_post.liked.toString()}');
         });
       else {
-        print('false');
+        logger.e('couldn\'t like post');
         showSnackBarMessage(context, errorMessage, Colors.red);
       }
     }).catchError((e) {
-      print('error is $e');
+      logger.e('error is $e');
       showSnackBarMessage(context, errorMessage, Colors.red);
     });
   }

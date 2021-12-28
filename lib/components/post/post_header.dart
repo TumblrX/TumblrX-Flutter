@@ -9,6 +9,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tumblrx/global.dart';
 import 'package:tumblrx/models/posts/post.dart';
 import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/services/content.dart';
@@ -33,8 +34,8 @@ class PostHeader extends StatelessWidget {
         Provider.of<Content>(context, listen: false).posts[_index];
 
     final bool isRebloged = post.reblogKey != null && post.reblogKey.isNotEmpty;
-    final bool showFollowButton = post.blogTitle !=
-        Provider.of<User>(context, listen: false).getActiveBlogTitle();
+    final bool showFollowButton =
+        !post.isFollowed && Provider.of<User>(context).getActiveBlogIsPrimary();
     return SizedBox(
       height: postHeaderHeight,
       child: post.blogTitle == null
@@ -68,8 +69,9 @@ class PostHeader extends StatelessWidget {
                                   onPressed: () {
                                     final User user = Provider.of<User>(context,
                                         listen: false);
+                                    logger.i('blog id is ${post.blogId}');
                                     user.userBlogs[user.activeBlogIndex]
-                                        .followBlog(post.postBlog.id, context);
+                                        .followBlog(post.blogId, context);
                                   },
                                   child: Text('Follow'),
                                 )
@@ -240,7 +242,7 @@ class PostHeader extends StatelessWidget {
         width: avatarSize,
         height: avatarSize,
         imageUrl: blogAvatar,
-        placeholder: (context, url) => SizedBox(
+        progressIndicatorBuilder: (context, url, progress) => SizedBox(
           width: avatarSize,
           height: avatarSize,
           child: Center(child: const CircularProgressIndicator()),
