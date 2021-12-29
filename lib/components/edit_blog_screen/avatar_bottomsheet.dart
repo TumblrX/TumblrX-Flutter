@@ -25,11 +25,11 @@ class EditAvatarBottomSheet extends StatelessWidget {
             ),
             title: Text('Choose a photo'),
             onTap: () {
+              print(Provider.of<User>(context, listen: false)
+                  .getActiveBlogAvatar());
               Provider.of<User>(context, listen: false)
                   .getActiveBlog()
                   .pickImage(1);
-                  
-            
             }),
         Padding(
           padding: EdgeInsets.only(left: 10, right: 10),

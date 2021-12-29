@@ -60,7 +60,7 @@ class _FeedScreenState extends State<FeedScreen>
                   controller: tabController,
                   children: [
                     DashboardScreen('dashboard'),
-                    DashboardScreen('foryou'),
+                    DashboardScreen('explore/1/for-you'),
                   ],
                 ),
               ),

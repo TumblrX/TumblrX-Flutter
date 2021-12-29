@@ -8,7 +8,7 @@ import 'package:tumblrx/components/blog_screen_initial_screen/blog_screen_header
 import 'package:tumblrx/components/avatar_shape/avatar_image.dart';
 import 'package:tumblrx/components/createpost/create_post.dart';
 import 'package:tumblrx/components/post/post_widget.dart';
-import 'package:tumblrx/models/post.dart';
+import 'package:tumblrx/models/posts/post.dart';
 import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/services/creating_post.dart';
 import 'package:tumblrx/utilities/hex_color_value.dart';
@@ -36,7 +36,7 @@ class _BlogScreenState extends State<BlogScreen>
     // Provider.of<User>(context, listen: false)
     //   .getUserPosts(context); //esraa added
 
-    Provider.of<User>(context,listen: false).getUserBlogFollowing(context);
+    Provider.of<User>(context, listen: false).getUserBlogFollowing(context);
     //intialize befor edit
 
     // print(
@@ -122,10 +122,10 @@ class _BlogScreenState extends State<BlogScreen>
                               .getActiveBlogTitle(),
                           description: Provider.of<User>(context, listen: false)
                               .getActiveBlogDescription(),
-                              color: Provider.of<User>(context, listen: false)
-                              .getActiveBlogBackColor() ,
-                              textColor: Provider.of<User>(context, listen: false)
-                          .getActiveBlogTitleColor(),
+                          color: Provider.of<User>(context, listen: false)
+                              .getActiveBlogBackColor(),
+                          textColor: Provider.of<User>(context, listen: false)
+                              .getActiveBlogTitleColor(),
                         ),
                       ],
                     ),
@@ -139,20 +139,33 @@ class _BlogScreenState extends State<BlogScreen>
                             true,
                         child: Provider.of<User>(context, listen: false)
                                 .getIsAvatarCircle()
-                            ? AvatarImage(myBlog: true,color: Provider.of<User>(context, listen: false)
-                          .getActiveBlogBackColor(),)
-                            : Square(color: Provider.of<User>(context, listen: false)
-                                .getActiveBlogBackColor(),))
+                            ? AvatarImage(
+                                myBlog: true,
+                                color: Provider.of<User>(context, listen: false)
+                                    .getActiveBlogBackColor(),
+                              )
+                            : Square(
+                                color: Provider.of<User>(context, listen: false)
+                                    .getActiveBlogBackColor(),
+                              ))
                   ]),
 
                   //{
 
                   if (Provider.of<User>(context).getActiveBlogIsPrimary())
-                    upperTabBar(_tabController, context,Provider.of<User>(context, listen: false)
-            .getActiveBlogBackColor()),
+                    upperTabBar(
+                        _tabController,
+                        context,
+                        Provider.of<User>(context, listen: false)
+                            .getActiveBlogBackColor()),
                   if (Provider.of<User>(context).getActiveBlogIsPrimary())
-                    bottomTabBar(_tabController, context,Provider.of<User>(context, listen: false)
-            .getActiveBlogBackColor(),Provider.of<User>(context, listen: false).getActiveBlog()),
+                    bottomTabBar(
+                        _tabController,
+                        context,
+                        Provider.of<User>(context, listen: false)
+                            .getActiveBlogBackColor(),
+                        Provider.of<User>(context, listen: false)
+                            .getActiveBlog()),
                   //}
                   if (Provider.of<User>(context).getActiveBlogIsPrimary() ==
                       false)
@@ -169,11 +182,8 @@ class _BlogScreenState extends State<BlogScreen>
                                 itemBuilder: (BuildContext context, int index) {
                                   Post post = snapshot.data[index];
                                   return PostWidget(
-                                    postContent: post.content,
-                                    tags: post.tags,
-                                    index: 0,
-                                    post: snapshot.data[index],
-                                    isLikes: false,
+                                    post: post,
+                                    // isLikes: false,
                                   );
                                 },
                                 separatorBuilder: (context, index) =>

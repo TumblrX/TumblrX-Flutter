@@ -12,26 +12,20 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/components/createpost/create_post.dart';
 import 'package:tumblrx/components/post/post_blocks/image_block_widget.dart';
 import 'package:tumblrx/components/post/post_blocks/link_block_widget.dart';
 import 'package:tumblrx/components/post/post_blocks/text_block_widget.dart';
 import 'package:tumblrx/components/post/post_blocks/video_block_widget.dart';
-import 'package:tumblrx/components/post/post_footer/post_footer.dart';
-import 'package:tumblrx/components/post/post_header.dart';
 import 'package:tumblrx/components/post/reblogged_post_header.dart';
 import 'package:tumblrx/components/post/tags_widget.dart';
-import 'package:tumblrx/models/posts/audio_block.dart';
+import 'package:tumblrx/global.dart';
 import 'package:tumblrx/models/posts/image_block.dart';
 import 'package:tumblrx/models/posts/link_block.dart';
 import 'package:tumblrx/models/posts/text_block.dart';
 import 'package:tumblrx/models/posts/video_block.dart';
-import 'package:tumblrx/models/user/blog.dart';
 import 'package:intl/intl.dart';
-import 'package:tumblrx/services/api_provider.dart';
-import 'dart:convert' as convert;
 
 import 'package:tumblrx/services/authentication.dart';
 import 'package:tumblrx/services/creating_post.dart';
@@ -51,9 +45,6 @@ class Post {
 
   String _blogId;
 
-  /// post's unique "genesis" ID† as a String
-  String _gensisPostId;
-
   /// The location of the post
   String _postUrl;
 
@@ -66,14 +57,14 @@ class Post {
   /// Tags applied to the post
   List<String> _tags = [];
 
-  /// The URL for the source of the content (for quotes, reblogs, etc)
-  String _sourceUrl;
-
-  /// The title of the source site
-  String _sourceTitle;
-
   /// Flag for like/unlike
   bool _liked;
+
+  /// Flag for followed/unfollowed
+  bool _isFollowed;
+
+  ///
+  bool _isReblogged;
 
   ///  the current state of the post
   String _state;
@@ -108,12 +99,12 @@ class Post {
       : _liked = liked,
         _content = content;
 
-  /// blog object who published this post
-  Blog postBlog;
-
 // ================= getters ===================
   String get id => this._id;
   bool get liked => this._liked;
+  bool get isFollowed => this._isFollowed;
+  bool get isReblogged => this._isReblogged;
+  bool get isAvatarCircle => this._isAvatarCircle;
   int get likesCount => this._likesCount;
   int get commentsCount => this._commentsCount;
   int get reblogsCount => this._reblogsCount;
@@ -121,17 +112,23 @@ class Post {
   List get tags => this._tags;
   List get content => this._content;
   String get blogTitle => this._blogTitle;
+  String get postType => this._postType;
+  String get blogHandle => this._blogHandle;
   String get blogAvatar => this._blogAvatar;
+  String get blogId => this._blogId;
   String get reblogKey => this._reblogKey;
   DateTime get publishedOn => _date;
   String get postUrl => _postUrl;
-  String get blogId => _blogId;
+  List get postLayout => this._layout;
+  List get postTrail => this._trail;
+
   set liked(bool liked) {
     this._liked = liked;
   }
 
   /// Constructs a new instance usin parsed json data
   Post.fromJson(Map<String, dynamic> parsedJson) {
+    logger.d(parsedJson.toString());
     // ==================== post related data =========================
     // post identifier '_id'
 
@@ -172,7 +169,15 @@ class Post {
       _liked = parsedJson['liked'];
     else
       _liked = false;
+    if (parsedJson.containsKey('isFollowed'))
+      _isFollowed = parsedJson['isFollowed'];
+    else
+      _isFollowed = true;
 
+    if (parsedJson.containsKey('isRebloged'))
+      _isReblogged = parsedJson['isRebloged'];
+    else
+      _isReblogged = false;
     // number of comments on the post
     if (parsedJson.containsKey('commentsCount'))
       this._commentsCount = parsedJson['commentsCount'];
@@ -244,46 +249,29 @@ class Post {
             case 'text':
               parsedConent.add(new TextBlock.fromJson(obj));
               break;
-            case 'audio':
-              //parsedConent.add(new AudioBlock.fromJson(obj));
-              break;
             case 'video':
-              parsedConent.add(new VideoBlock.fromJson(
-                  {'type': 'video', 'provider': 'youtube'}));
+              parsedConent.add(new VideoBlock.fromJson(obj));
               break;
             case 'image':
               parsedConent.add(new ImageBlock.fromJson(obj));
               break;
             case 'link':
-              print('link is:');
-              print(obj);
               parsedConent.add(new LinkBlock.fromJson(obj));
               break;
+            case 'audio':
+              break;
+
             default:
-              print(obj);
               throw Exception("invalid post type");
           }
         } catch (err) {
-          print('couldn\'t parse $obj');
+          logger.e('couldn\'t parse $obj');
         }
       });
-      parsedConent.add(
-          new VideoBlock.fromJson({'type': 'video', 'provider': 'youtube'}));
-      parsedConent.add(new AudioBlock.fromJson({
-        'type': 'audio',
-        'provider': 'soundcloud',
-        'url':
-            'https://soundcloud.com/youssefelsahaby/01-1?in=youssefelsahaby/sets/asmaa-allah&si=00bdbc4788484a8e81609dc404e0d240&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing'
-      }));
-      // parsedConent.add(new VideoBlock.fromJson({
-      //   'type': 'video',
-      //   'provider': 'vimeo',
-      //   "url": "https://vimeo.com/142624091"
-      // }));
 
       this._content.addAll(parsedConent);
     } catch (error) {
-      print('err @parseContent $error');
+      logger.e('err @parseContent $error');
     }
   }
 
@@ -297,12 +285,12 @@ class Post {
 
       Map<String, String> headers = {'Authorization': token};
       final response =
-          await ApiHttpRepository.sendPostRequest(endPoint, headers: headers);
+          await apiClient.sendPostRequest(endPoint, headers: headers);
 
-      if (response.statusCode != 200) {
-        print('id is ${this.id}');
-        print(response.body);
-        throw Exception('post ID or reblog_key was not found');
+      if (response['statuscode'] != 200) {
+        //logger.e('id is ${this.id}');
+        //logger.e(response);
+        return false;
       } else {
         this._liked = true;
         this._likesCount++;
@@ -310,7 +298,8 @@ class Post {
         return true;
       }
     } catch (error) {
-      throw Exception(error.message.toString());
+      logger.e(Exception(error.message.toString()));
+      return false;
     }
   }
 
@@ -321,12 +310,11 @@ class Post {
       String token = Provider.of<Authentication>(context, listen: false).token;
 
       Map<String, String> headers = {'Authorization': token};
-      final response =
-          await ApiHttpRepository.sendDeleteRequest(endPoint, headers);
+      final response = await apiClient.sendDeleteRequest(endPoint, headers);
 
-      if (response.statusCode != 200) {
-        print(response.body);
-        throw Exception('post ID or reblog_key was not found');
+      if (response['statuscode'] != 200) {
+        logger.e(response);
+        return false;
       } else {
         this._liked = false;
         this._likesCount--;
@@ -335,31 +323,26 @@ class Post {
         return true;
       }
     } catch (error) {
-      throw Exception(error.message.toString());
+      logger.e(Exception(error.message.toString()));
+      return false;
     }
   }
 
   /// API for post object to delete the post
-  Future<bool> deletePost(BuildContext context) async {
+  Future<bool> deletePost(BuildContext context, String token) async {
     final String endPoint = 'api/post/${this.id}';
-    String token = Provider.of<Authentication>(context, listen: false).token;
-    final Map<String, String> headers = {
-      'Authorization':
-          '${Provider.of<Authentication>(context, listen: false).token}'
-    };
+    final Map<String, String> headers = {'Authorization': token};
 
     try {
-      final response =
-          await ApiHttpRepository.sendDeleteRequest(endPoint, headers);
+      final response = await apiClient.sendDeleteRequest(endPoint, headers);
 
-      if (response.statusCode != 200) {
-        print(response.body);
-        print('token is $token');
+      if (response['statuscode'] != 200) {
+        logger.d(response);
         throw Exception('post ID or reblog_key was not found');
       }
       return true;
     } catch (error) {
-      print(error);
+      logger.e(error);
       return false;
     }
   }
@@ -395,17 +378,15 @@ class Post {
     try {} catch (error) {}
   }
 
-  void followBlog() async {
-    try {} catch (error) {}
+  Future<bool> mutePushNotification() async {
+    return false;
   }
-
-  Future<bool> mutePushNotification() async {}
 
   /// API for post object to edit the post
 
   void editPost(BuildContext context) async {
     double topPadding = MediaQuery.of(context).padding.top;
-    print(unmappedPostContent);
+    logger.d(unmappedPostContent);
     Provider.of<CreatingPost>(context, listen: false).initializePostOptions(
         context,
         edit: true,
@@ -435,44 +416,18 @@ class Post {
   static Future<Post> fetchPost(String id) async {
     try {
       final String endPoint = 'posts/id=$id';
-      final Response response =
-          await MockHttpRepository.sendGetRequest(endPoint);
-      if (response.statusCode != 200) throw Exception(response.body.toString());
-      final resposeObject =
-          convert.jsonDecode(response.body) as Map<String, dynamic>;
-      return Post.fromJson(resposeObject);
+      final Map<String, dynamic> response =
+          await apiClient.sendGetRequest(endPoint);
+      if (response['statuscode'] != 200) {
+        logger.e('error happened, ${response['body']['error']}');
+      }
+      return Post.fromJson(response['body']);
     } catch (error) {
       throw Exception(error.message);
     }
   }
 
   void navigateToTag(String tag) {}
-
-  /// API for post object to render the post
-  Container showPost(int index) {
-    return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          PostHeader(index: index),
-          Divider(),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children:
-                content.map<Widget>((block) => block.showBlock()).toList(),
-          ),
-          Divider(
-            color: Colors.transparent,
-          ),
-          TagsWidget(_tags),
-          Divider(
-            color: Colors.transparent,
-          ),
-          PostFooter(postIndex: index),
-        ],
-      ),
-    );
-  }
 
   /// Shows a reblogged post view
   Container showRebloggedPost() {
@@ -507,10 +462,6 @@ class Post {
                       url: block.url,
                       provider: block.provider,
                     );
-                    break;
-                  case AudioBlock:
-//                    return AudioBlockWidget();
-                    return Container();
                     break;
                   default:
                     return Container(width: 0, height: 0);

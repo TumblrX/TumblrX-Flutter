@@ -1,5 +1,5 @@
 import 'package:test/test.dart';
-import 'package:tumblrx/models/post.dart';
+import 'package:tumblrx/models/posts/post.dart';
 
 void main() {
   group("test handling response of get posts", () {

@@ -4,7 +4,7 @@ import 'package:tumblrx/components/blog_screen_initial_screen/blog_widgets.dart'
 import 'package:tumblrx/components/edit_blog_screen/cover_image_bottomsheet.dart';
 import 'package:tumblrx/components/edit_blog_screen/edit_app_bar.dart';
 import 'package:tumblrx/components/post/post_widget.dart';
-import 'package:tumblrx/models/post.dart';
+import 'package:tumblrx/models/posts/post.dart';
 import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/services/api_provider.dart';
 import 'package:tumblrx/services/blog_screen.dart';
@@ -35,11 +35,12 @@ class _EditState extends State<Edit> with SingleTickerProviderStateMixin {
     ///function used for Tab bars
 
     _tabController = new TabController(length: 3, vsync: this);
+    super.initState();
   }
 
+  @override
   Widget build(BuildContext context) {
-    @override
-    final blogProvider = Provider.of<BlogScreenConstantProvider>(context);
+    Provider.of<BlogScreenConstantProvider>(context);
     return Scaffold(
       body: Container(
         color: hexToColor(Provider.of<User>(context, listen: false)
@@ -186,11 +187,8 @@ class _EditState extends State<Edit> with SingleTickerProviderStateMixin {
                                       (BuildContext context, int index) {
                                     Post post = snapshot.data[index];
                                     return PostWidget(
-                                      postContent: post.content,
-                                      tags: post.tags,
-                                      index: 0,
-                                      post: snapshot.data[index],
-                                      isLikes: false,
+                                      post: post,
+                                      // isLikes: false,
                                     );
                                   },
                                   separatorBuilder: (context, index) =>

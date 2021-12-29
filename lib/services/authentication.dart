@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:tumblrx/models/user/blog.dart';
 import 'package:tumblrx/models/user/user.dart';
+import 'package:tumblrx/global.dart';
 import 'package:tumblrx/services/api_provider.dart';
 import 'dart:convert' as convert;
 
@@ -87,8 +88,6 @@ class Authentication extends ChangeNotifier {
   ///checks if the user exist
   ///And sets the user token
   Future<bool> loginRequest() async {
-    final String endPoint = 'user/login';
-
     Map<String, dynamic> loginRequestBody = {
       "email": userEmail,
       "password": userPassword
@@ -102,13 +101,13 @@ class Authentication extends ChangeNotifier {
 
       //if i get a bad response then this user doesnot exist
       if (response.statusCode == 400) {
-        print("400");
+        logger.d("400");
         loginErrorMessage = "wrong Email or password please try again";
         notifyListeners();
         return false;
       } else if (response.statusCode != 200) {
-        print('!200');
-        print(response.body);
+        logger.e('!200');
+        logger.d(response.body);
         throw Exception('error in the connection');
       } else {
         var responseObject = convert.jsonDecode(response.body);
@@ -116,14 +115,14 @@ class Authentication extends ChangeNotifier {
         token = responseObject['token'];
         emailExist = true;
         notifyListeners();
-        // print(response.statusCode);
-        // print(token);
-        // print(emailExist);
-        // return User.fromJson(resposeObject);
+
         return true;
       }
-    } catch (error) {
-      print(error);
+    } on SocketException catch (error) {
+      logger.e(error);
+      throw error;
+    } catch (err) {
+      logger.e(err);
       return false;
     }
   }
@@ -132,8 +131,6 @@ class Authentication extends ChangeNotifier {
   ///
   ///gets the user info that the user is authorized to access
   Future<Map<String, dynamic>> loginGetUserInfo() async {
-    final String endPoint = 'user/info';
-
     try {
       final response = await http.get(
         Uri.parse(ApiHttpRepository.api + 'api/user/info'),
@@ -146,12 +143,10 @@ class Authentication extends ChangeNotifier {
       else {
         Map<String, dynamic> responseObject =
             convert.jsonDecode(response.body) as Map<String, dynamic>;
-        print(response.statusCode);
-
+        logger.d(response.statusCode);
+        //logger.d(responseObject);
         try {
           // following blogs
-   
-     
 
           final blogsResponse = await http.get(
             Uri.parse(ApiHttpRepository.api + 'api/user/get-blogs'),
@@ -166,6 +161,7 @@ class Authentication extends ChangeNotifier {
           throw Exception(error.message.toString());
         }
 
+        logger.d(responseObject);
         return responseObject;
       }
     } catch (error) {
@@ -175,7 +171,7 @@ class Authentication extends ChangeNotifier {
 
   ///Sets the user age
   void setUserAge(String age) {
-    // print(age);
+    // logger.d(age);
     int temp = int.parse(age);
     userAge = temp;
     notifyListeners();

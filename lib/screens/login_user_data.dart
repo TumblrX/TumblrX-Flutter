@@ -40,10 +40,21 @@ class LogInUserData extends StatelessWidget {
                       padding: const EdgeInsets.fromLTRB(0, 5, 5, 0),
                       child: ElevatedButton(
                         onPressed: () async {
-                          if (!_formkey.currentState.validate() ||
-                              !await Provider.of<Authentication>(context,
-                                      listen: false)
-                                  .loginRequest())
+                          if (!_formkey.currentState.validate()) return null;
+                          bool loggedIn;
+                          try {
+                            loggedIn = await Provider.of<Authentication>(
+                                    context,
+                                    listen: false)
+                                .loginRequest();
+                          } catch (err) {
+                            showSnackBarMessage(
+                                context,
+                                'couldn\'t log in, please try again later',
+                                Colors.red);
+                            return null;
+                          }
+                          if (!loggedIn)
                             return null;
                           else {
                             final Map<String, dynamic> response =

@@ -2,20 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/components/following/following_card.dart';
 import 'package:tumblrx/components/post/post_widget.dart';
-import 'package:tumblrx/models/post.dart';
+import 'package:tumblrx/global.dart';
+import 'package:tumblrx/models/posts/post.dart';
 import 'package:tumblrx/models/user/blog.dart';
 import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/services/blog_screen.dart';
 import 'package:tumblrx/utilities/hex_color_value.dart';
 import '../blog_screen_constant.dart';
 
-Widget upperTabBar(TabController _tabConroller, BuildContext context,String color) {
+Widget upperTabBar(
+    TabController _tabConroller, BuildContext context, String color) {
   final blogProvider = Provider.of<BlogScreenConstantProvider>(context);
   return Container(
 
       /// start of Tab Bars
-      color: hexToColor(color) ??
-          Colors.blue,
+      color: hexToColor(color) ?? Colors.blue,
       child: TabBar(
         unselectedLabelColor: Color(0xffc7c1c1),
         labelColor: BlogScreenConstant.accent,
@@ -50,37 +51,38 @@ Widget upperTabBar(TabController _tabConroller, BuildContext context,String colo
       ));
 }
 
-Widget bottomTabBar(TabController _tabController, BuildContext context, String color,Blog blog) {
+Widget bottomTabBar(TabController _tabController, BuildContext context,
+    String color, Blog blog) {
   //final blogProvider = Provider.of<BlogScreenConstantProvider>(context);
-  Future<Post> blogPost;
   return Expanded(
 
       /// pages which display content of each tab bar
       child: Container(
-    color: hexToColor(color??'#000000') ??
-        Colors.blue,
+    color: hexToColor(color ?? '#000000') ?? Colors.blue,
     child: TabBarView(
       children: [
         FutureBuilder<List<Post>>(
           future: blog.blogPosts(context),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
+              logger.d(snapshot.data);
               return ListView.builder(
                 itemCount: snapshot.data.length,
-                itemBuilder: 
-                (BuildContext context, int index) {
+                itemBuilder: (BuildContext context, int index) {
                   Post post = snapshot.data[index];
-                  return Column(children: <Widget>[
-        PostWidget(
-                    postContent: post.content,
-                    tags: post.tags,
-                    index: 0,
-                    post: snapshot.data[index],
-                    isLikes: false,
-                  ),Container(height: 20.0,color: hexToColor(color??'#000000') ??
-        Colors.blue,),],);  
+                  return Column(
+                    children: <Widget>[
+                      PostWidget(
+                        post: post,
+                        // isLikes: false,
+                      ),
+                      Container(
+                        height: 20.0,
+                        color: hexToColor(color ?? '#000000') ?? Colors.blue,
+                      ),
+                    ],
+                  );
                 },
-              
               );
             } else if (snapshot.hasError) {
               Text('error');
@@ -118,11 +120,8 @@ Widget bottomTabBar(TabController _tabController, BuildContext context, String c
                     itemBuilder: (BuildContext context, int index) {
                       Post post = snapshot.data[index];
                       return PostWidget(
-                        postContent: post.content,
-                        tags: post.tags,
-                        index: 0,
-                        post: snapshot.data[index],
-                        isLikes: true,
+                        post: post,
+                        // isLikes: true,
                       );
                     },
                     separatorBuilder: (context, index) =>
@@ -134,14 +133,13 @@ Widget bottomTabBar(TabController _tabController, BuildContext context, String c
                   child: Text('Turbulent connection.Try again'),
                 );
               }
-              
 
               return Center(child: CircularProgressIndicator());
             }),
         //followings
 
         FutureBuilder<List<Blog>>(
-          future: Provider.of<User>(context).getFollowingBlogs(),
+          future: Provider.of<User>(context).getUserBlogFollowing(context),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return Column(
@@ -179,8 +177,7 @@ Widget bottomTabBar(TabController _tabController, BuildContext context, String c
                       child: ListView.builder(
                     itemCount: snapshot.data.length,
                     itemBuilder: (context, index) {
-                      return
-                      FollowingCard(blog: snapshot.data[index]);
+                      return FollowingCard(blog: snapshot.data[index]);
                     },
                   ))
                 ],
@@ -200,4 +197,3 @@ Widget bottomTabBar(TabController _tabController, BuildContext context, String c
     ),
   ));
 }
-                                 

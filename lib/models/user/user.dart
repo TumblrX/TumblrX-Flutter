@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:tumblrx/global.dart';
+import 'package:tumblrx/models/posts/post.dart';
+
 import 'package:provider/provider.dart';
-import 'package:tumblrx/components/createpost/post_tags.dart';
-import 'package:tumblrx/models/post.dart';
 import 'package:tumblrx/models/tag.dart';
 import 'package:tumblrx/models/user/blog.dart';
 import 'package:tumblrx/services/api_provider.dart';
@@ -32,7 +33,8 @@ class User extends ChangeNotifier {
   List<Blog> _blockedBlogs = [];
 
   /// List of blogs the user are following
-  List<Blog> followingBlogs = [];
+
+  List<Blog> _followingBlogs = [];
 
   /// List of tags the user are following
   List<Tag> _followingTags = [];
@@ -46,16 +48,9 @@ class User extends ChangeNotifier {
   /// index of the active blog in [_blogs] list
   int _activeBlogIndex;
 
-  ///hide Likes
-  bool _hideLikes;
-
-  ///hide Following
-  bool _hideFollowings;
-
-  /// description of the currently active/used blog
-  String _activeDescriptionTitle;
-
   User();
+
+  List<Blog> get followingBlogs => this._followingBlogs;
 
   /// constructor of the class using decoded json
   User.fromJson(Map<String, dynamic> json) {
@@ -79,20 +74,11 @@ class User extends ChangeNotifier {
       });
     }
 
-    // following blogs
-    if (json.containsKey('followingBlogs')) {
-      List<Map<String, dynamic>>.from(json['followingBlogs'])
-          .forEach((blogData) {
-        followingBlogs.add(new Blog.fromJson(blogData));
-      });
-      _following = followingBlogs.length;
-    } else
-      throw Exception('missing required parameter "followingBlogs"');
-
     // following tags
     if (json.containsKey('followingTags')) {
+      logger.d('following tags are ${json['followingTags']}');
       List<Map<String, dynamic>>.from(json['followingTags']).forEach((tagData) {
-        _followingTags.add(new Tag.fromJson(tagData));
+        _followingTags.add(new Tag.fromJson({'name': tagData}));
       });
     } else
       throw Exception('missing required parameter "followingTags"');
@@ -115,6 +101,40 @@ class User extends ChangeNotifier {
       throw Exception('missing required parameter "blockedBlogs"');
   }
 
+  // Future<void> getFollowingBlogs(String token) async {
+  //   Map<String, dynamic> response = await apiClient
+  //       .sendGetRequest('user/following', headers: {'Authorization': token});
+  //   if (response.containsKey('followingBlogs')) {
+  //     List<Map<String, dynamic>> blogs =
+  //         List<Map<String, dynamic>>.from(response['followingBlogs']);
+  //     blogs.map((blog) {
+  //       Map blogData = {};
+  //       try {
+  //         if (blog.containsKey('title'))
+  //           blogData['title'] = blog['title'];
+  //         else
+  //           throw Exception('missing required parameter "title"');
+  //         if (blog.containsKey('handle'))
+  //           blogData['handle'] = blog['handle'];
+  //         else
+  //           throw Exception('missing required parameter "handle"');
+  //         if (blog.containsKey('avatar'))
+  //           blogData['avatar'] = blog['avatar'];
+  //         else
+  //           throw Exception('missing required parameter "avatar"');
+  //         if (blog.containsKey('_id'))
+  //           blogData['_id'] = blog['_id'];
+  //         else
+  //           throw Exception('missing required parameter "id"');
+  //         logger.d(blogData);
+  //         _followingBlogs.add(blogData);
+  //       } catch (err) {
+  //         logger.e(err);
+  //       }
+  //     });
+  //   }
+  // }
+
   ///set user data after login
   void setLoginUserData(Map<String, dynamic> json, BuildContext context) {
     if (json.containsKey('following')) _following = json['following'];
@@ -125,14 +145,12 @@ class User extends ChangeNotifier {
     if (json.containsKey('default_post_format'))
       _defaultPostFormat = json['default_post_format'];
     if (json.containsKey('name'))
-      // TODO : change this to handler
       _username = json['name'];
     else
       throw Exception('missing required parameter "username"');
     if (json.containsKey('likes')) _likes = json['likes'];
 
     if (json['blogs'] != null) {
-      // TODO : change this to handler
       try {
         json['blogs'].forEach((v) {
           _blogs.add(new Blog.fromJson(v));
@@ -146,7 +164,7 @@ class User extends ChangeNotifier {
 
         setActiveBlog(json['blogs'][0]['handle']);
       } catch (err) {
-        print('error in creating blogs $err');
+        logger.e('error in creating blogs $err');
       }
     }
   }
@@ -183,7 +201,7 @@ class User extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// getter for active blog name
+  /// getter for active blog index
   int get activeBlogIndex => _activeBlogIndex;
 
   /// getter for active user blogs list
@@ -264,9 +282,6 @@ class User extends ChangeNotifier {
     return _blogs[_activeBlogIndex].isCircleAvatar;
   }
 
-  Future<List<Blog>> getFollowingBlogs() async {
-    return followingBlogs;
-  }
 //i will modify it
 
   void setActiveBlogTitle(String title) {
@@ -331,6 +346,7 @@ class User extends ChangeNotifier {
   void updateActiveBlogInfo(BuildContext context) {
     _blogs[_activeBlogIndex].updateBlog(context);
   }
+
   void updateActiveBlogTheme(BuildContext context) {
     _blogs[_activeBlogIndex].updateBlogTheme(context);
   }
@@ -343,10 +359,9 @@ class User extends ChangeNotifier {
   bool getActiveBlogStretchHeaderImage() {
     return _blogs[_activeBlogIndex].stretchHeaderImage;
   }
-  String getActiveBlogTitleColor()
-  {
-    return _blogs[_activeBlogIndex].titleColor;
 
+  String getActiveBlogTitleColor() {
+    return _blogs[_activeBlogIndex].titleColor;
   }
 
   void createNewlog(String name, BuildContext context) async {
@@ -363,23 +378,20 @@ class User extends ChangeNotifier {
           '${Provider.of<Authentication>(context, listen: false).token}'
     };
 
-    final response = await ApiHttpRepository.sendPostRequest(endPoint,
+    final response = await apiClient.sendPostRequest(endPoint,
         reqBody: blogInfo, headers: headers);
 
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      Map<String, dynamic> responseObject =
-          convert.jsonDecode(response.body) as Map<String, dynamic>;
-      if (responseObject.containsKey('data')) {
-        _blogs.add(Blog.fromJson(responseObject['data']));
+    if (response['statuscode'] == 200 || response['statuscode'] == 201) {
+      logger.d(response);
+      if (response.containsKey('data')) {
+        _blogs.add(Blog.fromJson(response['data']));
 
         ///set new blog as active blog
         _activeBlogIndex = _blogs.length - 1;
         notifyListeners();
       }
     } else {
-    
-      {}
-      print(response.statusCode);
+      logger.e(response['statuscode']);
     }
   }
 
@@ -403,8 +415,6 @@ class User extends ChangeNotifier {
   }
 
   void getUserInfo(BuildContext context) async {
-    final endPoint = 'user/info';
-
     final Map<String, String> headers = {
       'Authorization':
           '${Provider.of<Authentication>(context, listen: false).token}'
@@ -435,16 +445,12 @@ class User extends ChangeNotifier {
     };
 
     _likedPosts = [];
-    final response =
-        await ApiHttpRepository.sendGetRequest(endPoint, headers: headers);
-    if (response.statusCode == 200) {
-      final resposeObject =
-          convert.jsonDecode(response.body) as Map<String, dynamic>;
-     
-
-      if (resposeObject.containsKey('likePosts')) {
-        if (resposeObject['likePosts'] != null) {
-          List<Map<String, dynamic>>.from(resposeObject['likePosts'])
+    final response = await apiClient.sendGetRequest(endPoint, headers: headers);
+    if (response['statuscode'] == 200) {
+      logger.d(response);
+      if (response.containsKey('likePosts')) {
+        if (response['likePosts'] != null) {
+          List<Map<String, dynamic>>.from(response['likePosts'])
               .forEach((data) {
             try {
               this._likedPosts.add(new Post.fromJson(data));
@@ -469,44 +475,36 @@ class User extends ChangeNotifier {
     };
     final Map<String, String> body = {"_id": _id};
 
-  
-    final response = await ApiHttpRepository.sendPostRequest(endPoint,
+    final response = await apiClient.sendPostRequest(endPoint,
         reqBody: body, headers: headers);
-    if (response.statusCode == 200) {
-    
+    if (response['statuscode'] == 200) {
     } else {
-     
-
-      print('unseccful');
-      print(response.statusCode);
+      logger.e('unseccful');
+      logger.e(response);
     }
   }
 
-  void getUserBlogFollowing(BuildContext context) async {
+  Future<List<Blog>> getUserBlogFollowing(BuildContext context) async {
     String endPoint = 'user/following';
 
     final Map<String, String> headers = {
       'Authorization':
           '${Provider.of<Authentication>(context, listen: false).token}'
     };
-    final response =
-        await ApiHttpRepository.sendGetRequest(endPoint, headers: headers);
+    final response = await apiClient.sendGetRequest(endPoint, headers: headers);
 
-    Map<String, dynamic> responseObject =
-        convert.jsonDecode(response.body) as Map<String, dynamic>;
-    if (response.statusCode == 200) {
-      this.followingBlogs = [];
-      if (responseObject.containsKey('followingBlogs')) {
-        if (responseObject.containsKey('followingBlogs')) {
-          List<Map<String, dynamic>>.from(responseObject['followingBlogs'])
+    if (response['statuscode'] == 200) {
+      this._followingBlogs = [];
+      if (response.containsKey('followingBlogs')) {
+        if (response.containsKey('followingBlogs')) {
+          List<Map<String, dynamic>>.from(response['followingBlogs'])
               .forEach((blogData) {
-            followingBlogs.add(new Blog.fromJson(blogData));
+            _followingBlogs.add(new Blog.fromJson(blogData));
           });
         }
-       
       }
+      return _followingBlogs;
     } else {}
+    return [];
   }
-
-
 }

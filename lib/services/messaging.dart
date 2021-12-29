@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:convert' as convert;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:tumblrx/global.dart';
 import 'package:tumblrx/models/chatting/chat_message.dart';
 import 'package:tumblrx/models/chatting/conversation.dart';
 import 'package:tumblrx/services/api_provider.dart';
@@ -79,12 +80,11 @@ class Messaging extends ChangeNotifier {
     Map<String, String> header = {HttpHeaders.authorizationHeader: token};
     try {
       final response =
-          await ApiHttpRepository.sendGetRequest(endPoint, headers: header);
+          await apiClient.sendGetRequest(endPoint, headers: header);
       // print(response.statusCode);
       // print(response.body);
-      Map<String, dynamic> responseObject =
-          convert.jsonDecode(response.body) as Map<String, dynamic>;
-      for (Map<String, dynamic> conversation in responseObject['data']) {
+      logger.d(response);
+      for (Map<String, dynamic> conversation in response['data']) {
         conversations.add(Conversation.fromJson(conversation));
       }
       if (retrieveChatFirstTime) {
@@ -104,12 +104,11 @@ class Messaging extends ChangeNotifier {
     Map<String, String> header = {HttpHeaders.authorizationHeader: token};
     try {
       final response =
-          await ApiHttpRepository.sendGetRequest(endPoint, headers: header);
-      print(response.statusCode);
+          await apiClient.sendGetRequest(endPoint, headers: header);
+      logger.d(response['statuscode']);
+      logger.d(response);
       conversations[i].chatMessages = [];
-      Map<String, dynamic> responseObject =
-          convert.jsonDecode(response.body) as Map<String, dynamic>;
-      for (Map<String, dynamic> chatMessage in responseObject['messages']) {
+      for (Map<String, dynamic> chatMessage in response['messages']) {
         conversations[i].addMessage(chatMessage['text'],
             chatMessage['senderId'] != userId, chatMessage['createdAt']);
       }
