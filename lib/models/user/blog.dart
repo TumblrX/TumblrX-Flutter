@@ -1,8 +1,11 @@
 import 'package:tumblrx/global.dart';
 import 'package:tumblrx/models/posts/post.dart';
-import 'dart:convert' as convert;
+import 'dart:io';
+import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
 import 'package:tumblrx/services/api_provider.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:tumblrx/services/authentication.dart';
 import 'blog_theme.dart';
 
 class Blog {
@@ -47,10 +50,28 @@ class Blog {
   int _postsCount;
 
   /// list of posts of this blog
+
   List<Post> _posts = [];
 
   /// flag to determine avatar shape
   bool _isCircleAvatar;
+
+  //background color
+  String _backGroundColor;
+//check if show avatar or not
+  bool _showAvatar;
+  //show header image
+  bool _showHeadeImage;
+//strech header imae
+  bool _stretchHeaderImage;
+  //title befor Edit
+  String _titleBeforeEdit;
+//decription before Edit
+  String _descriptionBeforEdit;
+  //isCircleAvatar
+  bool _isCircleBeforEdit;
+  String _headerImage;
+  String _backGroundColorBeforEdit;
 
   /// themes of Blog
   BlogTheme _blogTheme = BlogTheme();
@@ -63,6 +84,16 @@ class Blog {
   bool get isCircleAvatar => this._isCircleAvatar;
   String get description => this._description;
   BlogTheme get blogTheme => this._blogTheme;
+  List<Post> get posts => _posts;
+  String get backGroundColor => _backGroundColor;
+  bool get showAvatar => _showAvatar;
+  bool get showHeadeImage => _showHeadeImage;
+  bool get stretchHeaderImage => _stretchHeaderImage;
+  String get titleBeforEdit => _titleBeforeEdit;
+  String get descriptionBeforEdit => _descriptionBeforEdit;
+  bool get isCircleBeforEdit => _isCircleBeforEdit;
+  String get backGroundColorBeforEdit => _backGroundColorBeforEdit;
+
   Blog(
       [this._handle,
       this._title,
@@ -89,10 +120,18 @@ class Blog {
       throw Exception('missing required parameter "handle"');
 
     // blog title
-    if (json.containsKey('title'))
+    if (json.containsKey('title')) {
       _title = json['title'];
-    else
+      _titleBeforeEdit = json['title'];
+    } else
       throw Exception('missing required parameter "title"');
+    //blog description
+    if (json.containsKey('description')) {
+      _description = json['description'];
+      _descriptionBeforEdit = json['description'];
+    }
+    // else
+    // throw Exception('missing required parameter "description"');
 
     if (json.containsKey('avatar')) {
       _blogAvatar = json['avatar'] == 'none'
@@ -115,6 +154,11 @@ class Blog {
     }
     // blog isPrivate flag
     if (json.containsKey('isPrivate')) _isPrivate = json['isPrivate'];
+
+    if (json.containsKey('isAvatarCircle')) {
+      _isCircleAvatar = json['isAvatarCircle'];
+      _isCircleBeforEdit = json['isAvatarCircle'];
+    }
 
     // blog isPrimary flag
     if (json.containsKey('isPrimary')) _isPrimary = json['isPrimary'];
@@ -157,15 +201,49 @@ class Blog {
     }
   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+  Map<dynamic, dynamic> toJson() {
+    final Map<dynamic, dynamic> data = new Map<dynamic, dynamic>();
 
-    data['handle'] = this._handle;
-    data['title'] = this._title;
-    data['isPrimary'] = this._isPrimary;
-    data['followedBy'] = convert.jsonEncode(this._followedBy);
-    data['isPrivate'] = this._isPrivate;
+    if (this._backGroundColor != null) {
+      //data['customappearance'] = {};
+      //data['customappearance']['globalparameters'] = {};
+      //data['customappearance']['globalparameters']['backgroundcolor'] =
+      //  this._backGroundColor;
+    }
+    if (this._description != null) data['description'] = this._description;
+
+    if (this._handle != null) data['handle'] = this._handle;
+    if (this._title != null) data['title'] = this._title;
+    if (this._isPrimary != null) data['isPrimary'] = this._isPrimary.toString();
+    //data['followedBy'] = convert.jsonEncode(this._followedBy);
+    if (this._isPrivate != null) data['isPrivate'] = this._isPrivate.toString();
+    if (this.isCircleAvatar != null)
+      data['isAvatarCircle'] = this.isCircleAvatar.toString();
+
     return data;
+  }
+
+  Future<String> getBlogAvatar() async {
+    final String endPoint = 'blog/';
+    final Map<String, dynamic> reqParameters = {
+      "blog-identifier": _title,
+      "size": 64
+    };
+    try {
+      final Map<String, dynamic> response =
+          await apiClient.sendGetRequest(endPoint, query: reqParameters);
+      if (response['statusCode'] == 200) {
+        print(response['avatar_url']);
+        return response['avatar_url'];
+      } else {
+        // handle failed request
+        throw Exception(response.toString());
+      }
+    } catch (error) {
+      // handle failed request
+      logger.e(error);
+//      throw Exception(error.message.toString());
+    }
   }
 
   static Future<Blog> getInfo(String name) async {
@@ -217,6 +295,22 @@ class Blog {
     return true;
   }
 
+  void setTitleBeforeEdit(String title) {
+    this._titleBeforeEdit = title;
+  }
+
+  void setDescriptionBeforEdit(String description) {
+    this._descriptionBeforEdit = description;
+  }
+
+  void setIsCircleBeforEditing(bool isCircle) {
+    this._isCircleBeforEdit = isCircle;
+  }
+
+  void setBackGroundColorBeforEditing(String color) {
+    this._backGroundColorBeforEdit = color;
+  }
+
   void getPosts() async {
     //final String url = 'blog/$name/posts/';
     try {} catch (error) {}
@@ -240,7 +334,7 @@ class Blog {
   }
 
   void setBlogBackGroundColor(String color) {
-    blogTheme.backgroundColor = color;
+    this._backGroundColor = color;
   }
 
   void setHeaderImage(String image) {
@@ -271,11 +365,107 @@ class Blog {
     return _isPrimary;
   }
 
-  static Future pickImage(int indicator) async {
+  void setShowAvatar(bool show) {
+    this._showAvatar = show;
+  }
+
+  void setStrtchHeaderImage(bool stretch) {
+    this._stretchHeaderImage = stretch;
+  }
+
+  Future pickImage(int indicator) async {
     final image = await ImagePicker().pickImage(source: ImageSource.gallery);
     logger.d(image.path);
     if (image == null) return;
-    if (indicator == 1) Blog().setBlogAvatar(image.path);
-    if (indicator == 2) Blog().setHeaderImage(image.path);
+    if (indicator == 1) this._blogAvatar = File(image.path).toString();
+    if (indicator == 2) this._headerImage = File(image.path).toString();
+  }
+
+  ///Get Blog Posts
+  Future<bool> blogPosts(BuildContext context) async {
+    final String endPoint = 'blog/${this._id}/posts';
+
+    print(endPoint);
+    final Map<String, String> headers = {
+      'Authorization':
+          '${Provider.of<Authentication>(context, listen: false).token}'
+    };
+
+    final response = await apiClient.sendGetRequest(endPoint, headers: headers);
+
+    if (response['statusCode'] == 200) {
+      logger.e(response['statusCode']);
+
+      if (response['data'] != {}) {
+        List<Map<String, dynamic>>.from(response['data']).map((postData) {
+          try {
+            logger.d(postData);
+            this._posts.add(Post.fromJson(postData));
+          } catch (e) {
+            logger.e(e);
+          }
+        });
+      }
+
+      logger.d(response);
+    } else {
+      logger.e(response);
+    }
+
+    return true;
+  }
+
+  //convert hexcolor to Color
+
+  void updateBlog(BuildContext context) async {
+    final String endPoint = 'api/blog/${this._id}';
+    final Map<dynamic, dynamic> body = this.toJson();
+
+    final Map<String, String> headers = {
+      'Authorization':
+          '${Provider.of<Authentication>(context, listen: false).token}'
+    };
+
+    final response = await apiClient.sendPutRequest(endPoint, headers, body);
+
+    print('${ApiHttpRepository.api}api/blog/${this._id}');
+
+    if (response.statusCode == 200) {
+      print(response.statusCode);
+    }
+  }
+
+  void blogRetrive(BuildContext context) async {
+    final String endPoint = 'blog/${this._handle}';
+
+    final Map<String, String> headers = {
+      'Authorization':
+          '${Provider.of<Authentication>(context, listen: false).token}'
+    };
+    final response = await apiClient.sendGetRequest(endPoint, headers: headers);
+
+    if (response['statusCode'] == 200) {
+      if (response.containsKey('globalParameters')) {
+        if (response['globalParameters'].containsKey('backgroundColor')) {
+          this._backGroundColor =
+              response['globalParameters']['backgroundColor'];
+        }
+        if (response['globalParameters'].containsKey('showAvatar')) {
+          this._showAvatar = response['globalParameters']['showAvatar'];
+        }
+        if (response['globalParameters'].containsKey('showHeaderImage')) {
+          this._showHeadeImage =
+              response['globalParameters']['showHeaderImage'];
+        }
+        if (response['globalParameters'].containsKey('stretchHeaderImage')) {
+          this._stretchHeaderImage =
+              response['globalParameters']['stretchHeaderImage'];
+        }
+      }
+
+      //print(responseObject);
+    } else {
+      logger.e(response['statusCode']);
+    }
   }
 }

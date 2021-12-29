@@ -154,7 +154,7 @@ class _HeaderImageState extends State<HeaderImage> {
         decoration: BoxDecoration(
             image: DecorationImage(
                 image: AssetImage(BlogScreenConstant.headerImgPath),
-                fit: BoxFit.fill)), //dummy image
+                fit:Provider.of<User>(context).getActiveBlogStretchHeaderImage()??true? BoxFit.fill:BoxFit.contain)), //dummy image
         height: MediaQuery.of(context).size.height / 3.6, //(200)
       ),
       onTap: () {

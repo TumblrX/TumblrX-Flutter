@@ -61,7 +61,7 @@ class LogInUserData extends StatelessWidget {
                                         listen: false)
                                     .loginGetUserInfo();
                             Provider.of<User>(context, listen: false)
-                                .setLoginUserData(response);
+                                .setLoginUserData(response, context);
                             await Provider.of<User>(context, listen: false)
                                 .getFollowingBlogs(Provider.of<Authentication>(
                                         context,

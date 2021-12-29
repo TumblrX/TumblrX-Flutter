@@ -11,6 +11,7 @@ Description:
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:tumblrx/components/bottom_nav_bar/bottom_nav_bar.dart';
+
 import 'package:tumblrx/screens/blog_screen.dart';
 import 'package:tumblrx/screens/feed_screen.dart';
 import 'package:tumblrx/screens/notifications_screen.dart';
@@ -36,6 +37,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
+   
     // initializing controller
     _controller = PageController();
     // initializing the notifier with 0 value

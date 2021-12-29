@@ -1,5 +1,4 @@
 import 'package:http/http.dart';
-import 'package:tumblrx/global.dart';
 import 'package:tumblrx/utilities/environment.dart';
 import 'dart:convert' as convert;
 
@@ -11,6 +10,8 @@ abstract class API {
   Future<Map<String, dynamic>> sendDeleteRequest(
       String endPoint, Map<String, String> headers,
       {Map<String, dynamic> reqBody});
+  Future sendPutRequest(String endPoint, Map<String, String> headers,
+      Map<dynamic, dynamic> reqBody);
 }
 
 /// MockAPI class to use for testing
@@ -92,6 +93,16 @@ class MockHttpRepository implements API {
     result['statuscode'] = 200;
     return result;
   }
+
+  @override
+  Future sendPutRequest(
+      String endPoint, Map<String, String> headers, Map reqBody) async {
+    String url = '$api$endPoint';
+    final Uri uri = Uri.parse(url);
+
+    if (reqBody != null) return put(uri, headers: headers, body: reqBody);
+    return put(uri);
+  }
 }
 
 /// Real API class
@@ -170,5 +181,15 @@ class ApiHttpRepository implements API {
     result['statuscode'] = 200;
 
     return result;
+  }
+
+  @override
+  Future sendPutRequest(
+      String endPoint, Map<String, String> headers, Map reqBody) async {
+    String url = '$api$endPoint';
+    final Uri uri = Uri.parse(url);
+
+    if (reqBody != null) return put(uri, headers: headers, body: reqBody);
+    return put(uri);
   }
 }

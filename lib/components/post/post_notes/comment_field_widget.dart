@@ -52,7 +52,8 @@ class _CommentFieldState extends State<CommentField> {
                 child: CircleAvatar(
                   radius: MediaQuery.of(context).size.height * 0.025,
                   backgroundImage: NetworkImage(
-                    Provider.of<User>(context).getActiveBlogAvatar(),
+                    Provider.of<User>(context, listen: false)
+                        .getActiveBlogAvatar(),
                   ),
                 ),
               ),

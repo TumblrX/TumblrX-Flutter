@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:tumblrx/components/blog_screen_constant.dart';
 import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/services/blog_screen.dart';
+import 'package:tumblrx/utilities/hex_color_value.dart';
 
 /// for square avatar
 class Square extends StatelessWidget {
@@ -34,9 +35,9 @@ class Square extends StatelessWidget {
             // )
 
             decoration: BoxDecoration(
-              color: blogProvider.getBottomColor(),
+              color:  hexToColor( Provider.of<User>(context,listen: false).getActiveBlogBackColor())??Colors.blue,
               border:
-                  Border.all(width: 3, color: blogProvider.getBottomColor()),
+                  Border.all(width: 3, color: hexToColor(( Provider.of<User>(context,listen: false).getActiveBlogBackColor())??Colors.blue,)),
               borderRadius: BorderRadius.circular(3),
             ),
           ),

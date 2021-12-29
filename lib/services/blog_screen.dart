@@ -1,21 +1,13 @@
 import 'package:flutter/material.dart';
 
 class BlogScreenConstantProvider extends ChangeNotifier {
-  Color bottomCoverColor = Color(0xffb03fa8);
+  //Color bottomCoverColor = Color(0xffb03fa8);
   String profileDescription = 'i want to finish this project';
   String blogTitle = 'EsraaGamal';
   bool isCircle = true;
   Color accent = Color(0xffffff00);
 
-  void setBottomColor(Color bottomColor) {
-    bottomCoverColor = bottomColor;
-    notifyListeners();
-  }
-
-  Color getBottomColor() {
-    return bottomCoverColor;
-  }
-
+  
   void setBlogDescription(String description) {
     profileDescription = description;
     notifyListeners();

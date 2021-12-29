@@ -9,6 +9,7 @@ Description:
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/components/post/post_widget.dart';
+
 import 'package:tumblrx/global.dart';
 import 'package:tumblrx/models/posts/post.dart';
 import 'package:tumblrx/services/authentication.dart';
