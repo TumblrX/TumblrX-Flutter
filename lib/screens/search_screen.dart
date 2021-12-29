@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/components/explore_screen_widgets/check_out_these_blogs.dart';
+import 'package:tumblrx/components/explore_screen_widgets/check_out_these_posts.dart';
 import 'package:tumblrx/components/explore_screen_widgets/check_out_these_tags.dart';
 import 'package:tumblrx/global.dart';
 import 'package:tumblrx/models/posts/post.dart';
@@ -25,7 +26,7 @@ Future<List<Post>> _getTrendingPosts(String token) async {
 Future<List<Tag>> _getTags(String token) async {
   Map<String, dynamic> response = await apiClient
       .sendGetRequest('user/get-tags', headers: {'Authorization': token});
-  logger.d(response['tagsPhotos']);
+  //logger.d('tags are ${response['tagsPhotos']}');
   if (response['statuscode'] != 200) return [];
   List<Tag> result = [];
   Map<String, dynamic> tags = response['tagsPhotos'] as Map<String, dynamic>;
@@ -43,8 +44,25 @@ Future<List<Blog>> _getTrendingBlogs(String token) async {
   return _handleTrendingBlogsResponse(response);
 }
 
-List<Post> _handleTrendingPostsResponse(Map<String, dynamic> json) {
-  return [];
+Future<List<Post>> _handleTrendingPostsResponse(
+    Map<String, dynamic> json) async {
+  List<Post> trendingPosts = [];
+  try {
+    if (json.containsKey('trendingPosts')) {
+      List<Map<String, dynamic>> response =
+          List<Map<String, dynamic>>.from(json['trendingPosts']);
+      for (var post in response) {
+        try {
+          trendingPosts.add(Post.fromJson(post));
+        } catch (err) {
+          logger.e('couldn\'t parse post in trending');
+        }
+      }
+    }
+  } catch (error) {
+    logger.e('error in trending posts $error');
+  }
+  return trendingPosts;
 }
 
 Future<List<Blog>> _handleTrendingBlogsResponse(
@@ -119,10 +137,12 @@ class SearchScreen extends StatelessWidget {
                     ),
                   );
                 }
+                final Size size = MediaQuery.of(context).size;
                 return CustomScrollView(
                   slivers: [
                     SliverAppBar(
-                      expandedHeight: 200,
+                      collapsedHeight: size.height * .13,
+                      expandedHeight: size.height * .25,
                       flexibleSpace: Stack(
                         children: [
                           // header
@@ -191,6 +211,8 @@ class SearchScreen extends StatelessWidget {
                           )
                         ],
                       ),
+                      pinned: true,
+                      floating: true,
                     ),
                     // Explore body
                     SliverToBoxAdapter(
@@ -234,7 +256,10 @@ class SearchScreen extends StatelessWidget {
                           ],
 
                           // check out these posts
-                          ...[],
+                          ...[
+                            if (snapshot.data[1].length > 0)
+                              TryOutThesePosts(posts: snapshot.data[1]),
+                          ],
                         ],
                       ),
                     ),
