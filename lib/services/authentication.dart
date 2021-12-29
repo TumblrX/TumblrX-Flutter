@@ -26,6 +26,29 @@ class Authentication extends ChangeNotifier {
 
   SharedPreferences _prefs;
 
+  // Future<String> getToken(BuildContext context) async {
+  //   if (_token != null) return _token;
+  //   //token is null, check for shared preferences
+  //   if (_prefs == null || _prefs.getString('token') == null) {
+  //     //user is logged out, go to login screen
+  //     while (Navigator.canPop(context)) {
+  //       Navigator.pop(context);
+  //     }
+  //     Navigator.popAndPushNamed(context, WelcomeScreen.id);
+  //     return null;
+  //   }
+  //   //Here means that the user is logged in but provider is cleared, restore provider data
+  //   _token = _prefs.getString('token');
+  //
+  //   final Map<String, dynamic> response = await loginGetUserInfo();
+  //   Provider.of<User>(context, listen: false)
+  //       .setLoginUserData(response, context);
+  //   Provider.of<Messaging>(context, listen: false)
+  //       .connectToServer(response['id'], _token);
+  //   Provider.of<Messaging>(context, listen: false).getConversationsList();
+  //   return _token;
+  // }
+
   ///returns error message if the user doesnot exist
   String getLogInErrorMessage() {
     return loginErrorMessage;
@@ -184,6 +207,7 @@ class Authentication extends ChangeNotifier {
     notifyListeners();
   }
 
+  ///check if user is authenticated
   Future<void> checkUserAuthentication(BuildContext context) async {
     _prefs = await SharedPreferences.getInstance();
     //await Future.delayed(Duration(seconds: 3));
@@ -193,6 +217,7 @@ class Authentication extends ChangeNotifier {
     await initializeUserData(context);
   }
 
+  ///initialize user Data on login
   Future<void> initializeUserData(BuildContext context) async {
     final Map<String, dynamic> response = await loginGetUserInfo();
     Provider.of<User>(context, listen: false)
@@ -206,6 +231,7 @@ class Authentication extends ChangeNotifier {
     Navigator.popAndPushNamed(context, MainScreen.id);
   }
 
+  ///Clears data from shared preferences and disconnects from socket server
   Future<void> logout(BuildContext context) async {
     Provider.of<Messaging>(context, listen: false).disconnect();
     _prefs = await SharedPreferences.getInstance();

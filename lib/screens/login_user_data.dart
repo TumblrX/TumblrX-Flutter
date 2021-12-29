@@ -46,25 +46,9 @@ class LogInUserData extends StatelessWidget {
                                   .loginRequest())
                             return null;
                           else {
-                            final Map<String, dynamic> response =
-                                await Provider.of<Authentication>(context,
-                                        listen: false)
-                                    .loginGetUserInfo();
-                            Provider.of<User>(context, listen: false)
-                                .setLoginUserData(response, context);
-                            Provider.of<Messaging>(context, listen: false)
-                                .connectToServer(
-                                    response['id'],
-                                    Provider.of<Authentication>(context,
-                                            listen: false)
-                                        .token);
-                            Provider.of<Messaging>(context, listen: false)
-                                .getConversationsList();
-
-                            while (Navigator.canPop(context)) {
-                              Navigator.pop(context);
-                            }
-                            Navigator.pushNamed(context, MainScreen.id);
+                            await Provider.of<Authentication>(context,
+                                    listen: false)
+                                .initializeUserData(context);
                           }
                         },
                         child: Text(

@@ -124,7 +124,9 @@ class Blog {
     if (json.containsKey('avatar')) {
       _blogAvatar = json['avatar'] == 'none'
           ? 'https://assets.tumblr.com/images/default_avatar/cube_open_128.png'
-          : json['avatar'];
+          : json['avatar'].startsWith('http')
+              ? json['avatar']
+              : ApiHttpRepository.api + json['avatar'];
     }
     // blog isPrivate flag
     if (json.containsKey('isPrivate')) _isPrivate = json['isPrivate'];

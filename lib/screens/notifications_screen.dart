@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/components/chatting/messaging_screen.dart';
 import 'package:tumblrx/models/user/user.dart';
+import 'package:tumblrx/services/api_provider.dart';
 import 'package:tumblrx/services/authentication.dart';
 import 'package:tumblrx/utilities/constants.dart';
 
