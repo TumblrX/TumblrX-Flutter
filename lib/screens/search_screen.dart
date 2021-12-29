@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/global.dart';
 import 'package:tumblrx/models/user/blog.dart';
+import 'package:tumblrx/screens/search_results_screen.dart';
 import 'package:tumblrx/services/authentication.dart';
 import 'package:tumblrx/utilities/constants.dart';
 
@@ -46,7 +47,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 Padding(
                   padding: const EdgeInsets.all(4.0),
                   child: Text(
-                    '@$query',
+                    'Go to @$query',
                     softWrap: true,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -112,11 +113,13 @@ class _SearchScreenState extends State<SearchScreen> {
         backgroundColor: Colors.white,
         foregroundColor: Colors.grey,
         title: Container(
-          width: MediaQuery.of(context).size.width * .8,
+          width: MediaQuery.of(context).size.width * .75,
           child: TextField(
             textInputAction: TextInputAction.search,
-            onSubmitted: (value) => Navigator.of(context)
-                .pushNamed('search_results', arguments: {'query': value}),
+            onSubmitted: (value) {
+              resultWidget = SearchResultScreen(query: value);
+              setState(() {});
+            },
             autofocus: true,
             decoration: InputDecoration(
               hintText: "Search Tumblrx",

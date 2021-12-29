@@ -61,7 +61,7 @@ class Blog {
   String get id => _id;
   bool get isPrimary => _isPrimary;
   bool get isCircleAvatar => this._isCircleAvatar;
-
+  String get description => this._description;
   BlogTheme get blogTheme => this._blogTheme;
   Blog(
       [this._handle,
