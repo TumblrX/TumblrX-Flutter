@@ -7,10 +7,9 @@ import 'package:tumblrx/models/user/blog.dart';
 import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/services/blog_screen.dart';
 import 'package:tumblrx/utilities/hex_color_value.dart';
-
 import '../blog_screen_constant.dart';
 
-Widget upperTabBar(TabController _tabController, BuildContext context,String color) {
+Widget upperTabBar(TabController _tabConroller, BuildContext context,String color) {
   final blogProvider = Provider.of<BlogScreenConstantProvider>(context);
   return Container(
 
@@ -46,7 +45,7 @@ Widget upperTabBar(TabController _tabController, BuildContext context,String col
             preferBelow: false,
           )
         ],
-        controller: _tabController,
+        controller: _tabConroller,
         indicatorSize: TabBarIndicatorSize.tab,
       ));
 }
@@ -58,7 +57,7 @@ Widget bottomTabBar(TabController _tabController, BuildContext context, String c
 
       /// pages which display content of each tab bar
       child: Container(
-    color: hexToColor(color) ??
+    color: hexToColor(color??'#000000') ??
         Colors.blue,
     child: TabBarView(
       children: [
@@ -66,20 +65,22 @@ Widget bottomTabBar(TabController _tabController, BuildContext context, String c
           future: blog.blogPosts(context),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return ListView.separated(
+              return ListView.builder(
                 itemCount: snapshot.data.length,
-                itemBuilder: (BuildContext context, int index) {
+                itemBuilder: 
+                (BuildContext context, int index) {
                   Post post = snapshot.data[index];
-                  return PostWidget(
+                  return Column(children: <Widget>[
+        PostWidget(
                     postContent: post.content,
                     tags: post.tags,
                     index: 0,
                     post: snapshot.data[index],
                     isLikes: false,
-                  );
+                  ),Container(height: 20.0,color: hexToColor(color??'#000000') ??
+        Colors.blue,),],);  
                 },
-                separatorBuilder: (context, index) =>
-                    const Divider(height: 20.0, color: Colors.transparent),
+              
               );
             } else if (snapshot.hasError) {
               Text('error');
@@ -133,6 +134,7 @@ Widget bottomTabBar(TabController _tabController, BuildContext context, String c
                   child: Text('Turbulent connection.Try again'),
                 );
               }
+              
 
               return Center(child: CircularProgressIndicator());
             }),
@@ -198,3 +200,4 @@ Widget bottomTabBar(TabController _tabController, BuildContext context, String c
     ),
   ));
 }
+                                 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/components/blog_screen_constant.dart';
 import 'package:tumblrx/models/user/user.dart';
+import 'package:tumblrx/services/api_provider.dart';
 import 'package:tumblrx/utilities/hex_color_value.dart';
 
 /// for square avatar
@@ -21,7 +22,7 @@ class Square extends StatelessWidget {
             height: MediaQuery.of(context).size.height / 8.8,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(3),
-              child: Image.network(
+              child: Image.network(ApiHttpRepository.api +
                 Provider.of<User>(context).getActiveBlogAvatar(),
                 fit: BoxFit.cover,
               ),

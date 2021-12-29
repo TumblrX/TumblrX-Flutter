@@ -49,7 +49,7 @@ class BlogScreenConstant extends StatelessWidget {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => ShowImage(headerImgPath)));
+                    builder: (context) => ShowImage(Provider.of<User>(context, listen: false).getActiveBlogHeaderImage())));
           },
         )
       ],

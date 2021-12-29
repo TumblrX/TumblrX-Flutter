@@ -28,6 +28,7 @@ class EditAvatarBottomSheet extends StatelessWidget {
               Provider.of<User>(context, listen: false)
                   .getActiveBlog()
                   .pickImage(1);
+                  
             
             }),
         Padding(

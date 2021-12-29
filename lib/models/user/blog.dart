@@ -1,7 +1,7 @@
-import 'dart:io';
+import 'package:dio/dio.dart';
 import 'package:dartdoc/dartdoc.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:http/http.dart';
+//import 'package:http/http.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/models/post.dart';
 import 'dart:convert' as convert;
@@ -9,8 +9,9 @@ import 'package:tumblrx/services/api_provider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tumblrx/services/authentication.dart';
 import 'blog_theme.dart';
-
-
+import 'package:http_parser/http_parser.dart';
+import 'package:http/http.dart' as http;
+//import 'package:http/http.dart' as http; 
 class Blog {
   /// The user's tumblr short name
   String _handle;
@@ -86,6 +87,12 @@ class Blog {
 
   ///title color
   String _titleColor;
+
+  ///user id
+  String _ownerId;
+
+  XFile avatarPick;
+  XFile headerImagePick;
 
   /// themes of Blog
   BlogTheme blogTheme;
@@ -208,6 +215,7 @@ class Blog {
   String get headerImage => _headerImage;
   String get description => _description;
   String get titleColor => _titleColor;
+  String get ownerId => _ownerId;
   Future<String> getBlogAvatar() async {
     final String endPoint = 'blog/';
     final Map<String, dynamic> reqParameters = {
@@ -215,7 +223,7 @@ class Blog {
       "size": 64
     };
     try {
-      final Response response = await MockHttpRepository.sendGetRequest(
+      final  response = await MockHttpRepository.sendGetRequest(
           endPoint,
           queryParams: reqParameters);
       if (response.statusCode == 200) {
@@ -236,7 +244,7 @@ class Blog {
     final Map<String, dynamic> reqParameters = {"blog-identifier": name};
 
     try {
-      final Response response = await MockHttpRepository.sendGetRequest(
+      final  response = await MockHttpRepository.sendGetRequest(
           endPoint,
           queryParams: reqParameters);
       if (response.statusCode != 200) throw Exception(response.body.toString());
@@ -336,9 +344,10 @@ class Blog {
 
   Future pickImage(int indicator) async {
     final image = await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (image == null) return;
-    if (indicator == 1) this._blogAvatar = File(image.path).toString();
-    if (indicator == 2) this._headerImage = File(image.path).toString();
+    print(image.path.toString());
+    if (image == null) return null;
+    if (indicator == 1)  avatarPick=image;
+    if (indicator == 2) headerImagePick=image;
   }
 
   ///Get Blog Posts
@@ -390,7 +399,6 @@ class Blog {
     final response =
         await ApiHttpRepository.sendPutRequest(endPoint, headers, body);
 
-
     if (response.statusCode == 200) {
       print(response.statusCode);
     }
@@ -412,10 +420,8 @@ class Blog {
 
     Map<String, dynamic> responseObject =
         convert.jsonDecode(response.body) as Map<String, dynamic>;
-   
 
     if (response.statusCode == 200) {
-     
       //Blog.fromJson(responseObject);
 
       if (responseObject.containsKey('_id'))
@@ -426,6 +432,9 @@ class Blog {
       if (responseObject.containsKey('title')) {
         _title = responseObject['title'];
         _titleBeforeEdit = responseObject['title'];
+      }
+      if (responseObject.containsKey('ownerId')) {
+        _ownerId = responseObject['ownerId'];
       }
 
       if (responseObject.containsKey('handle')) {
@@ -490,24 +499,38 @@ class Blog {
     final String endPoint = 'api/blog/edit-theme/${this._handle}';
     final Map<dynamic, dynamic> data = new Map<dynamic, dynamic>();
 
-  
     if (this._backGroundColor != null)
       data['backgroundColor'] = this._backGroundColor;
+    data['avatar'] = "none";
+
     if (this._stretchHeaderImage != null)
       data['stretchHeaderImage'] = this._stretchHeaderImage.toString();
-    if (this._showAvatar != null) data['showAvatar'] = this._showAvatar.toString();
+    if (this._showAvatar != null)
+      data['showAvatar'] = this._showAvatar.toString();
     final Map<String, String> headers = {
       'Authorization':
           '${Provider.of<Authentication>(context, listen: false).token}'
     };
+    /////////////////////////////////////////////////////////////////////////////////
+    var dio=Dio();
+     dio.options.headers["Authorization"] =
+          Provider.of<Authentication>(context, listen: false).token;
+
     
+    var formData = FormData.fromMap({
+'backgroundColor':this._backGroundColor,
+'stretchHeaderImage':this._stretchHeaderImage.toString(),
+'showAvatar': this._showAvatar.toString(),
+'avatar':await MultipartFile.fromFile(avatarPick.path,filename: avatarPick.name, contentType: MediaType("image", "jpeg")),
 
-    final response =
-        await ApiHttpRepository.sendPutRequest(endPoint, headers, data);
-    if (response.statusCode == 200) {
-     
+    });
+    final response=dio.put(ApiHttpRepository.api+endPoint,data:formData);
+ 
 
-      print(response.statusCode);
+    //final response =
+    //  await ApiHttpRepository.sendPutRequest(endPoint, headers, data);
+    //if (response.statusCode == 200) {
+      //print(response.statusCode);
     }
   }
-}
+

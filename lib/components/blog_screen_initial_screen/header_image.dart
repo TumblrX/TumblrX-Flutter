@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:tumblrx/components/blog_screen_constant.dart';
 import 'package:tumblrx/components/edit_blog_screen/edit.dart';
 import 'package:tumblrx/models/user/user.dart';
+import 'package:tumblrx/services/api_provider.dart';
 import '../blog_screen_search/blog_screen_search.dart';
 import 'create_new_tumblr.dart';
 
@@ -152,7 +153,7 @@ class _HeaderImageState extends State<HeaderImage> {
         //color: Colors.green,
         decoration: BoxDecoration(
             image: DecorationImage(
-                image: AssetImage(BlogScreenConstant.headerImgPath),
+                image:NetworkImage(ApiHttpRepository.api+ Provider.of<User>(context,listen: false).getActiveBlogHeaderImage()??'http://tumblrx.me:3000/uploads/blog/blog-1640803111113-undefined.png'),
                 fit:Provider.of<User>(context).getActiveBlogStretchHeaderImage()??true? BoxFit.fill:BoxFit.contain)), //dummy image
         height: MediaQuery.of(context).size.height / 3.6, //(200)
       ),

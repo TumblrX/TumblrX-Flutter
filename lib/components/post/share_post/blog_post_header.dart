@@ -7,7 +7,7 @@ import 'package:tumblrx/models/user/user.dart';
 class  BlogPostHeader extends StatelessWidget {
    final double avatarSize = 40;
   final double postHeaderHeight = 60;
-  Post _post;
+   final Post _post;
    BlogPostHeader({@required Post post}):_post=post;
      
 
