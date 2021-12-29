@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:tumblrx/components/blog_screen_constant.dart';
 import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/screens/blog_screen.dart';
+import 'package:tumblrx/services/api_provider.dart';
 import 'package:tumblrx/services/blog_screen.dart';
 import 'package:tumblrx/utilities/hex_color_value.dart';
 
@@ -24,7 +25,7 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-     final blogProvider = Provider.of<BlogScreenConstantProvider>(context);
+    final blogProvider = Provider.of<BlogScreenConstantProvider>(context);
 
     return Scaffold(
       body: Column(
@@ -36,7 +37,10 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
                 Container(
                   decoration: BoxDecoration(
                       image: DecorationImage(
-                          image: AssetImage("images/header.png"),
+                          image: NetworkImage(ApiHttpRepository.api +
+                                  Provider.of<User>(context, listen: false)
+                                      .getActiveBlogHeaderImage() ??
+                              'http://tumblrx.me:3000/uploads/blog/blog-1640803111113-undefined.png'),
                           fit: BoxFit.fill)),
                 ),
                 BackdropFilter(
@@ -49,13 +53,11 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
                     margin: const EdgeInsets.only(top: 20.0),
                     child: IconButton(
                       onPressed: () {
-                         Navigator.pop(
-                    context,
-                    MaterialPageRoute(builder: (context) => BlogScreen()),
-                  );
-              
-              
-              },
+                        Navigator.pop(
+                          context,
+                          MaterialPageRoute(builder: (context) => BlogScreen()),
+                        );
+                      },
                       icon: Icon(Icons.arrow_back),
                       color: Colors.white,
                     )),
@@ -76,10 +78,12 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
             ),
           ),
           Container(
-              color: hexToColor( Provider.of<User>(context,listen: false).getActiveBlogBackColor())??Colors.blue,
+              color: hexToColor(Provider.of<User>(context, listen: false)
+                      .getActiveBlogBackColor()) ??
+                  Colors.blue,
               child: TabBar(
                 unselectedLabelColor: Color(0xffc7c1c1),
-                labelColor:blogProvider.geaccentColor(),
+                labelColor: blogProvider.geaccentColor(),
                 indicatorColor: BlogScreenConstant.accent,
                 tabs: [
                   Tab(

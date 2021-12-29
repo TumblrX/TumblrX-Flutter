@@ -2,6 +2,7 @@ import 'package:http/http.dart';
 import 'package:tumblrx/utilities/environment.dart';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
+
 /// MockAPI class to use for testing
 class MockHttpRepository {
   /// API key for mock server
@@ -70,7 +71,7 @@ class ApiHttpRepository {
     //   });
     // }
     final Uri uri = Uri.parse(fullUrl);
-    print(uri.toString());
+
     if (headers != null) return post(uri, body: reqBody, headers: headers);
     return post(uri, body: reqBody);
   }
@@ -88,13 +89,12 @@ class ApiHttpRepository {
       endPoint = endPoint.substring(0, endPoint.length - 1);
     }
     final Uri uri = Uri.parse('${api}api/$endPoint');
-    print(uri.toString());
     if (headers != null) return await get(uri, headers: headers);
     return await get(uri);
   }
 
   static Future sendDeleteRequest(String endPoint, Map<String, String> headers,
-      {Map<String, dynamic> reqBody}) {
+      {Map<dynamic, dynamic> reqBody}) {
     String url = '$api$endPoint';
     final Uri uri = Uri.parse(url);
 
@@ -111,11 +111,7 @@ class ApiHttpRepository {
     String url = '$api$endPoint';
     final Uri uri = Uri.parse(url);
 
-    print(endPoint);
-    print(headers);
-    print(reqBody);
-
-    if (reqBody != null) return http. put( uri, headers: headers, body:  reqBody);
+    if (reqBody != null) return http.put(uri, headers: headers, body: reqBody);
     return put(uri);
   }
 }

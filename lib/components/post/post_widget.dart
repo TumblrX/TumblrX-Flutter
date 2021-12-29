@@ -8,6 +8,7 @@ import 'package:tumblrx/components/post/post_blocks/video_block_widget.dart';
 import 'package:tumblrx/components/post/post_content.dart';
 import 'package:tumblrx/components/post/post_footer/post_footer.dart';
 import 'package:tumblrx/components/post/post_header.dart';
+import 'package:tumblrx/components/post/share_post/blog_post_header.dart';
 import 'package:tumblrx/components/post/tags_widget.dart';
 import 'package:tumblrx/models/post.dart';
 import 'package:tumblrx/models/posts/audio_block.dart';
@@ -20,17 +21,22 @@ class PostWidget extends StatelessWidget {
   final List _postContent;
   final List<String> _tags;
   final List<Post> _trail;
+  final Post _post;
   final int _index;
+  final bool _isLikes;
   PostWidget(
       {Key key,
       @required List postContent,
       @required int index,
       List tags,
-      List trail})
+      List trail,
+      Post post,
+      bool isLikes})
       : _postContent = postContent,
         _index = index,
         _tags = tags == null ? [] : tags,
         _trail = trail == null ? [] : trail,
+        _post = post,_isLikes=isLikes,
         super(key: key);
 
   @override
@@ -41,7 +47,9 @@ class PostWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          PostHeader(index: _index),
+          (_post != null && _isLikes==false)
+              ? BlogPostHeader(post: _post)
+              : PostHeader(index: _index),
           Divider(),
           /*
           len > 0? 

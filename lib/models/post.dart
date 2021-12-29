@@ -125,7 +125,7 @@ class Post {
   String get reblogKey => this._reblogKey;
   DateTime get publishedOn => _date;
   String get postUrl => _postUrl;
-
+  String get blogId => _blogId;
   set liked(bool liked) {
     this._liked = liked;
   }
@@ -134,6 +134,7 @@ class Post {
   Post.fromJson(Map<String, dynamic> parsedJson) {
     // ==================== post related data =========================
     // post identifier '_id'
+
     if (parsedJson.containsKey('_id'))
       this._id = parsedJson['_id'];
     else

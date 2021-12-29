@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/models/post.dart';
 import 'package:tumblrx/models/user/user.dart';
+import 'package:tumblrx/screens/user_blog_view.dart';
 import 'package:tumblrx/services/content.dart';
 import 'package:tumblrx/utilities/constants.dart';
 
@@ -45,16 +46,16 @@ class PostHeader extends StatelessWidget {
           : Padding(
               padding: EdgeInsets.only(left: 15.0),
               child: InkWell(
-                onTap: () => _showBlogProfile(context),
+                onTap: () => showBlogProfile(context, post.blogId),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    _blogAvatar(post.blogAvatar),
+                    blogAvatar(post.blogAvatar),
                     Expanded(
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          _blogInfo(post.blogTitle, isRebloged, post.reblogKey),
+                          blogInfo(post.blogTitle, isRebloged, post.reblogKey),
                           showFollowButton
                               ? TextButton(
                                   style: ButtonStyle(
@@ -63,20 +64,22 @@ class PostHeader extends StatelessWidget {
                                             .colorScheme
                                             .secondary),
                                   ),
-                                  onPressed: () => post.followBlog(),
+                                  onPressed: () =>
+                                      Provider.of<User>(context, listen: false)
+                                          .followUser(context, post.blogId),
                                   child: Text('Follow'),
                                 )
-                              : _emptyContainer(),
+                              : emptyContainer(),
                         ],
                       ),
                     ),
                     _showOptionsIcon
                         ? IconButton(
                             onPressed: () =>
-                                _showBlogOptions(post.publishedOn, context),
+                                showBlogOptions(post.publishedOn, context),
                             icon: Icon(Icons.more_horiz),
                           )
-                        : _emptyContainer(),
+                        : emptyContainer(),
                   ],
                 ),
               ),
@@ -85,28 +88,41 @@ class PostHeader extends StatelessWidget {
   }
 
   /// navigate to the blog screen to view blog info
-  void _showBlogProfile(BuildContext context) {
-    Navigator.of(context).pushNamed('blog_screen');
+  void showBlogProfile(BuildContext context, String blogId) {
+    if (Provider.of<User>(context, listen: false).isUserBlog(blogId))
+      Navigator.of(context).pushNamed('blog_screen');
+    else {
+   
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => UserBlogView(id: blogId,
+                
+                )),
+      );
+    }
   }
 
   /// callback to open a dialog with blog options
-  void _showBlogOptions(DateTime publishedOn, BuildContext context) {
+  void showBlogOptions(DateTime publishedOn, BuildContext context) {
     final String pinOptionMessage =
         'This will appear at the top of your blog and replace any previous pinned post.Are you sure?';
     final String muteNotificationMessage =
         'Would you like to mute push notifications for this particular post?';
     showModalBottomSheet(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
       context: context,
-      builder: (context) => ListView(
+      builder: (context) => Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           ListTile(
             title: Text('Pin post'),
-            onTap: () => _showAlert(pinOptionMessage, context, null, 'Pin'),
+            onTap: () => showAlert(pinOptionMessage, context, null, 'Pin'),
           ),
           ListTile(
             title: Text('Mute notifications'),
-            onTap: () => _showAlert(muteNotificationMessage, context,
-                () => _muteNotifications, 'Mute'),
+            onTap: () => showAlert(muteNotificationMessage, context,
+                () => muteNotifications, 'Mute'),
           ),
           ListTile(
             title: Text('Copy link'),
@@ -117,7 +133,7 @@ class PostHeader extends StatelessWidget {
     );
   }
 
-  void _muteNotifications(BuildContext context) {
+  void muteNotifications(BuildContext context) {
     Provider.of<Content>(context, listen: false)
         .posts[_index]
         .mutePushNotification()
@@ -127,7 +143,7 @@ class PostHeader extends StatelessWidget {
     });
   }
 
-  void _showAlert(String alertMessage, BuildContext context,
+  void showAlert(String alertMessage, BuildContext context,
       void Function() callBack, String confirmationText) {
     AlertDialog(
       actions: [
@@ -149,16 +165,16 @@ class PostHeader extends StatelessWidget {
     );
   }
 
-  Widget _errorAvatar() => CircleAvatar(
+  Widget errorAvatar() => CircleAvatar(
         child: Icon(Icons.error),
       );
 
-  Widget _emptyContainer() => Container(
+  Widget emptyContainer() => Container(
         width: 0,
         height: 0,
       );
 
-  Widget _blogInfo(String blogTitle, bool isRebloged, String reblogKey) =>
+  Widget blogInfo(String blogTitle, bool isRebloged, String reblogKey) =>
       Padding(
         padding: const EdgeInsets.only(left: 8.0, right: 5.0),
         child: isRebloged
@@ -195,7 +211,7 @@ class PostHeader extends StatelessWidget {
               ),
       );
 
-  Widget _blogAvatar(String blogAvatar) => CachedNetworkImage(
+  Widget blogAvatar(String blogAvatar) => CachedNetworkImage(
         width: avatarSize,
         height: avatarSize,
         imageUrl: blogAvatar,
@@ -204,6 +220,6 @@ class PostHeader extends StatelessWidget {
           height: avatarSize,
           child: Center(child: const CircularProgressIndicator()),
         ),
-        errorWidget: (context, url, error) => _errorAvatar(),
+        errorWidget: (context, url, error) => errorAvatar(),
       );
 }
