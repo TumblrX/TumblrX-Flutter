@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:tumblrx/global.dart';
 import 'package:video_player/video_player.dart';
 //import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
@@ -33,7 +34,7 @@ class _VideoBlockWidgetState extends State<VideoBlockWidget> {
             initialVideoId: videoId,
             params: YoutubePlayerParams(autoPlay: false, mute: true));
       } else
-        print('video id is $videoId');
+        logger.d('video id is $videoId');
     } else if (widget._provider != 'vimeo') {
       _videoController = VideoPlayerController.network(widget._url)
         ..initialize().then((value) => setState(() {}));
@@ -70,7 +71,7 @@ class _VideoBlockWidgetState extends State<VideoBlockWidget> {
       );
     // if (widget._provider == 'vimeo') {
     //   String videoId = widget._url.split('/').last;
-    //   print('video id is $videoId');
+    //   logger.d('video id is $videoId');
     //   return Container(
     //     height: 250,
     //     child: Center(

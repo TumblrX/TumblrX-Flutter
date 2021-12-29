@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:tumblrx/global.dart';
 import 'package:tumblrx/utilities/constants.dart';
 
 class MediaWidget extends StatelessWidget {
@@ -48,7 +49,11 @@ class MediaWidget extends StatelessWidget {
           imageUrl: this._url,
           width: this._width,
           height: this._height,
-          placeholder: (cts, url) => Center(child: CircularProgressIndicator()),
+          progressIndicatorBuilder: (context, url, progress) => LimitedBox(
+            maxHeight: 40,
+            maxWidth: 40,
+            child: CircularProgressIndicator(),
+          ),
           errorWidget: (ctx, url, error) => noImage(),
         ),
       );
@@ -134,13 +139,13 @@ class MediaWidget extends StatelessWidget {
           if (await directory.exists()) {
             final String fileName = Uri.parse(this._url).path.split('/').last;
             final String downloadPath = '${directory.path}/$fileName';
-            final response = await Dio().download(this._url, downloadPath);
-            final result = await ImageGallerySaver.saveFile(downloadPath);
+            await Dio().download(this._url, downloadPath);
+            await ImageGallerySaver.saveFile(downloadPath);
           }
         } else {}
       } else {}
     } catch (err) {
-      print(err);
+      logger.e(err);
       throw err;
     }
   }

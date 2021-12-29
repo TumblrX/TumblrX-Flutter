@@ -8,6 +8,7 @@ Description:
 
 import 'dart:collection';
 
+import 'package:tumblrx/global.dart';
 import 'package:tumblrx/models/posts/inline_formatting.dart';
 
 import 'dart:math';
@@ -80,7 +81,7 @@ class TextBlock {
 
         _formattedText = this.formatText();
       } catch (err) {
-        print('error in formatting $err');
+        logger.e('error in formatting $err');
       }
     }
   }

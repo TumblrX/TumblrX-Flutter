@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 
 class NotificationButton extends StatefulWidget {
-  bool _isOn;
+  final bool _isOn;
   NotificationButton({Key key, @required bool isOn})
       : _isOn = isOn,
         super(key: key);
 
   @override
-  State<NotificationButton> createState() => _NotificationButtonState();
+  State<NotificationButton> createState() => _NotificationButtonState(_isOn);
 }
 
 class _NotificationButtonState extends State<NotificationButton> {
+  bool isOn;
+  _NotificationButtonState(this.isOn);
   @override
   Widget build(BuildContext context) {
     return IconButton(
@@ -18,7 +20,7 @@ class _NotificationButtonState extends State<NotificationButton> {
       onPressed: () {
         // send request
         setState(() {
-          widget._isOn = !widget._isOn;
+          isOn = !widget._isOn;
         });
       },
       icon: widget._isOn

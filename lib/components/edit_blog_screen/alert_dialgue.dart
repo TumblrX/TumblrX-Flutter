@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import 'package:provider/provider.dart';
 import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/screens/blog_screen.dart';
@@ -22,8 +21,7 @@ class AlerDialgue extends StatelessWidget {
                       Provider.of<User>(context, listen: false)
                               .getActiveBlogDescriptionBeforeEdit() ??
                           '');
-              print(Provider.of<User>(context, listen: false)
-                  .getActiveBlogIsCircleBeforeEdit());
+            
               Provider.of<User>(context, listen: false).setActiveBlogIsCircle(
                   Provider.of<User>(context, listen: false)
                           .getActiveBlogIsCircleBeforeEdit() ??
@@ -50,6 +48,9 @@ class AlerDialgue extends StatelessWidget {
           onPressed: () {
             Provider.of<User>(context, listen: false)
                 .updateActiveBlogInfo(context);
+            Provider.of<User>(context, listen: false)
+                .updateActiveBlogTheme(context);
+
             Navigator.of(context).pop();
 
             Navigator.pop(

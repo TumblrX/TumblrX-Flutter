@@ -1,5 +1,6 @@
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
+import 'package:tumblrx/global.dart';
 import 'package:tumblrx/utilities/constants.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:share/share.dart';
@@ -57,19 +58,6 @@ class ShareMethods extends StatelessWidget {
             ],
           ),
         ),
-        // TODO: onedrive method
-        InkWell(
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Icon(Icons.cloud),
-              ),
-              Text('OneDrive')
-            ],
-          ),
-        ),
         // share
         InkWell(
           onTap: () async {
@@ -78,7 +66,7 @@ class ShareMethods extends StatelessWidget {
               showSnackBarMessage(
                   context, 'Shared successfully!', Colors.green);
             } catch (err) {
-              print(err);
+              logger.e(err);
               showSnackBarMessage(context, 'Something went wrong!', Colors.red);
             }
           },

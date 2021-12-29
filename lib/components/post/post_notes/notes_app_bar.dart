@@ -20,7 +20,6 @@ class NotesAppBar extends StatelessWidget implements PreferredSizeWidget {
         _reblogCount = reblogCount,
         super(key: key);
 
-  AppBar appBar;
   @override
   Widget build(BuildContext context) {
     TabBar tabBar = TabBar(
@@ -55,7 +54,7 @@ class NotesAppBar extends StatelessWidget implements PreferredSizeWidget {
         )
       ],
     );
-    appBar = AppBar(
+    return AppBar(
       backgroundColor: Theme.of(context).primaryColor,
       title: Text('$_totalNotes notes'),
       actions: [NotificationButton(isOn: false)],
@@ -67,7 +66,6 @@ class NotesAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
       ),
     );
-    return appBar;
   }
 
   @override

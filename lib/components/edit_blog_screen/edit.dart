@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tumblrx/components/blog_screen_initial_screen/blog_widgets.dart';
 import 'package:tumblrx/components/edit_blog_screen/cover_image_bottomsheet.dart';
 import 'package:tumblrx/components/edit_blog_screen/edit_app_bar.dart';
+import 'package:tumblrx/components/post/post_widget.dart';
+import 'package:tumblrx/models/posts/post.dart';
 import 'package:tumblrx/models/user/user.dart';
+import 'package:tumblrx/services/api_provider.dart';
 import 'package:tumblrx/services/blog_screen.dart';
 import '../blog_screen_constant.dart';
 import 'edit_avatar.dart';
@@ -31,16 +35,22 @@ class _EditState extends State<Edit> with SingleTickerProviderStateMixin {
     ///function used for Tab bars
 
     _tabController = new TabController(length: 3, vsync: this);
+    super.initState();
   }
 
+  @override
   Widget build(BuildContext context) {
-    @override
-    final blogProvider = Provider.of<BlogScreenConstantProvider>(context);
+    Provider.of<BlogScreenConstantProvider>(context);
     return Scaffold(
-        body: Container(
-            color: hexToColor(Provider.of<User>(context, listen: false)
-                    .getActiveBlogBackColor()) ??
-                Colors.blue,
+      body: Container(
+        color: hexToColor(Provider.of<User>(context, listen: false)
+                .getActiveBlogBackColor()) ??
+            Colors.blue,
+        child: SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+                maxHeight: MediaQuery.of(context).size.height +
+                    MediaQuery.of(context).size.height / 2),
             child: Stack(
               children: [
                 Column(
@@ -52,7 +62,12 @@ class _EditState extends State<Edit> with SingleTickerProviderStateMixin {
                               height: MediaQuery.of(context).size.height / 3.2,
                               decoration: BoxDecoration(
                                   image: DecorationImage(
-                                      image: AssetImage('images/header.png'),
+                                      image: NetworkImage(ApiHttpRepository
+                                                  .api +
+                                              Provider.of<User>(context,
+                                                      listen: false)
+                                                  .getActiveBlogHeaderImage() ??
+                                          'http://tumblrx.me:3000/uploads/blog/blog-1640803111113-undefined.png'),
                                       fit: Provider.of<User>(context)
                                                   .getActiveBlogStretchHeaderImage() ??
                                               true
@@ -82,6 +97,10 @@ class _EditState extends State<Edit> with SingleTickerProviderStateMixin {
                         textAlign: TextAlign.center,
                         textInputAction: TextInputAction.done,
                         style: TextStyle(
+                          color: hexToColor(
+                              Provider.of<User>(context, listen: false)
+                                      .getActiveBlogTitleColor() ??
+                                  Colors.black),
                           fontSize: 35,
                           decoration: TextDecoration.underline,
                           decorationColor: BlogScreenConstant.accent,
@@ -120,6 +139,10 @@ class _EditState extends State<Edit> with SingleTickerProviderStateMixin {
                       },
                       textInputAction: TextInputAction.done,
                       style: TextStyle(
+                        color: hexToColor(
+                            Provider.of<User>(context, listen: false)
+                                    .getActiveBlogTitleColor() ??
+                                Colors.black),
                         fontSize: 15,
                         decoration: TextDecoration.underline,
                         decorationColor: BlogScreenConstant.accent,
@@ -134,14 +157,56 @@ class _EditState extends State<Edit> with SingleTickerProviderStateMixin {
                               decoration: TextDecoration.none)),
                     ),
                     EditButtons(),
-                    //if (Provider.of<User>(context).getActiveBlogIsPrimary())
-                    //upperTabBar(_tabController, context),
-                    //if (Provider.of<User>(context).getActiveBlogIsPrimary())
-                    //bottomTabBar(_tabController, context),
-                    //if (!Provider.of<User>(context).getActiveBlogIsPrimary())
-                    //Container(
-                    //child: Column(),
-                    //)
+                    if (Provider.of<User>(context).getActiveBlogIsPrimary())
+                      upperTabBar(
+                          _tabController,
+                          context,
+                          Provider.of<User>(context, listen: false)
+                              .getActiveBlogBackColor()),
+                    if (Provider.of<User>(context).getActiveBlogIsPrimary())
+                      bottomTabBar(
+                          _tabController,
+                          context,
+                          Provider.of<User>(context, listen: false)
+                              .getActiveBlogBackColor(),
+                          Provider.of<User>(context, listen: false)
+                              .getActiveBlog()),
+                    if (!Provider.of<User>(context).getActiveBlogIsPrimary())
+                      Container(
+                        child: FutureBuilder<List<Post>>(
+                          future:
+                              Provider.of<User>(context).getActiveBlogPosts(),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData &&
+                                snapshot.data != null &&
+                                snapshot.data.length != 0) {
+                              return Expanded(
+                                child: ListView.separated(
+                                  itemCount: snapshot.data.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    Post post = snapshot.data[index];
+                                    return PostWidget(
+                                      post: post,
+                                      // isLikes: false,
+                                    );
+                                  },
+                                  separatorBuilder: (context, index) =>
+                                      const Divider(
+                                          height: 20.0,
+                                          color: Colors.transparent),
+                                ),
+                              );
+                            } else if (snapshot.hasError) {
+                              return Text('no');
+                            } else if (snapshot.data == null ||
+                                snapshot.data.length == 0) {
+                              return Column();
+                            }
+                            return CircularProgressIndicator();
+                          },
+                        ),
+                      )
                   ],
                 ),
                 Provider.of<User>(context).getIsAvatarCircle() == true
@@ -150,6 +215,10 @@ class _EditState extends State<Edit> with SingleTickerProviderStateMixin {
 
                 // EditAvatar().editSquareAvatar(context)
               ],
-            )));
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

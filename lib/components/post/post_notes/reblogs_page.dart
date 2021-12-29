@@ -11,13 +11,15 @@ import 'package:provider/provider.dart';
 import 'package:tumblrx/components/post/post_content.dart';
 import 'package:tumblrx/components/post/post_header.dart';
 import 'package:tumblrx/models/notes.dart';
-import 'package:tumblrx/models/post.dart';
-import 'package:tumblrx/services/api_provider.dart';
+import 'package:tumblrx/models/posts/post.dart';
+import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/services/authentication.dart';
 import 'package:tumblrx/services/content.dart';
+import 'package:tumblrx/utilities/constants.dart';
+import 'package:tumblrx/utilities/custom_icons.dart';
 
 class ReblogsPage extends StatefulWidget {
-  String _postId;
+  final String _postId;
   ReblogsPage({Key key, @required String postId})
       : _postId = postId,
         super(key: key);
@@ -33,10 +35,14 @@ class _ReblogsPageState extends State<ReblogsPage> {
 
   @override
   Widget build(BuildContext context) {
+    //dismiss keyboard if opened
+    FocusScope.of(context).requestFocus(FocusNode());
     List<Post> posts = Provider.of<Content>(context, listen: false).posts;
     return FutureBuilder(
       future: Notes.getNotes(
-          'reblog', Provider.of<Authentication>(context).token, widget._postId),
+          'reblog',
+          Provider.of<Authentication>(context, listen: false).token,
+          widget._postId),
       builder: (context, snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.waiting:
@@ -51,9 +57,9 @@ class _ReblogsPageState extends State<ReblogsPage> {
               return Center(
                 child: Icon(Icons.error),
               );
-            if (snapshot.hasData)
-              return Container(
-                  child: Column(
+            if (snapshot.hasData) {
+              notes = snapshot.data ?? [];
+              return Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Flexible(
@@ -67,45 +73,92 @@ class _ReblogsPageState extends State<ReblogsPage> {
                       ),
                     ),
                   ),
-                  Divider(),
-                  Flexible(
-                    child: ListView.builder(
-                      itemCount: notes.length,
-                      itemBuilder: (context, index) {
-                        final int postIndex = posts.indexWhere(
-                            (element) => element.id == notes[index].postId);
-                        if (postIndex == -1)
-                          return Container(
-                            child: Text('blog not found'),
-                          );
-
-                        Post post = posts[postIndex];
-                        return Column(
-                          children: [
-                            // post header containing blog title, icon, and options icon
-                            PostHeader(index: postIndex),
-                            // post content widget without the original post
-                            PostContentView(
-                              postContent: post.content,
-                              tags: post.tags,
+                  // if no reblogs yet, render a placeholder
+                  if (notes.length == 0)
+                    Container(
+                      alignment: Alignment.bottomCenter,
+                      height: MediaQuery.of(context).size.height * 0.7,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Icon(
+                              CustomIcons.reblog,
+                              size: 50,
+                              color: Colors.grey,
                             ),
-                            // options buttons to Reblog the reblogged post, or
-                            // view the blog profile with this post at the begining
-                            Row(
-                              children: [
-                                TextButton(
-                                    onPressed: null, child: Text('Reblog')),
-                                TextButton(
-                                    onPressed: null, child: Text('View post'))
-                              ],
-                            )
-                          ],
-                        );
-                      },
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: Text(
+                              'No reblogs yet',
+                              style:
+                                  kBiggerTextStyle.copyWith(color: Colors.grey),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  )
+
+                  if (notes.length > 0) ...[
+                    Divider(),
+                    Flexible(
+                      child: ListView.builder(
+                        itemCount: notes.length,
+                        itemBuilder: (context, index) {
+                          final int postIndex = posts.indexWhere(
+                              (element) => element.id == notes[index].postId);
+                          if (postIndex == -1)
+                            return Container(
+                              child: Text('blog not found'),
+                            );
+
+                          Post post = posts[postIndex];
+                          return Column(
+                            children: [
+                              // post header containing blog title, icon, and options icon
+                              PostHeader(
+                                id: post.id,
+                                blogAvatar: post.blogAvatar,
+                                blogHandle: post.blogHandle,
+                                blogId: post.blogId,
+                                blogTitle: post.blogTitle,
+                                isReblogged: post.isReblogged,
+                                publishedOn: post.publishedOn,
+                                showOptionsIcon: true,
+                                showFollowButton: Provider.of<User>(context)
+                                        .getActiveBlogIsPrimary() &&
+                                    Provider.of<User>(context)
+                                            .followingBlogs
+                                            .singleWhere((element) =>
+                                                element.id == post.blogId) ==
+                                        null,
+                              ),
+                              // post content widget without the original post
+                              PostContentView(
+                                postContent: post.content,
+                                tags: post.tags,
+                              ),
+                              // options buttons to Reblog the reblogged post, or
+                              // view the blog profile with this post at the begining
+                              Row(
+                                children: [
+                                  TextButton(
+                                      onPressed: null, child: Text('Reblog')),
+                                  TextButton(
+                                      onPressed: null, child: Text('View post'))
+                                ],
+                              )
+                            ],
+                          );
+                        },
+                      ),
+                    ),
+                  ],
                 ],
-              ));
+              );
+            }
             break;
         }
         return Container(
@@ -116,6 +169,4 @@ class _ReblogsPageState extends State<ReblogsPage> {
       },
     );
   }
-
-  List<Notes> _handleResponse() {}
 }

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:convert' as convert;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:tumblrx/global.dart';
 import 'package:tumblrx/models/chatting/chat_message.dart';
 import 'package:tumblrx/models/chatting/conversation.dart';
 import 'package:tumblrx/services/api_provider.dart';
@@ -201,16 +202,16 @@ class Messaging extends ChangeNotifier {
     String endPoint = 'user/chat/reterive-conversations';
     Map<String, String> header = {HttpHeaders.authorizationHeader: token};
     try {
-      final response =
-          await ApiHttpRepository.sendGetRequest(endPoint, headers: header);
-      Map<String, dynamic> responseObject =
-          convert.jsonDecode(response.body) as Map<String, dynamic>;
-      print(responseObject);
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        for (Map<String, dynamic> conversation in responseObject['data']) {
+
+
+      final response = await apiClient.sendGetRequest(endPoint, headers: header);
+      // print(response.statusCode);
+      // print(response.body);
+      logger.d(response);
+      if (response['statuscode'] == 200 || response['statuscode'] == 201) {
+        for (Map<String, dynamic> conversation in response['data']) {
           conversations.add(Conversation.fromJson(conversation));
         }
-      }
       if (retrieveChatFirstTime) {
         getChatContent(userId);
       }
@@ -230,17 +231,19 @@ class Messaging extends ChangeNotifier {
     Map<String, String> header = {HttpHeaders.authorizationHeader: token};
     try {
       final response =
-          await ApiHttpRepository.sendGetRequest(endPoint, headers: header);
-      print(response.statusCode);
+          await apiClient.sendGetRequest(endPoint, headers: header);
+      logger.d(response['statuscode']);
+      logger.d(response);
       conversations[i].chatMessages = [];
-      Map<String, dynamic> responseObject =
-          convert.jsonDecode(response.body) as Map<String, dynamic>;
+      
       if (response.statusCode == 200 || response.statusCode == 201) {
-        for (Map<String, dynamic> chatMessage in responseObject['messages']) {
-          conversations[i].addMessage(chatMessage['text'],
-              chatMessage['senderId'] != userId, chatMessage['createdAt']);
+       for (Map<String, dynamic> chatMessage in response['messages']) {
+        conversations[i].addMessage(chatMessage['text'],
+            chatMessage['senderId'] != userId, chatMessage['createdAt']);
+
+            }
         }
-      }
+
       conversations[i].chatMessages =
           conversations[i].chatMessages.reversed.toList();
     } catch (e) {
