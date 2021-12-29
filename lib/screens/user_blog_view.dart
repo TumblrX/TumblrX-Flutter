@@ -147,7 +147,7 @@ class _UserBlogViewState extends State<UserBlogView>
                             true,
                         child: snapshot.data.isCircleAvatar
                             ? AvatarImage(myBlog: false,path: snapshot.data.blogAvatar,color: snapshot.data.backGroundColor,)
-                            : Square(color: snapshot.data.backGroundColor,))
+                            : Square(color: snapshot.data.backGroundColor,path: snapshot.data.blogAvatar,))
                           ]),
 
                           //{
@@ -157,7 +157,7 @@ class _UserBlogViewState extends State<UserBlogView>
                           if (snapshot.data.isPrimary) bottomTabBar(_tabController, context,snapshot.data.backGroundColor,_blog),
                           //}
                           if (snapshot.data.isPrimary) 
-                          Container(
+                          Container(color: hexToColor(snapshot.data.backGroundColor),
                       child: FutureBuilder<List<Post>>(
                         future: _blog.blogPosts(context),
                         builder: (context, snapshot) {

@@ -11,7 +11,8 @@ import 'package:tumblrx/services/authentication.dart';
 import 'blog_theme.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:http/http.dart' as http;
-//import 'package:http/http.dart' as http; 
+
+//import 'package:http/http.dart' as http;
 class Blog {
   /// The user's tumblr short name
   String _handle;
@@ -223,8 +224,7 @@ class Blog {
       "size": 64
     };
     try {
-      final  response = await MockHttpRepository.sendGetRequest(
-          endPoint,
+      final response = await MockHttpRepository.sendGetRequest(endPoint,
           queryParams: reqParameters);
       if (response.statusCode == 200) {
         final responseParsed = convert.jsonDecode(response.body);
@@ -244,8 +244,7 @@ class Blog {
     final Map<String, dynamic> reqParameters = {"blog-identifier": name};
 
     try {
-      final  response = await MockHttpRepository.sendGetRequest(
-          endPoint,
+      final response = await MockHttpRepository.sendGetRequest(endPoint,
           queryParams: reqParameters);
       if (response.statusCode != 200) throw Exception(response.body.toString());
       final parsedResponse = convert.jsonDecode(response.body);
@@ -346,8 +345,8 @@ class Blog {
     final image = await ImagePicker().pickImage(source: ImageSource.gallery);
     print(image.path.toString());
     if (image == null) return null;
-    if (indicator == 1)  avatarPick=image;
-    if (indicator == 2) headerImagePick=image;
+    if (indicator == 1) avatarPick = image;
+    if (indicator == 2) headerImagePick = image;
   }
 
   ///Get Blog Posts
@@ -512,25 +511,25 @@ class Blog {
           '${Provider.of<Authentication>(context, listen: false).token}'
     };
     /////////////////////////////////////////////////////////////////////////////////
-    var dio=Dio();
-     dio.options.headers["Authorization"] =
-          Provider.of<Authentication>(context, listen: false).token;
-
-    
+    var dio = Dio();
+    dio.options.headers["Authorization"] =
+        Provider.of<Authentication>(context, listen: false).token;
+dio.options.headers['content-Type'] = 'application/json';
     var formData = FormData.fromMap({
-'backgroundColor':this._backGroundColor,
-'stretchHeaderImage':this._stretchHeaderImage.toString(),
-'showAvatar': this._showAvatar.toString(),
-'avatar':await MultipartFile.fromFile(avatarPick.path,filename: avatarPick.name, contentType: MediaType("image", "jpeg")),
-
+      'backgroundColor': this._backGroundColor,
+      'stretchHeaderImage': this._stretchHeaderImage.toString(),
+      'showAvatar': this._showAvatar.toString(),
+      'avatar': await MultipartFile.fromFile(avatarPick.path,
+          filename: avatarPick.name, contentType: MediaType("image", "jpeg")),
+      'headerImage': await MultipartFile.fromFile(headerImagePick.path,
+          filename: headerImagePick.name, contentType: MediaType("image", "jpeg")),
     });
-    final response=dio.put(ApiHttpRepository.api+endPoint,data:formData);
- 
+    final response = await dio.put(ApiHttpRepository.api + endPoint, data: formData);
 
+    // var responseObject = convert.jsonDecode(response.body);
     //final response =
     //  await ApiHttpRepository.sendPutRequest(endPoint, headers, data);
     //if (response.statusCode == 200) {
-      //print(response.statusCode);
-    }
+    //print(response.statusCode);
   }
-
+}

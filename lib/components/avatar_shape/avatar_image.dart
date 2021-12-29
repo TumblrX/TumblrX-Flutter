@@ -41,7 +41,7 @@ class _AvatarImageState extends State<AvatarImage> {
               child: CircleAvatar(
                 radius: 38,
                 backgroundImage: NetworkImage(ApiHttpRepository.api +
-                  Provider.of<User>(context).getActiveBlogAvatar(),
+                 widget._path,
                 ),
               )),
           onTap: () {

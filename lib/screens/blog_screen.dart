@@ -142,7 +142,8 @@ class _BlogScreenState extends State<BlogScreen>
                             ? AvatarImage(myBlog: true,color: Provider.of<User>(context, listen: false)
                           .getActiveBlogBackColor(),)
                             : Square(color: Provider.of<User>(context, listen: false)
-                                .getActiveBlogBackColor(),))
+                                .getActiveBlogBackColor(),path:Provider.of<User>(context, listen: false)
+                                .getActiveBlogAvatar() ,))
                   ]),
 
                   //{

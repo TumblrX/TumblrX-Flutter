@@ -14,7 +14,7 @@ Widget upperTabBar(TabController _tabConroller, BuildContext context,String colo
   return Container(
 
       /// start of Tab Bars
-      color: hexToColor(color) ??
+      color: hexToColor(color??'#000000') ??
           Colors.blue,
       child: TabBar(
         unselectedLabelColor: Color(0xffc7c1c1),
