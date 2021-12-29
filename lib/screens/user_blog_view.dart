@@ -5,11 +5,9 @@ import 'package:tumblrx/components/avatar_shape/square.dart';
 import 'package:tumblrx/components/blog_screen_constant.dart';
 import 'package:tumblrx/components/blog_screen_initial_screen/blog_screen_header_text.dart';
 import 'package:tumblrx/components/blog_screen_initial_screen/blog_widgets.dart';
-import 'package:tumblrx/components/blog_screen_initial_screen/header_image.dart';
 import 'package:tumblrx/components/post/post_widget.dart';
-import 'package:tumblrx/models/post.dart';
+import 'package:tumblrx/models/posts/post.dart';
 import 'package:tumblrx/models/user/blog.dart';
-import 'package:tumblrx/utilities/hex_color_value.dart';
 
 class UserBlogView extends StatefulWidget {
   final String _blogId;
@@ -131,7 +129,7 @@ class _UserBlogViewState extends State<UserBlogView>
                                 ///display header image with icons and drop down list
 
                                 TextWriting(
-                                  title:snapshot.data.title,
+                                  title: snapshot.data.title,
                                   description: snapshot.data.description,
                                   color: snapshot.data.backGroundColor,
                                   textColor: snapshot.data.titleColor,
@@ -142,20 +140,28 @@ class _UserBlogViewState extends State<UserBlogView>
                             ///show an avatar in square
 
                             ///show an avatar in square
+
                              Visibility(
                         visible: snapshot.data.showAvatar ??
                             true,
                         child: snapshot.data.isCircleAvatar
                             ? AvatarImage(myBlog: false,path: snapshot.data.blogAvatar,color: snapshot.data.backGroundColor,)
                             : Square(color: snapshot.data.backGroundColor,path: snapshot.data.blogAvatar,))
+
+                           
+
                           ]),
 
                           //{
 
-                          if (snapshot.data.isPrimary) 
-                          upperTabBar(_tabController, context,snapshot.data.backGroundColor),
-                          if (snapshot.data.isPrimary) bottomTabBar(_tabController, context,snapshot.data.backGroundColor,_blog),
+                          if (snapshot.data.isPrimary)
+                            upperTabBar(_tabController, context,
+                                snapshot.data.backGroundColor),
+                          if (snapshot.data.isPrimary)
+                            bottomTabBar(_tabController, context,
+                                snapshot.data.backGroundColor, _blog),
                           //}
+
                           if (snapshot.data.isPrimary) 
                           Container(color: hexToColor(snapshot.data.backGroundColor),
                       child: FutureBuilder<List<Post>>(
@@ -185,26 +191,55 @@ class _UserBlogViewState extends State<UserBlogView>
                             );
 
                             /* PostWidget(
+
+                          if (snapshot.data.isPrimary)
+                            Container(
+                              child: FutureBuilder<List<Post>>(
+                                future: _blog.blogPosts(context),
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData &&
+                                      snapshot.data != null &&
+                                      snapshot.data.length != 0) {
+                                    return Expanded(
+                                      child: ListView.separated(
+                                        itemCount: snapshot.data.length,
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          Post post = snapshot.data[index];
+                                          return PostWidget(
+                                            post: post,
+                                            // isLikes: false,
+                                          );
+                                        },
+                                        separatorBuilder: (context, index) =>
+                                            const Divider(
+                                                height: 20.0,
+                                                color: Colors.transparent),
+                                      ),
+                                    );
+
+                                    /* PostWidget(
+
                               postContent: snapshot.data[0].content,
                               index: 0,
                                 post: snapshot.data[0],
                                 isLikes: false,
                                 );*/
-                            // PostWidget(
-                            //postContent: snapshot.data[0].content,
-                            //index: 0,
-                            //post: snapshot.data[0],
-                            //);
-                          } else if (snapshot.hasError) {
-                            return Text('no');
-                          } else if (snapshot.data == null ||
-                              snapshot.data.length == 0) {
-                            return Column();
-                          }
-                          return CircularProgressIndicator();
-                        },
-                      ),
-                    )
+                                    // PostWidget(
+                                    //postContent: snapshot.data[0].content,
+                                    //index: 0,
+                                    //post: snapshot.data[0],
+                                    //);
+                                  } else if (snapshot.hasError) {
+                                    return Text('no');
+                                  } else if (snapshot.data == null ||
+                                      snapshot.data.length == 0) {
+                                    return Column();
+                                  }
+                                  return CircularProgressIndicator();
+                                },
+                              ),
+                            )
                         ]),
                   ),
 

@@ -1,11 +1,20 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tumblrx/models/user/user.dart';
+import 'package:tumblrx/screens/main_screen.dart';
+import 'package:tumblrx/screens/welcome_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/models/user/blog.dart';
 import 'package:tumblrx/models/user/user.dart';
+import 'package:tumblrx/global.dart';
 import 'package:tumblrx/services/api_provider.dart';
 import 'dart:convert' as convert;
+import 'package:provider/provider.dart';
+
+import 'messaging.dart';
 
 ///Contains the user data for login and sign up
 ///
@@ -19,6 +28,31 @@ class Authentication extends ChangeNotifier {
   String token; //for user authorization
   bool emailExist = false;
   String loginErrorMessage = "";
+
+  SharedPreferences _prefs;
+
+  // Future<String> getToken(BuildContext context) async {
+  //   if (_token != null) return _token;
+  //   //token is null, check for shared preferences
+  //   if (_prefs == null || _prefs.getString('token') == null) {
+  //     //user is logged out, go to login screen
+  //     while (Navigator.canPop(context)) {
+  //       Navigator.pop(context);
+  //     }
+  //     Navigator.popAndPushNamed(context, WelcomeScreen.id);
+  //     return null;
+  //   }
+  //   //Here means that the user is logged in but provider is cleared, restore provider data
+  //   _token = _prefs.getString('token');
+  //
+  //   final Map<String, dynamic> response = await loginGetUserInfo();
+  //   Provider.of<User>(context, listen: false)
+  //       .setLoginUserData(response, context);
+  //   Provider.of<Messaging>(context, listen: false)
+  //       .connectToServer(response['id'], _token);
+  //   Provider.of<Messaging>(context, listen: false).getConversationsList();
+  //   return _token;
+  // }
 
   ///returns error message if the user doesnot exist
   String getLogInErrorMessage() {
@@ -87,8 +121,6 @@ class Authentication extends ChangeNotifier {
   ///checks if the user exist
   ///And sets the user token
   Future<bool> loginRequest() async {
-    final String endPoint = 'user/login';
-
     Map<String, dynamic> loginRequestBody = {
       "email": userEmail,
       "password": userPassword
@@ -102,28 +134,29 @@ class Authentication extends ChangeNotifier {
 
       //if i get a bad response then this user doesnot exist
       if (response.statusCode == 400) {
-        print("400");
+        logger.d("400");
         loginErrorMessage = "wrong Email or password please try again";
         notifyListeners();
         return false;
       } else if (response.statusCode != 200) {
-        print('!200');
-        print(response.body);
+        logger.e('!200');
+        logger.d(response.body);
         throw Exception('error in the connection');
       } else {
         var responseObject = convert.jsonDecode(response.body);
         print(responseObject);
         token = responseObject['token'];
         emailExist = true;
+        _prefs.setString('token', token);
         notifyListeners();
-        // print(response.statusCode);
-        // print(token);
-        // print(emailExist);
-        // return User.fromJson(resposeObject);
+
         return true;
       }
-    } catch (error) {
-      print(error);
+    } on SocketException catch (error) {
+      logger.e(error);
+      throw error;
+    } catch (err) {
+      logger.e(err);
       return false;
     }
   }
@@ -132,8 +165,6 @@ class Authentication extends ChangeNotifier {
   ///
   ///gets the user info that the user is authorized to access
   Future<Map<String, dynamic>> loginGetUserInfo() async {
-    final String endPoint = 'user/info';
-
     try {
       final response = await http.get(
         Uri.parse(ApiHttpRepository.api + 'api/user/info'),
@@ -146,12 +177,10 @@ class Authentication extends ChangeNotifier {
       else {
         Map<String, dynamic> responseObject =
             convert.jsonDecode(response.body) as Map<String, dynamic>;
-        print(response.statusCode);
-
+        logger.d(response.statusCode);
+        //logger.d(responseObject);
         try {
           // following blogs
-   
-     
 
           final blogsResponse = await http.get(
             Uri.parse(ApiHttpRepository.api + 'api/user/get-blogs'),
@@ -166,6 +195,7 @@ class Authentication extends ChangeNotifier {
           throw Exception(error.message.toString());
         }
 
+        logger.d(responseObject);
         return responseObject;
       }
     } catch (error) {
@@ -175,9 +205,44 @@ class Authentication extends ChangeNotifier {
 
   ///Sets the user age
   void setUserAge(String age) {
-    // print(age);
+    // logger.d(age);
     int temp = int.parse(age);
     userAge = temp;
     notifyListeners();
+  }
+
+  ///check if user is authenticated
+  Future<void> checkUserAuthentication(BuildContext context) async {
+    _prefs = await SharedPreferences.getInstance();
+    //await Future.delayed(Duration(seconds: 3));
+    if (_prefs.getString('token') == null) return;
+    token = _prefs.getString('token');
+
+    await initializeUserData(context);
+  }
+
+  ///initialize user Data on login
+  Future<void> initializeUserData(BuildContext context) async {
+    final Map<String, dynamic> response = await loginGetUserInfo();
+    Provider.of<User>(context, listen: false)
+        .setLoginUserData(response, context);
+    Provider.of<Messaging>(context, listen: false)
+        .connectToServer(response['id'], token);
+    Provider.of<Messaging>(context, listen: false).getConversationsList();
+    while (Navigator.canPop(context)) {
+      Navigator.pop(context);
+    }
+    Navigator.popAndPushNamed(context, MainScreen.id);
+  }
+
+  ///Clears data from shared preferences and disconnects from socket server
+  Future<void> logout(BuildContext context) async {
+    Provider.of<Messaging>(context, listen: false).disconnect();
+    _prefs = await SharedPreferences.getInstance();
+    _prefs.clear();
+    while (Navigator.canPop(context)) {
+      Navigator.pop(context);
+    }
+    Navigator.popAndPushNamed(context, WelcomeScreen.id);
   }
 }

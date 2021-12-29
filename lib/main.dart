@@ -1,16 +1,16 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
+import 'package:tumblrx/global.dart';
 import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/screens/blog_screen.dart';
 import 'package:tumblrx/screens/main_screen.dart';
 import 'package:tumblrx/screens/new_conversation_screen.dart';
 import 'package:tumblrx/screens/page_not_found.dart';
 import 'package:tumblrx/screens/post_screen.dart';
+import 'package:tumblrx/screens/search_screen.dart';
 import 'package:tumblrx/screens/signup_agecheck.dart';
 import 'package:tumblrx/screens/welcome_screen.dart';
 import 'package:tumblrx/services/authentication.dart';
@@ -27,11 +27,9 @@ import 'package:tumblrx/screens/signup_pick_tags.dart';
 import 'package:tumblrx/screens/signup_user_data.dart';
 import 'package:tumblrx/screens/login_user_data.dart';
 import 'package:tumblrx/utilities/environment.dart';
-import 'package:uni_links/uni_links.dart';
 import 'components/my_custom_scroll_behavior.dart';
-import 'models/user/blog.dart';
 
-bool _initialUriIsHandled = false;
+//bool _initialUriIsHandled = false;
 Future<void> main() async {
   await dotenv.load(fileName: Environment.fileName);
   runApp(MyApp());
@@ -43,8 +41,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
-  Uri _initialUri;
-  Uri _latestUri;
+//  Uri _initialUri;
+//  Uri _latestUri;
   String postId = "";
   StreamSubscription _linkSubscription;
 
@@ -80,48 +78,44 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     }
   }
 
-  void _handleIncomingLinks() {
-    if (!kIsWeb) {
-      _linkSubscription = uriLinkStream.listen((event) {
-        if (!mounted) return;
-        print('got uri $event');
-        setState(() {
-          _latestUri = event;
-        });
-      }, onError: (err) {
-        if (!mounted) return;
-        print('got error $err');
-      });
-    }
-  }
+  // void _handleIncomingLinks() {
+  //   if (!kIsWeb) {
+  //     _linkSubscription = uriLinkStream.listen((event) {
+  //       if (!mounted) return;
+  //       print('got uri $event');
+  //       setState(() {
+  //         _latestUri = event;
+  //       });
+  //     }, onError: (err) {
+  //       if (!mounted) return;
+  //       print('got error $err');
+  //     });
+  //   }
+  // }
 
-  void _handleInitialUri() async {
-    if (!_initialUriIsHandled) {
-      _initialUriIsHandled = true;
-      try {
-        final uri = await getInitialUri();
-        if (uri == null) {
-          // TODO: replace this with logging
-          print('no initial uri');
-          return;
-        } else
-          // TODO: replace this with logging
-          print('got initial uri: $uri');
-        // if the state is not yet in the tree, return
-        if (!mounted) return;
-        setState(() {
-          _initialUri = uri;
-        });
-      } on PlatformException {
-        // TODO: replace this with logging
-        print('failed to get initial uri');
-      } on FormatException catch (err) {
-        if (!mounted) return;
-        // TODO: replace this with logging
-        print('malformed initial uri');
-      }
-    }
-  }
+//   void _handleInitialUri() async {
+//     if (!_initialUriIsHandled) {
+//       _initialUriIsHandled = true;
+//       try {
+//         final uri = await getInitialUri();
+//         if (uri == null) {
+// //          print('no initial uri');
+//           return;
+//         } else
+//         //         print('got initial uri: $uri');
+//         // if the state is not yet in the tree, return
+//         if (!mounted) return;
+//         setState(() {
+//           _initialUri = uri;
+//         });
+//       } on PlatformException {
+//         //      print('failed to get initial uri');
+//       } on FormatException catch (_) {
+//         if (!mounted) return;
+//         //    print('malformed initial uri');
+//       }
+//     }
+//   }
 
   @override
   Widget build(BuildContext context) {
@@ -147,6 +141,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         ChangeNotifierProvider<User>(
           create: (context) => User(),
         ),
+
         ChangeNotifierProvider<Content>(
           create: (context) => Content(),
         ),
@@ -173,7 +168,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
               pageBuilder: (_, __, ___) => PageNotFound("Page Not Found"));
         },
         onGenerateRoute: (RouteSettings settings) {
-          print(settings.name);
+          logger.d(settings.name);
           if (settings.name.contains('posts/')) {
             final String postId = settings.name.split('/').last;
             return PageRouteBuilder(
@@ -183,7 +178,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                       postId: postId,
                     ));
           } else {
-            print(settings.name);
+            logger.e(settings.name);
             return null;
           }
         },
@@ -203,6 +198,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           SignUpUserData.id: (context) => SignUpUserData(),
           LogInUserData.id: (context) => LogInUserData(),
           NewConversationScreen.id: (context) => NewConversationScreen(),
+          SearchScreen.id: (context) => SearchScreen(),
         },
       ),
     );

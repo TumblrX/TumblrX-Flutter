@@ -13,21 +13,15 @@ class AvatarImage extends StatefulWidget {
   final String _path;
   final String _color;
 
-  AvatarImage({@required bool myBlog, @required color,String path})
+  AvatarImage({@required bool myBlog, @required color, String path})
       : _myBlog = myBlog,
         _path = path,
-        _color=color;
+        _color = color;
   @override
   _AvatarImageState createState() => _AvatarImageState();
 }
 
 class _AvatarImageState extends State<AvatarImage> {
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Positioned(
@@ -35,13 +29,14 @@ class _AvatarImageState extends State<AvatarImage> {
         child: GestureDetector(
           child: CircleAvatar(
               radius: 42,
-              backgroundColor: hexToColor(widget._color
-                      ) ??
-                  Colors.blue,
+              backgroundColor: hexToColor(widget._color) ?? Colors.blue,
               child: CircleAvatar(
                 radius: 38,
+
                 backgroundImage: NetworkImage(ApiHttpRepository.api +
                  widget._path,
+
+               
                 ),
               )),
           onTap: () {

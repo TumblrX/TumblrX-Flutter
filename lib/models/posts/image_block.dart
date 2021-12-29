@@ -1,3 +1,5 @@
+import 'package:tumblrx/global.dart';
+
 class ImageBlock {
   /// Type of the block: 'image'
   String _type;
@@ -44,12 +46,12 @@ class ImageBlock {
 
     if (json.containsKey('width') && json['width'] != null) {
       this._width = (json['width'] <= 0 ? 512 : json['width']);
-      if (json['width'] <= 0) print('width is less than 0');
+      if (json['width'] <= 0) logger.e('width is less than 0');
     }
 
     if (json.containsKey('height') && json['height'] != null) {
       this._height = (json['height'] <= 0 ? 512 : json['height']);
-      if (json['height'] <= 0) print('height is less than 0');
+      if (json['height'] <= 0) logger.e('height is less than 0');
     }
   }
 

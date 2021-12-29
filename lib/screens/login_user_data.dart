@@ -40,29 +40,26 @@ class LogInUserData extends StatelessWidget {
                       padding: const EdgeInsets.fromLTRB(0, 5, 5, 0),
                       child: ElevatedButton(
                         onPressed: () async {
-                          if (!_formkey.currentState.validate() ||
-                              !await Provider.of<Authentication>(context,
-                                      listen: false)
-                                  .loginRequest())
+                          if (!_formkey.currentState.validate()) return null;
+                          bool loggedIn;
+                          try {
+                            loggedIn = await Provider.of<Authentication>(
+                                    context,
+                                    listen: false)
+                                .loginRequest();
+                          } catch (err) {
+                            showSnackBarMessage(
+                                context,
+                                'couldn\'t log in, please try again later',
+                                Colors.red);
+                            return null;
+                          }
+                          if (!loggedIn)
                             return null;
                           else {
-                            final Map<String, dynamic> response =
-                                await Provider.of<Authentication>(context,
-                                        listen: false)
-                                    .loginGetUserInfo();
-                            Provider.of<User>(context, listen: false)
-                                .setLoginUserData(response, context);
-                            Provider.of<Messaging>(context, listen: false)
-                                .connectToServer(
-                                    response['id'],
-                                    Provider.of<Authentication>(context,
-                                            listen: false)
-                                        .token);
-
-                            while (Navigator.canPop(context)) {
-                              Navigator.pop(context);
-                            }
-                            Navigator.pushNamed(context, MainScreen.id);
+                            await Provider.of<Authentication>(context,
+                                    listen: false)
+                                .initializeUserData(context);
                           }
                         },
                         child: Text(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/components/blog_screen_constant.dart';
 import 'package:tumblrx/components/edit_blog_screen/edit.dart';
+import 'package:tumblrx/global.dart';
 import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/services/api_provider.dart';
 import '../blog_screen_search/blog_screen_search.dart';
@@ -135,7 +136,7 @@ class _HeaderImageState extends State<HeaderImage> {
                       icon: Icon(Icons.share),
                       color: Colors.white,
                       onPressed: () {
-                        print('share is pressed');
+                        logger.e('share is pressed');
                       },
                     ),
                     IconButton(
@@ -143,7 +144,7 @@ class _HeaderImageState extends State<HeaderImage> {
                       icon: Icon(Icons.settings),
                       color: Colors.white,
                       onPressed: () {
-                        print('setting is pressed');
+                        logger.e('setting is pressed');
                       },
                     ),
                   ],

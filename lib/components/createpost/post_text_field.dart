@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:tumblrx/global.dart';
 import 'package:tumblrx/services/creating_post.dart';
 
 import 'additional_style_options.dart';
@@ -30,7 +31,7 @@ class PostTextField extends StatelessWidget {
         }
         if (event.isKeyPressed(LogicalKeyboardKey.enter) &&
             event.isKeyPressed(LogicalKeyboardKey.shift)) {
-          print('next line');
+          logger.e('next line');
         }
       },
       child: GestureDetector(

@@ -6,11 +6,8 @@ Description:
 */
 
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
-import 'package:tumblrx/models/post.dart';
-import 'package:tumblrx/services/api_provider.dart';
-import 'dart:convert' as convert;
-
+import 'package:tumblrx/global.dart';
+import 'package:tumblrx/models/posts/post.dart';
 import 'package:tumblrx/services/authentication.dart';
 
 /// A class that holds a list of retrieved posts for later accessing
@@ -28,7 +25,7 @@ class Content extends ChangeNotifier {
     try {
       _posts = parsedJson.map((e) => new Post.fromJson(e)).toList();
     } catch (error) {
-      print('$error @ content from json');
+      logger.e('$error @ content from json');
     }
   }
   void resetContent() {
@@ -68,42 +65,38 @@ class Content extends ChangeNotifier {
     Map<String, String> headers = {'Authorization': auth.token};
 
     // send get request to 'user/dashboard' | 'user/foryou'
-    final Response response = await ApiHttpRepository.sendGetRequest(route,
+    final Map<String, dynamic> response = await apiClient.sendGetRequest(route,
         headers: headers, query: queryParams);
-
+    logger.d(response);
     return _handleResponse(response);
   }
 
   /// private helper function to handle 'getMorePosts' response and constructs&
   ///  add neccessary Post objects to content list
-  List<Post> _handleResponse(Response response) {
+  List<Post> _handleResponse(Map<String, dynamic> response) {
     // if unsuccessful request return empty list
-    if (response.statusCode != 200) {
-      // TODO: replace this with logging
-      print(response.body);
+    if (response.containsKey('statuscode') && response['statuscode'] != 200) {
+//      logger.d(response.body);
       return [];
     }
-    // decode reponse
-    final Map<String, dynamic> resposeObject =
-        convert.jsonDecode(response.body) as Map<String, dynamic>;
 
-    // TODO: replace this with logging
-    print(resposeObject);
+    // logger.d(resposeObject);
 
     // for pagination, set total number of posts
-
-    if (resposeObject.containsKey('posts'))
-      _totalPosts += resposeObject['posts'].length ?? 0;
-    if (resposeObject.containsKey('for-youPosts'))
-      _totalPosts += resposeObject['for-youPosts'].length ?? 0;
+    if (response.containsKey('posts'))
+      _totalPosts += response['posts'].length ?? 0;
+    if (response.containsKey('for-youPosts'))
+      _totalPosts += response['for-youPosts'].length ?? 0;
 
     // parse returned posts
-    List<Post> postsArray = _parseResponseJsonPosts(resposeObject['posts']);
+    List<Post> postsArray =
+        _parseResponseJsonPosts(response['posts'], isFollowed: true);
     // add posts to content list
     _posts.addAll(postsArray);
 
     // parse returned recommended posts
-    postsArray = _parseResponseJsonPosts(resposeObject['for_youPosts']);
+    postsArray =
+        _parseResponseJsonPosts(response['for-youPosts'], isFollowed: false);
     // add posts to content list
     _posts.addAll(postsArray);
 
@@ -115,7 +108,8 @@ class Content extends ChangeNotifier {
 
   /// private helper function to parse json-like array of posts
   /// and return list of Post objects
-  List<Post> _parseResponseJsonPosts(dynamic posts) {
+  List<Post> _parseResponseJsonPosts(dynamic posts, {bool isFollowed = true}) {
+    if (posts == null) return [];
     List<Post> postsArray = [];
     try {
       // type casting to list of map objects
@@ -125,15 +119,14 @@ class Content extends ChangeNotifier {
       postsArray = postsList.map((post) {
         // if any exception happened, skip this malformed post
         try {
+          post['isFollowed'] = isFollowed;
           return new Post.fromJson(post);
         } catch (err) {
-          // TODO: replace this with logging
-          print(err);
+          logger.e(err.toString());
         }
       }).toList();
     } catch (err) {
-      // TODO: replace this with logging
-      print(err);
+      logger.e(err.toString());
     }
     return postsArray;
   }

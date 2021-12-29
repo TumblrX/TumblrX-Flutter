@@ -18,7 +18,7 @@ class AudioBlockWidget extends StatefulWidget {
 }
 
 class _AudioBlockWidgetState extends State<AudioBlockWidget> {
-  WebViewController _webViewController;
+  //WebViewController _webViewController;
   @override
   void initState() {
     super.initState();

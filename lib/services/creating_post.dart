@@ -3,16 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:giphy_get/giphy_get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:tumblrx/global.dart';
 import 'package:tumblrx/models/creatingpost/text_field_data.dart';
 import 'package:tumblrx/models/posts/inline_formatting.dart';
-import 'package:tumblrx/models/post.dart';
+import 'package:tumblrx/models/posts/post.dart';
 import 'package:tumblrx/models/posts/text_block.dart';
 import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/services/api_provider.dart';
 import 'package:tumblrx/utilities/constants.dart';
 import 'package:http/http.dart' as http;
 import 'package:tumblrx/utilities/hex_color_value.dart';
-import 'dart:convert' as convert;
 import 'package:http_parser/http_parser.dart';
 import 'authentication.dart';
 
@@ -83,7 +83,11 @@ class CreatingPost extends ChangeNotifier {
       'football',
       'health',
       'music',
-      'poetry'
+      'poetry',
+      'movies',
+      'entertainment',
+      'cats',
+      'memories'
     ];
     suggestedHashtags = [
       'art',
@@ -92,7 +96,11 @@ class CreatingPost extends ChangeNotifier {
       'football',
       'health',
       'music',
-      'poetry'
+      'poetry',
+      'movies',
+      'entertainment',
+      'cats',
+      'memories'
     ];
     chosenTextStyle = TextStyleType.Normal;
     postContent = [];
@@ -509,7 +517,6 @@ class CreatingPost extends ChangeNotifier {
       //dio.options.headers['content-Type'] = 'application/json';
       dio.options.headers["authorization"] =
           Provider.of<Authentication>(context, listen: false).token;
-
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: kPrimaryColor,
@@ -520,14 +527,15 @@ class CreatingPost extends ChangeNotifier {
       String createPostEndPoint = 'api/blog/' +
           Provider.of<User>(context, listen: false).getActiveBlogId() +
           '/posts';
-      String editPostEndPoint = 'api/post/' + _editPostId;
+      String editPostEndPoint;
+      if (_editPostId != null) editPostEndPoint = 'api/post/' + _editPostId;
       var response;
       if (isEdit) {
         response = await dio.put(
           ApiHttpRepository.api + editPostEndPoint,
           data: body,
           onSendProgress: (int sent, int total) {
-            print('$sent $total');
+            logger.d('$sent $total');
           },
         );
       } else {
@@ -535,18 +543,19 @@ class CreatingPost extends ChangeNotifier {
           ApiHttpRepository.api + createPostEndPoint,
           data: body,
           onSendProgress: (int sent, int total) {
-            print('$sent $total');
+            logger.d('$sent $total');
           },
         );
       }
 
-      print('Response status: ${response.statusCode}');
-      if (response.statusCode == 201 || response.statusCode == 200)
+      logger.d('Response status: ${response.statuscode}');
+      if (response.statuscode == 201 || response.statuscode == 200)
         return true;
       else
         return false;
+
     } catch (e) {
-      print(e);
+      logger.e(e);
       return false;
     }
   }

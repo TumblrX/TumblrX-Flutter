@@ -9,7 +9,9 @@ Description:
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/components/post/post_widget.dart';
-import 'package:tumblrx/models/post.dart';
+
+import 'package:tumblrx/global.dart';
+import 'package:tumblrx/models/posts/post.dart';
 import 'package:tumblrx/services/authentication.dart';
 import 'package:tumblrx/services/content.dart';
 
@@ -58,8 +60,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           _pageNum++;
         });
       }).catchError((err) {
-        print('error in dashboard widget while loading more posts $err');
-
+        logger.e('error in dashboard widget while loading more posts $err');
         setState(() {});
       });
     }
@@ -80,8 +81,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
           controller: _controller,
           itemBuilder: (BuildContext context, int index) {
             Post post = content.posts[index];
-            return PostWidget(
-                postContent: post.content, tags: post.tags, index: index);
+            try {
+              return PostWidget(
+                post: post,
+              );
+            } catch (err) {
+              logger.e(err);
+              return Container(
+                child: Center(
+                  child: Icon(Icons.error),
+                ),
+              );
+            }
           },
           separatorBuilder: (context, index) =>
               const Divider(height: 20.0, color: Colors.transparent),
