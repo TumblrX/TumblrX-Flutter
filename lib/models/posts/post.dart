@@ -63,6 +63,9 @@ class Post {
   /// Flag for followed/unfollowed
   bool _isFollowed;
 
+  ///
+  bool _isReblogged;
+
   ///  the current state of the post
   String _state;
 
@@ -100,6 +103,7 @@ class Post {
   String get id => this._id;
   bool get liked => this._liked;
   bool get isFollowed => this._isFollowed;
+  bool get isReblogged => this._isReblogged;
   bool get isAvatarCircle => this._isAvatarCircle;
   int get likesCount => this._likesCount;
   int get commentsCount => this._commentsCount;
@@ -169,6 +173,10 @@ class Post {
     else
       _isFollowed = true;
 
+    if (parsedJson.containsKey('isRebloged'))
+      _isReblogged = parsedJson['isRebloged'];
+    else
+      _isReblogged = false;
     // number of comments on the post
     if (parsedJson.containsKey('commentsCount'))
       this._commentsCount = parsedJson['commentsCount'];

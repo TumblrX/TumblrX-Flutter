@@ -1,8 +1,6 @@
 //api/post?q=test&offset=0&type=image
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:tumblrx/components/search_results/tumblrs_view.dart';
-import 'package:tumblrx/models/user/user.dart';
 
 class SearchResultScreen extends StatefulWidget {
   final String _query;

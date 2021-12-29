@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
+import 'package:tumblrx/global.dart';
 import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/screens/blog_screen.dart';
 import 'package:tumblrx/screens/main_screen.dart';
@@ -166,7 +167,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
               pageBuilder: (_, __, ___) => PageNotFound("Page Not Found"));
         },
         onGenerateRoute: (RouteSettings settings) {
-          print(settings.name);
+          logger.d(settings.name);
           if (settings.name.contains('posts/')) {
             final String postId = settings.name.split('/').last;
             return PageRouteBuilder(
@@ -176,7 +177,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                       postId: postId,
                     ));
           } else {
-            print(settings.name);
+            logger.e(settings.name);
             return null;
           }
         },

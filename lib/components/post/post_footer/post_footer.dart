@@ -14,14 +14,13 @@ import 'package:tumblrx/global.dart';
 import 'package:tumblrx/models/posts/post.dart';
 import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/services/authentication.dart';
-import 'package:tumblrx/services/content.dart';
 import 'package:tumblrx/utilities/constants.dart';
 import 'package:tumblrx/utilities/custom_icons.dart';
 
 class PostFooter extends StatefulWidget {
-  final int _postIndex;
+  final Post _post;
 
-  PostFooter({@required int postIndex}) : _postIndex = postIndex;
+  PostFooter({@required Post post}) : _post = post;
 
   @override
   State<PostFooter> createState() => _PostFooterState();
@@ -41,16 +40,12 @@ class _PostFooterState extends State<PostFooter> {
 
   // string to hold the current active blog title
   String _activeBlogTitle;
-  // hold the post content to be used as a local provider for post information
-  Post _post;
 
   @override
   Widget build(BuildContext context) {
     // get active blog name to check the action icons view mode
     _activeBlogTitle =
         Provider.of<User>(context, listen: false).getActiveBlogTitle();
-    // get the post object to access its data
-    _post = Provider.of<Content>(context).posts[widget._postIndex];
 
     // build the post footer widget
     return Padding(
@@ -88,16 +83,18 @@ class _PostFooterState extends State<PostFooter> {
           onLongPressEnd: (details) => _blogsSelectorPopup.remove(),
           child: _optionIcon(
               icon: CustomIcons.reblog,
-              callback: () => _post.reblogPost(context),
+              callback: () => widget._post.reblogPost(context),
               color: _reblogged ? Colors.green : Colors.black),
         ),
         // like icon
         _optionIcon(
-            icon: _post.liked ? CustomIcons.heartFilled : CustomIcons.heart,
+            icon: widget._post.liked
+                ? CustomIcons.heartFilled
+                : CustomIcons.heart,
             callback: () => _likePost(),
-            color: _post.liked ? Colors.red : Colors.black),
+            color: widget._post.liked ? Colors.red : Colors.black),
       ],
-      if (_post.blogTitle == _activeBlogTitle) ..._editAndDeleteIcons()
+      if (widget._post.blogTitle == _activeBlogTitle) ..._editAndDeleteIcons()
     ]);
   }
 
@@ -108,7 +105,7 @@ class _PostFooterState extends State<PostFooter> {
       _optionIcon(
           icon: CustomIcons.remove,
           callback: () {
-            _post
+            widget._post
                 .deletePost(context,
                     Provider.of<Authentication>(context, listen: false).token)
                 .then(
@@ -126,7 +123,7 @@ class _PostFooterState extends State<PostFooter> {
       // edit icon
       _optionIcon(
           icon: Icons.edit_outlined,
-          callback: () => _post.editPost(context),
+          callback: () => widget._post.editPost(context),
           color: Colors.black),
     ];
   }
@@ -136,7 +133,7 @@ class _PostFooterState extends State<PostFooter> {
   Widget _buildReactionIcons() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: _post.totalNotes > 0
+      children: widget._post.totalNotes > 0
           ? [
               InkWell(
                 onTap: () => _showNotesPage,
@@ -144,7 +141,7 @@ class _PostFooterState extends State<PostFooter> {
               ),
               TextButton(
                 child: Text(
-                  '${_post.totalNotes.toString()} notes',
+                  '${widget._post.totalNotes.toString()} notes',
                   style: TextStyle(color: Colors.grey[700], fontSize: 16),
                   softWrap: false,
                   overflow: TextOverflow.ellipsis,
@@ -162,11 +159,11 @@ class _PostFooterState extends State<PostFooter> {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => NotesPage(
-            postId: _post.id,
-            totlaNotes: _post.totalNotes,
-            commentCount: _post.commentsCount,
-            likeCount: _post.likesCount,
-            reblogCount: _post.reblogsCount),
+            postId: widget._post.id,
+            totlaNotes: widget._post.totalNotes,
+            commentCount: widget._post.commentsCount,
+            likeCount: widget._post.likesCount,
+            reblogCount: widget._post.reblogsCount),
       ),
     );
   }
@@ -178,7 +175,7 @@ class _PostFooterState extends State<PostFooter> {
       context: context,
       isScrollControlled: true,
       builder: (context) => FractionallySizedBox(
-          heightFactor: 0.9, child: SharePostWidget(_post)),
+          heightFactor: 0.9, child: SharePostWidget(widget._post)),
     );
   }
 
@@ -246,13 +243,14 @@ class _PostFooterState extends State<PostFooter> {
   /// private helper function as a callback to be called on tap on like icon
   /// it handles like/unlike api requests and sets the state of the widget
   void _likePost() {
-    logger.d('like status is ${_post.liked.toString()}');
-    Future<bool> success =
-        _post.liked ? _post.unlikePost(context) : _post.likePost(context);
+    logger.d('like status is ${widget._post.liked.toString()}');
+    Future<bool> success = widget._post.liked
+        ? widget._post.unlikePost(context)
+        : widget._post.likePost(context);
     success.then((value) {
       if (value)
         setState(() {
-          logger.d('like status is ${_post.liked.toString()}');
+          logger.d('like status is ${widget._post.liked.toString()}');
         });
       else {
         logger.e('couldn\'t like post');
@@ -293,7 +291,7 @@ class _PostFooterState extends State<PostFooter> {
     List<Widget> stacked = [];
     int index = 0;
     // check if any comment => insert the comment icon
-    if (_post.commentsCount > 0) {
+    if (widget._post.commentsCount > 0) {
       stacked.add(Container(
         child: _reactionIcon(icon: CustomIcons.comment, color: Colors.blue),
         margin: EdgeInsets.only(left: shiftAmount * index),
@@ -301,7 +299,7 @@ class _PostFooterState extends State<PostFooter> {
       index++;
     }
     // check if any reblog => insert the reblog icon
-    if (_post.reblogsCount > 0) {
+    if (widget._post.reblogsCount > 0) {
       stacked.add(Container(
         child: _reactionIcon(icon: CustomIcons.reblogs, color: Colors.green),
         margin: EdgeInsets.only(left: shiftAmount * index),
@@ -309,7 +307,7 @@ class _PostFooterState extends State<PostFooter> {
       index++;
     }
     // check if any like => insert the like icon
-    if (_post.likesCount > 0) {
+    if (widget._post.likesCount > 0) {
       stacked.add(Container(
         child: _reactionIcon(icon: CustomIcons.like, color: Colors.red),
         margin: EdgeInsets.only(left: shiftAmount * index),

@@ -10,7 +10,6 @@ import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/global.dart';
-import 'package:tumblrx/models/posts/post.dart';
 import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/services/authentication.dart';
 import 'package:tumblrx/services/content.dart';
@@ -18,28 +17,47 @@ import 'package:tumblrx/utilities/constants.dart';
 
 class PostHeader extends StatelessWidget {
   /// blog object of the post
-  final int _index;
   final bool _showOptionsIcon;
-
+  final String _blogTitle;
+  final String _blogHandle;
+  final String _blogAvatar;
+  final String _blogId;
+  final String _postId;
+  final bool _showFollowButton;
+  final bool _isReblogged;
+  final DateTime _publishedOn;
   // constants to size widgets
   final double avatarSize = 40;
   final double postHeaderHeight = 60;
 
-  PostHeader({@required int index, bool showOptionsIcon = true})
-      : _index = index,
-        _showOptionsIcon = showOptionsIcon;
+  PostHeader(
+      {@required String id,
+      @required String blogTitle,
+      @required String blogHandle,
+      @required String blogAvatar,
+      @required String blogId,
+      @required bool showOptionsIcon,
+      @required bool showFollowButton,
+      @required bool isReblogged,
+      @required DateTime publishedOn})
+      : _postId = id,
+        _publishedOn = publishedOn,
+        _showOptionsIcon = showOptionsIcon,
+        _blogTitle = blogTitle,
+        _blogHandle = blogHandle,
+        _blogAvatar = blogAvatar,
+        _blogId = blogId,
+        _showFollowButton = showFollowButton,
+        _isReblogged = isReblogged;
+  // PostHeader({@required int index, bool showOptionsIcon = true})
+  //     : _index = index,
+  //       _showOptionsIcon = showOptionsIcon;
 
   @override
   Widget build(BuildContext context) {
-    final Post post =
-        Provider.of<Content>(context, listen: false).posts[_index];
-
-    final bool isRebloged = post.reblogKey != null && post.reblogKey.isNotEmpty;
-    final bool showFollowButton =
-        !post.isFollowed && Provider.of<User>(context).getActiveBlogIsPrimary();
     return SizedBox(
       height: postHeaderHeight,
-      child: post.blogTitle == null
+      child: _blogTitle == null
           ? Center(
               child: Icon(
                 Icons.error,
@@ -48,21 +66,20 @@ class PostHeader extends StatelessWidget {
           : Padding(
               padding: EdgeInsets.only(left: 15.0),
               child: InkWell(
-                onTap: () => _showBlogProfile(
-                    context: context, blogHandle: post.blogHandle),
+                onTap: () =>
+                    _showBlogProfile(context: context, blogHandle: _blogHandle),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    _blogAvatar(post.blogAvatar),
+                    _showBlogAvatar(_blogAvatar),
                     Expanded(
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Flexible(
-                            child: _blogInfo(
-                                post.blogTitle, isRebloged, post.reblogKey),
+                            child: _blogInfo(_blogTitle, _isReblogged, ""),
                           ),
-                          showFollowButton
+                          _showFollowButton
                               ? TextButton(
                                   style: ButtonStyle(
                                     foregroundColor: MaterialStateProperty.all(
@@ -73,10 +90,10 @@ class PostHeader extends StatelessWidget {
                                   onPressed: () {
                                     final User user = Provider.of<User>(context,
                                         listen: false);
-                                    logger.d('blog id is ${post.blogId}');
+                                    logger.d('blog id is $_blogId');
                                     user.userBlogs[user.activeBlogIndex]
                                         .followBlog(
-                                            post.blogId,
+                                            _blogId,
                                             Provider.of<Authentication>(context,
                                                     listen: false)
                                                 .token);
@@ -90,8 +107,8 @@ class PostHeader extends StatelessWidget {
                     _showOptionsIcon
                         ? IconButton(
                             onPressed: () => _showBlogOptions(
-                                post.publishedOn, context,
-                                otherBlog: false, postId: post.id),
+                                _publishedOn, context,
+                                otherBlog: false, postId: _postId),
                             icon: Icon(Icons.more_horiz),
                           )
                         : _emptyContainer(),
@@ -168,9 +185,10 @@ class PostHeader extends StatelessWidget {
     }
   }
 
-  void _muteNotifications(BuildContext context) {
+  void _muteNotifications(BuildContext context, String postId) {
     Provider.of<Content>(context, listen: false)
-        .posts[_index]
+        .posts
+        .firstWhere((post) => post.id == postId)
         .mutePushNotification()
         .then((value) => null)
         .catchError((err) {
@@ -249,7 +267,7 @@ class PostHeader extends StatelessWidget {
               ),
       );
 
-  Widget _blogAvatar(String blogAvatar) => CachedNetworkImage(
+  Widget _showBlogAvatar(String blogAvatar) => CachedNetworkImage(
         width: avatarSize,
         height: avatarSize,
         imageUrl: blogAvatar,

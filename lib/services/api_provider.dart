@@ -1,4 +1,5 @@
 import 'package:http/http.dart';
+import 'package:tumblrx/global.dart';
 import 'package:tumblrx/utilities/environment.dart';
 import 'dart:convert' as convert;
 
@@ -138,7 +139,7 @@ class ApiHttpRepository implements API {
       endPoint = endPoint.substring(0, endPoint.length - 1);
     }
     final Uri uri = Uri.parse('${api}api/$endPoint');
-    print(uri.toString());
+    //logger.d(uri.toString());
     final Response response =
         headers != null ? await get(uri, headers: headers) : await get(uri);
     if (response.statusCode != 200)

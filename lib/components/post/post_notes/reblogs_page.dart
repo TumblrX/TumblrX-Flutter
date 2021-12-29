@@ -12,6 +12,7 @@ import 'package:tumblrx/components/post/post_content.dart';
 import 'package:tumblrx/components/post/post_header.dart';
 import 'package:tumblrx/models/notes.dart';
 import 'package:tumblrx/models/posts/post.dart';
+import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/services/authentication.dart';
 import 'package:tumblrx/services/content.dart';
 import 'package:tumblrx/utilities/constants.dart';
@@ -57,6 +58,7 @@ class _ReblogsPageState extends State<ReblogsPage> {
                 child: Icon(Icons.error),
               );
             if (snapshot.hasData) {
+              notes = snapshot.data ?? [];
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -72,7 +74,7 @@ class _ReblogsPageState extends State<ReblogsPage> {
                     ),
                   ),
                   // if no reblogs yet, render a placeholder
-                  if (snapshot.data.length == 0)
+                  if (notes.length == 0)
                     Container(
                       alignment: Alignment.bottomCenter,
                       height: MediaQuery.of(context).size.height * 0.7,
@@ -98,7 +100,8 @@ class _ReblogsPageState extends State<ReblogsPage> {
                         ],
                       ),
                     ),
-                  if (snapshot.data.length > 0) ...[
+
+                  if (notes.length > 0) ...[
                     Divider(),
                     Flexible(
                       child: ListView.builder(
@@ -115,7 +118,24 @@ class _ReblogsPageState extends State<ReblogsPage> {
                           return Column(
                             children: [
                               // post header containing blog title, icon, and options icon
-                              PostHeader(index: postIndex),
+                              PostHeader(
+                                id: post.id,
+                                blogAvatar: post.blogAvatar,
+                                blogHandle: post.blogHandle,
+                                blogId: post.blogId,
+                                blogTitle: post.blogTitle,
+                                isReblogged: post.isReblogged,
+                                publishedOn: post.publishedOn,
+                                showOptionsIcon: true,
+                                showFollowButton: Provider.of<User>(context)
+                                        .getActiveBlogIsPrimary() &&
+                                    Provider.of<User>(context)
+                                            .followingBlogs
+                                            .singleWhere((element) =>
+                                                element['_id'] ==
+                                                post.blogId) ==
+                                        null,
+                              ),
                               // post content widget without the original post
                               PostContentView(
                                 postContent: post.content,
@@ -150,6 +170,4 @@ class _ReblogsPageState extends State<ReblogsPage> {
       },
     );
   }
-
-  List<Notes> _handleResponse() {}
 }

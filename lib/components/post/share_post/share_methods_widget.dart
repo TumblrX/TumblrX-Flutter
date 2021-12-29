@@ -58,19 +58,6 @@ class ShareMethods extends StatelessWidget {
             ],
           ),
         ),
-        // TODO: onedrive method
-        InkWell(
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Icon(Icons.cloud),
-              ),
-              Text('OneDrive')
-            ],
-          ),
-        ),
         // share
         InkWell(
           onTap: () async {

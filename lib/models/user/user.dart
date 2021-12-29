@@ -23,7 +23,7 @@ class User extends ChangeNotifier {
   List<Blog> _blockedBlogs = [];
 
   /// List of blogs the user are following
-  List<Blog> _followingBlogs = [];
+  List<Map> _followingBlogs = [];
 
   /// List of tags the user are following
   List<Tag> _followingTags = [];
@@ -42,6 +42,8 @@ class User extends ChangeNotifier {
 
   User();
 
+  List<Map> get followingBlogs => this._followingBlogs;
+
   /// constructor of the class using decoded json
   User.fromJson(Map<String, dynamic> json) {
     // =====
@@ -57,16 +59,6 @@ class User extends ChangeNotifier {
         _blogs.add(new Blog.fromJson(blogData));
       });
     }
-
-    // following blogs
-    if (json.containsKey('followingBlogs')) {
-      List<Map<String, dynamic>>.from(json['followingBlogs'])
-          .forEach((blogData) {
-        _followingBlogs.add(new Blog.fromJson(blogData));
-      });
-      _following = _followingBlogs.length;
-    } else
-      throw Exception('missing required parameter "followingBlogs"');
 
     // following tags
     if (json.containsKey('followingTags')) {
@@ -93,6 +85,40 @@ class User extends ChangeNotifier {
       });
     } else
       throw Exception('missing required parameter "blockedBlogs"');
+  }
+
+  Future<void> getFollowingBlogs(String token) async {
+    Map<String, dynamic> response = await apiClient
+        .sendGetRequest('user/following', headers: {'Authorization': token});
+    if (response.containsKey('followingBlogs')) {
+      List<Map<String, dynamic>> blogs =
+          List<Map<String, dynamic>>.from(response['followingBlogs']);
+      blogs.map((blog) {
+        Map blogData = {};
+        try {
+          if (blog.containsKey('title'))
+            blogData['title'] = blog['title'];
+          else
+            throw Exception('missing required parameter "title"');
+          if (blog.containsKey('handle'))
+            blogData['handle'] = blog['handle'];
+          else
+            throw Exception('missing required parameter "handle"');
+          if (blog.containsKey('avatar'))
+            blogData['avatar'] = blog['avatar'];
+          else
+            throw Exception('missing required parameter "avatar"');
+          if (blog.containsKey('_id'))
+            blogData['_id'] = blog['_id'];
+          else
+            throw Exception('missing required parameter "id"');
+          logger.d(blogData);
+          _followingBlogs.add(blogData);
+        } catch (err) {
+          logger.e(err);
+        }
+      });
+    }
   }
 
   ///set user data after login

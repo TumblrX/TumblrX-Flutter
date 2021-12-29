@@ -82,7 +82,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
             Post post = content.posts[index];
             try {
               return PostWidget(
-                  postContent: post.content, tags: post.tags, index: index);
+                post: post,
+              );
             } catch (err) {
               logger.e(err);
               return Container(
