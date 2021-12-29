@@ -51,8 +51,8 @@ class Conversation {
         if (avatarUrl.startsWith('uploads'))
           avatarUrl = ApiHttpRepository.api + avatarUrl;
       } else
-        avatarUrl = ApiHttpRepository.api +
-            "uploads/post/image/post-1639258474966-61b28a610a654cdd7b39171c.jpeg";
+        avatarUrl =
+            'https://assets.tumblr.com/images/default_avatar/cube_open_128.png';
     } else
       throw Exception('missing required parameter "avatar"');
     if (jsonData.containsKey('message'))

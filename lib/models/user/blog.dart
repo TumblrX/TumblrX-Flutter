@@ -147,10 +147,12 @@ class Blog {
 
     if (json.containsKey('avatar')) {
       _blogAvatar = json['avatar'] == 'none'
-          ? "https://64.media.tumblr.com/9f9b498bf798ef43dddeaa78cec7b027/tumblr_o51oavbMDx1ugpbmuo7_500.png"
-          : json['avatar'];
-      if (!this._blogAvatar.contains('http'))
-        this._blogAvatar = '${ApiHttpRepository.api}' + this._blogAvatar;
+
+          ? 'https://assets.tumblr.com/images/default_avatar/cube_open_128.png'
+          : json['avatar'].startsWith('http')
+              ? json['avatar']
+              : ApiHttpRepository.api + json['avatar'];
+
     }
     // blog avatar shape
     if (json.containsKey('isAvatarCircle'))
@@ -163,6 +165,7 @@ class Blog {
       if (!this._blogTheme.headerImage.contains('http'))
         this._blogTheme.headerImage =
             '${ApiHttpRepository.api}' + this._blogTheme.headerImage;
+
     }
 
     ///headerImage

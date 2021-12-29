@@ -1,8 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:tumblrx/components/chatting/chat_action_dialog.dart';
 import 'package:tumblrx/components/chatting/chat_content.dart';
 import 'package:tumblrx/components/chatting/chat_input.dart';
+import 'package:tumblrx/services/messaging.dart';
 import 'package:tumblrx/utilities/constants.dart';
 
 ///Chatting Screen Widget
@@ -55,21 +58,71 @@ class ChatScreen extends StatelessWidget {
               ),
               actions: [
                 PopupMenuButton(
-                    itemBuilder: (context) => [
-                          PopupMenuItem(
-                            child: Text('Delete conversation'),
-                            value: 'delete',
-                          ),
-                          PopupMenuItem(
-                            child: Text('Mark as spam'),
-                            value: 'spam',
-                          ),
-                          PopupMenuItem(
-                            child: Text('Block'),
-                            value: 'block',
-                          ),
-                        ],
-                    onSelected: (choice) {}),
+                  itemBuilder: (context) => [
+                    PopupMenuItem(
+                      child: Text('Delete conversation'),
+                      value: 'delete',
+                    ),
+                    PopupMenuItem(
+                      child: Text('Mark as spam'),
+                      value: 'spam',
+                    ),
+                    PopupMenuItem(
+                      child: Text('Block'),
+                      value: 'block',
+                    ),
+                  ],
+                  onSelected: (choice) {
+                    if (choice == 'delete') {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return ChatActionDialog(
+                            title: 'Delete conversation',
+                            content: 'Permanently delete this conversation?',
+                            actionButton: 'Approve',
+                            action: () =>
+                                Provider.of<Messaging>(context, listen: false)
+                                    .deleteConversation(context, userId),
+                          );
+                        },
+                      );
+                    } else if (choice == 'spam') {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return ChatActionDialog(
+                            title: 'Mark as spam?',
+                            content:
+                                '$receiverUsername will be blocked and reported. and any trace of this conversation will disappear from your inbox.',
+                            actionButton: 'Mark it spam',
+                            action: () =>
+                                Provider.of<Messaging>(context, listen: false)
+                                    .deleteConversation(
+                                        context, userId), //to be changed
+                          );
+                        },
+                      );
+                    } else {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return ChatActionDialog(
+                            title:
+                                'Are you sure you want to block $receiverUsername?',
+                            content:
+                                '$receiverUsername will be blocked and reported. and any trace of this conversation will disappear from your inbox.',
+                            actionButton: 'Block',
+                            action: () =>
+                                Provider.of<Messaging>(context, listen: false)
+                                    .deleteConversation(
+                                        context, userId), //to be changed
+                          );
+                        },
+                      );
+                    }
+                  },
+                ),
               ],
             ),
             body: Padding(

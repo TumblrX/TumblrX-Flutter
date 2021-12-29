@@ -3,6 +3,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/components/chatting/message_bubble.dart';
 import 'package:tumblrx/models/chatting/chat_message.dart';
+import 'package:tumblrx/services/api_provider.dart';
 import 'package:tumblrx/services/messaging.dart';
 import 'package:tumblrx/utilities/time_format_to_view.dart';
 
@@ -42,7 +43,9 @@ class ChatContent extends StatelessWidget {
           CircleAvatar(
             radius: 18.0,
             backgroundImage: NetworkImage(
-              receiverAvatarUrl,
+              receiverAvatarUrl.startsWith('http')
+                  ? receiverAvatarUrl
+                  : ApiHttpRepository.api + receiverAvatarUrl,
             ),
           ),
           Padding(

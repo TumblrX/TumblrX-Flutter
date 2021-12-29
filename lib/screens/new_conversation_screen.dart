@@ -1,12 +1,15 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tumblrx/components/chatting/new_conversation_tile.dart';
-import 'package:tumblrx/services/api_provider.dart';
+import 'package:tumblrx/services/messaging.dart';
 import 'package:tumblrx/utilities/constants.dart';
 
 ///Shows suggested users for new conversation
 class NewConversationScreen extends StatelessWidget {
   static String id = 'new_conversation_screen';
+
+  final TextEditingController _textEditingController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,35 +28,25 @@ class NewConversationScreen extends StatelessWidget {
             appBar: AppBar(
               iconTheme: IconThemeData(color: Colors.black),
               backgroundColor: Colors.white,
-              title: Text(
-                'To...',
-                style: TextStyle(color: Colors.black),
+              title: TextField(
+                controller: _textEditingController,
+                onChanged: (value) {
+                  Provider.of<Messaging>(context, listen: false)
+                      .searchSuggestedConversations(value);
+                },
+                decoration: InputDecoration(
+                  contentPadding: EdgeInsets.zero,
+                  hintText: 'To...',
+                  border: InputBorder.none,
+                  focusedBorder: InputBorder.none,
+                ),
               ),
             ),
             body: ListView(
               children: ListTile.divideTiles(
                 context: context,
                 color: Colors.grey,
-                tiles: [
-                  NewConversationTile(
-                    username: 'Taher2Bahsa',
-                    userId: '61b26488c3616702bdca4d48',
-                    userAvatar: ApiHttpRepository.api +
-                        "uploads/post/image/post-1639258474966-61b28a610a654cdd7b39171c.jpeg",
-                  ),
-                  NewConversationTile(
-                    username: 'Gamal',
-                    userId: '61b47bd2bd13dd22af73bd86',
-                    userAvatar: ApiHttpRepository.api +
-                        "uploads/post/image/post-1639258474966-61b28a610a654cdd7b39171c.jpeg",
-                  ),
-                  NewConversationTile(
-                    username: 'Example',
-                    userId: '61b72b2fcf6c2aaab9a1e406',
-                    userAvatar: ApiHttpRepository.api +
-                        "uploads/post/image/post-1639258474966-61b28a610a654cdd7b39171c.jpeg",
-                  ),
-                ],
+                tiles: getNewConversationTiles(context),
               ).toList(),
             ),
           ),
@@ -61,4 +54,19 @@ class NewConversationScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+List<Widget> getNewConversationTiles(BuildContext context) {
+  List<Widget> conversationTiles = [];
+
+  for (Map<String, String> conversation
+      in Provider.of<Messaging>(context).suggestedConversations) {
+    conversationTiles.add(NewConversationTile(
+      userId: conversation['userId'],
+      userAvatar: conversation['userAvatar'],
+      username: conversation['username'],
+    ));
+  }
+
+  return conversationTiles;
 }

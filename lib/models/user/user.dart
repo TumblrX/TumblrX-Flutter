@@ -318,9 +318,18 @@ class User extends ChangeNotifier {
     return _blogs[_activeBlogIndex].backGroundColor;
   }
 
+  ///Returns primary blog avatar url
   String getPrimaryBlogAvatar() {
     for (Blog blog in _blogs) {
       if (blog.isPrimary) return blog.blogAvatar;
+    }
+    return null;
+  }
+
+  ///Returns primary blog handle
+  String getPrimaryBlogName() {
+    for (Blog blog in _blogs) {
+      if (blog.isPrimary) return blog.handle;
     }
     return null;
   }

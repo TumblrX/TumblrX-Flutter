@@ -83,7 +83,11 @@ class CreatingPost extends ChangeNotifier {
       'football',
       'health',
       'music',
-      'poetry'
+      'poetry',
+      'movies',
+      'entertainment',
+      'cats',
+      'memories'
     ];
     suggestedHashtags = [
       'art',
@@ -92,7 +96,11 @@ class CreatingPost extends ChangeNotifier {
       'football',
       'health',
       'music',
-      'poetry'
+      'poetry',
+      'movies',
+      'entertainment',
+      'cats',
+      'memories'
     ];
     chosenTextStyle = TextStyleType.Normal;
     postContent = [];
@@ -509,7 +517,6 @@ class CreatingPost extends ChangeNotifier {
       //dio.options.headers['content-Type'] = 'application/json';
       dio.options.headers["authorization"] =
           Provider.of<Authentication>(context, listen: false).token;
-
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: kPrimaryColor,
@@ -520,7 +527,8 @@ class CreatingPost extends ChangeNotifier {
       String createPostEndPoint = 'api/blog/' +
           Provider.of<User>(context, listen: false).getActiveBlogId() +
           '/posts';
-      String editPostEndPoint = 'api/post/' + _editPostId;
+      String editPostEndPoint;
+      if (_editPostId != null) editPostEndPoint = 'api/post/' + _editPostId;
       var response;
       if (isEdit) {
         response = await dio.put(
@@ -545,6 +553,7 @@ class CreatingPost extends ChangeNotifier {
         return true;
       else
         return false;
+
     } catch (e) {
       logger.e(e);
       return false;
