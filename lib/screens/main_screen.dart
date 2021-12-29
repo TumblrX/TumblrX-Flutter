@@ -14,7 +14,7 @@ import 'package:tumblrx/components/bottom_nav_bar/bottom_nav_bar.dart';
 import 'package:tumblrx/screens/blog_screen.dart';
 import 'package:tumblrx/screens/feed_screen.dart';
 import 'package:tumblrx/screens/notifications_screen.dart';
-import 'package:tumblrx/screens/search_screen.dart';
+import 'package:tumblrx/screens/explore_screen.dart';
 
 /// class to build main screen when the user successfully log in
 class MainScreen extends StatefulWidget {
@@ -80,7 +80,7 @@ class _MainScreenState extends State<MainScreen> {
           physics: const NeverScrollableScrollPhysics(),
           children: [
             FeedScreen(),
-            SearchScreen(),
+            ExploreScreen(),
             NotificationsScreen(),
             BlogScreen(),
           ],

@@ -70,8 +70,9 @@ class User extends ChangeNotifier {
 
     // following tags
     if (json.containsKey('followingTags')) {
+      logger.d('following tags are ${json['followingTags']}');
       List<Map<String, dynamic>>.from(json['followingTags']).forEach((tagData) {
-        _followingTags.add(new Tag.fromJson(tagData));
+        _followingTags.add(new Tag.fromJson({'name': tagData}));
       });
     } else
       throw Exception('missing required parameter "followingTags"');

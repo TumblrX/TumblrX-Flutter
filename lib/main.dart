@@ -8,6 +8,7 @@ import 'package:tumblrx/screens/blog_screen.dart';
 import 'package:tumblrx/screens/main_screen.dart';
 import 'package:tumblrx/screens/page_not_found.dart';
 import 'package:tumblrx/screens/post_screen.dart';
+import 'package:tumblrx/screens/search_screen.dart';
 import 'package:tumblrx/screens/signup_agecheck.dart';
 import 'package:tumblrx/screens/welcome_screen.dart';
 import 'package:tumblrx/services/authentication.dart';
@@ -194,6 +195,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           SignUpPickTags.id: (context) => SignUpPickTags(),
           SignUpUserData.id: (context) => SignUpUserData(),
           LogInUserData.id: (context) => LogInUserData(),
+          SearchScreen.id: (context) => SearchScreen(),
         },
       ),
     );

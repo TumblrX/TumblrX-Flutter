@@ -79,6 +79,9 @@ class Blog {
     else
       throw Exception('missing required parameter "_id"');
 
+    // blog description
+    if (json.containsKey('description')) _description = json['description'];
+
     // blog handle
     if (json.containsKey('handle'))
       _handle = json['handle'];
@@ -95,6 +98,8 @@ class Blog {
       _blogAvatar = json['avatar'] == 'none'
           ? "https://64.media.tumblr.com/9f9b498bf798ef43dddeaa78cec7b027/tumblr_o51oavbMDx1ugpbmuo7_500.png"
           : json['avatar'];
+      if (!this._blogAvatar.contains('http'))
+        this._blogAvatar = '${ApiHttpRepository.api}' + this._blogAvatar;
     }
     // blog avatar shape
     if (json.containsKey('isAvatarCircle'))
@@ -114,15 +119,15 @@ class Blog {
     // blog isPrimary flag
     if (json.containsKey('isPrimary')) _isPrimary = json['isPrimary'];
 
-    // blog list of posts
-    if (json.containsKey('posts')) {
-      List<Map<String, dynamic>> parsedPosts =
-          List<Map<String, dynamic>>.from(json['posts']);
-      parsedPosts.map((post) {
-        _posts.add(new Post.fromJson(post));
-      });
-      _postsCount = _posts.length;
-    }
+    // // blog list of posts
+    // if (json.containsKey('posts')) {
+    //   List<Map<String, dynamic>> parsedPosts =
+    //       List<Map<String, dynamic>>.from(json['posts']);
+    //   parsedPosts.map((post) {
+    //     _posts.add(new Post.fromJson(post));
+    //   });
+    //   _postsCount = _posts.length;
+    // }
     // // followed by blogs
     // if (json.containsKey('followedBy')) {
     //   List<Map<String, dynamic>> parsedBlogs =
