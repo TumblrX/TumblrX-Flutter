@@ -6,6 +6,9 @@ import 'package:tumblrx/utilities/hex_color_value.dart';
 
 /// for square avatar
 class Square extends StatelessWidget {
+  final _color;
+  Square({@required color}):_color=color;
+
   @override
   Widget build(BuildContext context) {
     //final blogProvider = Provider.of<BlogScreenConstantProvider>(context);
@@ -29,14 +32,14 @@ class Square extends StatelessWidget {
             // )
 
             decoration: BoxDecoration(
-              color: hexToColor(Provider.of<User>(context, listen: false)
-                      .getActiveBlogBackColor()) ??
+              color: hexToColor(_color ??
+                      '#000000') ??
                   Colors.blue,
               border: Border.all(
                   width: 3,
                   color: hexToColor(
-                    (Provider.of<User>(context, listen: false)
-                            .getActiveBlogBackColor()) ??
+                    (_color ??
+                            '#000000') ??
                         Colors.blue,
                   )),
               borderRadius: BorderRadius.circular(3),

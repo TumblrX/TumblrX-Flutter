@@ -1,8 +1,6 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:tumblrx/models/user/blog.dart';
 import 'package:tumblrx/screens/user_blog_view.dart';
-import 'package:tumblrx/services/api_provider.dart';
 
 class FollowingCard extends StatelessWidget {
   final Blog _blog;

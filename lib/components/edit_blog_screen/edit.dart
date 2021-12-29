@@ -85,7 +85,8 @@ class _EditState extends State<Edit> with SingleTickerProviderStateMixin {
                       child: TextField(
                         textAlign: TextAlign.center,
                         textInputAction: TextInputAction.done,
-                        style: TextStyle(
+                        style: TextStyle(color: hexToColor(Provider.of<User>(context, listen: false)
+                          .getActiveBlogTitleColor()??Colors.black),
                           fontSize: 35,
                           decoration: TextDecoration.underline,
                           decorationColor: BlogScreenConstant.accent,
@@ -123,7 +124,8 @@ class _EditState extends State<Edit> with SingleTickerProviderStateMixin {
                             .setActiveBlogDescription(value);
                       },
                       textInputAction: TextInputAction.done,
-                      style: TextStyle(
+                      style: TextStyle(color:hexToColor(Provider.of<User>(context, listen: false)
+                          .getActiveBlogTitleColor()??Colors.black),
                         fontSize: 15,
                         decoration: TextDecoration.underline,
                         decorationColor: BlogScreenConstant.accent,
@@ -139,9 +141,11 @@ class _EditState extends State<Edit> with SingleTickerProviderStateMixin {
                     ),
                     EditButtons(),
                     if (Provider.of<User>(context).getActiveBlogIsPrimary())
-                    upperTabBar(_tabController, context),
+                    upperTabBar(_tabController,context,Provider.of<User>(context, listen: false)
+            .getActiveBlogBackColor()),
                     if (Provider.of<User>(context).getActiveBlogIsPrimary())
-                    bottomTabBar(_tabController, context,Provider.of<User>(context, listen: false).getActiveBlog()),
+                    bottomTabBar(_tabController, context,Provider.of<User>(context, listen: false)
+            .getActiveBlogBackColor(),Provider.of<User>(context, listen: false).getActiveBlog()),
                     if (!Provider.of<User>(context).getActiveBlogIsPrimary())
                    Container(
                       child: FutureBuilder<List<Post>>(

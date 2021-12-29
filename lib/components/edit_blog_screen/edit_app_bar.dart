@@ -37,6 +37,8 @@ class EditAppBar {
             TextButton(
                 onPressed: () { Provider.of<User>(context, listen: false)
                 .updateActiveBlogInfo(context);
+                 Provider.of<User>(context, listen: false)
+                .updateActiveBlogTheme(context);
            
 
             Navigator.pop(

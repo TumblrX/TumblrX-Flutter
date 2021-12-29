@@ -122,6 +122,10 @@ class _BlogScreenState extends State<BlogScreen>
                               .getActiveBlogTitle(),
                           description: Provider.of<User>(context, listen: false)
                               .getActiveBlogDescription(),
+                              color: Provider.of<User>(context, listen: false)
+                              .getActiveBlogBackColor() ,
+                              textColor: Provider.of<User>(context, listen: false)
+                          .getActiveBlogTitleColor(),
                         ),
                       ],
                     ),
@@ -135,16 +139,20 @@ class _BlogScreenState extends State<BlogScreen>
                             true,
                         child: Provider.of<User>(context, listen: false)
                                 .getIsAvatarCircle()
-                            ? AvatarImage(myBlog: true,)
-                            : Square())
+                            ? AvatarImage(myBlog: true,color: Provider.of<User>(context, listen: false)
+                          .getActiveBlogBackColor(),)
+                            : Square(color: Provider.of<User>(context, listen: false)
+                                .getActiveBlogBackColor(),))
                   ]),
 
                   //{
 
                   if (Provider.of<User>(context).getActiveBlogIsPrimary())
-                    upperTabBar(_tabController, context),
+                    upperTabBar(_tabController, context,Provider.of<User>(context, listen: false)
+            .getActiveBlogBackColor()),
                   if (Provider.of<User>(context).getActiveBlogIsPrimary())
-                    bottomTabBar(_tabController, context,Provider.of<User>(context, listen: false).getActiveBlog()),
+                    bottomTabBar(_tabController, context,Provider.of<User>(context, listen: false)
+            .getActiveBlogBackColor(),Provider.of<User>(context, listen: false).getActiveBlog()),
                   //}
                   if (Provider.of<User>(context).getActiveBlogIsPrimary() ==
                       false)

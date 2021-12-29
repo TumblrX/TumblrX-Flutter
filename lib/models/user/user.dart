@@ -331,6 +331,9 @@ class User extends ChangeNotifier {
   void updateActiveBlogInfo(BuildContext context) {
     _blogs[_activeBlogIndex].updateBlog(context);
   }
+  void updateActiveBlogTheme(BuildContext context) {
+    _blogs[_activeBlogIndex].updateBlogTheme(context);
+  }
 
   void setActiveBlogStretchHeaderImage(bool stretch) {
     _blogs[_activeBlogIndex].setStrtchHeaderImage(stretch);
@@ -339,6 +342,11 @@ class User extends ChangeNotifier {
 
   bool getActiveBlogStretchHeaderImage() {
     return _blogs[_activeBlogIndex].stretchHeaderImage;
+  }
+  String getActiveBlogTitleColor()
+  {
+    return _blogs[_activeBlogIndex].titleColor;
+
   }
 
   void createNewlog(String name, BuildContext context) async {
@@ -369,7 +377,7 @@ class User extends ChangeNotifier {
         notifyListeners();
       }
     } else {
-      print('unseccful');
+    
       {}
       print(response.statusCode);
     }
@@ -432,7 +440,7 @@ class User extends ChangeNotifier {
     if (response.statusCode == 200) {
       final resposeObject =
           convert.jsonDecode(response.body) as Map<String, dynamic>;
-      print(response.statusCode);
+     
 
       if (resposeObject.containsKey('likePosts')) {
         if (resposeObject['likePosts'] != null) {
@@ -461,13 +469,13 @@ class User extends ChangeNotifier {
     };
     final Map<String, String> body = {"_id": _id};
 
-    print(this._id);
+  
     final response = await ApiHttpRepository.sendPostRequest(endPoint,
         reqBody: body, headers: headers);
     if (response.statusCode == 200) {
-      print(response.body);
+    
     } else {
-      print(response.body);
+     
 
       print('unseccful');
       print(response.statusCode);
@@ -486,7 +494,6 @@ class User extends ChangeNotifier {
 
     Map<String, dynamic> responseObject =
         convert.jsonDecode(response.body) as Map<String, dynamic>;
-    print(response.statusCode);
     if (response.statusCode == 200) {
       this.followingBlogs = [];
       if (responseObject.containsKey('followingBlogs')) {
@@ -496,8 +503,10 @@ class User extends ChangeNotifier {
             followingBlogs.add(new Blog.fromJson(blogData));
           });
         }
-        print(responseObject);
+       
       }
     } else {}
   }
+
+
 }

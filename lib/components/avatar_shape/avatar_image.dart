@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/components/blog_screen_constant.dart';
 import 'package:tumblrx/components/blog_screen_initial_screen/show_image.dart';
-import 'package:tumblrx/models/user/blog.dart';
 import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/utilities/hex_color_value.dart';
 
@@ -11,10 +10,12 @@ import 'package:tumblrx/utilities/hex_color_value.dart';
 class AvatarImage extends StatefulWidget {
   final bool _myBlog;
   final String _path;
+  final String _color;
 
-  AvatarImage({@required bool myBlog, String path})
+  AvatarImage({@required bool myBlog, @required color,String path})
       : _myBlog = myBlog,
-        _path = path;
+        _path = path,
+        _color=color;
   @override
   _AvatarImageState createState() => _AvatarImageState();
 }
@@ -24,7 +25,6 @@ class _AvatarImageState extends State<AvatarImage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    print(widget._path);
   }
 
   @override
@@ -34,9 +34,8 @@ class _AvatarImageState extends State<AvatarImage> {
         child: GestureDetector(
           child: CircleAvatar(
               radius: 42,
-              backgroundColor: hexToColor(
-                      Provider.of<User>(context, listen: false)
-                          .getActiveBlogBackColor()) ??
+              backgroundColor: hexToColor(widget._color
+                      ) ??
                   Colors.blue,
               child: CircleAvatar(
                 radius: 38,

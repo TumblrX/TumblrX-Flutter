@@ -9,7 +9,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/models/post.dart';
-import 'package:tumblrx/models/user/blog.dart';
 import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/screens/user_blog_view.dart';
 import 'package:tumblrx/services/content.dart';

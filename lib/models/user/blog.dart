@@ -3,14 +3,13 @@ import 'package:dartdoc/dartdoc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
 import 'package:provider/provider.dart';
-import 'package:test/expect.dart';
 import 'package:tumblrx/models/post.dart';
 import 'dart:convert' as convert;
 import 'package:tumblrx/services/api_provider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tumblrx/services/authentication.dart';
 import 'blog_theme.dart';
-import 'package:http/http.dart' as http;
+
 
 class Blog {
   /// The user's tumblr short name
@@ -85,6 +84,9 @@ class Blog {
 
   String _backGroundColorBeforEdit;
 
+  ///title color
+  String _titleColor;
+
   /// themes of Blog
   BlogTheme blogTheme;
 
@@ -133,7 +135,6 @@ class Blog {
 
     ///headerImage
     if (json.containsKey('headerImage')) {
-     
       _headerImage = ApiHttpRepository.api + json['headerImage'] == 'none'
           ? ApiHttpRepository.api + "uploads/blog/defaultHeader.png"
           : json['headerImage'];
@@ -149,7 +150,6 @@ class Blog {
     // blog isPrimary flag
     if (json.containsKey('isPrimary')) _isPrimary = json['isPrimary'];
 
-   
     // followed by blogs
     if (json.containsKey('followedBy')) {
       List<Map<String, dynamic>> parsedBlogs =
@@ -158,9 +158,8 @@ class Blog {
       parsedBlogs.forEach((blogData) {
         _followedBy.add(new Blog.fromJson(blogData));
       });
-      
-      if(_followedBy!=null)
-     _followersCount = _followedBy.length;
+
+      if (_followedBy != null) _followersCount = _followedBy.length;
     }
     //  else
     //   throw Exception('missing required parameter "followedBy"');
@@ -208,6 +207,7 @@ class Blog {
   String get backGroundColorBeforEdit => _backGroundColorBeforEdit;
   String get headerImage => _headerImage;
   String get description => _description;
+  String get titleColor => _titleColor;
   Future<String> getBlogAvatar() async {
     final String endPoint = 'blog/';
     final Map<String, dynamic> reqParameters = {
@@ -220,8 +220,6 @@ class Blog {
           queryParams: reqParameters);
       if (response.statusCode == 200) {
         final responseParsed = convert.jsonDecode(response.body);
-
-        print(responseParsed['avatar_url']);
         return responseParsed['avatar_url'];
       } else {
         // handle failed request
@@ -338,7 +336,6 @@ class Blog {
 
   Future pickImage(int indicator) async {
     final image = await ImagePicker().pickImage(source: ImageSource.gallery);
-    print(image.path);
     if (image == null) return;
     if (indicator == 1) this._blogAvatar = File(image.path).toString();
     if (indicator == 2) this._headerImage = File(image.path).toString();
@@ -360,7 +357,7 @@ class Blog {
     if (response.statusCode == 200) {
       final resposeObject =
           convert.jsonDecode(response.body) as Map<String, dynamic>;
-      
+
       if (resposeObject['data'] != null) {
         List<Map<String, dynamic>> arr =
             List<Map<String, dynamic>>.from(resposeObject['data']);
@@ -393,7 +390,6 @@ class Blog {
     final response =
         await ApiHttpRepository.sendPutRequest(endPoint, headers, body);
 
-    print('${ApiHttpRepository.api}api/blog/${this._id}');
 
     if (response.statusCode == 200) {
       print(response.statusCode);
@@ -416,10 +412,10 @@ class Blog {
 
     Map<String, dynamic> responseObject =
         convert.jsonDecode(response.body) as Map<String, dynamic>;
-    print(response.statusCode);
+   
 
     if (response.statusCode == 200) {
-      print(responseObject);
+     
       //Blog.fromJson(responseObject);
 
       if (responseObject.containsKey('_id'))
@@ -454,7 +450,6 @@ class Blog {
             : responseObject['headerImage'];
       }
       if (responseObject.containsKey('isAvatarCircle')) {
-        
         this.isCircleAvatar = responseObject['isAvatarCircle'];
       }
       if (responseObject.containsKey('globalParameters')) {
@@ -474,6 +469,13 @@ class Blog {
           this._stretchHeaderImage =
               responseObject['globalParameters']['stretchHeaderImage'];
         }
+        if (responseObject['globalParameters'].containsKey('backgroundColor')) {
+          this._backGroundColor =
+              responseObject['globalParameters']['backgroundColor'];
+        }
+        if (responseObject['globalParameters'].containsKey('titleColor')) {
+          this._titleColor = responseObject['globalParameters']['titleColor'];
+        }
       }
 
       //print(responseObject);
@@ -481,6 +483,31 @@ class Blog {
     } else {
       print(response.statusCode);
       return null;
+    }
+  }
+
+  void updateBlogTheme(BuildContext context) async {
+    final String endPoint = 'api/blog/edit-theme/${this._handle}';
+    final Map<dynamic, dynamic> data = new Map<dynamic, dynamic>();
+
+  
+    if (this._backGroundColor != null)
+      data['backgroundColor'] = this._backGroundColor;
+    if (this._stretchHeaderImage != null)
+      data['stretchHeaderImage'] = this._stretchHeaderImage.toString();
+    if (this._showAvatar != null) data['showAvatar'] = this._showAvatar.toString();
+    final Map<String, String> headers = {
+      'Authorization':
+          '${Provider.of<Authentication>(context, listen: false).token}'
+    };
+    
+
+    final response =
+        await ApiHttpRepository.sendPutRequest(endPoint, headers, data);
+    if (response.statusCode == 200) {
+     
+
+      print(response.statusCode);
     }
   }
 }

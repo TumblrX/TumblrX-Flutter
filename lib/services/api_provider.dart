@@ -89,13 +89,12 @@ class ApiHttpRepository {
       endPoint = endPoint.substring(0, endPoint.length - 1);
     }
     final Uri uri = Uri.parse('${api}api/$endPoint');
-    print(uri.toString());
     if (headers != null) return await get(uri, headers: headers);
     return await get(uri);
   }
 
   static Future sendDeleteRequest(String endPoint, Map<String, String> headers,
-      {Map<String, dynamic> reqBody}) {
+      {Map<dynamic, dynamic> reqBody}) {
     String url = '$api$endPoint';
     final Uri uri = Uri.parse(url);
 

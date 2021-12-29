@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import 'package:provider/provider.dart';
-import 'package:styled_text/styled_text.dart';
 import 'package:tumblrx/components/following/following_card.dart';
 import 'package:tumblrx/components/post/post_widget.dart';
 import 'package:tumblrx/models/post.dart';
@@ -12,13 +10,12 @@ import 'package:tumblrx/utilities/hex_color_value.dart';
 
 import '../blog_screen_constant.dart';
 
-Widget upperTabBar(TabController _tabController, BuildContext context) {
+Widget upperTabBar(TabController _tabController, BuildContext context,String color) {
   final blogProvider = Provider.of<BlogScreenConstantProvider>(context);
   return Container(
 
       /// start of Tab Bars
-      color: hexToColor(Provider.of<User>(context, listen: false)
-              .getActiveBlogBackColor()) ??
+      color: hexToColor(color) ??
           Colors.blue,
       child: TabBar(
         unselectedLabelColor: Color(0xffc7c1c1),
@@ -54,15 +51,14 @@ Widget upperTabBar(TabController _tabController, BuildContext context) {
       ));
 }
 
-Widget bottomTabBar(TabController _tabController, BuildContext context, Blog blog) {
+Widget bottomTabBar(TabController _tabController, BuildContext context, String color,Blog blog) {
   //final blogProvider = Provider.of<BlogScreenConstantProvider>(context);
   Future<Post> blogPost;
   return Expanded(
 
       /// pages which display content of each tab bar
       child: Container(
-    color: hexToColor(Provider.of<User>(context, listen: false)
-            .getActiveBlogBackColor()) ??
+    color: hexToColor(color) ??
         Colors.blue,
     child: TabBarView(
       children: [

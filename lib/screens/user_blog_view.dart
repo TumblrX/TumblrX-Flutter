@@ -37,7 +37,6 @@ class _UserBlogViewState extends State<UserBlogView>
 
   Widget build(BuildContext context) {
     Blog _blog = Blog();
-    print(widget._blogId);
     _blog.setBlogId(widget._blogId);
     return FutureBuilder<Blog>(
       future: _blog.blogRetrive(context),
@@ -134,6 +133,8 @@ class _UserBlogViewState extends State<UserBlogView>
                                 TextWriting(
                                   title:snapshot.data.title,
                                   description: snapshot.data.description,
+                                  color: snapshot.data.backGroundColor,
+                                  textColor: snapshot.data.titleColor,
                                 ),
                               ],
                             ),
@@ -145,15 +146,15 @@ class _UserBlogViewState extends State<UserBlogView>
                         visible: snapshot.data.showAvatar ??
                             true,
                         child: snapshot.data.isCircleAvatar
-                            ? AvatarImage(myBlog: false,path: snapshot.data.blogAvatar,)
-                            : Square())
+                            ? AvatarImage(myBlog: false,path: snapshot.data.blogAvatar,color: snapshot.data.backGroundColor,)
+                            : Square(color: snapshot.data.backGroundColor,))
                           ]),
 
                           //{
 
                           if (snapshot.data.isPrimary) 
-                          upperTabBar(_tabController, context),
-                          if (snapshot.data.isPrimary) bottomTabBar(_tabController, context,_blog),
+                          upperTabBar(_tabController, context,snapshot.data.backGroundColor),
+                          if (snapshot.data.isPrimary) bottomTabBar(_tabController, context,snapshot.data.backGroundColor,_blog),
                           //}
                           if (snapshot.data.isPrimary) 
                           Container(
