@@ -32,9 +32,11 @@ class _AvatarImageState extends State<AvatarImage> {
               backgroundColor: hexToColor(widget._color) ?? Colors.blue,
               child: CircleAvatar(
                 radius: 38,
-                backgroundImage: NetworkImage(
-                  ApiHttpRepository.api +
-                      Provider.of<User>(context).getActiveBlogAvatar(),
+
+                backgroundImage: NetworkImage(ApiHttpRepository.api +
+                 widget._path,
+
+               
                 ),
               )),
           onTap: () {

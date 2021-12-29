@@ -16,7 +16,10 @@ Widget upperTabBar(
   return Container(
 
       /// start of Tab Bars
-      color: hexToColor(color) ?? Colors.blue,
+
+      color: hexToColor(color??'#000000') ??
+          Colors.blue,
+
       child: TabBar(
         unselectedLabelColor: Color(0xffc7c1c1),
         labelColor: BlogScreenConstant.accent,

@@ -9,6 +9,9 @@ import 'package:tumblrx/services/authentication.dart';
 import 'blog_theme.dart';
 import 'package:http_parser/http_parser.dart';
 
+import 'package:http/http.dart' as http;
+
+
 class Blog {
   /// The user's tumblr short name
   String _handle;
@@ -270,11 +273,13 @@ class Blog {
       "size": 64
     };
     try {
+
       final Map<String, dynamic> response =
           await apiClient.sendGetRequest(endPoint, query: reqParameters);
       if (response['statuscode'] == 200) {
         print(response['avatar_url']);
         return response['avatar_url'];
+
       } else {
         // handle failed request
         throw Exception(response.toString());
@@ -290,6 +295,7 @@ class Blog {
     this._id = id;
   }
 
+
   Future<bool> followBlog(String blogId, String token) async {
     final String endPoint = "api/user/follow";
     Map<String, dynamic> response =
@@ -301,6 +307,7 @@ class Blog {
     if (response['statuscode'] != 200) {
       logger.e('error at comment ${response['body']}');
       return false;
+
     }
     return true;
   }
@@ -564,15 +571,24 @@ class Blog {
     dio.options.headers["Authorization"] =
         Provider.of<Authentication>(context, listen: false).token;
 
+dio.options.headers['content-Type'] = 'application/json';
+
+
+
     var formData = FormData.fromMap({
       'backgroundColor': this._backGroundColor,
       'stretchHeaderImage': this._stretchHeaderImage.toString(),
       'showAvatar': this._showAvatar.toString(),
       'avatar': await MultipartFile.fromFile(avatarPick.path,
           filename: avatarPick.name, contentType: MediaType("image", "jpeg")),
-    });
-    dio.put(ApiHttpRepository.api + endPoint, data: formData);
 
+      'headerImage': await MultipartFile.fromFile(headerImagePick.path,
+          filename: headerImagePick.name, contentType: MediaType("image", "jpeg")),
+    });
+    final response = await dio.put(ApiHttpRepository.api + endPoint, data: formData);
+
+
+    // var responseObject = convert.jsonDecode(response.body);
     //final response =
     //  await ApiHttpRepository.sendPutRequest(endPoint, headers, data);
     //if (response.statusCode == 200) {
