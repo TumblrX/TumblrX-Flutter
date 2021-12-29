@@ -2,9 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/components/chatting/messaging_screen.dart';
-import 'package:tumblrx/components/createpost/create_post_user.dart';
 import 'package:tumblrx/models/user/user.dart';
-import 'package:tumblrx/screens/main_screen.dart';
+import 'package:tumblrx/services/authentication.dart';
 import 'package:tumblrx/utilities/constants.dart';
 
 ///Notifications Screen that contains Activity and Messaging
@@ -53,8 +52,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                       width: 10.0,
                     ),
                     Text(
-                      Provider.of<User>(context, listen: false)
-                          .getPrimaryBlogName(),
+                      Provider.of<User>(context, listen: false).username,
                       style: TextStyle(
                         fontSize: 18.0,
                         fontWeight: FontWeight.bold,
@@ -71,9 +69,17 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                       child: Text('Refresh'),
                       value: 'Refresh',
                     ),
+                    PopupMenuItem(
+                      child: Text('Log out'),
+                      value: 'Log out',
+                    ),
                   ],
                   onSelected: (choice) {
-                    if (choice == 'Refresh') setState(() {}); //to be changed
+                    if (choice == 'Refresh')
+                      setState(() {});
+                    else
+                      Provider.of<Authentication>(context, listen: false)
+                          .logout(context);
                   },
                 )
               ],

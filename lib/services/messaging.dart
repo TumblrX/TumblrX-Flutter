@@ -49,6 +49,36 @@ class Messaging extends ChangeNotifier {
       'userId': '61ca14deb6ee95ef1f690e44',
       'userAvatar': ApiHttpRepository.api +
           'uploads/blog/blog-1640644817494-61ca14deb6ee95ef1f690e47.jpeg'
+    },
+    {
+      'username': 'Taher13',
+      'userId': '61b4c1a32de31c0235abc090',
+      'userAvatar':
+          'https://assets.tumblr.com/images/default_avatar/cube_open_128.png'
+    },
+    {
+      'username': 'peter',
+      'userId': '61b4c39e2de31c0235abc12e',
+      'userAvatar':
+          'https://assets.tumblr.com/images/default_avatar/cube_open_128.png'
+    },
+    {
+      'username': 'YousefElshabrawy',
+      'userId': '61b72b2fcf6c2aaab9a1e406',
+      'userAvatar':
+          'https://assets.tumblr.com/images/default_avatar/cube_open_128.png'
+    },
+    {
+      'username': 'Andrew',
+      'userId': '61b76ec7cf6c2aaab9a1e484',
+      'userAvatar':
+          'https://assets.tumblr.com/images/default_avatar/cube_open_128.png'
+    },
+    {
+      'username': 'ahmednossir',
+      'userId': '61c353ebf50be9d1d297d959',
+      'userAvatar':
+          'https://assets.tumblr.com/images/default_avatar/cube_open_128.png'
     }
   ];
 
@@ -77,6 +107,36 @@ class Messaging extends ChangeNotifier {
       'userId': '61ca14deb6ee95ef1f690e44',
       'userAvatar': ApiHttpRepository.api +
           'uploads/blog/blog-1640644817494-61ca14deb6ee95ef1f690e47.jpeg'
+    },
+    {
+      'username': 'Taher13',
+      'userId': '61b4c1a32de31c0235abc090',
+      'userAvatar':
+          'https://assets.tumblr.com/images/default_avatar/cube_open_128.png'
+    },
+    {
+      'username': 'peter',
+      'userId': '61b4c39e2de31c0235abc12e',
+      'userAvatar':
+          'https://assets.tumblr.com/images/default_avatar/cube_open_128.png'
+    },
+    {
+      'username': 'YousefElshabrawy',
+      'userId': '61b72b2fcf6c2aaab9a1e406',
+      'userAvatar':
+          'https://assets.tumblr.com/images/default_avatar/cube_open_128.png'
+    },
+    {
+      'username': 'Andrew',
+      'userId': '61b76ec7cf6c2aaab9a1e484',
+      'userAvatar':
+          'https://assets.tumblr.com/images/default_avatar/cube_open_128.png'
+    },
+    {
+      'username': 'ahmednossir',
+      'userId': '61c353ebf50be9d1d297d959',
+      'userAvatar':
+          'https://assets.tumblr.com/images/default_avatar/cube_open_128.png'
     }
   ];
 
