@@ -18,9 +18,6 @@ class Blog {
   /// The id of the blog
   String _id;
 
-  /// indicates if this is the user's primary blog, default=false
-  bool _primary = false;
-
   /// total count of followers for this blog
   int _followersCount;
 
@@ -97,7 +94,6 @@ class Blog {
   Blog(
       [this._handle,
       this._title,
-      this._primary,
       this._followersCount,
       this._isPrivate,
       this._isPrimary,

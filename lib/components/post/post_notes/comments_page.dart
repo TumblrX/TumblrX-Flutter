@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/components/post/post_notes/comment_field_widget.dart';
@@ -110,18 +111,31 @@ class _CommentsPageState extends State<CommentsPage> {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 // blog avatar
-                                note.blogData.isCircleAvatar
-                                    ? CircleAvatar(
-                                        backgroundImage:
-                                            NetworkImage(blogAvatar),
-                                      )
-                                    : ClipRRect(
-                                        borderRadius: BorderRadius.circular(3),
-                                        child: Image.network(
-                                          blogAvatar,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
+                                CachedNetworkImage(
+                                  imageUrl: blogAvatar,
+                                  imageBuilder: (context, imageProvider) =>
+                                      note.blogData.isCircleAvatar
+                                          ? CircleAvatar(
+                                              radius: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  .1,
+                                              backgroundImage:
+                                                  NetworkImage(blogAvatar),
+                                            )
+                                          : ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(3),
+                                              child: Image.network(
+                                                blogAvatar,
+                                                fit: BoxFit.cover,
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    .1,
+                                              ),
+                                            ),
+                                ),
                                 // comment text box
                                 Expanded(
                                   child: Padding(

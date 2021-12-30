@@ -40,7 +40,7 @@ class EditAvatar {
   }
 
   Widget editSquareAvatar(BuildContext context) {
-    final blogProvider = Provider.of<BlogScreenConstantProvider>(context);
+    Provider.of<BlogScreenConstantProvider>(context);
     return Positioned(
       left: 140,
       top: 160,

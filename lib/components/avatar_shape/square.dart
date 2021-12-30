@@ -9,7 +9,7 @@ import 'package:tumblrx/utilities/hex_color_value.dart';
 class Square extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final blogProvider = Provider.of<BlogScreenConstantProvider>(context);
+    Provider.of<BlogScreenConstantProvider>(context);
 
     return Positioned(
         top: 135,
@@ -19,25 +19,27 @@ class Square extends StatelessWidget {
             height: MediaQuery.of(context).size.height / 8.8,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(3),
-              child: Image.network( 
-
-               
+              child: Image.network(
                 Provider.of<User>(context).getActiveBlogAvatar(),
                 fit: BoxFit.cover,
-            
-             
-                 
-                ),
+              ),
             ),
-            
+
             //image: AssetImage('images/avatar.png'),
             //fit: BoxFit.fill,
             // )
 
             decoration: BoxDecoration(
-              color:  hexToColor( Provider.of<User>(context,listen: false).getActiveBlogBackColor())??Colors.blue,
-              border:
-                  Border.all(width: 3, color: hexToColor(( Provider.of<User>(context,listen: false).getActiveBlogBackColor())??Colors.blue,)),
+              color: hexToColor(Provider.of<User>(context, listen: false)
+                      .getActiveBlogBackColor()) ??
+                  Colors.blue,
+              border: Border.all(
+                  width: 3,
+                  color: hexToColor(
+                    (Provider.of<User>(context, listen: false)
+                            .getActiveBlogBackColor()) ??
+                        Colors.blue,
+                  )),
               borderRadius: BorderRadius.circular(3),
             ),
           ),

@@ -26,6 +26,7 @@ import 'package:tumblrx/models/posts/link_block.dart';
 import 'package:tumblrx/models/posts/text_block.dart';
 import 'package:tumblrx/models/posts/video_block.dart';
 import 'package:intl/intl.dart';
+import 'package:tumblrx/services/api_provider.dart';
 
 import 'package:tumblrx/services/authentication.dart';
 import 'package:tumblrx/services/creating_post.dart';
@@ -228,10 +229,13 @@ class Post {
     // blog handle
     if (blogData.containsKey('handle')) this._blogHandle = blogData['handle'];
     // blog avatar url
-    if (blogData.containsKey('avatar'))
+    if (blogData.containsKey('avatar')) {
       this._blogAvatar = blogData['avatar'] == 'none'
           ? "https://64.media.tumblr.com/9f9b498bf798ef43dddeaa78cec7b027/tumblr_o51oavbMDx1ugpbmuo7_500.png"
           : blogData['avatar'];
+      if (!_blogAvatar.contains('http'))
+        _blogAvatar = '${ApiHttpRepository.api}$_blogAvatar';
+    }
     // blog avatar shape flag (true => circular, false => rectangular)
     if (blogData.containsKey('isAvatarCircle'))
       this._isAvatarCircle = blogData['isAvatarCircle'];

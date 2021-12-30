@@ -15,7 +15,7 @@ class Edit extends StatefulWidget {
 }
 
 class _EditState extends State<Edit> with SingleTickerProviderStateMixin {
-  TabController _tabController;
+  // TabController _tabController;
   TextEditingController titleController;
   TextEditingController descriptionController;
   @override
@@ -29,14 +29,13 @@ class _EditState extends State<Edit> with SingleTickerProviderStateMixin {
 
     ///this controller for Tabs bar
     ///function used for Tab bars
-
-    _tabController = new TabController(length: 3, vsync: this);
+    //_tabController = new TabController(length: 3, vsync: this);
     super.initState();
   }
 
+  @override
   Widget build(BuildContext context) {
-    @override
-    final blogProvider = Provider.of<BlogScreenConstantProvider>(context);
+    Provider.of<BlogScreenConstantProvider>(context);
     return Scaffold(
         body: Container(
             color: hexToColor(Provider.of<User>(context, listen: false)

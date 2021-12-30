@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/global.dart';
@@ -39,6 +40,7 @@ class _CommentFieldState extends State<CommentField> {
 
   @override
   Widget build(BuildContext context) {
+    final double avatarRadius = MediaQuery.of(context).size.width * 0.1;
     return Column(
       children: [
         Divider(thickness: .6),
@@ -49,11 +51,20 @@ class _CommentFieldState extends State<CommentField> {
             children: [
               Padding(
                 padding: const EdgeInsets.only(right: 8.0),
-                child: CircleAvatar(
-                  radius: MediaQuery.of(context).size.height * 0.025,
-                  backgroundImage: NetworkImage(
-                    Provider.of<User>(context, listen: false)
-                        .getActiveBlogAvatar(),
+                child: CachedNetworkImage(
+                  width: avatarRadius,
+                  height: avatarRadius,
+                  imageUrl: Provider.of<User>(context, listen: false)
+                      .getActiveBlogAvatar(),
+                  errorWidget: (context, url, error) => CircleAvatar(
+                    radius: avatarRadius,
+                    child: Center(
+                      child: Icon(Icons.error),
+                    ),
+                  ),
+                  imageBuilder: (context, imageProvider) => CircleAvatar(
+                    radius: avatarRadius,
+                    backgroundImage: imageProvider,
                   ),
                 ),
               ),
