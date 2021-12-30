@@ -19,7 +19,7 @@ class Edit extends StatefulWidget {
 }
 
 class _EditState extends State<Edit> with SingleTickerProviderStateMixin {
-  TabController _tabController;
+  // TabController _tabController;
   TextEditingController titleController;
   TextEditingController descriptionController;
   @override
@@ -33,8 +33,7 @@ class _EditState extends State<Edit> with SingleTickerProviderStateMixin {
 
     ///this controller for Tabs bar
     ///function used for Tab bars
-
-    _tabController = new TabController(length: 3, vsync: this);
+    //_tabController = new TabController(length: 3, vsync: this);
     super.initState();
   }
 

@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:tumblrx/components/post/post_blocks/audio_block_widget.dart';
 import 'package:tumblrx/components/post/post_blocks/image_block_widget.dart';
 import 'package:tumblrx/components/post/post_blocks/link_block_widget.dart';
 import 'package:tumblrx/components/post/post_blocks/text_block_widget.dart';
 import 'package:tumblrx/components/post/post_blocks/video_block_widget.dart';
 import 'package:tumblrx/components/post/tags_widget.dart';
-import 'package:tumblrx/models/posts/audio_block.dart';
 import 'package:tumblrx/models/posts/image_block.dart';
 import 'package:tumblrx/models/posts/link_block.dart';
 import 'package:tumblrx/models/posts/text_block.dart';
@@ -48,12 +46,12 @@ class PostContentView extends StatelessWidget {
                   return VideoBlockWidget(
                       url: block.url, provider: block.provider);
                   break;
-                case AudioBlock:
-                  return AudioBlockWidget(
-                    url: block.url,
-                    provider: block.provider,
-                  );
-                  break;
+                // case AudioBlock:
+                //   return AudioBlockWidget(
+                //     url: block.url,
+                //     provider: block.provider,
+                //   );
+                //   break;
                 default:
                   return Container(width: 0, height: 0);
               }

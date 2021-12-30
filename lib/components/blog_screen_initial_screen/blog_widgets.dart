@@ -17,6 +17,11 @@ Widget upperTabBar(
 
       /// start of Tab Bars
 
+//      color: hexToColor(Provider.of<User>(context, listen: false)
+//              .getActiveBlogBackColor()) ??
+//          Colors.blue,
+
+
       color: hexToColor(color??'#000000') ??
           Colors.blue,
 
@@ -54,14 +59,25 @@ Widget upperTabBar(
       ));
 }
 
+
+//Widget bottomTabBar(TabController _tabController, BuildContext context) {
+//  Provider.of<BlogScreenConstantProvider>(context);
+
 Widget bottomTabBar(TabController _tabController, BuildContext context,
     String color, Blog blog) {
   //final blogProvider = Provider.of<BlogScreenConstantProvider>(context);
+
   return Expanded(
 
       /// pages which display content of each tab bar
       child: Container(
+
+//    color: hexToColor(Provider.of<User>(context, listen: false)
+//            .getActiveBlogBackColor()) ??
+//        Colors.blue,
+
     color: hexToColor(color ?? '#000000') ?? Colors.blue,
+
     child: TabBarView(
       children: [
         FutureBuilder<List<Post>>(

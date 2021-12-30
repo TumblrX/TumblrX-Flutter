@@ -40,6 +40,9 @@ class EditAvatar {
   }
 
   Widget editSquareAvatar(BuildContext context) {
+
+    Provider.of<BlogScreenConstantProvider>(context);
+
    // final blogProvider = Provider.of<BlogScreenConstantProvider>(context);
     return Positioned(
       left:  MediaQuery.of(context).size.width/2.6,

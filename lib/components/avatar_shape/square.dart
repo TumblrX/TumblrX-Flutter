@@ -15,6 +15,7 @@ class Square extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     //final blogProvider = Provider.of<BlogScreenConstantProvider>(context);
 
     return Positioned(
@@ -26,6 +27,9 @@ class Square extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(3),
               child: Image.network(
+
+ //               Provider.of<User>(context).getActiveBlogAvatar(),
+
                 ApiHttpRepository.api +_path
                     ,
                 fit: BoxFit.cover,
@@ -37,6 +41,16 @@ class Square extends StatelessWidget {
             // )
 
             decoration: BoxDecoration(
+//              color: hexToColor(Provider.of<User>(context, listen: false)
+//                      .getActiveBlogBackColor()) ??
+//                  Colors.blue,
+//              border: Border.all(
+//                  width: 3,
+//                  color: hexToColor(
+//                    (Provider.of<User>(context, listen: false)
+//                            .getActiveBlogBackColor()) ??
+//                        Colors.blue,
+
               color: hexToColor(_color ?? '#000000') ?? Colors.blue,
               border: Border.all(
                   width: 3,
