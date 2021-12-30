@@ -449,7 +449,7 @@ class CreatingPost extends ChangeNotifier {
         : {
             'blog': Provider.of<User>(context, listen: false).getActiveBlogId(),
             'postType': 'text',
-            'tags': chosenHashtags,
+            'tags': _formatTags(),
             'state': postOption.toString().substring(11),
             'send_to_twitter': shareToTwitter,
             'blogAttribution': {
@@ -663,5 +663,13 @@ class CreatingPost extends ChangeNotifier {
     body['reblogData'] = {};
     body['reblogData']['parentPostId'] = id;
     return body;
+  }
+
+  Map<String, String> _formatTags() {
+    Map<String, String> tags = {};
+    for (int i = 0; i < chosenHashtags.length; i++) {
+      tags[i.toString()] = chosenHashtags[i];
+    }
+    return tags;
   }
 }
