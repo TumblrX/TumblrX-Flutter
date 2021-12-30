@@ -391,7 +391,6 @@ class User extends ChangeNotifier {
         reqBody: blogInfo, headers: headers);
 
     if (response['statuscode'] == 200 || response['statuscode'] == 201) {
-      logger.d(response);
       if (response.containsKey('data')) {
         _blogs.add(Blog.fromJson(response['data']));
 
@@ -400,7 +399,8 @@ class User extends ChangeNotifier {
         notifyListeners();
       }
     } else {
-      logger.e(response['statuscode']);
+      {}
+      print(response['statuscode']);
     }
   }
 

@@ -80,9 +80,19 @@ class _HeaderImageState extends State<HeaderImage> {
                                           child: Image(
                                             image: NetworkImage(
                                               Provider.of<User>(context,
-                                                      listen: false)
-                                                  .userBlogs[i]
-                                                  .blogAvatar,
+                                                          listen: false)
+                                                      .userBlogs[i]
+                                                      .blogAvatar
+                                                      .startsWith('http')
+                                                  ? Provider.of<User>(context,
+                                                          listen: false)
+                                                      .userBlogs[i]
+                                                      .blogAvatar
+                                                  : ApiHttpRepository.api +
+                                                      Provider.of<User>(context,
+                                                              listen: false)
+                                                          .userBlogs[i]
+                                                          .blogAvatar,
                                             ),
                                           ),
                                         ),
@@ -154,8 +164,15 @@ class _HeaderImageState extends State<HeaderImage> {
         //color: Colors.green,
         decoration: BoxDecoration(
             image: DecorationImage(
-                image:NetworkImage(ApiHttpRepository.api+ Provider.of<User>(context,listen: false).getActiveBlogHeaderImage()??'http://tumblrx.me:3000/uploads/blog/blog-1640803111113-undefined.png'),
-                fit:Provider.of<User>(context).getActiveBlogStretchHeaderImage()??true? BoxFit.fill:BoxFit.contain)), //dummy image
+                image: NetworkImage(ApiHttpRepository.api +
+                        Provider.of<User>(context, listen: false)
+                            .getActiveBlogHeaderImage() ??
+                    'http://tumblrx.me:3000/uploads/blog/blog-1640803111113-undefined.png'),
+                fit: Provider.of<User>(context)
+                            .getActiveBlogStretchHeaderImage() ??
+                        true
+                    ? BoxFit.fill
+                    : BoxFit.contain)), //dummy image
         height: MediaQuery.of(context).size.height / 3.6, //(200)
       ),
       onTap: () {

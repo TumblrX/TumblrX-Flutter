@@ -202,9 +202,8 @@ class Messaging extends ChangeNotifier {
     String endPoint = 'user/chat/reterive-conversations';
     Map<String, String> header = {HttpHeaders.authorizationHeader: token};
     try {
-
-
-      final response = await apiClient.sendGetRequest(endPoint, headers: header);
+      final response =
+          await apiClient.sendGetRequest(endPoint, headers: header);
       // print(response.statusCode);
       // print(response.body);
       logger.d(response);
@@ -212,6 +211,7 @@ class Messaging extends ChangeNotifier {
         for (Map<String, dynamic> conversation in response['data']) {
           conversations.add(Conversation.fromJson(conversation));
         }
+      }
       if (retrieveChatFirstTime) {
         getChatContent(userId);
       }
@@ -235,14 +235,13 @@ class Messaging extends ChangeNotifier {
       logger.d(response['statuscode']);
       logger.d(response);
       conversations[i].chatMessages = [];
-      
-      if (response.statusCode == 200 || response.statusCode == 201) {
-       for (Map<String, dynamic> chatMessage in response['messages']) {
-        conversations[i].addMessage(chatMessage['text'],
-            chatMessage['senderId'] != userId, chatMessage['createdAt']);
 
-            }
+      if (response['statuscode'] == 200 || response['statuscode'] == 201) {
+        for (Map<String, dynamic> chatMessage in response['messages']) {
+          conversations[i].addMessage(chatMessage['text'],
+              chatMessage['senderId'] != userId, chatMessage['createdAt']);
         }
+      }
 
       conversations[i].chatMessages =
           conversations[i].chatMessages.reversed.toList();
@@ -295,10 +294,9 @@ class Messaging extends ChangeNotifier {
       content: Text('Something went wrong :( .. Check internet connection...'),
     );
     try {
-      final response =
-          await ApiHttpRepository.sendDeleteRequest(endPoint, header);
-      print(response.body);
-      if (response.statusCode == 200) {
+      final response = await apiClient.sendDeleteRequest(endPoint, header);
+      print(response);
+      if (response['statuscode'] == 200) {
         Navigator.pop(context);
         Navigator.pop(context);
         conversations.removeAt(i);
