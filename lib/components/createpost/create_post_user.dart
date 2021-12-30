@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/models/user/user.dart';
+import 'package:tumblrx/services/api_provider.dart';
 import 'post_blog_choice.dart';
 
 ///Shows the user of Creating post and allows you to choose the blog that post will be added into.
@@ -34,7 +35,14 @@ class CreatePostUser extends StatelessWidget {
             CircleAvatar(
               radius: 18.0,
               backgroundImage: NetworkImage(
-                Provider.of<User>(context, listen: false).getActiveBlogAvatar(),
+                Provider.of<User>(context, listen: false)
+                        .getActiveBlogAvatar()
+                        .startsWith('http')
+                    ? Provider.of<User>(context, listen: false)
+                        .getActiveBlogAvatar()
+                    : ApiHttpRepository.api +
+                        Provider.of<User>(context, listen: false)
+                            .getActiveBlogAvatar(),
               ),
             ),
             SizedBox(

@@ -46,7 +46,13 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                       radius: 18.0,
                       backgroundImage: NetworkImage(
                         Provider.of<User>(context, listen: false)
-                            .getPrimaryBlogAvatar(),
+                                .getPrimaryBlogAvatar()
+                                .startsWith('http')
+                            ? Provider.of<User>(context, listen: false)
+                                .getPrimaryBlogAvatar()
+                            : ApiHttpRepository.api +
+                                Provider.of<User>(context, listen: false)
+                                    .getPrimaryBlogAvatar(),
                       ),
                     ),
                     SizedBox(
