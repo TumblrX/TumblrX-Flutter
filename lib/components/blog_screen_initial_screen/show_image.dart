@@ -12,7 +12,7 @@ class ShowImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return InteractiveViewer(
         child: Container(
-      child: Image(image: NetworkImage(ApiHttpRepository.api +img), fit: BoxFit.fitWidth),
+      child: Image(image: NetworkImage(img.startsWith('http')?img:ApiHttpRepository.api+img), fit: BoxFit.fitWidth),
     ));
   }
 }
