@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/global.dart';
 import 'package:tumblrx/models/user/user.dart';
+import 'package:tumblrx/services/api_provider.dart';
 import 'package:tumblrx/services/authentication.dart';
 import 'package:tumblrx/utilities/constants.dart';
 
@@ -55,7 +56,13 @@ class _CommentFieldState extends State<CommentField> {
                   width: avatarRadius,
                   height: avatarRadius,
                   imageUrl: Provider.of<User>(context, listen: false)
-                      .getActiveBlogAvatar(),
+                          .getActiveBlogAvatar()
+                          .startsWith('http')
+                      ? Provider.of<User>(context, listen: false)
+                          .getActiveBlogAvatar()
+                      : ApiHttpRepository.api +
+                          Provider.of<User>(context, listen: false)
+                              .getActiveBlogAvatar(),
                   errorWidget: (context, url, error) => CircleAvatar(
                     radius: avatarRadius,
                     child: Center(

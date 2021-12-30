@@ -171,15 +171,14 @@ class _BlogScreenState extends State<BlogScreen>
                         Provider.of<User>(context, listen: false)
                             .getActiveBlog()),
                   //}
-                  if (Provider.of<User>(context).getActiveBlogIsPrimary() ==
-                      false)
+                  if (!Provider.of<User>(context).getActiveBlogIsPrimary())
                     Container(
                       child: FutureBuilder<List<Post>>(
-                        future: Provider.of<User>(context).getActiveBlogPosts(),
+                        future: Provider.of<User>(context)
+                            .getActiveBlog()
+                            .blogPosts(context, true),
                         builder: (context, snapshot) {
-                          if (snapshot.hasData &&
-                              snapshot.data != null &&
-                              snapshot.data.length != 0) {
+                          if (snapshot.hasData) {
                             return Expanded(
                               child: ListView.separated(
                                 itemCount: snapshot.data.length,

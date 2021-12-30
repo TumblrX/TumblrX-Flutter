@@ -184,7 +184,7 @@ class _UserBlogViewState extends State<UserBlogView>
                             bottomTabBar(_tabController, context,
                                 snapshot.data.backGroundColor, _blog),
                           //}
-                          if (snapshot.data.isPrimary)
+                          if (!snapshot.data.isPrimary)
                             Container(
                               color: hexToColor(snapshot.data.backGroundColor),
                               child: FutureBuilder<List<Post>>(
