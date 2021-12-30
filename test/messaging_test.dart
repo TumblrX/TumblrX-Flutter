@@ -1,9 +1,8 @@
 import 'package:tumblrx/models/chatting/conversation.dart';
 import 'package:tumblrx/services/messaging.dart';
-import 'package:tumblrx/utilities/time_format_to_view.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-void main() {
+void main() async {
   final messaging = Messaging();
   messaging.conversations = [
     Conversation.fromJson({

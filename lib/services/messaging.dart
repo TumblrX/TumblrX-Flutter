@@ -48,8 +48,8 @@ class Messaging extends ChangeNotifier {
     {
       'username': 'bishoytest123',
       'userId': '61ca14deb6ee95ef1f690e44',
-      'userAvatar': ApiHttpRepository.api +
-          'uploads/blog/blog-1640644817494-61ca14deb6ee95ef1f690e47.jpeg'
+      'userAvatar':
+          'https://assets.tumblr.com/images/default_avatar/cube_open_128.png'
     },
     {
       'username': 'Taher13',
@@ -106,8 +106,8 @@ class Messaging extends ChangeNotifier {
     {
       'username': 'bishoytest123',
       'userId': '61ca14deb6ee95ef1f690e44',
-      'userAvatar': ApiHttpRepository.api +
-          'uploads/blog/blog-1640644817494-61ca14deb6ee95ef1f690e47.jpeg'
+      'userAvatar':
+          'https://assets.tumblr.com/images/default_avatar/cube_open_128.png'
     },
     {
       'username': 'Taher13',
