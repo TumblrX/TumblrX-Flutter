@@ -81,7 +81,7 @@ class InlineFormatting implements Comparable<InlineFormatting> {
         break;
       case 'color':
         formattedText = '<color text="${this.hex}">$originalText</color>';
-        leftPadding = 12 + this.hex.length;
+        leftPadding = 15 + this.hex.length;
         rightPadding = 8;
         break;
       case 'mention': // "uuid": , "name": , "url":

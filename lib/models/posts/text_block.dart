@@ -78,7 +78,7 @@ class TextBlock {
 
         // prepare formatting intervals for viewing later
         _renderingFormatting = this.prepareFormattingList(parsedFormats);
-
+        logger.e(_renderingFormatting);
         _formattedText = this.formatText();
       } catch (err) {
         logger.e('error in formatting $err');
@@ -111,13 +111,17 @@ class TextBlock {
     for (int i = len - 2; i >= 0; i--) {
       InlineFormatting format = _renderingFormatting[i];
 
+      int updatedEnd = 0;
       if (format.start == prevFormat.start && format.end == prevFormat.end) {
-        format.end += leftPadding + rightPadding;
+        updatedEnd = leftPadding + rightPadding;
+        format.end += updatedEnd;
       }
       List result = format.applyFormat(_formattedText);
       _formattedText = result[0];
-      leftPadding = result[1];
-      rightPadding = result[2];
+      logger.e(_formattedText);
+      leftPadding += result[1];
+      rightPadding += result[2];
+      if (updatedEnd != 0) format.end -= updatedEnd;
       prevFormat = format;
     }
     if (_subtype != null && _subtype.isNotEmpty) {
