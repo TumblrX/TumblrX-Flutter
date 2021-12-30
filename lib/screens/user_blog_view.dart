@@ -140,8 +140,12 @@ class _UserBlogViewState extends State<UserBlogView>
                                 Container(
                                   decoration: BoxDecoration(
                                       image: DecorationImage(
-                                          image: AssetImage(
-                                              BlogScreenConstant.headerImgPath),
+                                          image: NetworkImage(snapshot
+                                                  .data.headerImage
+                                                  .startsWith('http')
+                                              ? snapshot.data.headerImage
+                                              : ApiHttpRepository.api +
+                                                  snapshot.data.headerImage),
                                           fit: BoxFit.fill)), //dummy image
                                   height: MediaQuery.of(context).size.height /
                                       3.6, //(200)
