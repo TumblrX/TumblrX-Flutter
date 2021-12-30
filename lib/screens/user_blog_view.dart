@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tumblrx/components/avatar_shape/avatar_image.dart';
 import 'package:tumblrx/components/avatar_shape/square.dart';
 import 'package:tumblrx/components/blog_screen_constant.dart';
@@ -9,7 +10,10 @@ import 'package:tumblrx/components/blog_screen_initial_screen/header_image.dart'
 import 'package:tumblrx/components/post/post_widget.dart';
 import 'package:tumblrx/models/posts/post.dart';
 import 'package:tumblrx/models/user/blog.dart';
+import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/utilities/hex_color_value.dart';
+
+import 'chat_screen.dart';
 
 class UserBlogView extends StatefulWidget {
   final String _blogId;
@@ -54,7 +58,22 @@ class _UserBlogViewState extends State<UserBlogView>
                   ),
                   IconButton(
                     icon: Icon(Icons.message),
-                    onPressed: () {},
+                    onPressed: () {
+                      if (snapshot.data.isPrimary)
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ChatScreen(
+                              userId: snapshot.data.ownerId,
+                              receiverUsername: snapshot.data.handle,
+                              receiverAvatarUrl: snapshot.data.blogAvatar,
+                              myAvatarUrl: Provider.of<User>(context)
+                                  .getPrimaryBlogAvatar(),
+                              myUsername: Provider.of<User>(context).username,
+                            ),
+                          ),
+                        );
+                    },
                   ),
                   PopupMenuButton<String>(
                     itemBuilder: (BuildContext context) {
@@ -169,7 +188,7 @@ class _UserBlogViewState extends State<UserBlogView>
                             Container(
                               color: hexToColor(snapshot.data.backGroundColor),
                               child: FutureBuilder<List<Post>>(
-                                future: _blog.blogPosts(context),
+                                future: _blog.blogPosts(context, false),
                                 builder: (context, snapshot) {
                                   if (snapshot.hasData &&
                                       snapshot.data != null &&

@@ -50,7 +50,7 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
                               return Center(
                                 child: Icon(Icons.error),
                               );
-                            logger.d(snapshot.data);
+                            //logger.e(snapshot.data);
                             return ListView.builder(
                               itemCount: snapshot.data.length,
                               itemBuilder: (context, index) => Padding(
@@ -233,19 +233,25 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
     }, headers: {
       'Authorization': Provider.of<Authentication>(context, listen: false).token
     });
-    logger.d(response);
+    //logger.d(response);
     if (response['statuscode'] != 200) {
       logger.e(response['error']);
       return [];
     }
-    List<Map<String, dynamic>> blogs =
-        List<Map<String, dynamic>>.from(response['blogs']);
-    return blogs.map((blog) {
-      try {
-        Blog.fromJson(blog);
-      } catch (err) {
-        logger.e(err);
-      }
-    }).toList();
+    try {
+      List<Map<String, dynamic>> blogs =
+          List<Map<String, dynamic>>.from(response['blogs']);
+
+      return blogs.map((blog) {
+        try {
+          return Blog.fromJson(blog);
+        } catch (err) {
+          logger.e(err);
+        }
+      }).toList();
+    } catch (err) {
+      logger.e(err);
+      return [];
+    }
   }
 }

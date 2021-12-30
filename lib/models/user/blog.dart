@@ -11,7 +11,6 @@ import 'package:http_parser/http_parser.dart';
 
 import 'package:http/http.dart' as http;
 
-
 class Blog {
   /// The user's tumblr short name
   String _handle;
@@ -150,12 +149,10 @@ class Blog {
 
     if (json.containsKey('avatar')) {
       _blogAvatar = json['avatar'] == 'none'
-
           ? 'https://assets.tumblr.com/images/default_avatar/cube_open_128.png'
           : json['avatar'].startsWith('http')
               ? json['avatar']
               : ApiHttpRepository.api + json['avatar'];
-
     }
     // blog avatar shape
     if (json.containsKey('isAvatarCircle'))
@@ -168,14 +165,15 @@ class Blog {
       if (!this._blogTheme.headerImage.contains('http'))
         this._blogTheme.headerImage =
             '${ApiHttpRepository.api}' + this._blogTheme.headerImage;
-
     }
 
     ///headerImage
     if (json.containsKey('headerImage')) {
-      _headerImage = ApiHttpRepository.api + json['headerImage'] == 'none'
-          ? ApiHttpRepository.api + "uploads/blog/defaultHeader.png"
-          : json['headerImage'];
+      _headerImage = json['headerImage'] == 'none'
+          ? 'https://assets.tumblr.com/images/default_header/optica_pattern_10_focused_v3.png'
+          : json['headerImage'].startsWith('http')
+              ? json['headerImage']
+              : ApiHttpRepository.api + json['headerImage'];
     }
 
     // blog isPrivate flag
@@ -273,13 +271,11 @@ class Blog {
       "size": 64
     };
     try {
-
       final Map<String, dynamic> response =
           await apiClient.sendGetRequest(endPoint, query: reqParameters);
       if (response['statuscode'] == 200) {
         print(response['avatar_url']);
         return response['avatar_url'];
-
       } else {
         // handle failed request
         throw Exception(response.toString());
@@ -295,7 +291,6 @@ class Blog {
     this._id = id;
   }
 
-
   Future<bool> followBlog(String blogId, String token) async {
     final String endPoint = "api/user/follow";
     Map<String, dynamic> response =
@@ -307,7 +302,6 @@ class Blog {
     if (response['statuscode'] != 200) {
       logger.e('error at comment ${response['body']}');
       return false;
-
     }
     return true;
   }
@@ -418,7 +412,7 @@ class Blog {
   }
 
   ///Get Blog Posts
-  Future<List<Post>> blogPosts(BuildContext context) async {
+  Future<List<Post>> blogPosts(BuildContext context, bool flag) async {
     this._posts = [];
     final String endPoint = 'blog/${this._id}/posts';
 
@@ -447,7 +441,7 @@ class Blog {
     } else {
       logger.e(response);
     }
-    this._posts = posts ?? [];
+    if (flag) this._posts = posts ?? [];
     return posts;
   }
 
@@ -522,9 +516,11 @@ class Blog {
         this._isCircleAvatar = response['isAvatarCircle'];
       }
       if (response.containsKey('globalParameters')) {
-        if (response['globalParameters'].containsKey('backgroundColor'))
+        if (response['globalParameters'].containsKey('backgroundColor')) {
           this._backGroundColor =
               response['globalParameters']['backgroundColor'];
+          this._backGroundColorBeforEdit = this._backGroundColor;
+        }
 
         if (response['globalParameters'].containsKey('showAvatar')) {
           this._showAvatar = response['globalParameters']['showAvatar'];
@@ -553,7 +549,7 @@ class Blog {
     }
   }
 
-  void updateBlogTheme(BuildContext context) async {
+  Future<void> updateBlogTheme(BuildContext context) async {
     final String endPoint = 'api/blog/edit-theme/${this._handle}';
     final Map<dynamic, dynamic> data = new Map<dynamic, dynamic>();
 
@@ -566,27 +562,46 @@ class Blog {
     if (this._showAvatar != null)
       data['showAvatar'] = this._showAvatar.toString();
 
+    logger.d('hellloo');
     /////////////////////////////////////////////////////////////////////////////////
-    var dio = Dio();
-    dio.options.headers["Authorization"] =
-        Provider.of<Authentication>(context, listen: false).token;
+    try {
+      var dio = Dio();
+      dio.options.headers["Authorization"] =
+          Provider.of<Authentication>(context, listen: false).token;
 
-dio.options.headers['content-Type'] = 'application/json';
+      dio.options.headers['content-Type'] = 'application/json';
 
+      Map<String, dynamic> requestBody = {
+        'backgroundColor': this._backGroundColor,
+        'stretchHeaderImage': this._stretchHeaderImage.toString(),
+        'showAvatar': this._showAvatar.toString(),
+      };
 
+      if (avatarPick != null)
+        requestBody['avatar'] = await MultipartFile.fromFile(avatarPick.path,
+            filename: avatarPick.name, contentType: MediaType("image", "jpeg"));
+      if (headerImagePick != null)
+        requestBody['headerImage'] = await MultipartFile.fromFile(
+            headerImagePick.path,
+            filename: headerImagePick.name,
+            contentType: MediaType("image", "jpeg"));
 
-    var formData = FormData.fromMap({
-      'backgroundColor': this._backGroundColor,
-      'stretchHeaderImage': this._stretchHeaderImage.toString(),
-      'showAvatar': this._showAvatar.toString(),
-      'avatar': await MultipartFile.fromFile(avatarPick.path,
-          filename: avatarPick.name, contentType: MediaType("image", "jpeg")),
+      var formData = FormData.fromMap(requestBody);
+      final response =
+          await dio.put(ApiHttpRepository.api + endPoint, data: formData);
+      logger.d(response);
+      this._blogAvatar =
+          response.data['updatedBlog']['avatar'].startsWith('http')
+              ? response.data['updatedBlog']['avatar']
+              : ApiHttpRepository.api + response.data['updatedBlog']['avatar'];
 
-      'headerImage': await MultipartFile.fromFile(headerImagePick.path,
-          filename: headerImagePick.name, contentType: MediaType("image", "jpeg")),
-    });
-    final response = await dio.put(ApiHttpRepository.api + endPoint, data: formData);
-
+      this._headerImage = response.data['updatedBlog']['headerImage']
+              .startsWith('http')
+          ? response.data['updatedBlog']['headerImage']
+          : ApiHttpRepository.api + response.data['updatedBlog']['headerImage'];
+    } catch (e) {
+      logger.e(e);
+    }
 
     // var responseObject = convert.jsonDecode(response.body);
     //final response =

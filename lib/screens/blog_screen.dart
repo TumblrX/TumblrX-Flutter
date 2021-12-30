@@ -139,14 +139,19 @@ class _BlogScreenState extends State<BlogScreen>
                             true,
                         child: Provider.of<User>(context, listen: false)
                                 .getIsAvatarCircle()
-
-                            ? AvatarImage(myBlog: true,color: Provider.of<User>(context, listen: false)
-                          .getActiveBlogBackColor(),)
-                            : Square(color: Provider.of<User>(context, listen: false)
-                                .getActiveBlogBackColor(),path:Provider.of<User>(context, listen: false)
-                                .getActiveBlogAvatar() ,))
-
-                           
+                            ? AvatarImage(
+                                myBlog: true,
+                                color: Provider.of<User>(context, listen: false)
+                                    .getActiveBlogBackColor(),
+                                path: Provider.of<User>(context)
+                                    .getActiveBlogAvatar(),
+                              )
+                            : Square(
+                                color: Provider.of<User>(context, listen: false)
+                                    .getActiveBlogBackColor(),
+                                path: Provider.of<User>(context, listen: false)
+                                    .getActiveBlogAvatar(),
+                              ))
                   ]),
 
                   //{

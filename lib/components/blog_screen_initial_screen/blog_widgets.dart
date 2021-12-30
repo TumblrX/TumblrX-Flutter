@@ -21,10 +21,7 @@ Widget upperTabBar(
 //              .getActiveBlogBackColor()) ??
 //          Colors.blue,
 
-
-      color: hexToColor(color??'#000000') ??
-          Colors.blue,
-
+      color: hexToColor(color ?? '#000000') ?? Colors.blue,
       child: TabBar(
         unselectedLabelColor: Color(0xffc7c1c1),
         labelColor: BlogScreenConstant.accent,
@@ -59,7 +56,6 @@ Widget upperTabBar(
       ));
 }
 
-
 //Widget bottomTabBar(TabController _tabController, BuildContext context) {
 //  Provider.of<BlogScreenConstantProvider>(context);
 
@@ -71,7 +67,6 @@ Widget bottomTabBar(TabController _tabController, BuildContext context,
 
       /// pages which display content of each tab bar
       child: Container(
-
 //    color: hexToColor(Provider.of<User>(context, listen: false)
 //            .getActiveBlogBackColor()) ??
 //        Colors.blue,
@@ -81,7 +76,7 @@ Widget bottomTabBar(TabController _tabController, BuildContext context,
     child: TabBarView(
       children: [
         FutureBuilder<List<Post>>(
-          future: blog.blogPosts(context),
+          future: blog.blogPosts(context, true),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               logger.d(snapshot.data);

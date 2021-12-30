@@ -2,7 +2,6 @@ import 'package:http/http.dart';
 import 'package:tumblrx/utilities/environment.dart';
 import 'dart:convert' as convert;
 
-
 abstract class API {
   Future<Map<String, dynamic>> sendPostRequest(String endPoint,
       {Map<String, dynamic> reqBody, Map<String, String> headers});
@@ -14,7 +13,6 @@ abstract class API {
   Future sendPutRequest(String endPoint, Map<String, String> headers,
       Map<dynamic, dynamic> reqBody);
 }
-
 
 /// MockAPI class to use for testing
 class MockHttpRepository implements API {
@@ -40,7 +38,7 @@ class MockHttpRepository implements API {
 
     final Uri uri = Uri.parse(fullUrl);
     final Response response = await get(uri, headers: headers);
-    if (response.statusCode != 200)
+    if (response.statusCode != 200 && response.statusCode != 201)
       return {'statuscode': response.statusCode, 'error': response.body};
     Map<String, dynamic> result =
         convert.jsonDecode(response.body) as Map<String, dynamic>;
@@ -69,7 +67,7 @@ class MockHttpRepository implements API {
     final Response response = reqBody != null
         ? await post(uri, body: reqBody, headers: headers)
         : await post(uri, headers: headers);
-    if (response.statusCode != 200)
+    if (response.statusCode != 200 && response.statusCode != 201)
       return {'statuscode': response.statusCode, 'error': response.body};
     Map<String, dynamic> result =
         convert.jsonDecode(response.body) as Map<String, dynamic>;
@@ -87,7 +85,7 @@ class MockHttpRepository implements API {
     final Response response = reqBody != null
         ? await delete(uri, headers: headers, body: reqBody)
         : await delete(uri, headers: headers);
-    if (response.statusCode != 200)
+    if (response.statusCode != 200 && response.statusCode != 201)
       return {'statuscode': response.statusCode, 'error': response.body};
     if (response.body.isEmpty) return {};
     Map<String, dynamic> result =
@@ -129,7 +127,7 @@ class ApiHttpRepository implements API {
     final Response response = headers != null
         ? await post(uri, body: reqBody, headers: headers)
         : await post(uri, body: reqBody);
-    if (response.statusCode != 200)
+    if (response.statusCode != 200 && response.statusCode != 201)
       return {'statuscode': response.statusCode, 'error': response.body};
     if (response.body.isEmpty) return {};
     Map<String, dynamic> result =
@@ -156,7 +154,7 @@ class ApiHttpRepository implements API {
     //logger.d(uri.toString());
     final Response response =
         headers != null ? await get(uri, headers: headers) : await get(uri);
-    if (response.statusCode != 200)
+    if (response.statusCode != 200 && response.statusCode != 201)
       return {'statuscode': response.statusCode, 'error': response.body};
 
     Map<String, dynamic> result =
@@ -176,7 +174,7 @@ class ApiHttpRepository implements API {
     final Response response = reqBody != null
         ? await delete(uri, headers: headers, body: reqBody)
         : await delete(uri, headers: headers);
-    if (response.statusCode != 200)
+    if (response.statusCode != 200 && response.statusCode != 201)
       return {'statuscode': response.statusCode, 'error': response.body};
 
     Map<String, dynamic> result =

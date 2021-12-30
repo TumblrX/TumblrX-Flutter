@@ -185,7 +185,7 @@ class User extends ChangeNotifier {
 
   void getUserPosts(BuildContext context) {
     _blogs.forEach((element) {
-      element.blogPosts(context);
+      element.blogPosts(context, true);
     });
     notifyListeners();
   }
@@ -356,10 +356,6 @@ class User extends ChangeNotifier {
     _blogs[_activeBlogIndex].updateBlog(context);
   }
 
-  void updateActiveBlogTheme(BuildContext context) {
-    _blogs[_activeBlogIndex].updateBlogTheme(context);
-  }
-
   void setActiveBlogStretchHeaderImage(bool stretch) {
     _blogs[_activeBlogIndex].setStrtchHeaderImage(stretch);
     notifyListeners();
@@ -373,7 +369,7 @@ class User extends ChangeNotifier {
     return _blogs[_activeBlogIndex].titleColor;
   }
 
-  void createNewlog(String name, BuildContext context) async {
+  Future<void> createNewlog(String name, BuildContext context) async {
     final endPoint = 'api/blog/dfsfdfsfsd';
 
     final Map<String, dynamic> blogInfo = {
@@ -389,13 +385,15 @@ class User extends ChangeNotifier {
 
     final response = await apiClient.sendPostRequest(endPoint,
         reqBody: blogInfo, headers: headers);
-
+    logger.d(response);
     if (response['statuscode'] == 200 || response['statuscode'] == 201) {
       if (response.containsKey('data')) {
         _blogs.add(Blog.fromJson(response['data']));
 
         ///set new blog as active blog
         _activeBlogIndex = _blogs.length - 1;
+        logger.d('active blog index ${_activeBlogIndex}');
+        logger.d('_blogs ${_blogs.length}');
         notifyListeners();
       }
     } else {
@@ -515,5 +513,10 @@ class User extends ChangeNotifier {
       return _followingBlogs;
     } else {}
     return [];
+  }
+
+  Future<void> updateBlog(BuildContext context) async {
+    await _blogs[_activeBlogIndex].updateBlogTheme(context);
+    notifyListeners();
   }
 }

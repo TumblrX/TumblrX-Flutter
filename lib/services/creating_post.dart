@@ -483,7 +483,7 @@ class CreatingPost extends ChangeNotifier {
             'filename': postContent[i]['content'].name,
             'contentType': MediaType("image", "jpeg")
           });
-          
+
           requestBody[map['identifier']] = await MultipartFile.fromFile(
             postContent[i]['content'].path,
             filename: postContent[i]['content'].name,
@@ -553,7 +553,6 @@ class CreatingPost extends ChangeNotifier {
         return true;
       else
         return false;
-
     } catch (e) {
       logger.e(e);
       return false;

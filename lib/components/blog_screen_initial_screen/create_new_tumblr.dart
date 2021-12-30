@@ -13,24 +13,35 @@ class CreateNewTumblrPage extends StatelessWidget {
       appBar: AppBar(
           backgroundColor: Color(0xff0c1b3b),
           title: Text('Create a new Tumblr'),
-          actions: [TextButton(onPressed: () {}, child: Text('Save'))],
+          actions: [
+            TextButton(
+                onPressed: () async {
+                  await Provider.of<User>(context, listen: false)
+                      .createNewlog(_controller.value.text, context);
+
+                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Edit()),
+                  );
+                },
+                child: Text('Save'))
+          ],
           elevation: 0.0),
       body: Center(
           child: Padding(
               padding: EdgeInsets.only(left: 20, right: 50),
               child: TextFormField(
                   controller: _controller,
-                  onFieldSubmitted: (value) {
-                    Provider.of<User>(context, listen: false)
+                  onFieldSubmitted: (value) async {
+                    await Provider.of<User>(context, listen: false)
                         .createNewlog(value, context);
 
-                        Navigator.pop(context);
-                      Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) => Edit()),
-  );
-
-                   
+                    Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Edit()),
+                    );
                   },
                   cursorColor: Colors.white,
                   style: TextStyle(color: Colors.white),

@@ -119,7 +119,7 @@ class _CommentsPageState extends State<CommentsPage> {
                                               radius: MediaQuery.of(context)
                                                       .size
                                                       .width *
-                                                  .1,
+                                                  .05,
                                               backgroundImage:
                                                   NetworkImage(blogAvatar),
                                             )
@@ -132,7 +132,7 @@ class _CommentsPageState extends State<CommentsPage> {
                                                 width: MediaQuery.of(context)
                                                         .size
                                                         .width *
-                                                    .1,
+                                                    .05,
                                               ),
                                             ),
                                 ),

@@ -1,5 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:tumblrx/components/post/post_blocks/image_block_widget.dart';
+import 'package:tumblrx/components/post/post_blocks/text_block_widget.dart';
+import 'package:tumblrx/global.dart';
+import 'package:tumblrx/models/posts/image_block.dart';
+import 'package:tumblrx/models/posts/post.dart';
+import 'package:tumblrx/models/posts/text_block.dart';
 import 'package:tumblrx/models/user/blog.dart';
 import 'package:tumblrx/utilities/constants.dart';
 
@@ -16,8 +22,8 @@ class TumblrView extends StatelessWidget {
             _blog.blogAvatar == null
         ? "https://64.media.tumblr.com/9f9b498bf798ef43dddeaa78cec7b027/tumblr_o51oavbMDx1ugpbmuo7_500.png"
         : _blog.blogAvatar;
-    final String blogHeaderImage = _blog != null && _blog.blogTheme != null
-        ? _blog.blogTheme.headerImage ??
+    final String blogHeaderImage = _blog != null
+        ? _blog.headerImage ??
             "https://64.media.tumblr.com/9f9b498bf798ef43dddeaa78cec7b027/tumblr_o51oavbMDx1ugpbmuo7_500.png"
         : "https://64.media.tumblr.com/9f9b498bf798ef43dddeaa78cec7b027/tumblr_o51oavbMDx1ugpbmuo7_500.png";
     // final Color blogBackgroundColor = blog.blogTheme != null &&
@@ -67,6 +73,7 @@ class TumblrView extends StatelessWidget {
                             ),
                           ),
                           errorWidget: (context, url, error) => Container(
+                            width: cardWidth,
                             color: Colors.grey,
                             child: Icon(Icons.error),
                           ),
@@ -85,9 +92,18 @@ class TumblrView extends StatelessWidget {
               // blog avatar
               Positioned(
                 top: cardHeight * .28,
-                child: CircleAvatar(
-                  radius: cardHeight * .13,
-                  backgroundImage: NetworkImage(blogAvatar),
+                child: CachedNetworkImage(
+                  imageUrl: blogAvatar,
+                  imageBuilder: (context, imageProvider) => CircleAvatar(
+                    radius: cardHeight * .13,
+                    backgroundImage: imageProvider,
+                  ),
+                  errorWidget: (context, url, error) => CircleAvatar(
+                    radius: cardHeight * .13,
+                    child: Center(
+                      child: Icon(Icons.error),
+                    ),
+                  ),
                 ),
               ),
               // blog title
@@ -96,7 +112,7 @@ class TumblrView extends StatelessWidget {
                 child: Container(
                   padding: EdgeInsets.all(8),
                   child: Text(
-                    _blog == null ? "untitled" : _blog.title ?? "untitled",
+                    _blog == null ? "" : _blog.title ?? "",
                     style:
                         kBiggerTextStyle.copyWith(fontWeight: FontWeight.bold),
                   ),
@@ -108,9 +124,7 @@ class TumblrView extends StatelessWidget {
                 child: Container(
                   padding: EdgeInsets.all(8),
                   child: Text(
-                    _blog == null
-                        ? "hi there mock description"
-                        : _blog.description ?? "hi there mock description",
+                    _blog == null ? "" : _blog.description ?? "",
                   ),
                 ),
               ),
@@ -120,67 +134,99 @@ class TumblrView extends StatelessWidget {
                 height: cardHeight * .25,
                 top: cardHeight * .73,
                 width: cardWidth,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Container(
-                      padding: EdgeInsets.all(4),
-                      color: Colors.amber,
-                      width: cardHeight * .25,
-                    ),
-                    Container(
-                      padding: EdgeInsets.all(4),
-                      color: Colors.blue,
-                      width: cardHeight * .25,
-                    ),
-                    Container(
-                      padding: EdgeInsets.all(4),
-                      color: Colors.purple,
-                      width: cardHeight * .25,
-                    ),
-                  ],
+                child: FutureBuilder(
+                  future: _blog.blogPosts(context, false),
+                  builder: (context, snapshot) {
+                    switch (snapshot.connectionState) {
+                      case ConnectionState.none:
+                      case ConnectionState.waiting:
+                      case ConnectionState.active:
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                        break;
+                      case ConnectionState.done:
+                        if (snapshot.hasError)
+                          return Center(
+                            child: Icon(Icons.error),
+                          );
+                        if (!snapshot.hasData)
+                          return Container(
+                            child: Center(
+                              child: Text('no posts yet'),
+                            ),
+                          );
+                        if (snapshot.data.length == 0)
+                          return Container(
+                            child: Center(
+                              child: Text('no posts yet'),
+                            ),
+                          );
+                        List<Post> posts = snapshot.data;
+                        logger.e(posts);
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: _showBlogPostSamples(posts, cardHeight),
+                        );
+                    }
+                    return Center(
+                      child: Icon(Icons.error),
+                    );
+                  },
                 ),
               ),
-
-              // // follow button
-              // Positioned(
-              //   width: cardWidth * .9,
-              //   bottom: 1,
-              //   child: TextButton(
-              //     onPressed: () {
-              //       final User user =
-              //           Provider.of<User>(context, listen: false);
-              //       user.userBlogs[user.activeBlogIndex]
-              //           .followBlog(
-              //               blog.id,
-              //               Provider.of<Authentication>(context,
-              //                       listen: false)
-              //                   .token)
-              //           .then((value) {
-              //         showSnackBarMessage(
-              //             context,
-              //             'followed ${blog.title} successfully',
-              //             Colors.green);
-              //       }).catchError((err) {
-              //         logger.e(err);
-              //         showSnackBarMessage(
-              //             context, 'something went wrong', Colors.red);
-              //       });
-              //     },
-              //     child: Text('Follow'),
-              //     style: ButtonStyle(
-              //       alignment: Alignment.center,
-              //       backgroundColor:
-              //           MaterialStateProperty.all(Colors.black),
-              //       foregroundColor:
-              //           MaterialStateProperty.all(Colors.white),
-              //     ),
-              //   ),
-              // ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  List<Widget> _showBlogPostSamples(List<Post> posts, double cardHeight) {
+    List<Widget> blocks = [];
+    for (var post in posts) {
+      if (blocks.length == 3) break;
+      final blockContent = post.content.firstWhere(
+        (element) =>
+            element.runtimeType == TextBlock ||
+            element.runtimeType == ImageBlock,
+        orElse: () => null,
+      );
+      if (blockContent == null) {
+        logger.e('no block');
+        continue;
+      }
+      if (blockContent.runtimeType == TextBlock)
+        blocks.add(
+          Container(
+            padding: EdgeInsets.all(4),
+            color: Colors.white,
+            width: cardHeight * .25,
+            height: cardHeight * .25,
+            child: TextBlockWidget(
+                text: blockContent.formattedText,
+                sharableText: blockContent.text),
+          ),
+        );
+      if (blockContent.runtimeType == ImageBlock)
+        blocks.add(
+          Container(
+            padding: EdgeInsets.all(4),
+            color: Colors.white,
+            width: cardHeight * .25,
+            height: cardHeight * .25,
+            child: ImageBlockWidget(
+              media: blockContent.media,
+            ),
+          ),
+        );
+    }
+    if (blocks.length == 0) {
+      logger.e('blocks are empty');
+      blocks.add(Center(
+        child: Text('Visit blog profile to view posts'),
+      ));
+    }
+    return blocks;
   }
 }

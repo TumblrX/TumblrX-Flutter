@@ -164,10 +164,14 @@ class _HeaderImageState extends State<HeaderImage> {
         //color: Colors.green,
         decoration: BoxDecoration(
             image: DecorationImage(
-                image: NetworkImage(ApiHttpRepository.api +
-                        Provider.of<User>(context, listen: false)
-                            .getActiveBlogHeaderImage() ??
-                    'http://tumblrx.me:3000/uploads/blog/blog-1640803111113-undefined.png'),
+                image: NetworkImage(
+                  Provider.of<User>(context)
+                          .getActiveBlogHeaderImage()
+                          .startsWith('http')
+                      ? Provider.of<User>(context).getActiveBlogHeaderImage()
+                      : ApiHttpRepository.api +
+                          Provider.of<User>(context).getActiveBlogHeaderImage(),
+                ),
                 fit: Provider.of<User>(context)
                             .getActiveBlogStretchHeaderImage() ??
                         true

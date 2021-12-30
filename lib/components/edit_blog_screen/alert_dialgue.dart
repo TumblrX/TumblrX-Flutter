@@ -21,7 +21,7 @@ class AlerDialgue extends StatelessWidget {
                       Provider.of<User>(context, listen: false)
                               .getActiveBlogDescriptionBeforeEdit() ??
                           '');
-            
+
               Provider.of<User>(context, listen: false).setActiveBlogIsCircle(
                   Provider.of<User>(context, listen: false)
                           .getActiveBlogIsCircleBeforeEdit() ??
@@ -48,8 +48,7 @@ class AlerDialgue extends StatelessWidget {
           onPressed: () {
             Provider.of<User>(context, listen: false)
                 .updateActiveBlogInfo(context);
-            Provider.of<User>(context, listen: false)
-                .updateActiveBlogTheme(context);
+            Provider.of<User>(context, listen: false).updateBlog(context);
 
             Navigator.of(context).pop();
 

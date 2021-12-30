@@ -35,16 +35,16 @@ class EditAppBar {
                   fontSize: 18,
                 )),
             TextButton(
-                onPressed: () { Provider.of<User>(context, listen: false)
-                .updateActiveBlogInfo(context);
-                 Provider.of<User>(context, listen: false)
-                .updateActiveBlogTheme(context);
-           
+                onPressed: () {
+                  Provider.of<User>(context, listen: false)
+                      .updateActiveBlogInfo(context);
+                  Provider.of<User>(context, listen: false).updateBlog(context);
 
-            Navigator.pop(
-              context,
-              MaterialPageRoute(builder: (context) => BlogScreen()),
-            );},
+                  Navigator.pop(
+                    context,
+                    MaterialPageRoute(builder: (context) => BlogScreen()),
+                  );
+                },
                 child: Text(
                   'Save',
                   style: TextStyle(color: Colors.white, fontSize: 17),

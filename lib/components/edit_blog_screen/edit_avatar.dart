@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/services/api_provider.dart';
+import 'package:tumblrx/services/blog_screen.dart';
 import 'package:tumblrx/utilities/hex_color_value.dart';
 import 'avatar_bottomsheet.dart';
 
 class EditAvatar {
   Widget editCircleAvatar(BuildContext context) {
     return Positioned(
-      left: MediaQuery.of(context).size.width/2.6,
-      top:  MediaQuery.of(context).size.height/4.5,
+      left: MediaQuery.of(context).size.width / 2.6,
+      top: MediaQuery.of(context).size.height / 4.5,
       child: Stack(
         alignment: Alignment.center,
         children: <Widget>[
@@ -22,7 +23,12 @@ class EditAvatar {
               child: CircleAvatar(
                 radius: 38,
                 backgroundImage: NetworkImage(
-                   ApiHttpRepository.api+ Provider.of<User>(context).getActiveBlogAvatar(),
+                    Provider.of<User>(context)
+                            .getActiveBlogAvatar()
+                            .startsWith('http')
+                        ? Provider.of<User>(context).getActiveBlogAvatar()
+                        : ApiHttpRepository.api +
+                            Provider.of<User>(context).getActiveBlogAvatar(),
                     scale: 1.0),
               )),
           IconButton(
@@ -40,13 +46,12 @@ class EditAvatar {
   }
 
   Widget editSquareAvatar(BuildContext context) {
-
     Provider.of<BlogScreenConstantProvider>(context);
 
-   // final blogProvider = Provider.of<BlogScreenConstantProvider>(context);
+    // final blogProvider = Provider.of<BlogScreenConstantProvider>(context);
     return Positioned(
-      left:  MediaQuery.of(context).size.width/2.6,
-      top: MediaQuery.of(context).size.height/4.5,
+      left: MediaQuery.of(context).size.width / 2.6,
+      top: MediaQuery.of(context).size.height / 4.5,
       child: Stack(
         alignment: Alignment.center,
         children: <Widget>[
@@ -56,7 +61,8 @@ class EditAvatar {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(3),
               child: Image.network(
-              ApiHttpRepository.api+ Provider.of<User>(context).getActiveBlogAvatar(),
+                ApiHttpRepository.api +
+                    Provider.of<User>(context).getActiveBlogAvatar(),
                 fit: BoxFit.cover,
               ),
             ),

@@ -21,7 +21,7 @@ class TextWriting extends StatelessWidget {
     //final blogProvider = Provider.of<BlogScreenConstantProvider>(context);
     return Container(
         alignment: Alignment.center,
-        color: hexToColor(_colorBackground ?? '#000000') ?? Colors.blue,
+        color: hexToColor(_colorBackground ?? '#2196f3') ?? Colors.blue,
         padding: const EdgeInsets.all(25.0),
 
         ///height: 123,
