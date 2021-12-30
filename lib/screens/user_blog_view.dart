@@ -3,10 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/components/avatar_shape/avatar_image.dart';
 import 'package:tumblrx/components/avatar_shape/square.dart';
-import 'package:tumblrx/components/blog_screen_constant.dart';
 import 'package:tumblrx/components/blog_screen_initial_screen/blog_screen_header_text.dart';
 import 'package:tumblrx/components/blog_screen_initial_screen/blog_widgets.dart';
-import 'package:tumblrx/components/blog_screen_initial_screen/header_image.dart';
 import 'package:tumblrx/components/post/post_widget.dart';
 import 'package:tumblrx/models/posts/post.dart';
 import 'package:tumblrx/models/user/blog.dart';
@@ -203,7 +201,6 @@ class _UserBlogViewState extends State<UserBlogView>
                                         itemCount: snapshot.data.length,
                                         itemBuilder:
                                             (BuildContext context, int index) {
-                                          Post post = snapshot.data[index];
                                           return PostWidget(
                                             post: snapshot.data[index],
                                           );

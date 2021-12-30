@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:tumblrx/components/blog_screen_constant.dart';
 import 'package:tumblrx/components/blog_screen_initial_screen/show_image.dart';
-import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/services/api_provider.dart';
 import 'package:tumblrx/utilities/hex_color_value.dart';
 

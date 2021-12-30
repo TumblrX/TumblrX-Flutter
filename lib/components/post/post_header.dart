@@ -18,7 +18,6 @@ class PostHeader extends StatelessWidget {
   /// blog object of the post
   final bool _showOptionsIcon;
   final String _blogTitle;
-  final String _blogHandle;
   final String _blogAvatar;
   final String _blogId;
   final String _postId;
@@ -43,7 +42,6 @@ class PostHeader extends StatelessWidget {
         _publishedOn = publishedOn,
         _showOptionsIcon = showOptionsIcon,
         _blogTitle = blogTitle,
-        _blogHandle = blogHandle,
         _blogAvatar = blogAvatar,
         _blogId = blogId,
         _showFollowButton = showFollowButton,
@@ -317,10 +315,9 @@ class PostHeader extends StatelessWidget {
       );
 }
 
-
 /*
 
 TODOs:
   1. Mute notifications
-  2. Pin post  
-*/ 
+  2. Pin post
+*/

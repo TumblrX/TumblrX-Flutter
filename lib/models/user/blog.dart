@@ -9,8 +9,6 @@ import 'package:tumblrx/services/authentication.dart';
 import 'blog_theme.dart';
 import 'package:http_parser/http_parser.dart';
 
-import 'package:http/http.dart' as http;
-
 class Blog {
   /// The user's tumblr short name
   String _handle;
@@ -20,12 +18,6 @@ class Blog {
 
   /// The id of the blog
   String _id;
-
-  /// total count of followers for this blog
-  int _followersCount;
-
-  /// list of blogs that follow this blog
-  List<Blog> _followedBy;
 
   /// indicates whether a blog is private or not
   bool _isPrivate = false;
@@ -42,16 +34,6 @@ class Blog {
   /// The blog's description
   String _description;
 
-  /// total count of blogs this blog follows
-  int _following;
-
-  /// Number of likes for this user, returned only if this is
-  ///  the user's primary blog
-  int _likes;
-
-  /// The total number of posts to this blog
-  int _postsCount;
-
   /// list of posts of this blog
 
   List<Post> _posts = [];
@@ -59,19 +41,25 @@ class Blog {
   /// flag to determine avatar shape
   bool _isCircleAvatar;
 
-  //background color
+  ///background color
   String _backGroundColor;
-//check if show avatar or not
+
+  ///check if show avatar or not
   bool _showAvatar;
-  //show header image
+
+  ///show header image
   bool _showHeadeImage;
-//strech header imae
+
+  ///strech header image
   bool _stretchHeaderImage;
-  //title befor Edit
+
+  ///title before Edit
   String _titleBeforeEdit;
-//decription before Edit
+
+  ///decription before Edit
   String _descriptionBeforEdit;
-  //isCircleAvatar
+
+  ///isCircleAvatar
   bool _isCircleBeforEdit;
 
   String _backGroundColorBeforEdit;
@@ -112,7 +100,6 @@ class Blog {
   Blog(
       [this._handle,
       this._title,
-      this._followersCount,
       this._isPrivate,
       this._isPrimary,
       this._blogAvatar]);
@@ -285,6 +272,7 @@ class Blog {
       logger.e(error);
 //      throw Exception(error.message.toString());
     }
+    return null;
   }
 
   void setBlogId(String id) {

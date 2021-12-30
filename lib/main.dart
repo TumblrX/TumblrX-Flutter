@@ -17,7 +17,6 @@ import 'package:tumblrx/services/authentication.dart';
 import 'package:tumblrx/services/blog_screen.dart';
 import 'package:tumblrx/services/content.dart';
 import 'package:tumblrx/services/messaging.dart';
-import 'package:tumblrx/services/notifications.dart';
 import 'package:tumblrx/services/creating_post.dart';
 import 'package:tumblrx/services/settings.dart';
 import 'package:tumblrx/services/theme.dart';
@@ -147,9 +146,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         ),
         ChangeNotifierProvider<Messaging>(
           create: (context) => Messaging(),
-        ),
-        ChangeNotifierProvider<Notifications>(
-          create: (context) => Notifications(),
         ),
         ChangeNotifierProvider<Settings>(
           create: (context) => Settings(),

@@ -24,7 +24,6 @@ class _BlogScreenState extends State<BlogScreen>
     with SingleTickerProviderStateMixin {
   Future<Post> blogpost;
   TabController _tabController;
-  ScrollController _controller;
   @override
   void initState() {
     ///this controller for Tabs bar

@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/components/welcome_screen_image.dart';
-import 'package:tumblrx/screens/main_screen.dart';
 import 'package:tumblrx/services/authentication.dart';
 import 'package:tumblrx/utilities/constants.dart';
 import 'package:tumblrx/screens/welcome_screen_login.dart';

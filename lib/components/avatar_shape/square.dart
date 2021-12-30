@@ -1,9 +1,5 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:tumblrx/components/blog_screen_constant.dart';
-import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/services/api_provider.dart';
 import 'package:tumblrx/utilities/hex_color_value.dart';
 
@@ -11,11 +7,12 @@ import 'package:tumblrx/utilities/hex_color_value.dart';
 class Square extends StatelessWidget {
   final _color;
   final String _path;
-  Square({@required color,@required path}) : _color = color,_path=path;
+  Square({@required color, @required path})
+      : _color = color,
+        _path = path;
 
   @override
   Widget build(BuildContext context) {
-
     //final blogProvider = Provider.of<BlogScreenConstantProvider>(context);
 
     return Positioned(
@@ -27,13 +24,12 @@ class Square extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(3),
               child: Image.network(
-
- //              
+                //
 
                 _path.startsWith('http')
-                      ? _path
-                      : ApiHttpRepository.api + _path,
-                    
+                    ? _path
+                    : ApiHttpRepository.api + _path,
+
                 fit: BoxFit.cover,
               ),
             ),

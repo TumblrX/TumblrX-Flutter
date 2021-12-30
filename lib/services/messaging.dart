@@ -1,11 +1,9 @@
 import 'dart:io';
-import 'dart:convert' as convert;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:tumblrx/global.dart';
 import 'package:tumblrx/models/chatting/chat_message.dart';
 import 'package:tumblrx/models/chatting/conversation.dart';
-import 'package:tumblrx/services/api_provider.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 ///Class that manages all chat services

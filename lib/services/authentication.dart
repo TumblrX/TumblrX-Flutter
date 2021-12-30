@@ -7,12 +7,10 @@ import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/screens/main_screen.dart';
 import 'package:tumblrx/screens/welcome_screen.dart';
 import 'package:provider/provider.dart';
-import 'package:tumblrx/models/user/blog.dart';
-import 'package:tumblrx/models/user/user.dart';
+
 import 'package:tumblrx/global.dart';
 import 'package:tumblrx/services/api_provider.dart';
 import 'dart:convert' as convert;
-import 'package:provider/provider.dart';
 
 import 'messaging.dart';
 

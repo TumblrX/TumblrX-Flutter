@@ -392,7 +392,7 @@ class User extends ChangeNotifier {
 
         ///set new blog as active blog
         _activeBlogIndex = _blogs.length - 1;
-        logger.d('active blog index ${_activeBlogIndex}');
+        logger.d('active blog index $_activeBlogIndex');
         logger.d('_blogs ${_blogs.length}');
         notifyListeners();
       }
