@@ -1,15 +1,22 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/components/blog_screen_constant.dart';
 import 'package:tumblrx/models/user/user.dart';
-import 'package:tumblrx/services/blog_screen.dart';
+import 'package:tumblrx/services/api_provider.dart';
 import 'package:tumblrx/utilities/hex_color_value.dart';
 
 /// for square avatar
 class Square extends StatelessWidget {
+  final _color;
+  final String _path;
+  Square({@required color,@required path}) : _color = color,_path=path;
+
   @override
   Widget build(BuildContext context) {
-    Provider.of<BlogScreenConstantProvider>(context);
+
+    //final blogProvider = Provider.of<BlogScreenConstantProvider>(context);
 
     return Positioned(
         top: 135,
@@ -20,7 +27,11 @@ class Square extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(3),
               child: Image.network(
-                Provider.of<User>(context).getActiveBlogAvatar(),
+
+ //               Provider.of<User>(context).getActiveBlogAvatar(),
+
+                ApiHttpRepository.api +_path
+                    ,
                 fit: BoxFit.cover,
               ),
             ),
@@ -30,15 +41,21 @@ class Square extends StatelessWidget {
             // )
 
             decoration: BoxDecoration(
-              color: hexToColor(Provider.of<User>(context, listen: false)
-                      .getActiveBlogBackColor()) ??
-                  Colors.blue,
+//              color: hexToColor(Provider.of<User>(context, listen: false)
+//                      .getActiveBlogBackColor()) ??
+//                  Colors.blue,
+//              border: Border.all(
+//                  width: 3,
+//                  color: hexToColor(
+//                    (Provider.of<User>(context, listen: false)
+//                            .getActiveBlogBackColor()) ??
+//                        Colors.blue,
+
+              color: hexToColor(_color ?? '#000000') ?? Colors.blue,
               border: Border.all(
                   width: 3,
                   color: hexToColor(
-                    (Provider.of<User>(context, listen: false)
-                            .getActiveBlogBackColor()) ??
-                        Colors.blue,
+                    (_color ?? '#000000') ?? Colors.blue,
                   )),
               borderRadius: BorderRadius.circular(3),
             ),

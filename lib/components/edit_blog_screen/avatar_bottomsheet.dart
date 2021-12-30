@@ -30,8 +30,6 @@ class EditAvatarBottomSheet extends StatelessWidget {
               Provider.of<User>(context, listen: false)
                   .getActiveBlog()
                   .pickImage(1);
-              print(Provider.of<User>(context, listen: false)
-                  .getActiveBlogAvatar());
             }),
         Padding(
           padding: EdgeInsets.only(left: 10, right: 10),

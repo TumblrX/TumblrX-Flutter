@@ -9,9 +9,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tumblrx/global.dart';
 import 'package:tumblrx/models/user/user.dart';
-import 'package:tumblrx/services/authentication.dart';
+import 'package:tumblrx/screens/user_blog_view.dart';
 import 'package:tumblrx/services/content.dart';
 import 'package:tumblrx/utilities/constants.dart';
 
@@ -66,8 +65,7 @@ class PostHeader extends StatelessWidget {
           : Padding(
               padding: EdgeInsets.only(left: 15.0),
               child: InkWell(
-                onTap: () =>
-                    _showBlogProfile(context: context, blogHandle: _blogHandle),
+                onTap: () => showBlogProfile(context, _blogId),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
@@ -87,20 +85,12 @@ class PostHeader extends StatelessWidget {
                                             .colorScheme
                                             .secondary),
                                   ),
-                                  onPressed: () {
-                                    final User user = Provider.of<User>(context,
-                                        listen: false);
-                                    logger.d('blog id is $_blogId');
-                                    user.userBlogs[user.activeBlogIndex]
-                                        .followBlog(
-                                            _blogId,
-                                            Provider.of<Authentication>(context,
-                                                    listen: false)
-                                                .token);
-                                  },
+                                  onPressed: () =>
+                                      Provider.of<User>(context, listen: false)
+                                          .followUser(context, _blogId),
                                   child: Text('Follow'),
                                 )
-                              : _emptyContainer(),
+                              : emptyContainer(),
                         ],
                       ),
                     ),
@@ -108,10 +98,10 @@ class PostHeader extends StatelessWidget {
                         ? IconButton(
                             onPressed: () => _showBlogOptions(
                                 _publishedOn, context,
-                                otherBlog: false, postId: _postId),
+                                otherBlog: false),
                             icon: Icon(Icons.more_horiz),
                           )
-                        : _emptyContainer(),
+                        : emptyContainer(),
                   ],
                 ),
               ),
@@ -120,17 +110,64 @@ class PostHeader extends StatelessWidget {
   }
 
   /// navigate to the blog screen to view blog info
-  void _showBlogProfile({BuildContext context, @required String blogHandle}) {
-    Navigator.of(context)
-        .pushNamed('blog_screen', arguments: {'blogHandle': blogHandle});
+  void showBlogProfile(BuildContext context, String blogId) {
+    if (Provider.of<User>(context, listen: false).isUserBlog(blogId))
+      Navigator.of(context).pushNamed('blog_screen');
+    else {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => UserBlogView(
+                  id: blogId,
+                )),
+      );
+    }
   }
+
+  Widget _blogInfo(String blogTitle, bool isRebloged, String reblogKey) =>
+      Padding(
+        padding: const EdgeInsets.only(left: 8.0, right: 5.0),
+        child: isRebloged
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    blogTitle,
+                    style: TextStyle(color: Colors.black),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.repeat_outlined,
+                        color: Colors.grey,
+                      ),
+                      Flexible(
+                        child: Text(
+                          reblogKey,
+                          style: TextStyle(color: Colors.grey),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              )
+            : Text(
+                blogTitle,
+                style: TextStyle(color: Colors.black),
+                overflow: TextOverflow.ellipsis,
+              ),
+      );
 
   /// callback to open a dialog with blog options
   void _showBlogOptions(DateTime publishedOn, BuildContext context,
-      {bool otherBlog = false, @required String postId}) {
+      {bool otherBlog = false}) {
     final String muteNotificationMessage =
         'Would you like to mute push notifications for this particular post?';
     showModalBottomSheet(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
       context: context,
       builder: (context) => FractionallySizedBox(
         heightFactor: 0.3,
@@ -140,7 +177,7 @@ class PostHeader extends StatelessWidget {
                   ListTile(
                     title: Text('Copy link'),
                     onTap: () {
-                      copyLink(postId)
+                      _copyLink(_postId)
                           .then((value) => showSnackBarMessage(
                               context, 'Copied to clipboard!', Colors.green))
                           .catchError((error) {
@@ -161,7 +198,7 @@ class PostHeader extends StatelessWidget {
                   ListTile(
                     title: Text('Copy link'),
                     onTap: () {
-                      copyLink(postId)
+                      _copyLink(_postId)
                           .then((value) => showSnackBarMessage(
                               context, 'Copied to clipboard!', Colors.green))
                           .catchError((error) {
@@ -176,7 +213,7 @@ class PostHeader extends StatelessWidget {
     );
   }
 
-  Future<bool> copyLink(String postId) async {
+  Future<bool> _copyLink(String postId) async {
     try {
       await FlutterClipboard.copy('https://tumblrx.me:5000/post/$postId');
       return true;
@@ -218,16 +255,16 @@ class PostHeader extends StatelessWidget {
     );
   }
 
-  Widget _errorAvatar() => CircleAvatar(
+  Widget errorAvatar() => CircleAvatar(
         child: Icon(Icons.error),
       );
 
-  Widget _emptyContainer() => Container(
+  Widget emptyContainer() => Container(
         width: 0,
         height: 0,
       );
 
-  Widget _blogInfo(String blogTitle, bool isRebloged, String reblogKey) =>
+  Widget blogInfo(String blogTitle, bool isRebloged, String reblogKey) =>
       Padding(
         padding: const EdgeInsets.only(left: 8.0, right: 5.0),
         child: isRebloged
@@ -276,9 +313,10 @@ class PostHeader extends StatelessWidget {
           height: avatarSize,
           child: Center(child: const CircularProgressIndicator()),
         ),
-        errorWidget: (context, url, error) => _errorAvatar(),
+        errorWidget: (context, url, error) => errorAvatar(),
       );
 }
+
 
 /*
 

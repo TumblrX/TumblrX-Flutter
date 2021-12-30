@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tumblrx/components/edit_blog_screen/edit.dart';
 import 'package:tumblrx/models/user/user.dart';
 
 class CreateNewTumblrPage extends StatelessWidget {
@@ -22,6 +23,12 @@ class CreateNewTumblrPage extends StatelessWidget {
                   onFieldSubmitted: (value) {
                     Provider.of<User>(context, listen: false)
                         .createNewlog(value, context);
+
+                        Navigator.pop(context);
+                      Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => Edit()),
+  );
 
                    
                   },

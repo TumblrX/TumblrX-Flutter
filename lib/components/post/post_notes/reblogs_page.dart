@@ -132,8 +132,7 @@ class _ReblogsPageState extends State<ReblogsPage> {
                                     Provider.of<User>(context)
                                             .followingBlogs
                                             .singleWhere((element) =>
-                                                element['_id'] ==
-                                                post.blogId) ==
+                                                element.id == post.blogId) ==
                                         null,
                               ),
                               // post content widget without the original post

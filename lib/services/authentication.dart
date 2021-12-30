@@ -1,9 +1,20 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tumblrx/models/user/user.dart';
+import 'package:tumblrx/screens/main_screen.dart';
+import 'package:tumblrx/screens/welcome_screen.dart';
+import 'package:provider/provider.dart';
+import 'package:tumblrx/models/user/blog.dart';
+import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/global.dart';
 import 'package:tumblrx/services/api_provider.dart';
 import 'dart:convert' as convert;
+import 'package:provider/provider.dart';
+
+import 'messaging.dart';
 
 ///Contains the user data for login and sign up
 ///
@@ -17,6 +28,31 @@ class Authentication extends ChangeNotifier {
   String token; //for user authorization
   bool emailExist = false;
   String loginErrorMessage = "";
+
+  SharedPreferences _prefs;
+
+  // Future<String> getToken(BuildContext context) async {
+  //   if (_token != null) return _token;
+  //   //token is null, check for shared preferences
+  //   if (_prefs == null || _prefs.getString('token') == null) {
+  //     //user is logged out, go to login screen
+  //     while (Navigator.canPop(context)) {
+  //       Navigator.pop(context);
+  //     }
+  //     Navigator.popAndPushNamed(context, WelcomeScreen.id);
+  //     return null;
+  //   }
+  //   //Here means that the user is logged in but provider is cleared, restore provider data
+  //   _token = _prefs.getString('token');
+  //
+  //   final Map<String, dynamic> response = await loginGetUserInfo();
+  //   Provider.of<User>(context, listen: false)
+  //       .setLoginUserData(response, context);
+  //   Provider.of<Messaging>(context, listen: false)
+  //       .connectToServer(response['id'], _token);
+  //   Provider.of<Messaging>(context, listen: false).getConversationsList();
+  //   return _token;
+  // }
 
   ///returns error message if the user doesnot exist
   String getLogInErrorMessage() {
@@ -108,8 +144,10 @@ class Authentication extends ChangeNotifier {
         throw Exception('error in the connection');
       } else {
         var responseObject = convert.jsonDecode(response.body);
+        print(responseObject);
         token = responseObject['token'];
         emailExist = true;
+        _prefs.setString('token', token);
         notifyListeners();
 
         return true;
@@ -142,6 +180,8 @@ class Authentication extends ChangeNotifier {
         logger.d(response.statusCode);
         //logger.d(responseObject);
         try {
+          // following blogs
+
           final blogsResponse = await http.get(
             Uri.parse(ApiHttpRepository.api + 'api/user/get-blogs'),
             // Send authorization headers to the backend.
@@ -154,6 +194,7 @@ class Authentication extends ChangeNotifier {
         } catch (error) {
           throw Exception(error.message.toString());
         }
+
         logger.d(responseObject);
         return responseObject;
       }
@@ -168,5 +209,40 @@ class Authentication extends ChangeNotifier {
     int temp = int.parse(age);
     userAge = temp;
     notifyListeners();
+  }
+
+  ///check if user is authenticated
+  Future<void> checkUserAuthentication(BuildContext context) async {
+    _prefs = await SharedPreferences.getInstance();
+    //await Future.delayed(Duration(seconds: 3));
+    if (_prefs.getString('token') == null) return;
+    token = _prefs.getString('token');
+
+    await initializeUserData(context);
+  }
+
+  ///initialize user Data on login
+  Future<void> initializeUserData(BuildContext context) async {
+    final Map<String, dynamic> response = await loginGetUserInfo();
+    Provider.of<User>(context, listen: false)
+        .setLoginUserData(response, context);
+    Provider.of<Messaging>(context, listen: false)
+        .connectToServer(response['id'], token);
+    Provider.of<Messaging>(context, listen: false).getConversationsList();
+    while (Navigator.canPop(context)) {
+      Navigator.pop(context);
+    }
+    Navigator.popAndPushNamed(context, MainScreen.id);
+  }
+
+  ///Clears data from shared preferences and disconnects from socket server
+  Future<void> logout(BuildContext context) async {
+    Provider.of<Messaging>(context, listen: false).disconnect();
+    _prefs = await SharedPreferences.getInstance();
+    _prefs.clear();
+    while (Navigator.canPop(context)) {
+      Navigator.pop(context);
+    }
+    Navigator.popAndPushNamed(context, WelcomeScreen.id);
   }
 }

@@ -32,7 +32,6 @@ class PostBlogChoice extends StatelessWidget {
               backgroundImage: NetworkImage(
                 avatar,
               ),
-              //will be later to changed to NetworkImage
             ),
             SizedBox(
               width: 10.0,

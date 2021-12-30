@@ -31,7 +31,9 @@ class CoverImageBottomSheet extends StatelessWidget {
             ),
             title: Text('Choose a photo'),
             onTap: () {
-              //Blog.pickImage(2);
+               Provider.of<User>(context, listen: false)
+                  .getActiveBlog()
+                  .pickImage(2);
             }),
         Padding(
           padding: EdgeInsets.only(left: 10, right: 10),

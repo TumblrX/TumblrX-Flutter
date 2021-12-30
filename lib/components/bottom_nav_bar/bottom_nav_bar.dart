@@ -4,8 +4,12 @@ Description:
     The bottom navigation bar component to be used in 'Main Screen'
 
 */
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tumblrx/components/bottom_nav_bar/profile_icon.dart';
+import 'package:tumblrx/services/messaging.dart';
+import 'package:tumblrx/utilities/constants.dart';
 
 class BottomNavBarWidget extends StatefulWidget {
   /// passed controller from parent widget to use for navigation
@@ -65,7 +69,33 @@ class _BottomNavBarWidgetState extends State<BottomNavBarWidget> {
           label: 'Explore',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.notifications),
+          icon: Provider.of<Messaging>(context).totalUnseenMessage == 0
+              ? Icon(Icons.emoji_emotions_outlined)
+              : Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Icon(Icons.emoji_emotions_outlined),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 15.0, bottom: 15.0),
+                      child: CircleAvatar(
+                        backgroundColor: kPrimaryColor,
+                        radius: 12.0,
+                        child: CircleAvatar(
+                          backgroundColor: Colors.green,
+                          radius: 10.0,
+                          child: Center(
+                            child: Text(
+                              Provider.of<Messaging>(context)
+                                  .totalUnseenMessage
+                                  .toString(),
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
           label: 'Notifications',
         ),
         BottomNavigationBarItem(

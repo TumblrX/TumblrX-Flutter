@@ -132,6 +132,7 @@ class Post {
     logger.d(parsedJson.toString());
     // ==================== post related data =========================
     // post identifier '_id'
+
     if (parsedJson.containsKey('_id'))
       this._id = parsedJson['_id'];
     else

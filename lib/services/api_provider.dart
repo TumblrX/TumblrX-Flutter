@@ -2,6 +2,7 @@ import 'package:http/http.dart';
 import 'package:tumblrx/utilities/environment.dart';
 import 'dart:convert' as convert;
 
+
 abstract class API {
   Future<Map<String, dynamic>> sendPostRequest(String endPoint,
       {Map<String, dynamic> reqBody, Map<String, String> headers});
@@ -13,6 +14,7 @@ abstract class API {
   Future sendPutRequest(String endPoint, Map<String, String> headers,
       Map<dynamic, dynamic> reqBody);
 }
+
 
 /// MockAPI class to use for testing
 class MockHttpRepository implements API {
@@ -123,6 +125,7 @@ class ApiHttpRepository implements API {
     //   });
     // }
     final Uri uri = Uri.parse(fullUrl);
+
     final Response response = headers != null
         ? await post(uri, body: reqBody, headers: headers)
         : await post(uri, body: reqBody);
@@ -190,6 +193,7 @@ class ApiHttpRepository implements API {
     final Uri uri = Uri.parse(url);
 
     if (reqBody != null) return put(uri, headers: headers, body: reqBody);
+
     return put(uri);
   }
 }

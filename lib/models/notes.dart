@@ -37,7 +37,6 @@ class Notes {
     } catch (error) {
       logger.e('error while fetching notes with id $postId and mode $mode');
     }
-
     return notesResponse;
   }
 
