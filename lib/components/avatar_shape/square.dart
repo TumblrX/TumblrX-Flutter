@@ -28,9 +28,11 @@ class Square extends StatelessWidget {
               borderRadius: BorderRadius.circular(3),
               child: Image.network(
 
- //               Provider.of<User>(context).getActiveBlogAvatar(),
+ //              
 
-                ApiHttpRepository.api +_path
+                widget._path.startsWith('http')
+                      ? widget._path
+                      : ApiHttpRepository.api + widget._path,
                     ,
                 fit: BoxFit.cover,
               ),
