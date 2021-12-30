@@ -11,6 +11,7 @@ import 'package:tumblrx/components/post/post_widget.dart';
 import 'package:tumblrx/models/posts/post.dart';
 import 'package:tumblrx/models/user/blog.dart';
 import 'package:tumblrx/models/user/user.dart';
+import 'package:tumblrx/services/api_provider.dart';
 import 'package:tumblrx/utilities/hex_color_value.dart';
 
 import 'chat_screen.dart';
