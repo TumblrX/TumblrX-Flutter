@@ -58,17 +58,16 @@ class CheckOutTheseTags extends StatelessWidget {
                 ),
                 // tag image
                 Container(
+                  width: cardWidth,
+                  height: cardHeight * .5,
                   padding: EdgeInsets.only(left: 8, right: 8),
-                  child: AspectRatio(
-                    aspectRatio: 5 / 3,
-                    child: CachedNetworkImage(
-                      fit: BoxFit.cover,
+                  child: CachedNetworkImage(
+                    fit: BoxFit.cover,
+                    imageUrl: tag.image,
+                    errorWidget: (context, url, error) => Container(
                       width: cardWidth,
-                      imageUrl: tag.image,
-                      errorWidget: (context, url, error) => Container(
-                        width: cardWidth,
-                        child: Icon(Icons.error),
-                      ),
+                      height: cardHeight * .5,
+                      child: Icon(Icons.error),
                     ),
                   ),
                 ),
