@@ -61,8 +61,11 @@ class EditAvatar {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(3),
               child: Image.network(
-                ApiHttpRepository.api +
-                    Provider.of<User>(context).getActiveBlogAvatar(),
+               
+                    Provider.of<User>(context).getActiveBlogAvatar().startsWith('http')
+                        ? Provider.of<User>(context).getActiveBlogAvatar()
+                        : ApiHttpRepository.api +
+                            Provider.of<User>(context).getActiveBlogAvatar(),
                 fit: BoxFit.cover,
               ),
             ),
