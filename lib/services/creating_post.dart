@@ -513,6 +513,7 @@ class CreatingPost extends ChangeNotifier {
 
     try {
       var body = FormData.fromMap(requestBody);
+      logger.d(requestBody);
       var dio = Dio();
       //dio.options.headers['content-Type'] = 'application/json';
       dio.options.headers["authorization"] =
@@ -548,8 +549,8 @@ class CreatingPost extends ChangeNotifier {
         );
       }
 
-      logger.d('Response status: ${response.statuscode}');
-      if (response.statuscode == 201 || response.statuscode == 200)
+      logger.d('Response status: ${response.statusCode}');
+      if (response.statusCode == 201 || response.statusCode == 200)
         return true;
       else
         return false;
