@@ -30,9 +30,9 @@ class Square extends StatelessWidget {
 
  //              
 
-                widget._path.startsWith('http')
-                      ? widget._path
-                      : ApiHttpRepository.api + widget._path,
+                _path.startsWith('http')
+                      ? _path
+                      : ApiHttpRepository.api + _path,
                     ,
                 fit: BoxFit.cover,
               ),
