@@ -3,7 +3,7 @@ class ChatMessage {
   ///Content of the message
   String text;
 
-  ///boolean value that determines if the message is sent by the user or the other user
+  ///boolean value that determines if the message is sent by the user himself or the other user
   bool isMe;
 
   ///time of the message

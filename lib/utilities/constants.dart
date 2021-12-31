@@ -51,9 +51,10 @@ const Map<String, TextStyleType> kTextSubtypeMap = {
   'quirky': TextStyleType.Lucille
 };
 
+///Main color in the project
 const kPrimaryColor = Color(0xFF001935);
 
-//welcome screen title tumblrx
+///welcome screen title tumblrx
 const KWelcomeScreenTitle = TextStyle(
   fontFamily: 'Pacifico',
   fontSize: 60.0,
@@ -61,14 +62,15 @@ const KWelcomeScreenTitle = TextStyle(
   fontWeight: FontWeight.bold,
 );
 
-//for welcome screen signup login
+///for welcome screen signup login
 const KWelcomeScreenButton = TextStyle(
   fontFamily: 'Pacifico',
   fontSize: 20.0,
   color: Colors.black,
   fontWeight: FontWeight.bold,
 );
-// for age check page button
+
+/// for age check page button
 const KTextButton = TextStyle(
   fontFamily: 'Pacifico',
   fontSize: 20.0,
@@ -76,7 +78,7 @@ const KTextButton = TextStyle(
   fontWeight: FontWeight.bold,
 );
 
-//for age check page
+///for age check page
 const KHintTextForTextField = TextStyle(
   fontFamily: 'Pacifico',
   fontSize: 15.0,
@@ -84,26 +86,28 @@ const KHintTextForTextField = TextStyle(
   fontWeight: FontWeight.bold,
 );
 
-// bold text
+/// bold text
 const KHeadLines = TextStyle(
     fontFamily: 'Pacifico',
     fontSize: 20.0,
     color: Colors.white,
     fontWeight: FontWeight.bold);
-// bigger font size
+
+/// bigger font size
 const KHeadLines1 = TextStyle(
     fontFamily: 'Pacifico',
     fontSize: 30.0,
     color: Colors.white,
     fontWeight: FontWeight.bold);
-//smaller text for pick tags screen
+
+///smaller text for pick tags screen
 const KPickTagsInfoText = TextStyle(
     fontFamily: 'Pacifico',
     fontSize: 20.0,
     color: Colors.grey,
     fontWeight: FontWeight.bold);
 
-//small text info
+///small text info
 const KTextInfo = TextStyle(
   fontFamily: 'Pacifico',
   fontSize: 15.0,

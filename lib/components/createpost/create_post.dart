@@ -15,7 +15,7 @@ class CreatePost extends StatelessWidget {
   ///top padding sent to the widget to show it below status bar
   final double topPadding;
 
-  ///indicates of the post type is reblog
+  ///indicates of the post type is reblog so the button text changes
   final bool isReblog;
 
   @override

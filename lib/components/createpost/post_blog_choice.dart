@@ -15,7 +15,7 @@ class PostBlogChoice extends StatelessWidget {
 
   ///user avatar url
   final String avatar;
-  //final Image userPic;
+
   @override
   Widget build(BuildContext context) {
     return Padding(

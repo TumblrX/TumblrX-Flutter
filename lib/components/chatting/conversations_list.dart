@@ -6,7 +6,8 @@ import 'package:tumblrx/services/messaging.dart';
 
 import 'conversation_item.dart';
 
-///Conversations List View Widget
+///Conversations List View Widget shows all the conversations of the user.
+///The conversations are sorted by the most recent chat.
 class ConversationsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

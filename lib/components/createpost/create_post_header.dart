@@ -10,6 +10,7 @@ import 'create_post_options.dart';
 
 ///The Top header of the creating post container shows posting options button and Post button
 class CreatePostHeader extends StatelessWidget {
+  ///indicates if the post is reblog so the button text changes from post to reblog
   final bool isReblog;
   CreatePostHeader({this.isReblog = false});
   @override

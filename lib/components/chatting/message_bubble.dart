@@ -3,6 +3,7 @@ import 'package:tumblrx/components/chatting/square_avatar.dart';
 import 'package:tumblrx/utilities/time_format_to_view.dart';
 
 ///shows the message widget
+///The message bubble changes its shape according to the sender and the time of the message compared to the previous one.
 class MessageBubble extends StatelessWidget {
   ///content of the message
   final String text;

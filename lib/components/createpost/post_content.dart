@@ -10,6 +10,7 @@ import 'package:tumblrx/services/creating_post.dart';
 
 ///A List that keeps updating will all post content widgets: Text, Image, Video, Link Preview and so on.
 class PostContent extends StatelessWidget {
+  ///List of dynamic post widgets in the post
   final List<dynamic> postContent;
 
   PostContent({this.postContent});
