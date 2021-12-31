@@ -1,5 +1,4 @@
 /*
-Author: Passant Abdelgalil
 Description: 
     A class that serves as an API for post objects with 
     like/unlike, comment, reblog, share, edit and delete funcitonalities.

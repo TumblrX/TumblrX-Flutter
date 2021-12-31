@@ -1,5 +1,4 @@
 /*
-Author: Passant Abdelgalil
 Description: 
     This file creates a class as an API for media objects used for image
     blocks, all kinds of posters (GIF, video, etc), native audio, and
