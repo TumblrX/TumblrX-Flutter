@@ -2,6 +2,16 @@
  A Web and Mobile Application that mimics Tumblr
  
  ## Getting Started
- This project is still in the phase of development, Some functionalities are now implemented with mock data: Log in, Sign Up, Home Screen, Post View, Blog Screen, Creating Post.
+ This is a Software Engineering Project for CUFE-CMP, A web and mobile Application that contains most of tumblr functionalities.
  
+ ## Android release
+ You can find the first full release apk for the project in this link
+ ```
+ https://github.com/TumblrX/TumblrX-Flutter/releases/tag/v1.0.0
+ ```
+ ## Web release 
+ The web version of the app is now deployed on this link
+ ```
+ http://tumblrx.me:5000/
+ ```
  
