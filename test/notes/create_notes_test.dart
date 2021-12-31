@@ -1,70 +1,57 @@
 import 'package:test/test.dart';
-import 'package:tumblrx/global.dart';
 import 'package:tumblrx/models/notes.dart';
-import 'package:tumblrx/models/posts/text_block.dart';
+import 'package:tumblrx/models/user/blog.dart';
 
 void main() {
   group("create note", () {
-    test("creating note from json", () {
+    test("creating comment from json", () {
       Notes note = Notes.fromJson({
         "type": "comment",
         "commentText": "My super comment :)",
-        "blogId": "df4g6fd87gds5f5d1fds",
+        "blogId": {
+          "_id": "61b28a610a654cdd7b39171c",
+          "title": "Untitled",
+          "handle": "test",
+          "owner": "61b28a610a654cdd7b391719",
+          "avatar":
+              "http://tumblrx.me:3000/uploads/blog/blog-1640803918661-undefined.png",
+          "isAvatarCircle": true,
+          "isFollowed": true
+        },
       });
 
       expect(note.commentText, "My super comment :)");
       expect(note.type, "comment");
-      expect(note.blogData, "My super comment :)");
+      Blog blogData = note.blogData;
+      expect(blogData.id, "61b28a610a654cdd7b39171c");
+      expect(blogData.title, "Untitled");
+      expect(blogData.handle, "test");
+      expect(blogData.blogAvatar,
+          "http://tumblrx.me:3000/uploads/blog/blog-1640803918661-undefined.png");
     });
-    test("missing parameter type", () {
-      expect(
-          () => TextBlock.fromJson({
-                "subtype": "normal",
-                "text": "Hello there from my super unit test :)",
-                "formatting": [],
-              }),
-          throwsA(predicate(
-              (e) => e.message == 'missing required parameter "type"')));
-    });
-
-    test("missing parameter text", () {
-      expect(
-          () => TextBlock.fromJson({
-                "type": "text",
-                "subtype": "normal",
-                "formatting": [],
-              }),
-          throwsA(predicate(
-              (e) => e.message == 'missing required parameter "text"')));
-    });
-
-    test("apply inline formatting", () {
-      TextBlock textBlock = TextBlock.fromJson({
-        "type": "text",
-        "subtype": "normal",
-        "text": "Hello there from my super unit test :)",
-        "formatting": [
-          {"start": 0, "end": 4, "type": "bold"},
-          {"start": 0, "end": 4, "type": "italic"},
-          {"start": 0, "end": 4, "type": "color", "hex": "#FF0000"},
-        ],
+    test("creating like from json", () {
+      Notes note = Notes.fromJson({
+        "type": "like",
+        "blogId": {
+          "_id": "61b28a610a654cdd7b39171c",
+          "title": "Untitled",
+          "handle": "test",
+          "owner": "61b28a610a654cdd7b391719",
+          "avatar":
+              "http://tumblrx.me:3000/uploads/blog/blog-1640803918661-undefined.png",
+          "isAvatarCircle": true,
+          "isFollowed": true
+        },
       });
-      expect(textBlock.formattedText,
-          '<normal><bold><italic><color text="#FF0000">Hello</color></italic></bold> there from my super unit test :)</normal>');
-    });
-    test("overlapping inline text formatting ", () {
-      TextBlock textBlock = TextBlock.fromJson({
-        "type": "text",
-        "subtype": "normal",
-        "text": "Hello there from my super unit test :)",
-        "formatting": [
-          {"start": 6, "end": 10, "type": "italic"},
-          {"start": 0, "end": 10, "type": "bold"},
-        ],
-      });
-      logger.d(textBlock.formattedText);
-      expect(textBlock.formattedText,
-          '<normal><bold>Hello </bold><bold><italic>there</italic></bold> from my super unit test :)</normal>');
+
+      expect(note.commentText, null);
+      expect(note.type, "like");
+      Blog blogData = note.blogData;
+      expect(blogData.id, "61b28a610a654cdd7b39171c");
+      expect(blogData.title, "Untitled");
+      expect(blogData.handle, "test");
+      expect(blogData.blogAvatar,
+          "http://tumblrx.me:3000/uploads/blog/blog-1640803918661-undefined.png");
     });
   });
 }
