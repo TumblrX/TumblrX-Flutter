@@ -1,14 +1,18 @@
+/*
+Author: Esraa Gamal
+Description: this class show Avatar as a circle in Blog 
+*/
 import 'package:flutter/material.dart';
 import 'package:tumblrx/components/blog_screen_constant.dart';
 import 'package:tumblrx/components/blog_screen_initial_screen/show_image.dart';
 import 'package:tumblrx/services/api_provider.dart';
 import 'package:tumblrx/utilities/hex_color_value.dart';
-
-///this to get the shape of circle avatar
-/// for avatar image
 class AvatarImage extends StatefulWidget {
+///  check is this blog belong to this user or not
   final bool _myBlog;
+/// image url
   final String _path;
+/// blog background color
   final String _color;
 
   AvatarImage({@required bool myBlog, @required color, String path})
@@ -35,7 +39,8 @@ class _AvatarImageState extends State<AvatarImage> {
                       ? widget._path
                       : ApiHttpRepository.api + widget._path,
                 ),
-              )),
+              ),
+              ),
           onTap: () {
             ///bottom sheet of avatar
             if (widget._myBlog)
@@ -50,6 +55,7 @@ class _AvatarImageState extends State<AvatarImage> {
                   MaterialPageRoute(
                       builder: (context) => ShowImage(widget._path)));
           },
-        ));
+        ),
+        );
   }
 }

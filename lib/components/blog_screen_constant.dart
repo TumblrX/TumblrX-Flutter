@@ -1,3 +1,7 @@
+/*
+Author:Esraa Gamal
+Description:thsi class for constant function and variable 
+*/
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/components/blog_screen_initial_screen/show_image.dart';

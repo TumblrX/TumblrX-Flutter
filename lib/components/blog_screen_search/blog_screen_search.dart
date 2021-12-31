@@ -1,3 +1,7 @@
+/*
+Author:Esraa Gamal 
+Description:this class for search in blog
+*/
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,17 +12,17 @@ import 'package:tumblrx/screens/blog_screen.dart';
 import 'package:tumblrx/services/api_provider.dart';
 import 'package:tumblrx/services/blog_screen.dart';
 import 'package:tumblrx/utilities/hex_color_value.dart';
-
 class Search extends StatefulWidget {
-  ///search of avatar
   @override
   _SearchState createState() => _SearchState();
 }
 
 class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
+  ///controller for text field
   TabController _tabController;
   @override
   void initState() {
+    ///we have two tabs (Posts/Following)
     _tabController = new TabController(length: 2, vsync: this);
     super.initState();
   }
@@ -37,6 +41,8 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
                 Container(
                   decoration: BoxDecoration(
                       image: DecorationImage(
+
+                          ///show header image in background in search
                           image: NetworkImage(ApiHttpRepository.api +
                                   Provider.of<User>(context, listen: false)
                                       .getActiveBlogHeaderImage() ??
@@ -78,31 +84,33 @@ class _SearchState extends State<Search> with SingleTickerProviderStateMixin {
             ),
           ),
           Container(
-              color: hexToColor(Provider.of<User>(context, listen: false)
-                      .getActiveBlogBackColor()) ??
-                  Colors.blue,
-              child: TabBar(
-                unselectedLabelColor: Color(0xffc7c1c1),
-                labelColor: blogProvider.geaccentColor(),
-                indicatorColor: BlogScreenConstant.accent,
-                tabs: [
-                  Tab(
-                    text: 'Posts',
-                  ),
-                  Tab(
-                    text: 'Followings',
-                  )
-                ],
-                controller: _tabController,
-                indicatorSize: TabBarIndicatorSize.tab,
-              )),
-          Expanded(
-              child: Container(
-            child: TabBarView(
-              children: [Text('Posts a lot about'), Text('Followings')],
+            color: hexToColor(Provider.of<User>(context, listen: false)
+                    .getActiveBlogBackColor()) ??
+                Colors.blue,
+            child: TabBar(
+              unselectedLabelColor: Color(0xffc7c1c1),
+              labelColor: blogProvider.geaccentColor(),
+              indicatorColor: BlogScreenConstant.accent,
+              tabs: [
+                Tab(
+                  text: 'Posts',
+                ),
+                Tab(
+                  text: 'Followings',
+                )
+              ],
               controller: _tabController,
+              indicatorSize: TabBarIndicatorSize.tab,
             ),
-          ))
+          ),
+          Expanded(
+            child: Container(
+              child: TabBarView(
+                children: [Text('Posts a lot about'), Text('Followings')],
+                controller: _tabController,
+              ),
+            ),
+          )
         ],
       ),
     );

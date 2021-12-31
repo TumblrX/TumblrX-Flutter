@@ -1,3 +1,7 @@
+/*
+Author:Esraa Gamal
+Description:Editing avatar functions  
+*/
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/models/user/user.dart';
@@ -5,9 +9,10 @@ import 'package:tumblrx/services/api_provider.dart';
 import 'package:tumblrx/services/blog_screen.dart';
 import 'package:tumblrx/utilities/hex_color_value.dart';
 import 'avatar_bottomsheet.dart';
-
+///this class for editing avatar and show avatar in Editing page
 class EditAvatar {
   Widget editCircleAvatar(BuildContext context) {
+    ///position of avatar in editing
     return Positioned(
       left: MediaQuery.of(context).size.width / 2.6,
       top: MediaQuery.of(context).size.height / 4.5,
@@ -44,11 +49,9 @@ class EditAvatar {
       ),
     );
   }
-
+/// when avatar is square
   Widget editSquareAvatar(BuildContext context) {
     Provider.of<BlogScreenConstantProvider>(context);
-
-    // final blogProvider = Provider.of<BlogScreenConstantProvider>(context);
     return Positioned(
       left: MediaQuery.of(context).size.width / 2.6,
       top: MediaQuery.of(context).size.height / 4.5,

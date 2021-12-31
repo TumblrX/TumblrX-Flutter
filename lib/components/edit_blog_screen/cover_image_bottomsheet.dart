@@ -1,12 +1,13 @@
+/*
+Author:Esraa Gamal
+Description:this bottom sheet in editing for(header image)
+*/
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/models/user/user.dart';
 
-///this bootom sheet for header image in editing
+///this bootom sheet for header image in editing for (header image)
 class CoverImageBottomSheet extends StatelessWidget {
-  XFile a;
-
   @override
   Widget build(BuildContext context) {
     bool isswitched;
@@ -31,7 +32,7 @@ class CoverImageBottomSheet extends StatelessWidget {
             ),
             title: Text('Choose a photo'),
             onTap: () {
-               Provider.of<User>(context, listen: false)
+              Provider.of<User>(context, listen: false)
                   .getActiveBlog()
                   .pickImage(2);
             }),
@@ -42,6 +43,8 @@ class CoverImageBottomSheet extends StatelessWidget {
         ListTile(
             title: Text('Stretch header'),
             trailing: Switch(
+
+                ///set the image if stretched or not
                 value: Provider.of<User>(context)
                         .getActiveBlogStretchHeaderImage() ??
                     true,
