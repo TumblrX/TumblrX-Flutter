@@ -27,8 +27,12 @@ class BlogScreenConstant extends StatelessWidget {
         ListTile(
           title: Text('View your avatar'),
           onTap: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => ShowImage(  Provider.of<User>(context, listen: false).getActiveBlogAvatar())));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ShowImage(
+                        Provider.of<User>(context, listen: false)
+                            .getActiveBlogAvatar())));
           },
         )
       ],
@@ -53,7 +57,9 @@ class BlogScreenConstant extends StatelessWidget {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => ShowImage(Provider.of<User>(context, listen: false).getActiveBlogHeaderImage())));
+                    builder: (context) => ShowImage(
+                        Provider.of<User>(context, listen: false)
+                            .getActiveBlogHeaderImage())));
           },
         )
       ],

@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:tumblrx/components/blog_screen_constant.dart';
 import 'package:tumblrx/services/api_provider.dart';
 import 'package:tumblrx/utilities/hex_color_value.dart';
-
 /// for square avatar
 class Square extends StatelessWidget {
   ///Background color of the Blog
