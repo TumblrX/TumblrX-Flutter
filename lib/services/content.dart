@@ -15,9 +15,12 @@ class Content extends ChangeNotifier {
   /// list of posts
   List<Post> _posts = [];
 
+  /// integer to hold total number of posts
   int _totalPosts = 0;
 
+  /// flag to indicating if a request is still being processed
   bool _isLoading = false;
+
   Content();
 
   /// class constructor from parsed JSON

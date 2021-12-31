@@ -2,6 +2,7 @@ import 'package:http/http.dart';
 import 'package:tumblrx/utilities/environment.dart';
 import 'dart:convert' as convert;
 
+/// abstract class to be implemented by Mock/Real API classed
 abstract class API {
   Future<Map<String, dynamic>> sendPostRequest(String endPoint,
       {Map<String, dynamic> reqBody, Map<String, String> headers});
@@ -14,7 +15,7 @@ abstract class API {
       Map<dynamic, dynamic> reqBody);
 }
 
-/// MockAPI class to use for testing
+/// MockAPI class
 class MockHttpRepository implements API {
   /// API key for mock server
   static final String api =
@@ -22,7 +23,8 @@ class MockHttpRepository implements API {
 
   /// API to send get requests
   /// @endPoint : the end point to which send the request
-  /// @req : request query parameters as map<String, dynamic>
+  /// @query : request query parameters as map<String, dynamic>
+  /// @headers: request headers as Map<String, dynamic>
   Future<Map<String, dynamic>> sendGetRequest(String endPoint,
       {Map<String, String> headers, Map<String, dynamic> query}) async {
     String fullUrl = "$api/$endPoint?";
@@ -48,7 +50,8 @@ class MockHttpRepository implements API {
 
   /// API to send post requests
   /// @endPoint : the end point to which send the request
-  /// @req : request body as map<String, dynamic>
+  /// @reqBody : request body as map<String, dynamic>
+  /// @headers: request headers as Map<String, dynamic>
   Future<Map<String, dynamic>> sendPostRequest(String endPoint,
       {Map<String, dynamic> reqBody, Map<String, String> headers}) async {
     String fullUrl = "$api/$endPoint";
@@ -75,6 +78,10 @@ class MockHttpRepository implements API {
     return result;
   }
 
+  /// API to send delete requests
+  /// @endPoint : the end point to which send the request
+  /// @reqBody : request body as map<String, dynamic>
+  /// @headers: request headers as Map<String, dynamic>
   @override
   Future<Map<String, dynamic>> sendDeleteRequest(
       String endPoint, Map<String, String> headers,
@@ -94,6 +101,10 @@ class MockHttpRepository implements API {
     return result;
   }
 
+  /// API to send put requests
+  /// @endPoint : the end point to which send the request
+  /// @reqBody : request body as map<String, dynamic>
+  /// @headers: request headers as Map<String, dynamic>
   @override
   Future sendPutRequest(
       String endPoint, Map<String, String> headers, Map reqBody) async {
@@ -110,9 +121,10 @@ class ApiHttpRepository implements API {
   /// API key for real server
   static final String api = Environment.apiUrl;
 
-  /// API to send get requests
+  /// API to send post requests
   /// @endPoint : the end point to which send the request
-  /// @req : request query parameters as map<String, dynamic>
+  /// @reqBody : request body as map<String, dynamic>
+  /// @headers: request headers as Map<String, dynamic>
   @override
   Future<Map<String, dynamic>> sendPostRequest(String endPoint,
       {Map<String, dynamic> reqBody, Map<String, String> headers}) async {
@@ -137,9 +149,10 @@ class ApiHttpRepository implements API {
     return result;
   }
 
-  /// API to send post requests
+  /// API to send get requests
   /// @endPoint : the end point to which send the request
-  /// @req : request body as map<String, dynamic>
+  /// @query : request query parameters as map<String, dynamic>
+  /// @headers: request headers as Map<String, dynamic>
   @override
   Future<Map<String, dynamic>> sendGetRequest(String endPoint,
       {Map<String, String> headers, Map<String, dynamic> query}) async {
@@ -164,6 +177,10 @@ class ApiHttpRepository implements API {
     return result;
   }
 
+  /// API to send delete requests
+  /// @endPoint : the end point to which send the request
+  /// @reqBody : request body as map<String, dynamic>
+  /// @headers: request headers as Map<String, dynamic>
   @override
   Future<Map<String, dynamic>> sendDeleteRequest(
       String endPoint, Map<String, String> headers,
@@ -184,6 +201,10 @@ class ApiHttpRepository implements API {
     return result;
   }
 
+  /// API to send put requests
+  /// @endPoint : the end point to which send the request
+  /// @reqBody : request body as map<String, dynamic>
+  /// @headers: request headers as Map<String, dynamic>
   @override
   Future sendPutRequest(
       String endPoint, Map<String, String> headers, Map reqBody) async {

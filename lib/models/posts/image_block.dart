@@ -7,12 +7,16 @@ class ImageBlock {
   /// List of media objects in the block
   String _media;
 
+  /// url source of the image
   String _url;
 
+  /// width of the image block
   double _width;
 
+  /// height of the image block
   double _height;
 
+  /* getters */
   String get type => this._type;
   String get media => this._media;
   double get width => this._width;
@@ -27,7 +31,7 @@ class ImageBlock {
         _width = width,
         _height = height;
 
-  /// Constructs a new instance usin parsed json data
+  /// Constructs a new instance using parsed json data
   ImageBlock.fromJson(Map<String, dynamic> json) {
     if (json.containsKey('type') && json['type'].toString().trim().isNotEmpty)
       this._type = json['type'];
