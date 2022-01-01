@@ -1,5 +1,4 @@
 /*
-Author: Passant Abdelgalil
 Description: 
     This file creates a Poster class to define poster field in media
     objects that should be displayed for low-bandwidth consumers

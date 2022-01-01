@@ -5,7 +5,9 @@ import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/screens/chat_screen.dart';
 import 'package:tumblrx/utilities/time_format_to_view.dart';
 
-///Conversation Item in the conversations list
+///Conversation Item in the conversations list shows the avatar and username of the user.
+///It also shows the last message sent, and the time of it.
+///On click on this item it opens the chat screen with this user
 class ConversationItem extends StatelessWidget {
   ///avatar url for the conversation user
   final String avatarUrl;

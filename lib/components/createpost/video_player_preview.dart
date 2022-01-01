@@ -11,6 +11,7 @@ class VideoPlayerPreview extends StatefulWidget {
   ///The video data to be shown.
   final XFile file;
 
+  ///Url of the video if the video is shown from the internet
   final String url;
   VideoPlayerPreview({this.file, this.url});
   @override

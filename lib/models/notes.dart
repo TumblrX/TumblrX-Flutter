@@ -8,11 +8,18 @@ import 'package:tumblrx/global.dart';
 import 'package:tumblrx/models/user/blog.dart';
 
 class Notes {
+  /// String to hold post id on which is note object is on
   String _postId;
-  String _type;
-  Blog _blogData;
-  String _commentText;
 
+  /// type of the note, [comment, like, reblog]
+  String _type;
+
+  /// data of the note owner blog
+  Blog _blogData;
+
+  /// if the note is a comment, this holds the comment content
+  String _commentText;
+  /* getters */
   String get postId => _postId;
   String get type => _type;
   Blog get blogData => _blogData;
@@ -25,6 +32,7 @@ class Notes {
     if (json.containsKey('commentText')) _commentText = json['commentText'];
   }
 
+  /// function to communicate with api to get notes with passed type
   static Future<List<Notes>> getNotes(
       String mode, String token, String postId) async {
     List<Notes> notesResponse = [];
@@ -40,6 +48,7 @@ class Notes {
     return notesResponse;
   }
 
+  /// private helper function to handle reponse on getting notes from API
   static List<Notes> _parseResponseJsonNotes(Map<String, dynamic> response) {
     if (response.containsKey('error')) return [];
     List<Notes> notes = [];

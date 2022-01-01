@@ -1,5 +1,4 @@
 /*
-Author: Passant Abdelgalil
 Description: 
     The main screen after sign in, a template to inject other routes
     but with a shared bottom navigation bar among all of them
@@ -37,10 +36,10 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
-   
-    // initializing controller
+
+    // initializing page controller
     _controller = PageController();
-    // initializing the notifier with 0 value
+    // initializing the notifier of selected index of taps with 0 value
     _selectedIndex = ValueNotifier(0);
   }
 

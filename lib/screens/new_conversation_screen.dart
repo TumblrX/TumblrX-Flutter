@@ -9,6 +9,7 @@ import 'package:tumblrx/utilities/constants.dart';
 class NewConversationScreen extends StatelessWidget {
   static String id = 'new_conversation_screen';
 
+  ///Controller of the search bar to keep track of text
   final TextEditingController _textEditingController = TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -56,6 +57,7 @@ class NewConversationScreen extends StatelessWidget {
   }
 }
 
+///Returns the list of new conversation tie widgets
 List<Widget> getNewConversationTiles(BuildContext context) {
   List<Widget> conversationTiles = [];
 

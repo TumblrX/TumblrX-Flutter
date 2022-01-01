@@ -1,3 +1,10 @@
+/*
+Description: 
+    A class that implementes post content widget
+    post content is a list of post blocks that can be of type
+    [TextBlock, VideoBlock, LinkBlock, and ImageBlock]
+*/
+
 import 'package:flutter/material.dart';
 import 'package:tumblrx/components/post/post_blocks/image_block_widget.dart';
 import 'package:tumblrx/components/post/post_blocks/link_block_widget.dart';
@@ -46,12 +53,6 @@ class PostContentView extends StatelessWidget {
                   return VideoBlockWidget(
                       url: block.url, provider: block.provider);
                   break;
-                // case AudioBlock:
-                //   return AudioBlockWidget(
-                //     url: block.url,
-                //     provider: block.provider,
-                //   );
-                //   break;
                 default:
                   return Container(width: 0, height: 0);
               }

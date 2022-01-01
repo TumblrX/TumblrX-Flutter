@@ -1,5 +1,4 @@
 /*
-Author: Passant Abdelgalil
 Description: 
     This file creates a class as an API for link block content
 */

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/services/messaging.dart';
 
-///Widget that inputs chat messages
+///Widget that inputs chat messages in a text field
 class ChatInput extends StatelessWidget {
-  ///user id
+  ///id of the user the message will be sent to
   final String userId;
 
   ///Text Field controller to keep track of entered text

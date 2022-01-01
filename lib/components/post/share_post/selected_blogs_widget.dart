@@ -1,3 +1,7 @@
+/*
+Description: 
+    A class that implementes selected blogs widget 
+*/
 import 'package:flutter/material.dart';
 import 'package:tumblrx/models/user/blog.dart';
 
@@ -12,6 +16,7 @@ class SelectedBlogsWidget extends StatefulWidget {
 class _SelectedBlogsWidgetState extends State<SelectedBlogsWidget> {
   @override
   void initState() {
+    // ad listener to selected blogs value notifier to rebuild upon changes
     super.initState();
     widget._selectedBlogsNotifier.addListener(() {
       setState(() {});
@@ -31,6 +36,7 @@ class _SelectedBlogsWidgetState extends State<SelectedBlogsWidget> {
     ExpansionPanel(
         canTapOnHeader: true,
         headerBuilder: (context, isExpanded) {
+          // build widget to report number of selected blogs
           return RichText(
             text: TextSpan(
               text: 'Send to',
@@ -49,6 +55,7 @@ class _SelectedBlogsWidgetState extends State<SelectedBlogsWidget> {
             ),
           );
         },
+        // show selected blogs avatars
         body: Row(
           children: selectedBlogs
               .map<Widget>((blog) => selectedBlogIcon(blog))

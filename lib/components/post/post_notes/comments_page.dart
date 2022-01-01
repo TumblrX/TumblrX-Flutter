@@ -1,3 +1,10 @@
+/*
+  Description:
+      this file creates a class that extends stateful widget to view
+      comments inside the notes page
+      post id is passed to the constructor to be used in API requests
+ */
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -18,10 +25,12 @@ class CommentsPage extends StatefulWidget {
 }
 
 class _CommentsPageState extends State<CommentsPage> {
+  // notifier to listen on comment text field, to rebuild on reply
   ValueNotifier<bool> _commentNotifier;
   @override
   void initState() {
     super.initState();
+    // initalize notifier and add a listener to the value to rebuild the widget
     _commentNotifier = ValueNotifier(false);
     _commentNotifier.addListener(() {
       setState(() {});
@@ -100,6 +109,7 @@ class _CommentsPageState extends State<CommentsPage> {
                         itemCount: comments.length,
                         itemBuilder: (context, index) {
                           final Notes note = comments[index];
+                          // blog avatar link, set to default in case of none
                           final String blogAvatar = note.blogData.blogAvatar ==
                                       null ||
                                   note.blogData.blogAvatar == 'none'
@@ -153,11 +163,13 @@ class _CommentsPageState extends State<CommentsPage> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
+                                          // blog title
                                           Text(
                                             note.blogData.title,
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w700),
                                           ),
+                                          // comment content
                                           Container(
                                             padding: EdgeInsets.only(top: 8.0),
                                             child: Text(

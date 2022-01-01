@@ -18,7 +18,7 @@ class Messaging extends ChangeNotifier {
   String myId;
 
   ///Token
-  String token; //to be removed probably
+  String token;
 
   ///Number of unseen messages
   int totalUnseenMessage = 0;

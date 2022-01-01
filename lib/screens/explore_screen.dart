@@ -1,3 +1,7 @@
+/*
+Description: 
+    a stateful widget for viewing explore screen
+*/
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -12,6 +16,7 @@ import 'package:tumblrx/models/user/blog.dart';
 import 'package:tumblrx/services/authentication.dart';
 import 'package:tumblrx/utilities/constants.dart';
 
+// private helper function to request trending posts
 Future<List<Post>> _getTrendingPosts(String token) async {
   Map<String, dynamic> response = await apiClient.sendGetRequest(
       'user/explore/0/trending',
@@ -25,6 +30,7 @@ Future<List<Post>> _getTrendingPosts(String token) async {
   return _handleTrendingPostsResponse(response);
 }
 
+// private helper function to request trending tags
 Future<List<Tag>> _getTags(String token) async {
   Map<String, dynamic> response = await apiClient
       .sendGetRequest('user/get-tags', headers: {'Authorization': token});
@@ -38,6 +44,7 @@ Future<List<Tag>> _getTags(String token) async {
   return result;
 }
 
+// private helper function to request trending blogs
 Future<List<Blog>> _getTrendingBlogs(String token) async {
   Map<String, dynamic> response = await apiClient.sendGetRequest(
       'blog/explore/0/trending',
@@ -46,6 +53,7 @@ Future<List<Blog>> _getTrendingBlogs(String token) async {
   return _handleTrendingBlogsResponse(response);
 }
 
+// private helper function to handle response and create Post objects for results
 Future<List<Post>> _handleTrendingPostsResponse(
     Map<String, dynamic> json) async {
   List<Post> trendingPosts = [];
@@ -67,6 +75,7 @@ Future<List<Post>> _handleTrendingPostsResponse(
   return trendingPosts;
 }
 
+// private helper function to handle response and create blog objects for results
 Future<List<Blog>> _handleTrendingBlogsResponse(
     Map<String, dynamic> json) async {
   List<Blog> trendingBlogs = [];
@@ -100,6 +109,8 @@ Future<List<Blog>> _handleTrendingBlogsResponse(
   return trendingBlogs;
 }
 
+// private helper function to choose a random image block from the retrieved
+// posts to show in the screen header image
 Post _pickRandomImagePost(List<Post> posts) {
   return posts.firstWhere(
     (post) => post.content.any((block) => block.runtimeType == ImageBlock),
@@ -129,6 +140,7 @@ class ExploreScreen extends StatelessWidget {
                   ),
             color: Theme.of(context).primaryColor,
             child: FutureBuilder(
+              // wait for all requests to complete
               future: Future.wait<List>([
                 _getTrendingBlogs(token),
                 _getTrendingPosts(token),
@@ -144,6 +156,7 @@ class ExploreScreen extends StatelessWidget {
                       child: CircularProgressIndicator(),
                     );
                   case ConnectionState.done:
+                    // if an error happened, view 404 page
                     if (snapshot.hasError) {
                       logger.e(snapshot.error);
                       return Container(
@@ -157,8 +170,11 @@ class ExploreScreen extends StatelessWidget {
                         ),
                       );
                     }
+                    // widget dimensions
                     final Size size = MediaQuery.of(context).size;
                     final Post post = _pickRandomImagePost(snapshot.data[1]);
+                    // if the post contains image block, view it as a header image
+                    // else view default image
                     String headerImageUrl = post == null
                         ? "https://i.pinimg.com/236x/fb/bf/df/fbbfdf0b5dd8a03841eb61a5a0aa33b2.jpg"
                         : post.content
@@ -172,6 +188,7 @@ class ExploreScreen extends StatelessWidget {
                               ),
                             )
                             .url;
+                    // screen content
                     return CustomScrollView(
                       slivers: [
                         SliverAppBar(
@@ -179,7 +196,7 @@ class ExploreScreen extends StatelessWidget {
                           expandedHeight: size.height * .25,
                           flexibleSpace: Stack(
                             children: [
-                              // header
+                              // header image
                               Positioned.fill(
                                 child: Container(
                                   decoration: BoxDecoration(
@@ -188,6 +205,7 @@ class ExploreScreen extends StatelessWidget {
                                       image: NetworkImage(headerImageUrl),
                                     ),
                                   ),
+                                  // button to navigate to search screen
                                   child: Center(
                                     child: TextButton(
                                       onPressed: () => Navigator.of(context)
@@ -243,6 +261,8 @@ class ExploreScreen extends StatelessWidget {
                                   ),
                                 ),
                               ),
+                              // if the header image is picked from the post,
+                              // view the blog title
                               post != null
                                   ? Positioned(
                                       child:

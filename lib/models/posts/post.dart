@@ -1,5 +1,4 @@
 /*
-Author: Passant Abdelgalil
 Description: 
     A class that serves as an API for post objects with 
     like/unlike, comment, reblog, share, edit and delete funcitonalities.
@@ -387,7 +386,6 @@ class Post {
   }
 
   /// API for post object to edit the post
-
   void editPost(BuildContext context) async {
     double topPadding = MediaQuery.of(context).padding.top;
     logger.d(unmappedPostContent);

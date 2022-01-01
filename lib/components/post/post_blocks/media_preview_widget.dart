@@ -1,5 +1,4 @@
 /*
-  Author: Passant Abdelgalil
 
   Description:
       A stateless widget to preview media blocks [image, GIF] in a post 
@@ -124,6 +123,8 @@ class MediaWidget extends StatelessWidget {
 
   void _sharePost() {}
   void _sharePhoto() {}
+
+  // helper function to request to download the image to the device storage
   Future<void> _downloadPhoto() async {
     try {
       if (Platform.isAndroid) {
@@ -137,9 +138,13 @@ class MediaWidget extends StatelessWidget {
             await directory.create(recursive: true);
           }
           if (await directory.exists()) {
+            // extract file name from the url
             final String fileName = Uri.parse(this._url).path.split('/').last;
+            // combine the file name with the directory path
             final String downloadPath = '${directory.path}/$fileName';
+            // request downloading the image
             await Dio().download(this._url, downloadPath);
+            // save the image to the local device gallery
             await ImageGallerySaver.saveFile(downloadPath);
           }
         } else {}

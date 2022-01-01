@@ -1,5 +1,4 @@
 /*
-Author: Passant Abdelgalil
 Description: 
     A widget for the profile icon in the bottom nav bar with animation
     to open the overlay entry to choose between blogs

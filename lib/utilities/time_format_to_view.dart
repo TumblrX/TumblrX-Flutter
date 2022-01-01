@@ -66,7 +66,7 @@ bool isDifferenceBiggerThanHalfAnHour(String timestamp1, String timestamp2) {
   }
 }
 
-///Adds zero to single digit minute
+///Adds zero to single digit minute for example: 15:3 => 15:03 where [number] is 3 and it return 03
 String addZeroToSingleDigit(String number) {
   if (number.length == 1) {
     number = '0' + number;

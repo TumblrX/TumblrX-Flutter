@@ -1,5 +1,4 @@
 /*
-Author: Passant Abdeljalil
 Description: 
     The post footer widget that contains reactions count and icons, and 
     post options: share, comment, reblog, and like/unlike, [edit, delete]

@@ -1,3 +1,8 @@
+/*
+Description: 
+    A class that implementes widget for selecting one of the user blogs
+    to use in sharing the post
+*/
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/models/user/blog.dart';
@@ -16,6 +21,7 @@ class _BlogSelectorState extends State<BlogSelector> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    // get the selected blog info
     user = Provider.of<User>(context);
     selectedBlog = user.userBlogs[user.activeBlogIndex];
   }
@@ -27,6 +33,7 @@ class _BlogSelectorState extends State<BlogSelector> {
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          // blog avatar
           Padding(
             padding: const EdgeInsets.all(5.0),
             child: CircleAvatar(
@@ -37,10 +44,12 @@ class _BlogSelectorState extends State<BlogSelector> {
               ),
             ),
           ),
+          // blog title
           Text(
             selectedBlog.title,
             style: TextStyle(fontSize: 20),
           ),
+          // drop down/up icon for decoration
           Icon(
             selectingBlog
                 ? Icons.arrow_drop_up_outlined
@@ -52,6 +61,7 @@ class _BlogSelectorState extends State<BlogSelector> {
         setState(() {
           selectingBlog = true;
         });
+        // widget to list blog users and choose from them
         showGeneralDialog(
           context: context,
           barrierDismissible: true,

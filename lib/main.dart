@@ -28,7 +28,6 @@ import 'package:tumblrx/screens/login_user_data.dart';
 import 'package:tumblrx/utilities/environment.dart';
 import 'components/my_custom_scroll_behavior.dart';
 
-//bool _initialUriIsHandled = false;
 Future<void> main() async {
   await dotenv.load(fileName: Environment.fileName);
   runApp(MyApp());
@@ -40,8 +39,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
-//  Uri _initialUri;
-//  Uri _latestUri;
   String postId = "";
   StreamSubscription _linkSubscription;
 
@@ -49,10 +46,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-
-    // load data from shared preferences
-    //_handleIncomingLinks();
-    //_handleInitialUri();
   }
 
   @override
@@ -77,45 +70,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     }
   }
 
-  // void _handleIncomingLinks() {
-  //   if (!kIsWeb) {
-  //     _linkSubscription = uriLinkStream.listen((event) {
-  //       if (!mounted) return;
-  //       print('got uri $event');
-  //       setState(() {
-  //         _latestUri = event;
-  //       });
-  //     }, onError: (err) {
-  //       if (!mounted) return;
-  //       print('got error $err');
-  //     });
-  //   }
-  // }
-
-//   void _handleInitialUri() async {
-//     if (!_initialUriIsHandled) {
-//       _initialUriIsHandled = true;
-//       try {
-//         final uri = await getInitialUri();
-//         if (uri == null) {
-// //          print('no initial uri');
-//           return;
-//         } else
-//         //         print('got initial uri: $uri');
-//         // if the state is not yet in the tree, return
-//         if (!mounted) return;
-//         setState(() {
-//           _initialUri = uri;
-//         });
-//       } on PlatformException {
-//         //      print('failed to get initial uri');
-//       } on FormatException catch (_) {
-//         if (!mounted) return;
-//         //    print('malformed initial uri');
-//       }
-//     }
-//   }
-
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -123,24 +77,12 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         ChangeNotifierProvider<Authentication>(
           create: (context) => Authentication(),
         ),
-        // ChangeNotifierProvider<Post>(
-        //   create: (context) => Post(),
-        // ),
         ChangeNotifierProvider<CreatingPost>(
           create: (context) => CreatingPost(),
         ),
-
-        // ChangeNotifierProxyProvider<Authentication, User>(
-        //   create: (_) => User(Provider.of<Authentication>(context, listen: false)),
-        //   update: (_, authentication, user) =>
-        //       user..name = authentication.userName,
-
-        // ),
-
         ChangeNotifierProvider<User>(
           create: (context) => User(),
         ),
-
         ChangeNotifierProvider<Content>(
           create: (context) => Content(),
         ),
@@ -200,8 +142,3 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     );
   }
 }
-
-// ChangeNotifierProvider<User>(
-//           create: (context) => User(),
-
-//         ),

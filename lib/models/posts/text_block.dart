@@ -1,5 +1,4 @@
 /*
-Author: Passant Abdelgalil
 Description: 
     This file creates a class as an API for text block content in addition
     to inline class 'InlineFormatting' to handle inline formatting for
@@ -18,13 +17,16 @@ class TextBlock {
   /// 'ordered-list-item', 'unordered-list-item'
   String _subtype;
 
+  /// block type = "text"
   String _type;
 
   /// Text Block content
   String _text;
 
+  /// string to hold text after adding formatting tags, eg: <bold>blabla</bold>
   String _formattedText;
 
+  /// list of inline formatting objects to be applied on the text
   List<InlineFormatting> _renderingFormatting = [];
 
   ///Text block constructor that takes the [_subtype], [_text] and [_formatting]
@@ -97,10 +99,14 @@ class TextBlock {
   }
 
   /// Apply inline formatting on the text if any
+  /// this function returns the text after adding the formatting tags
+  /// in addition to length of left and right string tags added to the text
+  /// to use later for processing the text in a proper way
   String formatText() {
     InlineFormatting prevFormat;
     int leftPadding, rightPadding = 0;
     int len = _renderingFormatting.length;
+    // if there is a formatting to be applied
     if (len > 0) {
       List result = _renderingFormatting[len - 1].applyFormat(_formattedText);
       _formattedText = result[0];
@@ -108,6 +114,18 @@ class TextBlock {
       rightPadding = result[2];
       prevFormat = _renderingFormatting[len - 1];
     }
+    // loop on formattings backward and apply them
+    // why backward? because the formatting list is sorted ascendingly and in
+    // this way we don't change the indecies of earilier letters in the string
+    // eg: Hello world => Hello <bold>world</bold>
+    // in this example, the letter 'H' still at index 0, and if there is a
+    // formatting at this index, it's apllied on the right letter =>
+    // <italic>Hello</italic><bold>world</bold>
+    // unlike if we applied formattings ascendingly, eg: <italic>hello</italic>
+    // now if we go to apply formatting on word 'world', the indecies are
+    // different
+    // all this is due to using a package that performs inline formatting
+    // using html-like tags
     for (int i = len - 2; i >= 0; i--) {
       InlineFormatting format = _renderingFormatting[i];
 
@@ -130,6 +148,8 @@ class TextBlock {
     return _formattedText;
   }
 
+  /// this function divides overlapping formatting intervals of the string
+  /// to avoid rendering logical errors
   List<InlineFormatting> prepareFormattingList(
       List<InlineFormatting> parsedFormats) {
     if (parsedFormats.isEmpty) return parsedFormats;

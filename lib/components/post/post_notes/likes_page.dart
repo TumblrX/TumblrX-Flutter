@@ -1,3 +1,9 @@
+/*
+  Description:
+      this file creates a class that extends stateful widget to view
+      likes inside the notes page
+      post id is passed to the constructor to be used in API requests
+ */
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/global.dart';
@@ -70,7 +76,7 @@ class LikesPage extends StatelessWidget {
                       itemCount: likes.length,
                       itemBuilder: (context, index) {
                         Blog blogData = likes[index].blogData;
-                        // get blogavatar to be viewed
+                        // get blogavatar to be viewed, set to default in case of none
                         String blogAvatar = (blogData.blogAvatar == null ||
                                 blogData.blogAvatar == 'none')
                             ? "https://64.media.tumblr.com/9f9b498bf798ef43dddeaa78cec7b027/tumblr_o51oavbMDx1ugpbmuo7_500.png"
