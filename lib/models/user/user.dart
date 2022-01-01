@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:tumblrx/global.dart';
 import 'package:tumblrx/models/posts/post.dart';
-
 import 'package:provider/provider.dart';
 import 'package:tumblrx/models/tag.dart';
 import 'package:tumblrx/models/user/blog.dart';
@@ -61,13 +60,13 @@ class User extends ChangeNotifier {
     else
       throw Exception('missing required parameter "id"');
 
-    // username
+    /// username
     if (json.containsKey('name'))
       _username = json['name'];
     else
       throw Exception('missing required parameter "name"');
 
-    // blogs list
+    /// blogs list
     if (json['blogs'] != null) {
       json['blogs'].forEach((blogData) {
         _blogs.add(new Blog.fromJson(blogData));
@@ -100,40 +99,6 @@ class User extends ChangeNotifier {
     } else
       throw Exception('missing required parameter "blockedBlogs"');
   }
-
-  // Future<void> getFollowingBlogs(String token) async {
-  //   Map<String, dynamic> response = await apiClient
-  //       .sendGetRequest('user/following', headers: {'Authorization': token});
-  //   if (response.containsKey('followingBlogs')) {
-  //     List<Map<String, dynamic>> blogs =
-  //         List<Map<String, dynamic>>.from(response['followingBlogs']);
-  //     blogs.map((blog) {
-  //       Map blogData = {};
-  //       try {
-  //         if (blog.containsKey('title'))
-  //           blogData['title'] = blog['title'];
-  //         else
-  //           throw Exception('missing required parameter "title"');
-  //         if (blog.containsKey('handle'))
-  //           blogData['handle'] = blog['handle'];
-  //         else
-  //           throw Exception('missing required parameter "handle"');
-  //         if (blog.containsKey('avatar'))
-  //           blogData['avatar'] = blog['avatar'];
-  //         else
-  //           throw Exception('missing required parameter "avatar"');
-  //         if (blog.containsKey('_id'))
-  //           blogData['_id'] = blog['_id'];
-  //         else
-  //           throw Exception('missing required parameter "id"');
-  //         logger.d(blogData);
-  //         _followingBlogs.add(blogData);
-  //       } catch (err) {
-  //         logger.e(err);
-  //       }
-  //     });
-  //   }
-  // }
 
   ///set user data after login
   void setLoginUserData(Map<String, dynamic> json, BuildContext context) {
@@ -274,6 +239,7 @@ class User extends ChangeNotifier {
     return _blogs[_activeBlogIndex].id;
   }
 
+  ///return if blog is primary
   bool getActiveBlogIsPrimary() {
     return _blogs[_activeBlogIndex].isPrimary;
   }
@@ -281,8 +247,6 @@ class User extends ChangeNotifier {
   bool getIsAvatarCircle() {
     return _blogs[_activeBlogIndex].isCircleAvatar;
   }
-
-//i will modify it
 
   void setActiveBlogTitle(String title) {
     _blogs[_activeBlogIndex].setBlogtitle(title);
@@ -334,6 +298,7 @@ class User extends ChangeNotifier {
     return null;
   }
 
+  ///get if show header image true or false
   bool getActiveShowHeaderImage() {
     return _blogs[_activeBlogIndex].showHeadeImage;
   }
@@ -369,6 +334,7 @@ class User extends ChangeNotifier {
     return _blogs[_activeBlogIndex].titleColor;
   }
 
+  ///send request to create new blog for the same user
   Future<void> createNewlog(String name, BuildContext context) async {
     final endPoint = 'api/blog/dfsfdfsfsd';
 
@@ -402,6 +368,7 @@ class User extends ChangeNotifier {
     }
   }
 
+  ///set blogs' information for the user
   void setBlogsInfo(BuildContext context) {
     _blogs.forEach((element) {
       element.blogRetrive(context);
@@ -421,6 +388,7 @@ class User extends ChangeNotifier {
     return false;
   }
 
+  ///retrive blogs' information from data base
   void getUserInfo(BuildContext context) async {
     final Map<String, String> headers = {
       'Authorization':
@@ -442,7 +410,7 @@ class User extends ChangeNotifier {
       }
     }
   }
-
+/// send get request to retrive all post this user likes
   Future<List<Post>> getUserLikes(BuildContext context) async {
     final String endPoint = 'user/likes';
 
@@ -490,7 +458,7 @@ class User extends ChangeNotifier {
       logger.e(response);
     }
   }
-
+///send get request to retrive the blogs the user follow
   Future<List<Blog>> getUserBlogFollowing(BuildContext context) async {
     String endPoint = 'user/following';
 
@@ -514,7 +482,7 @@ class User extends ChangeNotifier {
     } else {}
     return [];
   }
-
+///update blog
   Future<void> updateBlog(BuildContext context) async {
     await _blogs[_activeBlogIndex].updateBlogTheme(context);
     notifyListeners();

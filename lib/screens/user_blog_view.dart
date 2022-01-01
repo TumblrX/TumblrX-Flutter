@@ -1,3 +1,7 @@
+/*
+Author:Esraa Gamal
+Description:this class for another user blog view 
+*/
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -11,9 +15,8 @@ import 'package:tumblrx/models/user/blog.dart';
 import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/services/api_provider.dart';
 import 'package:tumblrx/utilities/hex_color_value.dart';
-
 import 'chat_screen.dart';
-
+///this class for another user blog view 
 class UserBlogView extends StatefulWidget {
   final String _blogId;
   UserBlogView({@required String id}) : _blogId = id;
@@ -21,7 +24,6 @@ class UserBlogView extends StatefulWidget {
   @override
   _UserBlogViewState createState() => _UserBlogViewState();
 }
-
 class _UserBlogViewState extends State<UserBlogView>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
@@ -30,8 +32,6 @@ class _UserBlogViewState extends State<UserBlogView>
 
     super.initState();
   }
-
-  @override
   @override
   void dispose() {
     _tabController.dispose();
@@ -47,7 +47,6 @@ class _UserBlogViewState extends State<UserBlogView>
         if (snapshot.hasData)
           return Scaffold(
               appBar: AppBar(
-                //elevation: 0,
                 backgroundColor: Colors.transparent,
                 title: Text(snapshot.data.handle),
                 actions: [
@@ -74,6 +73,7 @@ class _UserBlogViewState extends State<UserBlogView>
                         );
                     },
                   ),
+                  ///pop up list
                   PopupMenuButton<String>(
                     itemBuilder: (BuildContext context) {
                       return [
@@ -161,9 +161,7 @@ class _UserBlogViewState extends State<UserBlogView>
                               ],
                             ),
 
-                            ///show an avatar in square
-
-                            ///show an avatar in square
+                            ///check visibility of avatar
                             Visibility(
                                 visible: snapshot.data.showAvatar ?? true,
                                 child: snapshot.data.isCircleAvatar

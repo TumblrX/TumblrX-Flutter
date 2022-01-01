@@ -1,3 +1,7 @@
+/*
+Author:Esraa Gamal
+Description:the page of Editing in blog 
+*/
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,6 +20,7 @@ import 'edit_avatar.dart';
 import 'edit_bottons.dart';
 import 'package:tumblrx/utilities/hex_color_value.dart';
 
+///the page of Editing in blog
 class Edit extends StatefulWidget {
   @override
   _EditState createState() => _EditState();
@@ -31,12 +36,15 @@ class _EditState extends State<Edit> with SingleTickerProviderStateMixin {
         'active title ${Provider.of<User>(context, listen: false).getActiveBlogTitle()}');
     logger.d(
         'active description ${Provider.of<User>(context, listen: false).getActiveBlogDescription()}');
+
+    ///controller for title
     titleController = new TextEditingController(
-        text: Provider.of<User>(context, listen: false)
-            .getActiveBlogTitle()); //i will put initial title here
+        text: Provider.of<User>(context, listen: false).getActiveBlogTitle());
+
+    ///controller for description
     descriptionController = new TextEditingController(
         text: Provider.of<User>(context, listen: false)
-            .getActiveBlogDescription()); //i will put initial title here
+            .getActiveBlogDescription());
 
     ///this controller for Tabs bar
     ///function used for Tab bars
@@ -82,13 +90,19 @@ class _EditState extends State<Edit> with SingleTickerProviderStateMixin {
                                     decoration: BoxDecoration(
                                         image: DecorationImage(
                                             image: NetworkImage(
-                                                    Provider.of<User>(context,
+
+                                                ///header image of blog
+                                                Provider.of<User>(context,
                                                             listen: false)
-                                                        .getActiveBlogHeaderImage().startsWith('http')
-                        ? Provider.of<User>(context).getActiveBlogHeaderImage()
-                        : ApiHttpRepository.api +
-                            Provider.of<User>(context).getActiveBlogHeaderImage() ??
-                                                'http://tumblrx.me:3000/uploads/blog/blog-1640803111113-undefined.png'),
+                                                        .getActiveBlogHeaderImage()
+                                                        .startsWith('http')
+                                                    ? Provider.of<User>(context)
+                                                        .getActiveBlogHeaderImage()
+                                                    : ApiHttpRepository.api +
+                                                            Provider.of<User>(
+                                                                    context)
+                                                                .getActiveBlogHeaderImage() ??
+                                                        'http://tumblrx.me:3000/uploads/blog/blog-1640803111113-undefined.png'),
                                             fit: Provider.of<User>(context)
                                                         .getActiveBlogStretchHeaderImage() ??
                                                     true
@@ -213,7 +227,7 @@ class _EditState extends State<Edit> with SingleTickerProviderStateMixin {
                                           Post post = snapshot.data[index];
                                           return PostWidget(
                                             post: post,
-                                            // isLikes: false,
+                                            /// isLikes: false,
                                           );
                                         },
                                         separatorBuilder: (context, index) =>
@@ -234,11 +248,11 @@ class _EditState extends State<Edit> with SingleTickerProviderStateMixin {
                             )
                         ],
                       ),
+                     /// check if will show avatar as a circle or square 
                       Provider.of<User>(context).getIsAvatarCircle() == true
                           ? EditAvatar().editCircleAvatar(context)
                           : EditAvatar().editSquareAvatar(context),
 
-                      // EditAvatar().editSquareAvatar(context)
                     ],
                   ),
                 ),

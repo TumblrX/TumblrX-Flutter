@@ -1,11 +1,16 @@
+/*
+Author:Esraa Gamal
+Description:All App Bar in Editing page 
+*/
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/components/edit_blog_screen/alert_dialgue.dart';
 import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/screens/blog_screen.dart';
-
+///this class for App bars in editing
 class EditAppBar {
   bool isswitched = true;
+  ///default app bar
   Widget defaultAppBar(BuildContext context) {
     return Container(
         color: Colors.transparent,
@@ -16,16 +21,13 @@ class EditAppBar {
           children: <Widget>[
             IconButton(
                 onPressed: () {
+                  ///show dialgue when return to blog screen
                   showDialog(
                     useRootNavigator: false,
                     context: context,
                     builder: (context) => AlerDialgue(),
                   );
 
-                  // await Navigator.pop(
-                  //    context,
-                  //  MaterialPageRoute(builder: (context) => BlogScreen()),
-                  //);
                 },
                 icon: Icon(Icons.arrow_back),
                 color: Colors.white),
@@ -52,7 +54,7 @@ class EditAppBar {
           ],
         ));
   }
-
+///App bar for Editing title
   Widget editTitleAppBar() {
     return Container(
       color: Colors.white,
@@ -102,7 +104,7 @@ class EditAppBar {
       ),
     );
   }
-
+  ///App bar in Editing header image
   Widget editHeaderImage() {
     return Container(
       color: Colors.white,
@@ -137,7 +139,7 @@ class EditAppBar {
       ),
     );
   }
-
+///App bar when editing Description
   Widget editDescriptionAppBar() {
     return Container(
       color: Colors.white,
