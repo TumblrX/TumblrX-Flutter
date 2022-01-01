@@ -386,7 +386,6 @@ class Post {
   }
 
   /// API for post object to edit the post
-
   void editPost(BuildContext context) async {
     double topPadding = MediaQuery.of(context).padding.top;
     logger.d(unmappedPostContent);

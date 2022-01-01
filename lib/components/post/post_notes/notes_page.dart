@@ -1,3 +1,7 @@
+/*
+  Description:
+      this file creates a class that extends stateless widget to view notes page
+ */
 import 'package:flutter/material.dart';
 import 'package:tumblrx/components/post/post_notes/comments_page.dart';
 import 'package:tumblrx/components/post/post_notes/likes_page.dart';

@@ -1,3 +1,10 @@
+/*
+  Description:
+      this file creates a class that extends stateless widget to view
+      tags inside explore screen
+      list of tagss to be viewed are passed to the constructor
+
+ */
 import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -17,7 +24,9 @@ class CheckOutTheseTags extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // tags card height
     final double height = MediaQuery.of(context).size.height * .25;
+    // build tag cards list
     return Container(
       height: height,
       child: ListView.separated(
@@ -28,10 +37,11 @@ class CheckOutTheseTags extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         itemBuilder: (context, index) {
           final Tag tag = _tags[index];
-
+          // card specs hardcoded
           final Color tagBackgroundColor = Colors.pink;
           final cardHeight = height;
           final cardWidth = MediaQuery.of(context).size.width * 0.34;
+          // build card
           return Container(
             decoration: BoxDecoration(
               color: tagBackgroundColor,

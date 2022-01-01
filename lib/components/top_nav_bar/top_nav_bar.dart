@@ -1,5 +1,4 @@
 /*
-Author: Passant Abdelgalil
 Description: 
     The top navigation bar component to be used in 'Feed Screen',
     with taps ['following', 'stuff for you'] and animated tumblr icon
@@ -11,7 +10,6 @@ import 'package:tumblrx/components/top_nav_bar/tumblrx_icon.dart';
 class TopNavBar extends StatelessWidget {
   final TabController _controller;
   TopNavBar(this._controller);
-  //constanst for rendering the widget
 
   /// tumblr logo icon width
   final double _tumblrIconWidth = 30.0;

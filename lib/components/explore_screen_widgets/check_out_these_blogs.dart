@@ -1,3 +1,10 @@
+/*
+  Description:
+      this file creates a class that extends stateless widget to view
+      blogs inside explore screen
+      list of blogs to be viewed are passed to the constructor
+
+ */
 import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -26,14 +33,18 @@ class CheckOutTheseBlogs extends StatelessWidget {
         itemCount: min(_blogs.length, 10),
         scrollDirection: Axis.horizontal,
         itemBuilder: (context, index) {
+          // store blog data in a final to ovoid indexing multiple times
           final Blog blog = _blogs[index];
+          // store blog avatar link and set to a default in case of none
           final String blogAvatar = blog.blogAvatar == 'none'
               ? "https://64.media.tumblr.com/9f9b498bf798ef43dddeaa78cec7b027/tumblr_o51oavbMDx1ugpbmuo7_500.png"
               : blog.blogAvatar;
+          // store blog header image link and set to a default in case of none
           final String blogHeaderImage = blog.blogTheme != null
               ? blog.blogTheme.headerImage ??
                   "https://64.media.tumblr.com/9f9b498bf798ef43dddeaa78cec7b027/tumblr_o51oavbMDx1ugpbmuo7_500.png"
               : "https://64.media.tumblr.com/9f9b498bf798ef43dddeaa78cec7b027/tumblr_o51oavbMDx1ugpbmuo7_500.png";
+          // store blog background color and set to default in case of none
           // final Color blogBackgroundColor = blog.blogTheme != null &&
           //         blog.blogTheme.backgroundColor != null
           //     ? Color(int.parse(
@@ -41,12 +52,15 @@ class CheckOutTheseBlogs extends StatelessWidget {
           //         Colors.pink
           //     : Colors.pink;
           final Color blogBackgroundColor = Colors.pink;
+          // blog card dimenssions
           final cardHeight = MediaQuery.of(context).size.height * .2;
           final cardWidth = MediaQuery.of(context).size.width * 0.35;
+
+          // build card widget
           return Material(
             child: InkWell(
               onTap: () {
-                Navigator.of(context).pushNamed('blog_screen');
+//                Navigator.of(context).pushNamed('blog_screen');
               },
               child: Container(
                 decoration: BoxDecoration(

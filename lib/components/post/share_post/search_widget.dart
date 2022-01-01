@@ -1,3 +1,8 @@
+/*
+Description: 
+    A class that implementes text field widget for seaching blogs
+*/
+
 import 'package:flutter/material.dart';
 import 'package:tumblrx/global.dart';
 import 'package:tumblrx/models/user/blog.dart';

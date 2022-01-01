@@ -1,3 +1,8 @@
+/*
+Description: 
+    A class that implementes widget for viewing seaching blogs result
+*/
+
 import 'package:flutter/material.dart';
 import 'package:tumblrx/models/user/blog.dart';
 
@@ -23,6 +28,7 @@ class SearchResult extends StatelessWidget {
                   'Tumblrs',
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
+                // foe each blog in the list of results, build a widget
                 ..._searchResultsNotifier.value
                     .map((blog) => ListTile(
                           onTap: () => _selectedBlogsNotifier.value.add(blog),

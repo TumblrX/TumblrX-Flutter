@@ -1,10 +1,18 @@
+/*
+  Description:
+      this file creates a class that extends stateless widget to view
+      text block
+      text orignal string and formatted string after adding format tags
+      are passed to the constructor
+      original string is used in 'copy to clipboard' logic
+ */
+
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:styled_text/styled_text.dart';
 import 'package:tumblrx/utilities/constants.dart';
 import 'package:tumblrx/utilities/text_format.dart';
 
-//import 'package:clipboard/clipboard.dart';
 class TextBlockWidget extends StatelessWidget {
   final String _text;
   final String _sharableText;
@@ -17,6 +25,7 @@ class TextBlockWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      // on long press, show copy to clipboard options
       onLongPress: () {
         EdgeInsets padding = MediaQuery.of(context).padding;
         double pads = padding.left + padding.right;
@@ -51,6 +60,7 @@ class TextBlockWidget extends StatelessWidget {
                   ],
                 ));
       },
+      // view text content
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: StyledText(

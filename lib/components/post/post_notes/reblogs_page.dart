@@ -1,5 +1,4 @@
 /*
-Author: Passant Abdelgalil
 Description: 
     A class that implementes reblogs screen for a specific post
     list of reblogs on the post is passed to the constructor and

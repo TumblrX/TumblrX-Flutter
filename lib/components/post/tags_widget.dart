@@ -1,3 +1,8 @@
+/*
+Description: 
+    A class that implementes tags widget 
+*/
+
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 
@@ -10,7 +15,7 @@ class TagsWidget extends StatefulWidget {
 }
 
 void navigateToTag(String tag, BuildContext context) {
-  Navigator.of(context).pushNamed('tag_screen');
+//  Navigator.of(context).pushNamed('tag_screen');
 }
 
 class _TagsWidgetState extends State<TagsWidget> {
@@ -42,6 +47,8 @@ class _TagsWidgetState extends State<TagsWidget> {
                 children: widget._tags
                     .getRange(1, widget._tags.length)
                     .map(
+                      // view each tag with callback on tap that navigates to
+                      // tag page
                       (tag) => TextSpan(
                         text: ' $tag ',
                         recognizer: TapGestureRecognizer()

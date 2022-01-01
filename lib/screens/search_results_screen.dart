@@ -1,4 +1,7 @@
-//api/post?q=test&offset=0&type=image
+/*
+Description: 
+    a stateful widget for viewing search result screen
+*/
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/components/post/post_widget.dart';
@@ -19,6 +22,7 @@ class SearchResultScreen extends StatefulWidget {
 }
 
 class _SearchResultScreenState extends State<SearchResultScreen> {
+  // inform user to choose a filter to apply on search results
   Widget _searchResultBody = Center(
     child: Text("Filter Your Results"),
   );
@@ -36,9 +40,12 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
             width: MediaQuery.of(context).size.width * .98,
             child: Row(
               children: [
+                // button to select tumblrs from the search results
                 TextButton(
                   onPressed: () {
                     _searchResultBody = FutureBuilder(
+                      // request search results with type 'blog'
+                      future: _getBlogsResult(widget._query),
                       builder: (context, snapshot) {
                         switch (snapshot.connectionState) {
                           case ConnectionState.active:
@@ -46,11 +53,12 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
                           case ConnectionState.waiting:
                             return Center(child: CircularProgressIndicator());
                           case ConnectionState.done:
+                            // if something went wrong, view error icon
                             if (snapshot.hasError)
                               return Center(
                                 child: Icon(Icons.error),
                               );
-                            //logger.e(snapshot.data);
+                            // view blogs
                             return ListView.builder(
                               itemCount: snapshot.data.length,
                               itemBuilder: (context, index) => Padding(
@@ -63,7 +71,6 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
                           child: Icon(Icons.error),
                         );
                       },
-                      future: _getBlogsResult(widget._query),
                     );
                     setState(() {});
                   },
@@ -72,6 +79,7 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
                       foregroundColor:
                           MaterialStateProperty.all(_unSelectedButtonColor)),
                 ),
+                // button to select posts with type image from the search results
                 TextButton(
                   onPressed: () {
                     _searchResultBody = FutureBuilder(
@@ -82,11 +90,12 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
                           case ConnectionState.waiting:
                             return Center(child: CircularProgressIndicator());
                           case ConnectionState.done:
+                            // if something went wrong, view error icon
                             if (snapshot.hasError)
                               return Center(
                                 child: Icon(Icons.error),
                               );
-                            logger.d(snapshot.data);
+                            // view posts
                             return ListView.builder(
                               itemCount: snapshot.data.length,
                               itemBuilder: (context, index) => Padding(
@@ -112,6 +121,7 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
                       foregroundColor:
                           MaterialStateProperty.all(_unSelectedButtonColor)),
                 ),
+                // button to select posts with type text from the search results
                 TextButton(
                   onPressed: () {
                     _searchResultBody = FutureBuilder(
@@ -122,11 +132,12 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
                           case ConnectionState.waiting:
                             return Center(child: CircularProgressIndicator());
                           case ConnectionState.done:
+                            // if something went wrong, view error icon
                             if (snapshot.hasError)
                               return Center(
                                 child: Icon(Icons.error),
                               );
-                            logger.d(snapshot.data);
+                            // view posts
                             return ListView.builder(
                               itemCount: snapshot.data.length,
                               itemBuilder: (context, index) => Padding(
@@ -152,6 +163,7 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
                       foregroundColor:
                           MaterialStateProperty.all(_unSelectedButtonColor)),
                 ),
+                // button to select posts with type video from the search results
                 TextButton(
                   onPressed: () {
                     _searchResultBody = FutureBuilder(
@@ -162,11 +174,11 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
                           case ConnectionState.waiting:
                             return Center(child: CircularProgressIndicator());
                           case ConnectionState.done:
+                            // if something went wrong, view error icon
                             if (snapshot.hasError)
                               return Center(
                                 child: Icon(Icons.error),
                               );
-                            logger.d(snapshot.data);
                             return ListView.builder(
                               itemCount: snapshot.data.length,
                               itemBuilder: (context, index) => Padding(
@@ -196,6 +208,7 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
             ),
           ),
         ),
+        // widget to render search results
         Expanded(
           child: Container(
             padding: EdgeInsets.only(bottom: 8),
@@ -206,6 +219,7 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
     );
   }
 
+// private helper function to filter posts with the passed type
   Future<List<Post>> _filterPostsResults(
       String query, String type, String token) async {
     Map<String, dynamic> response = await apiClient.sendGetRequest('post',
@@ -226,6 +240,7 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
     }).toList();
   }
 
+// private helper function to request blogs from the search results
   Future<List<Blog>> _getBlogsResult(String query) async {
     Map<String, dynamic> response = await apiClient
         .sendGetRequest('blog/search', query: {

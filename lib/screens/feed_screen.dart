@@ -1,3 +1,7 @@
+/*
+Description: 
+    a stateful widget for viewing home screen with [Following, Stuff for you]
+*/
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -17,12 +21,14 @@ class FeedScreen extends StatefulWidget {
 
 class _FeedScreenState extends State<FeedScreen>
     with SingleTickerProviderStateMixin {
+  // tab controller to choose between [Following, Stuff for you]
   TabController tabController;
 
   @override
   void initState() {
     super.initState();
     tabController = TabController(length: 2, vsync: this);
+    // reset provider list of posts, to avoid overlapping between old/new posts
     tabController.addListener(() {
       Provider.of<Content>(context, listen: false).resetContent();
     });
@@ -68,6 +74,7 @@ class _FeedScreenState extends State<FeedScreen>
           ),
         ),
       ),
+      // floating action icon to use for creating posts
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.blue,
         child: Icon(Icons.edit),

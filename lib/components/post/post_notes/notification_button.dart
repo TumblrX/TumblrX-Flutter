@@ -1,3 +1,8 @@
+/*
+  Description:
+      this file creates a class that extends stateful widget to view
+      notification icon inside the notes page to follow/unfollow post 
+ */
 import 'package:flutter/material.dart';
 
 class NotificationButton extends StatefulWidget {

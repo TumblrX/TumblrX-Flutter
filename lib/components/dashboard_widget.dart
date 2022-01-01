@@ -1,5 +1,4 @@
 /*
-Author: Passant Abdelgalil
 Description: 
     This file creates a statefulwdiget class to use for rendering
     the user dashboard in tab 'Stuff For You' in the user's feed, using
@@ -68,12 +67,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   /// Builds the ListView widget to view posts
   Widget _buildListView() {
+    // if no posts to view, view an empty content state image
     if (content.posts.isEmpty)
       return Container(
         child: Center(
           child: Image.asset('assets/images/empty_content.jpg'),
         ),
       );
+
+    // build stack to view post view and progress indicator  while loading
     return Stack(
       children: [
         ListView.separated(
