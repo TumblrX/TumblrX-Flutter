@@ -1,5 +1,4 @@
 /*
-Author: Esraa Gamal
 Description: this class show Avatar as a circle in Blog 
 */
 import 'package:flutter/material.dart';

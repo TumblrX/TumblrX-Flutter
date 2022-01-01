@@ -1,5 +1,4 @@
 /*
-Author:Esraa Gamal saad
 Description:for show header image for the blog 
 */
 import 'package:flutter/material.dart';

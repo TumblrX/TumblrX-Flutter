@@ -1,5 +1,4 @@
 /*
-Author:Esraa Gamal
 Description: this class to show avatar as a square in Blog 
 */
 import 'package:flutter/material.dart';

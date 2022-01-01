@@ -1,5 +1,4 @@
 /*
-Author:Esraa Gamal
 Description: this for showing text and description in blog
 */
 import 'package:flutter/material.dart';

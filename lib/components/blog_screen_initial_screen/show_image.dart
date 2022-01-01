@@ -1,5 +1,5 @@
 /*
-Author:Esraa Gamal
+
 Description:this class for show image
 */
 import 'package:flutter/material.dart';

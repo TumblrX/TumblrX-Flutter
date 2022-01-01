@@ -1,5 +1,4 @@
 /*
-Author:Esraa Gamal
 Description: alert dialgue show when you exsit from edit blog
 */
 import 'package:flutter/cupertino.dart';

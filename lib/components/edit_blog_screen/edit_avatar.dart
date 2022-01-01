@@ -1,5 +1,4 @@
 /*
-Author:Esraa Gamal
 Description:Editing avatar functions  
 */
 import 'package:flutter/material.dart';
