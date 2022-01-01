@@ -12,6 +12,6 @@
  ## Web release 
  The web version of the app is now deployed on this link
  ```
- http://tumblrx.me:5000/
+ https://tumblrx.me:5500/
  ```
  
