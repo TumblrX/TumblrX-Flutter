@@ -1,3 +1,11 @@
+/*
+  Description:
+      this file creates a class that extends stateless widget to view
+      posts inside explore screen
+      list of posts to be viewed are passed to the constructor
+
+ */
+
 import 'package:flutter/material.dart';
 import 'package:tumblrx/components/post/post_blocks/image_block_widget.dart';
 import 'package:tumblrx/components/post/post_blocks/text_block_widget.dart';
@@ -39,8 +47,8 @@ class TryOutThesePosts extends StatelessWidget {
             default:
               break;
           }
-          // check if child is set from previous check, or a block is already
-          // picked, skip
+          // check if child is set from previous check, or a block from this
+          // post is already picked, skip
           if (child != null && !pickedBlock) {
             pickedBlock = true;
             childrenCount++;
@@ -50,8 +58,8 @@ class TryOutThesePosts extends StatelessWidget {
                 child: InkWell(
                   enableFeedback: false,
                   onTap: () {
-                    Navigator.of(context).pushNamed('recommendations',
-                        arguments: {'posts': _posts});
+                    // Navigator.of(context).pushNamed('recommendations',
+                    //    arguments: {'posts': _posts});
                   },
                   child: GridTile(
                     child: Container(

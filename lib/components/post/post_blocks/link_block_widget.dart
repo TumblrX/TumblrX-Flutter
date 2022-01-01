@@ -1,3 +1,9 @@
+/*
+  Description:
+      this file creates a class that extends stateless widget to view
+      link block
+      link url and descriptions are passed to the constructor
+ */
 import 'package:any_link_preview/any_link_preview.dart';
 import 'package:flutter/material.dart';
 

@@ -1,3 +1,9 @@
+/*
+  Description:
+      this file creates a class that extends stateful widget to view
+      number of notes in addition to notification icon inside the notes page
+      also with tabs to navigate between [comments, like, reblogs] page
+ */
 import 'package:flutter/material.dart';
 import 'package:tumblrx/components/post/post_notes/notification_button.dart';
 import 'package:tumblrx/utilities/custom_icons.dart';
@@ -27,6 +33,7 @@ class NotesAppBar extends StatelessWidget implements PreferredSizeWidget {
       unselectedLabelColor: Colors.grey,
       labelColor: Colors.blueAccent,
       tabs: [
+        // comments tab
         Tab(
           icon: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -36,6 +43,7 @@ class NotesAppBar extends StatelessWidget implements PreferredSizeWidget {
             ],
           ),
         ),
+        // reblogs tab
         Tab(
           icon: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -44,6 +52,7 @@ class NotesAppBar extends StatelessWidget implements PreferredSizeWidget {
                 Text('$_reblogCount')
               ]),
         ),
+        // likes tab
         Tab(
           icon: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -54,6 +63,7 @@ class NotesAppBar extends StatelessWidget implements PreferredSizeWidget {
         )
       ],
     );
+    // build app bar
     return AppBar(
       backgroundColor: Theme.of(context).primaryColor,
       title: Text('$_totalNotes notes'),

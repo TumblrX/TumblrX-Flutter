@@ -1,3 +1,8 @@
+/*
+Description: 
+    A class that implementes widget to view posts in the search result screen
+    list of posts are passed to the constructor
+*/
 import 'package:flutter/material.dart';
 import 'package:tumblrx/components/post/post_widget.dart';
 import 'package:tumblrx/global.dart';
@@ -11,6 +16,7 @@ class PostView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // view list of posts
     return ListView.separated(
       itemCount: _posts.length,
       // controller: _controller,

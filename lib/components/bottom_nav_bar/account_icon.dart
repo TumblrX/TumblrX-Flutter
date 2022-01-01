@@ -1,5 +1,4 @@
 /*
-Author: Passant Abdelgalil
 Description: 
     A widget for the blog icon in the overlay entry with animation
     to switch between blogs

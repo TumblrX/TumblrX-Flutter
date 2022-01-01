@@ -1,3 +1,7 @@
+/*
+Description: 
+    A class that implementes share post widget 
+*/
 import 'package:flutter/material.dart';
 import 'package:tumblrx/components/post/share_post/blog_selector_widget.dart';
 import 'package:tumblrx/components/post/share_post/share_methods_widget.dart';
@@ -8,11 +12,13 @@ class SharePostWidget extends StatelessWidget {
   final bool enableSending = false;
   final Post _post;
   SharePostWidget(Post post) : _post = post;
-
+  // value notifier of selected blogs to send the post to
   // final ValueNotifier<List<Blog>> _selectedBlogsNotifier = ValueNotifier([]);
+  // value notivifer of search blog results
 //  final ValueNotifier<List<Blog>> _searchBlogResultsNotifier =
 //      ValueNotifier([]);
 
+  // helper function to draw a thick line
   Widget topDecoration() => Padding(
         padding: const EdgeInsets.all(8.0),
         child: Center(
@@ -39,6 +45,7 @@ class SharePostWidget extends StatelessWidget {
           const Divider(
             thickness: 2.5,
           ),
+          // view search results
           //SearchWidget(_searchBlogResultsNotifier),
           /*SearchResult(
             searchResultsNotifier: _searchBlogResultsNotifier,
@@ -46,6 +53,7 @@ class SharePostWidget extends StatelessWidget {
           ),
           Spacer(),
           const Divider(),
+          // view list of selected blogs to send the post to them
           Row(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -73,6 +81,7 @@ class SharePostWidget extends StatelessWidget {
                   ),
                 ),
               ),
+              // send button
               IconButton(
                 color: Colors.blueAccent,
                 disabledColor: Colors.blueAccent.withOpacity(0.5),

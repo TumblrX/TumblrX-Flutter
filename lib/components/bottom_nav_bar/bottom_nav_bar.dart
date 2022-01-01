@@ -1,5 +1,4 @@
 /*
-Author: Passant Abdelgalil
 Description: 
     The bottom navigation bar component to be used in 'Main Screen'
 
@@ -60,14 +59,17 @@ class _BottomNavBarWidgetState extends State<BottomNavBarWidget> {
       currentIndex: _selectedIndex,
       onTap: _onTap,
       items: <BottomNavigationBarItem>[
+        // home icon
         BottomNavigationBarItem(
           icon: Icon(Icons.home),
           label: 'Home',
         ),
+        // explore icon
         BottomNavigationBarItem(
           icon: Icon(Icons.search),
           label: 'Explore',
         ),
+        // notification icon
         BottomNavigationBarItem(
           icon: Provider.of<Messaging>(context).totalUnseenMessage == 0
               ? Icon(Icons.emoji_emotions_outlined)
@@ -98,6 +100,7 @@ class _BottomNavBarWidgetState extends State<BottomNavBarWidget> {
                 ),
           label: 'Notifications',
         ),
+        // profile icon
         BottomNavigationBarItem(
           icon: ProfileIcon(context, _key, _onTap),
           label: 'Profile',

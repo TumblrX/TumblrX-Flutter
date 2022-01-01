@@ -1,3 +1,8 @@
+/*
+Description: 
+    a stateful widget for viewing search screen 
+    this screen is a templeate where I inject search results to view
+*/
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -17,8 +22,9 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
+// private helper function to view blogs returned from the immediate search
   Widget _viewSearchedBlogs(Map<String, dynamic> response, String query) {
-    //logger.d(response);
+    // parse response body and create blog objects
     if (response.containsKey('blogs')) {
       List<Map<String, dynamic>> blogs =
           List<Map<String, dynamic>>.from(response['blogs']);
@@ -30,8 +36,8 @@ class _SearchScreenState extends State<SearchScreen> {
           logger.e('error in handle search blog, $err');
         }
       }).toList();
-      logger.d(blogsList.length);
       final double avatarWidth = MediaQuery.of(context).size.width * .1;
+      // view blogs results
       return blogsList == null || blogsList.isEmpty
           ? Container()
           : Column(
@@ -52,12 +58,14 @@ class _SearchScreenState extends State<SearchScreen> {
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
+                // search result
                 Expanded(
                   child: ListView(
                     shrinkWrap: true,
                     children: [
                       ...blogsList.map((blog) {
                         return ListTile(
+                          // blog avatar
                           leading: CachedNetworkImage(
                             width: avatarWidth,
                             height: avatarWidth,
@@ -80,16 +88,19 @@ class _SearchScreenState extends State<SearchScreen> {
                               ),
                             ),
                           ),
+                          // blog title
                           title: Text(
                             blog.title,
                             softWrap: true,
                             overflow: TextOverflow.ellipsis,
                           ),
+                          // blog handle
                           subtitle: Text(
                             blog.handle,
                             softWrap: true,
                             overflow: TextOverflow.ellipsis,
                           ),
+                          // follow button
                           trailing: TextButton(
                             onPressed: () {},
                             child: Text("FOLLOW"),
@@ -116,6 +127,8 @@ class _SearchScreenState extends State<SearchScreen> {
           width: MediaQuery.of(context).size.width * .75,
           child: TextField(
             textInputAction: TextInputAction.search,
+            // on pressing search icon from the keyboard, navigate to search
+            // results screen
             onSubmitted: (value) {
               resultWidget = SearchResultScreen(query: value);
               setState(() {});
@@ -127,6 +140,8 @@ class _SearchScreenState extends State<SearchScreen> {
               focusedBorder: InputBorder.none,
               border: InputBorder.none,
             ),
+            // whenever the text in the search field changes, request blogs with
+            // the new query
             onChanged: (value) async {
               resultWidget = value.isEmpty
                   ? Container()
@@ -144,6 +159,7 @@ class _SearchScreenState extends State<SearchScreen> {
           ),
         ),
       ),
+      // view search screen body
       body: Container(
         color: Theme.of(context).primaryColor,
         child: Center(

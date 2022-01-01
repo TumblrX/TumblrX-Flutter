@@ -1,3 +1,10 @@
+/*
+Description: 
+      this file creates a class that extends stateful widget to view
+      comment text field, and monitor the text field content to
+      activare/deactivate the submit/reply button
+*/
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -23,6 +30,7 @@ class CommentField extends StatefulWidget {
 }
 
 class _CommentFieldState extends State<CommentField> {
+  // text input controller to monitor the text field content
   TextEditingController _textInputController;
 
   bool allowReply = false;
@@ -42,6 +50,7 @@ class _CommentFieldState extends State<CommentField> {
   @override
   Widget build(BuildContext context) {
     final double avatarRadius = MediaQuery.of(context).size.width * 0.1;
+    // build text field widget
     return Column(
       children: [
         Divider(thickness: .6),
@@ -50,6 +59,7 @@ class _CommentFieldState extends State<CommentField> {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              // blog avatar image icon
               Padding(
                 padding: const EdgeInsets.only(right: 8.0),
                 child: CachedNetworkImage(
@@ -75,6 +85,7 @@ class _CommentFieldState extends State<CommentField> {
                   ),
                 ),
               ),
+              // text field widget
               Flexible(
                 child: TextField(
                   controller: _textInputController,
@@ -91,9 +102,11 @@ class _CommentFieldState extends State<CommentField> {
                       focusedBorder: InputBorder.none),
                 ),
               ),
+              // reply button
               TextButton(
                   onPressed: allowReply
                       ? () async {
+                          // on pressed, send request to the API
                           final String endPoint =
                               "api/post/${widget._postId}/comment";
                           Map<String, dynamic> response = await apiClient
@@ -106,6 +119,8 @@ class _CommentFieldState extends State<CommentField> {
                             'commentText': _textInputController.text
                           });
                           logger.d(response);
+                          // if success, rebuild the widget and notify widgets
+                          // that listen on comments
                           if (!response.containsKey('error')) {
                             widget._commentNotifier.value = true;
                             setState(() {});

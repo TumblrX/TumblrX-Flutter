@@ -1,10 +1,17 @@
+/*
+  Description:
+      this file creates a class that extends stateless widget to view
+      video block
+      video url and provider data are passed to the constructor
+      
+      video can be from youtube, or uploaded to tumblrx
+ */
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:tumblrx/global.dart';
 import 'package:video_player/video_player.dart';
-//import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
-//import 'package:vimeo_player_flutter/vimeo_player_flutter.dart';
 
 class VideoBlockWidget extends StatefulWidget {
   final String _provider;
@@ -24,18 +31,22 @@ class _VideoBlockWidgetState extends State<VideoBlockWidget> {
   @override
   void initState() {
     if (widget._provider == 'youtube') {
+      // regex to extract video is from video url
       RegExp regExp = RegExp(
           r"^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*");
       RegExpMatch match = regExp.firstMatch(widget._url);
       String videoId;
       if (match != null) videoId = match.group(2);
+      // if the url is not malformed, initialize the video controller
       if (videoId != null) {
         _youtubeController = YoutubePlayerController(
-            initialVideoId: videoId,
-            params: YoutubePlayerParams(autoPlay: false, mute: true));
+          initialVideoId: videoId,
+          params: YoutubePlayerParams(autoPlay: false, mute: true),
+        );
       } else
         logger.d('video id is $videoId');
     } else if (widget._provider != 'vimeo') {
+      // initialize video controller for videos from tumblrx
       _videoController = VideoPlayerController.network(widget._url)
         ..initialize().then((value) => setState(() {}));
     }
@@ -59,6 +70,7 @@ class _VideoBlockWidgetState extends State<VideoBlockWidget> {
   }
 
   dynamic _buildVideoPlayer() {
+    // build video widget for youtube/upladed videos
     if (widget._provider == 'youtube')
       return Row(
         children: [
@@ -69,18 +81,7 @@ class _VideoBlockWidgetState extends State<VideoBlockWidget> {
           ),
         ],
       );
-    // if (widget._provider == 'vimeo') {
-    //   String videoId = widget._url.split('/').last;
-    //   logger.d('video id is $videoId');
-    //   return Container(
-    //     height: 250,
-    //     child: Center(
-    //       child: VimeoPlayer(
-    //         videoId: videoId,
-    //       ),
-    //     ),
-    //   );
-    // }
+
     return _videoController.value.isInitialized
         ? AspectRatio(
             aspectRatio: _videoController.value.aspectRatio,

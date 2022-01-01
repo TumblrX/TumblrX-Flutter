@@ -20,12 +20,12 @@ void main() {
 
     test('test color to hex', () {
       Color x = hexToColor('#000000');
-      expect(x, 0xff000000);
+      expect(x, Color(0xff000000));
+
     });
     test('test hex to color', () {
       String x = colorToHexString(Color(0xff000000));
       expect(x, '#000000');
     });
-  
   });
 }

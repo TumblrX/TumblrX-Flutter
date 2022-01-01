@@ -1,3 +1,9 @@
+/*
+Description: 
+    A class that implementes share options widget
+    options can be [copy to clipboard, share via telegarm, share via others] 
+    sharing the post is done by sharing a link to the post
+*/
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:tumblrx/global.dart';
@@ -58,7 +64,7 @@ class ShareMethods extends StatelessWidget {
             ],
           ),
         ),
-        // share
+        // share via others
         InkWell(
           onTap: () async {
             try {

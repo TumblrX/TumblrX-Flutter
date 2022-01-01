@@ -1,5 +1,4 @@
 /*
-Author: Passant Abdelgalil
 Description: 
     The post header widget that contains blog name, follow button,
     and options icon
@@ -46,9 +45,6 @@ class PostHeader extends StatelessWidget {
         _blogId = blogId,
         _showFollowButton = showFollowButton,
         _isReblogged = isReblogged;
-  // PostHeader({@required int index, bool showOptionsIcon = true})
-  //     : _index = index,
-  //       _showOptionsIcon = showOptionsIcon;
 
   @override
   Widget build(BuildContext context) {
@@ -68,6 +64,7 @@ class PostHeader extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     _showBlogAvatar(_blogAvatar),
+                    // blog info with follow button
                     Expanded(
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -122,6 +119,8 @@ class PostHeader extends StatelessWidget {
     }
   }
 
+  // private helper function to build blog info widget that contains
+  // blog title and blog handle
   Widget _blogInfo(String blogTitle, bool isRebloged, String reblogKey) =>
       Padding(
         padding: const EdgeInsets.only(left: 8.0, right: 5.0),
@@ -135,6 +134,7 @@ class PostHeader extends StatelessWidget {
                     style: TextStyle(color: Colors.black),
                     overflow: TextOverflow.ellipsis,
                   ),
+                  // show reblogged icon is the post is reblogged
                   Row(
                     children: [
                       Icon(
@@ -159,7 +159,7 @@ class PostHeader extends StatelessWidget {
               ),
       );
 
-  /// callback to open a dialog with blog options
+  /// callback to open a dialog with options [copy to clipboard, mute notifiaction]
   void _showBlogOptions(DateTime publishedOn, BuildContext context,
       {bool otherBlog = false}) {
     final String muteNotificationMessage =
@@ -169,6 +169,8 @@ class PostHeader extends StatelessWidget {
       context: context,
       builder: (context) => FractionallySizedBox(
         heightFactor: 0.3,
+        // in case the post blog owner is the current active blog, show only
+        // copy to clipboard option
         child: otherBlog
             ? ListView(
                 children: [
@@ -186,6 +188,7 @@ class PostHeader extends StatelessWidget {
                   )
                 ],
               )
+            // else view also mute notification option
             : ListView(
                 children: [
                   ListTile(
@@ -211,6 +214,7 @@ class PostHeader extends StatelessWidget {
     );
   }
 
+// function to construct the post link to be shared
   Future<bool> _copyLink(String postId) async {
     try {
       await FlutterClipboard.copy('https://tumblrx.me:5000/post/$postId');
@@ -220,6 +224,7 @@ class PostHeader extends StatelessWidget {
     }
   }
 
+// function to send request to mute notifications for this post
   void _muteNotifications(BuildContext context, String postId) {
     Provider.of<Content>(context, listen: false)
         .posts
@@ -231,6 +236,7 @@ class PostHeader extends StatelessWidget {
     });
   }
 
+// function to view alert in case the user choose to mute notifications
   void _showAlert(String alertMessage, BuildContext context,
       void Function() callBack, String confirmationText) {
     AlertDialog(
@@ -261,47 +267,7 @@ class PostHeader extends StatelessWidget {
         width: 0,
         height: 0,
       );
-
-  Widget blogInfo(String blogTitle, bool isRebloged, String reblogKey) =>
-      Padding(
-        padding: const EdgeInsets.only(left: 8.0, right: 5.0),
-        child: isRebloged
-            ? Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    blogTitle,
-                    style: TextStyle(
-                      color: Colors.black,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    softWrap: true,
-                  ),
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.repeat_outlined,
-                        color: Colors.grey,
-                      ),
-                      Flexible(
-                        child: Text(
-                          reblogKey,
-                          style: TextStyle(color: Colors.grey),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
-                  )
-                ],
-              )
-            : Text(
-                blogTitle,
-                style: TextStyle(color: Colors.black),
-                overflow: TextOverflow.ellipsis,
-              ),
-      );
-
+// function to build blog avatar widget
   Widget _showBlogAvatar(String blogAvatar) => CachedNetworkImage(
         width: avatarSize,
         height: avatarSize,
