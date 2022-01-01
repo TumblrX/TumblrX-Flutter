@@ -188,37 +188,45 @@ class User extends ChangeNotifier {
     return _blogs[_activeBlogIndex].title;
   }
 
+  ///returns Active blog title before edit to keep it on discard
   String getActiveBlogTitleBeforeEdit() {
     return _blogs[_activeBlogIndex].titleBeforEdit;
   }
 
+  ///sets Active blog Title
   void settActiveBlogTitleBeforeEdit(String title) {
     _blogs[_activeBlogIndex].setTitleBeforeEdit(title);
     notifyListeners();
   }
 
+  ///returns background color from active blog
   String getActiveBlogBackGroundColoreBeforeEdit() {
     return _blogs[_activeBlogIndex].backGroundColorBeforEdit;
   }
 
+  ///Sets background color for active blog
   void settActiveBlogBackGroundColorBeforeEdit(String color) {
     _blogs[_activeBlogIndex].setBackGroundColorBeforEditing(color);
     notifyListeners();
   }
 
+  ///returns description from active blog
   String getActiveBlogDescriptionBeforeEdit() {
     return _blogs[_activeBlogIndex].descriptionBeforEdit;
   }
 
+  ///Sets description for active blog
   void setActiveBlogDescriptionBeforeEdit(String description) {
     _blogs[_activeBlogIndex].setDescriptionBeforEdit(description);
     notifyListeners();
   }
 
+  ///returns if the blog avatar is circle from active blog
   bool getActiveBlogIsCircleBeforeEdit() {
     return _blogs[_activeBlogIndex].isCircleBeforEdit;
   }
 
+  ///Sets is circle for active blog
   void setActiveBlogIsCircleBeforeEdit(bool isCircle) {
     _blogs[_activeBlogIndex].setIsCircleBeforEditing(isCircle);
     notifyListeners();
@@ -244,40 +252,48 @@ class User extends ChangeNotifier {
     return _blogs[_activeBlogIndex].isPrimary;
   }
 
+  ///returns true if the active blog avatar is circle
   bool getIsAvatarCircle() {
     return _blogs[_activeBlogIndex].isCircleAvatar;
   }
 
+  ///Sets active blog title
   void setActiveBlogTitle(String title) {
     _blogs[_activeBlogIndex].setBlogtitle(title);
 
     notifyListeners();
   }
 
+  ///Sets Active blog description
   void setActiveBlogDescription(String description) {
     _blogs[_activeBlogIndex].setBlogDescription(description);
     notifyListeners();
   }
 
+  ///Sets active blog avatar shape to circle
   void setActiveBlogIsCircle(bool isCircle) {
     _blogs[_activeBlogIndex].setIsCircleAvatar(isCircle);
 
     notifyListeners();
   }
 
+  ///returns active blog posts
   Future<List<Post>> getActiveBlogPosts() async {
     return _blogs[_activeBlogIndex].posts;
   }
 
+  ///returns true if the user allows show avatar
   bool getActiveBlogShowAvatar() {
     return _blogs[_activeBlogIndex].showAvatar;
   }
 
+  ///Sets if the user allows showing avatar
   void setActiveBlogShowAvatar(bool showAvatar) {
     _blogs[_activeBlogIndex].setShowAvatar(showAvatar);
     notifyListeners();
   }
 
+  ///returns background color for active blog
   String getActiveBlogBackColor() {
     return _blogs[_activeBlogIndex].backGroundColor;
   }
@@ -303,33 +319,40 @@ class User extends ChangeNotifier {
     return _blogs[_activeBlogIndex].showHeadeImage;
   }
 
+  ///Sets active blog back color
   void setActiveBlogBackColor(String color) {
     _blogs[_activeBlogIndex].setBlogBackGroundColor(color);
 
     notifyListeners();
   }
 
+  ///returns the active blog
   Blog getActiveBlog() {
     return _blogs[_activeBlogIndex];
   }
 
+  ///returns header of active blog
   String getActiveBlogHeaderImage() {
     return _blogs[_activeBlogIndex].headerImage;
   }
 
+  ///updates active blog
   void updateActiveBlogInfo(BuildContext context) {
     _blogs[_activeBlogIndex].updateBlog(context);
   }
 
+  ///set if the header is stretch for active blog
   void setActiveBlogStretchHeaderImage(bool stretch) {
     _blogs[_activeBlogIndex].setStrtchHeaderImage(stretch);
     notifyListeners();
   }
 
+  ///get active blog stretch header image
   bool getActiveBlogStretchHeaderImage() {
     return _blogs[_activeBlogIndex].stretchHeaderImage;
   }
 
+  ///gets the title color of the active blog
   String getActiveBlogTitleColor() {
     return _blogs[_activeBlogIndex].titleColor;
   }
@@ -376,6 +399,7 @@ class User extends ChangeNotifier {
     notifyListeners();
   }
 
+  ///returns number of followings
   int getUserFollowing() {
     return _following;
   }
@@ -410,7 +434,8 @@ class User extends ChangeNotifier {
       }
     }
   }
-/// send get request to retrive all post this user likes
+
+  /// send get request to retrive all post this user likes
   Future<List<Post>> getUserLikes(BuildContext context) async {
     final String endPoint = 'user/likes';
 
@@ -458,7 +483,8 @@ class User extends ChangeNotifier {
       logger.e(response);
     }
   }
-///send get request to retrive the blogs the user follow
+
+  ///send get request to retrive the blogs the user follow
   Future<List<Blog>> getUserBlogFollowing(BuildContext context) async {
     String endPoint = 'user/following';
 
@@ -482,7 +508,8 @@ class User extends ChangeNotifier {
     } else {}
     return [];
   }
-///update blog
+
+  ///update blog
   Future<void> updateBlog(BuildContext context) async {
     await _blogs[_activeBlogIndex].updateBlogTheme(context);
     notifyListeners();

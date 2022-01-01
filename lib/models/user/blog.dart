@@ -9,6 +9,7 @@ import 'package:tumblrx/services/authentication.dart';
 import 'blog_theme.dart';
 import 'package:http_parser/http_parser.dart';
 
+///This class handles all blog details and contains all blog data
 class Blog {
   /// The user's tumblr short name
   String _handle;
@@ -35,7 +36,6 @@ class Blog {
   String _description;
 
   /// list of posts of this blog
-
   List<Post> _posts = [];
 
   /// flag to determine avatar shape
@@ -62,6 +62,7 @@ class Blog {
   ///isCircleAvatar
   bool _isCircleBeforEdit;
 
+  ///Color before editing
   String _backGroundColorBeforEdit;
 
   ///title color
@@ -69,13 +70,17 @@ class Blog {
 
   ///user id
   String _ownerId;
-///for chooes avatar in gallery
+
+  ///for chooes avatar in gallery
   XFile avatarPick;
-///for chooes header image in gallery
+
+  ///for chooes header image in gallery
   XFile headerImagePick;
- /// themes of Blog
- BlogTheme _blogTheme = BlogTheme();
-/// getter in blog class
+
+  /// themes of Blog
+  BlogTheme _blogTheme = BlogTheme();
+
+  /// getter in blog class
   String get blogAvatar => _blogAvatar;
   String get handle => _handle;
   String get title => _title;
@@ -96,14 +101,16 @@ class Blog {
   String get descriptionBeforEdit => _descriptionBeforEdit;
   bool get isCircleBeforEdit => _isCircleBeforEdit;
   String get backGroundColorBeforEdit => _backGroundColorBeforEdit;
-///constructor of blog
+
+  ///constructor of blog
   Blog(
       [this._handle,
       this._title,
       this._isPrivate,
       this._isPrimary,
       this._blogAvatar]);
-///from json convert json file to blog
+
+  ///from json convert json file to blog
   Blog.fromJson(Map<String, dynamic> json) {
     // blog id
     if (json.containsKey('_id'))
@@ -195,8 +202,8 @@ class Blog {
         this._titleColor = json['globalParameters']['titleColor'];
       }
     }
-     
   }
+
   ///convert blog to json file
   Map<dynamic, dynamic> toJson() {
     final Map<dynamic, dynamic> data = new Map<dynamic, dynamic>();
@@ -213,7 +220,8 @@ class Blog {
 
     return data;
   }
-///get avatar from data base
+
+  ///get avatar from data base
   Future<String> getBlogAvatar() async {
     final String endPoint = 'blog/';
     final Map<String, dynamic> reqParameters = {
@@ -240,7 +248,8 @@ class Blog {
   void setBlogId(String id) {
     this._id = id;
   }
-///Follow another blog request
+
+  ///Follow another blog request
   Future<bool> followBlog(String blogId, String token) async {
     final String endPoint = "api/user/follow";
     Map<String, dynamic> response =
@@ -271,87 +280,97 @@ class Blog {
     return true;
   }
 
+  ///saves title before edit
   void setTitleBeforeEdit(String title) {
     this._titleBeforeEdit = title;
   }
 
+  ///saves description before edit
   void setDescriptionBeforEdit(String description) {
     this._descriptionBeforEdit = description;
   }
 
+  ///saves avatar shape before edoting
   void setIsCircleBeforEditing(bool isCircle) {
     this._isCircleBeforEdit = isCircle;
   }
 
+  ///saves color before editing
   void setBackGroundColorBeforEditing(String color) {
     this._backGroundColorBeforEdit = color;
   }
 
-  void getPosts() async {
-    try {} catch (error) {}
-  }
-
-  void blockBlog(String toBlock) async {
-  
-    try {} catch (error) {}
-  }
-
+  ///Sets blog avatar
   void setBlogAvatar(String avatar) {
     _blogAvatar = avatar;
   }
 
+  ///Sets Blog title
   void setBlogtitle(String title) {
     _title = title;
   }
 
+  ///Sets blog description
   void setBlogDescription(String description) {
     _description = description;
   }
 
+  ///Sets Background Color
   void setBlogBackGroundColor(String color) {
     this._backGroundColor = color;
   }
 
+  ///Sets Header Image
   void setHeaderImage(String image) {
     blogTheme.headerImage = image;
   }
 
+  ///Sets Avatar shape
   void setAvatarShape(String shape) {
     blogTheme.avatarShape = shape;
   }
 
+  ///Gets Avatar shape
   String getAvatarShape() {
     return blogTheme.avatarShape;
   }
 
+  ///gets blog Header Image
   String getHeaderImage() {
     return blogTheme.headerImage;
   }
 
+  ///Gets blog description
   String getBlogDescription() {
     return _description;
   }
 
+  ///Sets if the blog avatar is circle
   void setIsCircleAvatar(bool isCircle) {
     _isCircleAvatar = isCircle;
   }
 
+  ///gets if blog is primary
   bool getIsPrimary() {
     return _isPrimary;
   }
 
+  ///returns blog posts
   Future<List<Post>> getBlogPosts() async {
     return _posts;
   }
 
+  ///sets if show avatar is true
   void setShowAvatar(bool show) {
     this._showAvatar = show;
   }
 
+  ///sets if the header image is strecth
   void setStrtchHeaderImage(bool stretch) {
     this._stretchHeaderImage = stretch;
   }
 
+  ///uploads image for blog avatar or header image
   Future pickImage(int indicator) async {
     final image = await ImagePicker().pickImage(source: ImageSource.gallery);
     logger.d(image.path.toString());
@@ -394,7 +413,7 @@ class Blog {
     return posts;
   }
 
-
+  ///updates blog by sending getBlog info request to back-end
   void updateBlog(BuildContext context) async {
     final String endPoint = 'api/blog/${this._id}';
     final Map<dynamic, dynamic> body = this.toJson();
@@ -410,7 +429,8 @@ class Blog {
       print(response.statusCode);
     }
   }
-///this function send get request and get blog's information 
+
+  ///this function send get request and get blog's information
   Future<Blog> blogRetrive(BuildContext context) async {
     String endPoint;
 
@@ -496,8 +516,8 @@ class Blog {
       return null;
     }
   }
-  ///this function send put request and update blog theme
 
+  ///this function send put request and update blog theme
   Future<void> updateBlogTheme(BuildContext context) async {
     final String endPoint = 'api/blog/edit-theme/${this._handle}';
     final Map<dynamic, dynamic> data = new Map<dynamic, dynamic>();

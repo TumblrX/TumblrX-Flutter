@@ -255,7 +255,7 @@ class Messaging extends ChangeNotifier {
     this.myId = userId;
     this.token = token;
     socket = IO.io(
-        'http://tumblrx.me:6600',
+        'wss://tumblrx.me:9900',
         !kIsWeb
             ? IO.OptionBuilder()
                 .setTransports(['websocket']) // for Flutter or Dart VM
