@@ -4,7 +4,7 @@ import 'package:tumblrx/components/chatting/square_avatar.dart';
 import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/screens/chat_screen.dart';
 
-///Widget that appears in new conversation for each user
+///Widget that appears in new conversation screen for each user suggested
 class NewConversationTile extends StatelessWidget {
   ///The user id of the conversation
   final String userId;

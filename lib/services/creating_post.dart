@@ -60,7 +60,12 @@ class CreatingPost extends ChangeNotifier {
   ///postID if it is editing post
   String _editPostId;
 
-  ///Initializes all post options and variables.
+  ///Initializes all post options and variables with optional input variables
+  ///[reblog] is sent if the posting is reblog, [edit] if the post is edit
+  ///[rebloggedPost] is a post object to be shown upon reblog
+  ///[editPostContent] is json object of the edited post to be edited
+  ///[editPostId] is used to edit the post
+  ///[editPostTags] tags in the edited post
   void initializePostOptions(BuildContext context,
       {bool reblog = false,
       bool edit = false,
@@ -444,6 +449,7 @@ class CreatingPost extends ChangeNotifier {
   ///It maps the collected data about the post to the final form and send it in a post request.
   Future<bool> postData(BuildContext context) async {
     List<Map> files = [];
+    //if the post is edit sum attributes aren't used
     Map<String, dynamic> requestBody = isEdit
         ? {}
         : {
@@ -515,7 +521,6 @@ class CreatingPost extends ChangeNotifier {
       var body = FormData.fromMap(requestBody);
       logger.d(requestBody);
       var dio = Dio();
-      //dio.options.headers['content-Type'] = 'application/json';
       dio.options.headers["authorization"] =
           Provider.of<Authentication>(context, listen: false).token;
       ScaffoldMessenger.of(context).showSnackBar(
@@ -665,6 +670,7 @@ class CreatingPost extends ChangeNotifier {
     return body;
   }
 
+  ///Format tags to final form: {'0': 'tag1', '1': 'tag2'}
   Map<String, String> _formatTags() {
     Map<String, String> tags = {};
     for (int i = 0; i < chosenHashtags.length; i++) {
