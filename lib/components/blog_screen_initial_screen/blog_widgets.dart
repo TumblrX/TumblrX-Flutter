@@ -1,5 +1,4 @@
 /*
-Author:Esraa Gamal
 Description:this file for tabs bar in Blog 
 */
 import 'package:flutter/material.dart';

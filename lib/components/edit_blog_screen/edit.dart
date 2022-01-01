@@ -1,5 +1,4 @@
 /*
-Author:Esraa Gamal
 Description:the page of Editing in blog 
 */
 import 'package:flutter/foundation.dart';

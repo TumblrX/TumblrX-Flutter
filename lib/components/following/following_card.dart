@@ -3,14 +3,15 @@ import 'package:tumblrx/models/user/blog.dart';
 import 'package:tumblrx/screens/user_blog_view.dart';
 
 class FollowingCard extends StatelessWidget {
-  final Blog _blog;
+  ///blog of user
+  final Blog _blog; 
   FollowingCard({@required blog}) : _blog = blog;
   @override
   Widget build(BuildContext context) {
     return Container(
         color: Colors.white,
 
-        //Followings
+        ///Followings
         child: InkWell(
           child: Column(
             children: [
@@ -20,6 +21,7 @@ class FollowingCard extends StatelessWidget {
                     height: 40,
                     decoration: BoxDecoration(
                         image: DecorationImage(
+                          ///avatar image
                       image: (_blog.blogAvatar != 'none')
                           ? NetworkImage(_blog.blogAvatar)
                           : NetworkImage(

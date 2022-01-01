@@ -1,5 +1,4 @@
 /*
-Author:Esraa Gamal
 Description:Edit buttons(background and accent)
 */
 import 'package:flutter/material.dart';

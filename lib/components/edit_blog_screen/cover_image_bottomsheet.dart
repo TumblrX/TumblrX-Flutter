@@ -1,5 +1,4 @@
 /*
-Author:Esraa Gamal
 Description:this bottom sheet in editing for(header image)
 */
 import 'package:flutter/material.dart';

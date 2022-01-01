@@ -1,5 +1,4 @@
 /*
-Author:Esraa Gamal
 Description:Bottom sheet for Avatar in Edinting 
 */
 import 'package:flutter/material.dart';
