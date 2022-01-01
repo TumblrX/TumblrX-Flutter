@@ -20,7 +20,9 @@ void main() {
 
     test('test color to hex', () {
       Color x = hexToColor('#000000');
+
       expect(x, Color(0xff000000));
+
 
     });
     test('test hex to color', () {

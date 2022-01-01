@@ -1,5 +1,4 @@
 /*
-Author:Esraa Gamal
 Description:this class for another user blog view 
 */
 import 'package:flutter/foundation.dart';

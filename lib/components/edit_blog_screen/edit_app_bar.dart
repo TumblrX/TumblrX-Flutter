@@ -1,5 +1,4 @@
 /*
-Author:Esraa Gamal
 Description:All App Bar in Editing page 
 */
 import 'package:flutter/material.dart';

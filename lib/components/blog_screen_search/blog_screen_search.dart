@@ -1,5 +1,4 @@
 /*
-Author:Esraa Gamal 
 Description:this class for search in blog
 */
 import 'dart:ui';
