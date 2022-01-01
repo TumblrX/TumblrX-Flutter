@@ -1,32 +1,26 @@
+/*
+Author:Esraa Gamal
+Description:Bottom sheet for Avatar in Edinting 
+*/
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/models/user/user.dart';
-
+///this class for avatr bottom sheet in editing blog
 class EditAvatarBottomSheet extends StatelessWidget {
-  bool showAvatar;
-
-  List<bool> selectShape;
-  XFile a; //test
-
   @override
   Widget build(BuildContext context) {
-    selectShape = [
-      !Provider.of<User>(context, listen: false).getIsAvatarCircle(),
-      Provider.of<User>(context, listen: false).getIsAvatarCircle()
-    ];
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         ListTile(
+
             leading: Icon(
               Icons.apps,
               color: Colors.black,
             ),
             title: Text('Choose a photo'),
             onTap: () {
-              print(Provider.of<User>(context, listen: false)
-                  .getActiveBlogAvatar());
+              ///pick the image from device
               Provider.of<User>(context, listen: false)
                   .getActiveBlog()
                   .pickImage(1);
@@ -36,6 +30,7 @@ class EditAvatarBottomSheet extends StatelessWidget {
           child: Divider(thickness: 1),
         ),
         ListTile(
+          ///showing  avatar or hide it
             title: Text('Show avatar'),
             trailing: Switch(
                 value: Provider.of<User>(context).getActiveBlogShowAvatar(),
@@ -52,7 +47,10 @@ class EditAvatarBottomSheet extends StatelessWidget {
           title: Text('Shape'),
           trailing: ToggleButtons(
             renderBorder: false,
-            isSelected: selectShape,
+            isSelected: [
+      !Provider.of<User>(context, listen: false).getIsAvatarCircle(),
+      Provider.of<User>(context, listen: false).getIsAvatarCircle()
+    ],      ///index [0] for square shape and index [1] for circle        
             onPressed: (index) {
               Provider.of<User>(context, listen: false)
                   .setActiveBlogIsCircleBeforeEdit(

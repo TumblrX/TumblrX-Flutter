@@ -1,3 +1,7 @@
+/*
+Author:Esraa Gamal
+Description:the screen for blog
+*/
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -32,9 +36,6 @@ class _BlogScreenState extends State<BlogScreen>
     _tabController = new TabController(length: 3, vsync: this);
 
     super.initState();
-    // Provider.of<User>(context, listen: false)
-    //   .getUserPosts(context); //esraa added
-
     Provider.of<User>(context, listen: false).getUserBlogFollowing(context);
     //intialize befor edit
 
@@ -50,10 +51,10 @@ class _BlogScreenState extends State<BlogScreen>
 
   @override
   Widget build(BuildContext context) {
-    //final blogProvider = Provider.of<BlogScreenConstantProvider>(context);
-
     return Scaffold(
       backgroundColor: Color(0xFF001935),
+
+      ///posts button
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.blue,
         child: Icon(Icons.edit),
@@ -81,144 +82,137 @@ class _BlogScreenState extends State<BlogScreen>
         },
       ),
       body: Center(
+        ///scroller page
         child: SingleChildScrollView(
-            child: ConstrainedBox(
-          constraints: BoxConstraints(
-              maxHeight: MediaQuery.of(context).size.height +
-                  MediaQuery.of(context).size.height / 3),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+                maxHeight: MediaQuery.of(context).size.height +
+                    MediaQuery.of(context).size.height / 3),
 
-          /// i will chnge it and make it equal total no of following-3*40
+            /// i will chnge it and make it equal total no of following-3*40
 
-          child: Container(
-            color: hexToColor(Provider.of<User>(context, listen: false)
-                    .getActiveBlogBackColor()) ??
-                Colors.blue,
-            constraints: !kIsWeb
-                ? BoxConstraints()
-                : BoxConstraints(
-                    maxWidth: 750.0,
-                    minWidth: MediaQuery.of(context).size.width < 750
-                        ? MediaQuery.of(context).size.width * 0.9
-                        : 750.0,
-                  ),
-            child: Column(
-
-                /// couloum have(the header image , avatar,title, description and tab bars )
-
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Stack(alignment: Alignment.center, children: <Widget>[
-                    Column(
-                      children: <Widget>[
-                        ///display header image with icons and drop down list
-
-                        HeaderImage(),
-
-                        ///display header image with icons and drop down list
-
-                        TextWriting(
-                          title: Provider.of<User>(context, listen: false)
-                              .getActiveBlogTitle(),
-                          description: Provider.of<User>(context, listen: false)
-                              .getActiveBlogDescription(),
-                          color: Provider.of<User>(context, listen: false)
-                              .getActiveBlogBackColor(),
-                          textColor: Provider.of<User>(context, listen: false)
-                              .getActiveBlogTitleColor(),
-                        ),
-                      ],
+            child: Container(
+              color: hexToColor(Provider.of<User>(context, listen: false)
+                      .getActiveBlogBackColor()) ??
+                  Colors.blue,
+              constraints: !kIsWeb
+                  ? BoxConstraints()
+                  : BoxConstraints(
+                      maxWidth: 750.0,
+                      minWidth: MediaQuery.of(context).size.width < 750
+                          ? MediaQuery.of(context).size.width * 0.9
+                          : 750.0,
                     ),
+              child: Column(
 
-                    ///show an avatar in square
+                  /// couloum have(the header image , avatar,title, description and tab bars )
 
-                    ///show an avatar in square
-                    Visibility(
-                        visible: Provider.of<User>(context, listen: false)
-                                .getActiveBlogShowAvatar() ??
-                            true,
-                        child: Provider.of<User>(context, listen: false)
-                                .getIsAvatarCircle()
-                            ? AvatarImage(
-                                myBlog: true,
-                                color: Provider.of<User>(context, listen: false)
-                                    .getActiveBlogBackColor(),
-                                path: Provider.of<User>(context)
-                                    .getActiveBlogAvatar(),
-                              )
-                            : Square(
-                                color: Provider.of<User>(context, listen: false)
-                                    .getActiveBlogBackColor(),
-                                path: Provider.of<User>(context, listen: false)
-                                    .getActiveBlogAvatar(),
-                              ))
-                  ]),
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Stack(alignment: Alignment.center, children: <Widget>[
+                      Column(
+                        children: <Widget>[
+                          ///display header image with icons and drop down list
 
-                  //{
+                          HeaderImage(),
 
-                  if (Provider.of<User>(context).getActiveBlogIsPrimary())
-                    upperTabBar(
-                        _tabController,
-                        context,
-                        Provider.of<User>(context, listen: false)
-                            .getActiveBlogBackColor()),
-                  if (Provider.of<User>(context).getActiveBlogIsPrimary())
-                    bottomTabBar(
-                        _tabController,
-                        context,
-                        Provider.of<User>(context, listen: false)
-                            .getActiveBlogBackColor(),
-                        Provider.of<User>(context, listen: false)
-                            .getActiveBlog()),
-                  //}
-                  if (!Provider.of<User>(context).getActiveBlogIsPrimary())
-                    Container(
-                      child: FutureBuilder<List<Post>>(
-                        future: Provider.of<User>(context)
-                            .getActiveBlog()
-                            .blogPosts(context, true),
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            return Expanded(
-                              child: ListView.separated(
-                                itemCount: snapshot.data.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  Post post = snapshot.data[index];
-                                  return PostWidget(
-                                    post: post,
-                                    // isLikes: false,
-                                  );
-                                },
-                                separatorBuilder: (context, index) =>
-                                    const Divider(
-                                        height: 20.0,
-                                        color: Colors.transparent),
-                              ),
-                            );
+                          ///display header image with icons and drop down list
 
-                            /* PostWidget(
-                              postContent: snapshot.data[0].content,
-                              index: 0,
-                                post: snapshot.data[0],
-                                isLikes: false,
-                                );*/
-                            // PostWidget(
-                            //postContent: snapshot.data[0].content,
-                            //index: 0,
-                            //post: snapshot.data[0],
-                            //);
-                          } else if (snapshot.hasError) {
-                            return Text('no');
-                          } else if (snapshot.data == null ||
-                              snapshot.data.length == 0) {
-                            return Column();
-                          }
-                          return CircularProgressIndicator();
-                        },
+                          TextWriting(
+                            title: Provider.of<User>(context, listen: false)
+                                .getActiveBlogTitle(),
+                            description:
+                                Provider.of<User>(context, listen: false)
+                                    .getActiveBlogDescription(),
+                            color: Provider.of<User>(context, listen: false)
+                                .getActiveBlogBackColor(),
+                            textColor: Provider.of<User>(context, listen: false)
+                                .getActiveBlogTitleColor(),
+                          ),
+                        ],
                       ),
-                    )
-                ]),
+                      Visibility(
+
+                          ///check visibility of avatar
+                          visible: Provider.of<User>(context, listen: false)
+                                  .getActiveBlogShowAvatar() ??
+                              true,
+                          child: Provider.of<User>(context, listen: false)
+                                  .getIsAvatarCircle()
+                              ? AvatarImage(
+                                  myBlog: true,
+                                  color:
+                                      Provider.of<User>(context, listen: false)
+                                          .getActiveBlogBackColor(),
+                                  path: Provider.of<User>(context)
+                                      .getActiveBlogAvatar(),
+                                )
+                              : Square(
+                                  color:
+                                      Provider.of<User>(context, listen: false)
+                                          .getActiveBlogBackColor(),
+                                  path:
+                                      Provider.of<User>(context, listen: false)
+                                          .getActiveBlogAvatar(),
+                                ))
+                    ]),
+
+                    //{
+                    ///check if blog is primary or not
+                    if (Provider.of<User>(context).getActiveBlogIsPrimary())
+                      upperTabBar(
+                          _tabController,
+                          context,
+                          Provider.of<User>(context, listen: false)
+                              .getActiveBlogBackColor()),
+                    if (Provider.of<User>(context).getActiveBlogIsPrimary())
+                      bottomTabBar(
+                          _tabController,
+                          context,
+                          Provider.of<User>(context, listen: false)
+                              .getActiveBlogBackColor(),
+                          Provider.of<User>(context, listen: false)
+                              .getActiveBlog()),
+                    //}
+                    if (!Provider.of<User>(context).getActiveBlogIsPrimary())
+                      Container(
+                        child: FutureBuilder<List<Post>>(
+                          future: Provider.of<User>(context)
+                              .getActiveBlog()
+                              .blogPosts(context, true),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              return Expanded(
+                                child: ListView.separated(
+                                  itemCount: snapshot.data.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    Post post = snapshot.data[index];
+                                    return PostWidget(
+                                      post: post,
+                                      // isLikes: false,
+                                    );
+                                  },
+                                  separatorBuilder: (context, index) =>
+                                      const Divider(
+                                          height: 20.0,
+                                          color: Colors.transparent),
+                                ),
+                              );
+                            } else if (snapshot.hasError) {
+                              return Text('no');
+                            } else if (snapshot.data == null ||
+                                snapshot.data.length == 0) {
+                              return Column();
+                            }
+                            return CircularProgressIndicator();
+                          },
+                        ),
+                      )
+                  ]),
+            ),
           ),
-        )),
+        ),
       ),
     );
   }

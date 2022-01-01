@@ -1,3 +1,7 @@
+/*
+Author:Esraa Gamal
+Description:Edit buttons(background and accent)
+*/
 import 'package:flutter/material.dart';
 import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
 import 'package:provider/provider.dart';
@@ -5,6 +9,7 @@ import 'package:tumblrx/models/user/user.dart';
 import 'package:tumblrx/utilities/hex_color_value.dart';
 import '../blog_screen_constant.dart';
 
+///Edit buttons(background and accent)
 class EditButtons extends StatefulWidget {
   @override
   _EditButtonsState createState() => _EditButtonsState();
@@ -13,8 +18,6 @@ class EditButtons extends StatefulWidget {
 class _EditButtonsState extends State<EditButtons> {
   @override
   Widget build(BuildContext context) {
-    // final blogProvider = Provider.of<BlogScreenConstantProvider>(context);
-
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -23,6 +26,7 @@ class _EditButtonsState extends State<EditButtons> {
             width: 120,
             child: ElevatedButton(
               onPressed: () {
+                ///show color picker when press of color picker to change background color
                 showDialog(
                     context: context,
                     builder: (context) => AlertDialog(
@@ -64,6 +68,7 @@ class _EditButtonsState extends State<EditButtons> {
           width: 110,
           child: ElevatedButton(
             onPressed: () {
+              ///show color picker when press of color picker to change accent color
               showDialog(
                   context: context,
                   builder: (context) => AlertDialog(

@@ -1,3 +1,7 @@
+/*
+Author:Esraa Gamal
+Description:thsi class for constant function and variable 
+*/
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/components/blog_screen_initial_screen/show_image.dart';
@@ -23,8 +27,12 @@ class BlogScreenConstant extends StatelessWidget {
         ListTile(
           title: Text('View your avatar'),
           onTap: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => ShowImage(  Provider.of<User>(context, listen: false).getActiveBlogAvatar())));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ShowImage(
+                        Provider.of<User>(context, listen: false)
+                            .getActiveBlogAvatar())));
           },
         )
       ],
@@ -49,7 +57,9 @@ class BlogScreenConstant extends StatelessWidget {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => ShowImage(Provider.of<User>(context, listen: false).getActiveBlogHeaderImage())));
+                    builder: (context) => ShowImage(
+                        Provider.of<User>(context, listen: false)
+                            .getActiveBlogHeaderImage())));
           },
         )
       ],

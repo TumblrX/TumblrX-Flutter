@@ -69,13 +69,13 @@ class Blog {
 
   ///user id
   String _ownerId;
-
+///for chooes avatar in gallery
   XFile avatarPick;
+///for chooes header image in gallery
   XFile headerImagePick;
-
-  /// themes of Blog
-  BlogTheme _blogTheme = BlogTheme();
-
+ /// themes of Blog
+ BlogTheme _blogTheme = BlogTheme();
+/// getter in blog class
   String get blogAvatar => _blogAvatar;
   String get handle => _handle;
   String get title => _title;
@@ -96,14 +96,14 @@ class Blog {
   String get descriptionBeforEdit => _descriptionBeforEdit;
   bool get isCircleBeforEdit => _isCircleBeforEdit;
   String get backGroundColorBeforEdit => _backGroundColorBeforEdit;
-
+///constructor of blog
   Blog(
       [this._handle,
       this._title,
       this._isPrivate,
       this._isPrimary,
       this._blogAvatar]);
-
+///from json convert json file to blog
   Blog.fromJson(Map<String, dynamic> json) {
     // blog id
     if (json.containsKey('_id'))
@@ -171,7 +171,7 @@ class Blog {
       _isCircleBeforEdit = json['isAvatarCircle'];
     }
 
-    // blog isPrimary flag
+    /// blog isPrimary flag
     if (json.containsKey('isPrimary')) _isPrimary = json['isPrimary'];
 
     if (json.containsKey('globalParameters')) {
@@ -195,49 +195,12 @@ class Blog {
         this._titleColor = json['globalParameters']['titleColor'];
       }
     }
-    // // blog list of posts
-    // if (json.containsKey('posts')) {
-    //   List<Map<String, dynamic>> parsedPosts =
-    //       List<Map<String, dynamic>>.from(json['posts']);
-    //   parsedPosts.map((post) {
-    //     _posts.add(new Post.fromJson(post));
-    //   });
-    //   _postsCount = _posts.length;
-    // }
-    // // followed by blogs
-    // if (json.containsKey('followedBy')) {
-    //   List<Map<String, dynamic>> parsedBlogs =
-    //       List<Map<String, dynamic>>.from(json['followedBy']);
-
-    //   parsedBlogs.forEach((blogData) {
-    //     _followedBy.add(new Blog.fromJson(blogData));
-    //   });
-    //   _followersCount = _followedBy.length;
-    // }
-    //  else
-    //   throw Exception('missing required parameter "followedBy"');
-
-    if (json.containsKey('blockedTumblrs')) {}
-
-// // blog theme
-
-//     if (json.containsKey('globalParameters')) {
-//       Map<String, dynamic> globalParameters =
-//           json['globalParameters'] as Map<String, dynamic>;
-//       if (globalParameters.containsKey('backgroundColor')) {
-//         this._blogTheme.backgroundColor = globalParameters['backgroundColor'];
-//       }
-//     }
+     
   }
+  ///convert blog to json file
   Map<dynamic, dynamic> toJson() {
     final Map<dynamic, dynamic> data = new Map<dynamic, dynamic>();
 
-    if (this._backGroundColor != null) {
-      //data['customappearance'] = {};
-      //data['customappearance']['globalparameters'] = {};
-      //data['customappearance']['globalparameters']['backgroundcolor'] =
-      //  this._backGroundColor;
-    }
     if (this._description != null) data['description'] = this._description;
 
     if (this._handle != null) data['handle'] = this._handle;
@@ -250,7 +213,7 @@ class Blog {
 
     return data;
   }
-
+///get avatar from data base
   Future<String> getBlogAvatar() async {
     final String endPoint = 'blog/';
     final Map<String, dynamic> reqParameters = {
@@ -270,7 +233,6 @@ class Blog {
     } catch (error) {
       // handle failed request
       logger.e(error);
-//      throw Exception(error.message.toString());
     }
     return null;
   }
@@ -278,7 +240,7 @@ class Blog {
   void setBlogId(String id) {
     this._id = id;
   }
-
+///Follow another blog request
   Future<bool> followBlog(String blogId, String token) async {
     final String endPoint = "api/user/follow";
     Map<String, dynamic> response =
@@ -326,12 +288,11 @@ class Blog {
   }
 
   void getPosts() async {
-    //final String url = 'blog/$name/posts/';
     try {} catch (error) {}
   }
 
   void blockBlog(String toBlock) async {
-    //String url = 'blog/$name/blocks';
+  
     try {} catch (error) {}
   }
 
@@ -399,7 +360,7 @@ class Blog {
     if (indicator == 2) headerImagePick = image;
   }
 
-  ///Get Blog Posts
+  ///Get Blog Posts from data base
   Future<List<Post>> blogPosts(BuildContext context, bool flag) async {
     this._posts = [];
     final String endPoint = 'blog/${this._id}/posts';
@@ -433,7 +394,6 @@ class Blog {
     return posts;
   }
 
-  //convert hexcolor to Color
 
   void updateBlog(BuildContext context) async {
     final String endPoint = 'api/blog/${this._id}';
@@ -450,7 +410,7 @@ class Blog {
       print(response.statusCode);
     }
   }
-
+///this function send get request and get blog's information 
   Future<Blog> blogRetrive(BuildContext context) async {
     String endPoint;
 
@@ -536,6 +496,7 @@ class Blog {
       return null;
     }
   }
+  ///this function send put request and update blog theme
 
   Future<void> updateBlogTheme(BuildContext context) async {
     final String endPoint = 'api/blog/edit-theme/${this._handle}';
@@ -551,7 +512,6 @@ class Blog {
       data['showAvatar'] = this._showAvatar.toString();
 
     logger.d('hellloo');
-    /////////////////////////////////////////////////////////////////////////////////
     try {
       var dio = Dio();
       dio.options.headers["Authorization"] =
@@ -590,11 +550,5 @@ class Blog {
     } catch (e) {
       logger.e(e);
     }
-
-    // var responseObject = convert.jsonDecode(response.body);
-    //final response =
-    //  await ApiHttpRepository.sendPutRequest(endPoint, headers, data);
-    //if (response.statusCode == 200) {
-    //print(response.statusCode);
   }
 }

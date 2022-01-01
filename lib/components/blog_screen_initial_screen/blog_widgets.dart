@@ -1,3 +1,7 @@
+/*
+Author:Esraa Gamal
+Description:this file for tabs bar in Blog 
+*/
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tumblrx/components/following/following_card.dart';
@@ -10,16 +14,13 @@ import 'package:tumblrx/services/blog_screen.dart';
 import 'package:tumblrx/utilities/hex_color_value.dart';
 import '../blog_screen_constant.dart';
 
+///Upper tab bar
 Widget upperTabBar(
     TabController _tabConroller, BuildContext context, String color) {
   final blogProvider = Provider.of<BlogScreenConstantProvider>(context);
   return Container(
 
       /// start of Tab Bars
-
-//      color: hexToColor(Provider.of<User>(context, listen: false)
-//              .getActiveBlogBackColor()) ??
-//          Colors.blue,
 
       color: hexToColor(color ?? '#000000') ?? Colors.blue,
       child: TabBar(
@@ -56,9 +57,7 @@ Widget upperTabBar(
       ));
 }
 
-//Widget bottomTabBar(TabController _tabController, BuildContext context) {
-//  Provider.of<BlogScreenConstantProvider>(context);
-
+///body of tabs
 Widget bottomTabBar(TabController _tabController, BuildContext context,
     String color, Blog blog) {
   //final blogProvider = Provider.of<BlogScreenConstantProvider>(context);
@@ -67,14 +66,10 @@ Widget bottomTabBar(TabController _tabController, BuildContext context,
 
       /// pages which display content of each tab bar
       child: Container(
-//    color: hexToColor(Provider.of<User>(context, listen: false)
-//            .getActiveBlogBackColor()) ??
-//        Colors.blue,
-
     color: hexToColor(color ?? '#000000') ?? Colors.blue,
-
     child: TabBarView(
       children: [
+        ///posts
         FutureBuilder<List<Post>>(
           future: blog.blogPosts(context, true),
           builder: (context, snapshot) {
@@ -150,8 +145,7 @@ Widget bottomTabBar(TabController _tabController, BuildContext context,
 
               return Center(child: CircularProgressIndicator());
             }),
-        //followings
-
+        //following
         FutureBuilder<List<Blog>>(
           future: Provider.of<User>(context).getUserBlogFollowing(context),
           builder: (context, snapshot) {
@@ -203,7 +197,7 @@ Widget bottomTabBar(TabController _tabController, BuildContext context,
             }
             return Center(child: CircularProgressIndicator());
           },
-        )
+        ),
 
         // FollowingCard()
       ],
